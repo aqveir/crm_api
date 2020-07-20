@@ -10,3 +10,7 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+
+# Adding Application level files
+/resources/views/vendor
+/storage/api-docs/api-docs.json
