@@ -1,0 +1,25 @@
+{
+    "name": "ellaisys/customer",
+    "description": "",
+    "authors": [
+        {
+            "name": "Ellai Information Systems Private Limited",
+            "email": "support@ellaisys.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Customer\\Providers\\CustomerServiceProvider"
+            ],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Customer\\": ""
+        }
+    }
+}

@@ -1,0 +1,25 @@
+{
+    "name": "ellaisys/document",
+    "description": "",
+    "authors": [
+        {
+            "name": "Ellai Information Systems Private Limited",
+            "email": "support@ellaisys.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Document\\Providers\\DocumentServiceProvider"
+            ],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Document\\": ""
+        }
+    }
+}

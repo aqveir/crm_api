@@ -8,7 +8,7 @@ return [
         |--------------------------------------------------------------------------
         */
 
-        'title' => 'XRM Swagger UI',
+        'title' => env('APP_NAME', 'Omni CRM Swagger UI'),
     ],
 
     'routes' => [
@@ -82,6 +82,7 @@ return [
 
         'annotations' => [
             base_path('app'),
+            base_path('modules'),
         ],
 
         /*
@@ -232,6 +233,6 @@ return [
     |--------------------------------------------------------------------------
      */
     'constants' => [
-        'L5_SWAGGER_CONST_HOST' => env('SWAGGER_CONST_HOST', 'http://xrm.ellaisys.com'),
+        'SWAGGER_CONST_HOST' => env('SWAGGER_CONST_HOST', 'http://xrm.ellaisys.com'),
     ],
 ];

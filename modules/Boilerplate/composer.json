@@ -1,0 +1,25 @@
+{
+    "name": "ellaisys/boilerplate",
+    "description": "",
+    "authors": [
+        {
+            "name": "Ellai Information Systems Private Limited",
+            "email": "support@ellaisys.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Boilerplate\\Providers\\BoilerplateServiceProvider"
+            ],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Boilerplate\\": ""
+        }
+    }
+}

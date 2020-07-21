@@ -1,0 +1,9 @@
+{
+    "Boilerplate": true,
+    "Core": true,
+    "Customer": true,
+    "User": true,
+    "Note": true,
+    "Document": true,
+    "Feedback": true
+}

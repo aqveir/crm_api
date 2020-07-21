@@ -1,7 +1,7 @@
 {
-    "name": "laravel/laravel",
+    "name": "ellaisys/crmsuite",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "EllaiSys CRM Suite",
     "keywords": [
         "framework",
         "laravel"
@@ -15,7 +15,9 @@
         "guzzlehttp/guzzle": "^6.3",
         "laravel/framework": "^7.0",
         "laravel/tinker": "^2.0",
-        "nwidart/laravel-modules": "^7.1"
+        "league/fractal": "^0.19.2",
+        "nwidart/laravel-modules": "^7.1",
+        "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {
         "facade/ignition": "^2.0",

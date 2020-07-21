@@ -1,0 +1,13 @@
+{
+    "name": "Boilerplate",
+    "alias": "boilerplate",
+    "description": "",
+    "keywords": [],
+    "order": 0,
+    "providers": [
+        "Modules\\Boilerplate\\Providers\\BoilerplateServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

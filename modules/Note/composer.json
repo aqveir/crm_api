@@ -1,0 +1,25 @@
+{
+    "name": "ellaisys/note",
+    "description": "",
+    "authors": [
+        {
+            "name": "Ellai Information Systems Private Limited",
+            "email": "support@ellaisys.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Note\\Providers\\NoteServiceProvider"
+            ],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Note\\": ""
+        }
+    }
+}

@@ -1,0 +1,25 @@
+{
+    "name": "ellaisys/core",
+    "description": "",
+    "authors": [
+        {
+            "name": "Ellai Information Systems Private Limited",
+            "email": "support@ellaisys.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Core\\Providers\\CoreServiceProvider"
+            ],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Core\\": ""
+        }
+    }
+}
