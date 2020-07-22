@@ -88,7 +88,7 @@ class Note extends Model {
      */
     protected function serializeDate(\DateTimeInterface $date)
     {
-        return $date->format(config('omnichannel.settings.date_format_response_generic'));
+        return $date->format(config('crmomni.settings.date_format_response_generic'));
     }
 
 
@@ -99,7 +99,7 @@ class Note extends Model {
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->table = config('omnicrm-migration.table_name.notes');
+        $this->table = config('crmomni-migration.table_name.notes');
     }
 
 } //Class ends

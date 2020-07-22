@@ -3,12 +3,28 @@
 return [
     'request_handler' => [
         'backend' => [
+            // Organization Controller Requests
+            'organization' => [
+                // Create Organization
+                'create' => [
+                    'validation_rules' => [
+                        'name' => 'nullable|string|max:40',
+                        'sub_domain' => 'required|max:36|unique:' . config('crmomni-migration.table_name.organizations') . ',sub_domain',
+                        'first_name' => 'required|string|max:40',
+                        'last_name' => 'nullable|string|max:40',
+                        'email' => 'required|email|max:40',
+                        'phone' => 'required|string',
+                        'country_idd' => 'required'
+                    ]
+                ],
+            ], //Organization Controller ends
+
             // Auth Controller Requests
             'auth' => [
                 //Authenticate user
                 'login' => [
                     'validation_rules' => [
-                        'key' => 'required|exists:' . config('omnicrm-migration.table_name.organizations') . ',hash|max:36',
+                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
                         'username' => 'required|min:6|max:36',
                         'password' => 'required|min:8'
                     ]
@@ -92,7 +108,7 @@ return [
                 // Create Note validations
                 'create' => [
                     'validation_rules' => [
-                        'entity_type'     => 'required|string|exists:' . config('omnicrm-migration.table_name.lookup_value') . ',key',
+                        'entity_type'     => 'required|string|exists:' . config('crmomni-migration.table_name.lookup_value') . ',key',
                         'reference_id' => 'required|numeric',
                         'note' => 'required|string|max:1000',
                     ]
@@ -110,7 +126,7 @@ return [
                 // Create Document validations
                 'create' => [
                     'validation_rules' => [
-                        'entity_type'     => 'required|string|exists:' . config('omnicrm-migration.table_name.lookup_value') . ',key',
+                        'entity_type'     => 'required|string|exists:' . config('crmomni-migration.table_name.lookup_value') . ',key',
                         'reference_id'    => 'required|numeric',
                         'title'           => 'required|string|max:150',
                         'description'     => 'string|max:1000',
@@ -124,39 +140,21 @@ return [
                 ],
             ], //Document Controller ends
 
-            // Wallet Controller Requests
-            'wallet' => [
-
-            ], // Wallet Controller ends
         ],
 
         'frontend' => [
-            // Blog Module Requests
-            'blog' => [
-                'index' => [
-                    'validation_rules' => [
-                        'key' => 'required|exists:' . config('omnicrm-migration.table_name.organizations') . ',hash|max:36',
-                    ]
-                ],
-                'post' => [
-                    'validation_rules' => [
-                        'key' => 'required|exists:' . config('omnicrm-migration.table_name.organizations') . ',hash|max:36',
-                    ]
-                ]
-            ],
-
             // Customer Controller Requests
             'customer' => [
                 //Get the customer data
                 'show' => [
                     'validation_rules' => [
-                        'key' => 'required|exists:' . config('omnicrm-migration.table_name.organizations') . ',hash|max:36',
+                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
                     ]
                 ],
 
                 'exists' => [
                     'validation_rules' => [
-                        'key' => 'required|exists:' . config('omnicrm-migration.table_name.organizations') . ',hash|max:36',
+                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
                         'email' => 'required_without:phone|email|max:36',
                         'phone' => 'required_without:email|max:15',
                     ]
@@ -164,7 +162,7 @@ return [
 
                 'register' => [
                     'validation_rules' => [
-                        'key' => 'required|exists:' . config('omnicrm-migration.table_name.organizations') . ',hash|max:36',
+                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
                         'password' => 'required|confirmed|string|min:8|max:64',
                         'first_name' => 'string|max:64',
                         'last_name' => 'string|max:64',
@@ -177,7 +175,7 @@ return [
                 // Authenticate the customer
                 'login' => [
                     'validation_rules' => [
-                        'key' => 'required|exists:' . config('omnicrm-migration.table_name.organizations') . ',hash|max:36',
+                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
                         'username' => 'required|max:36',
                         'password' => 'required|string|min:8|max:64',
                         'country_idd' => 'required|min:1|max:5',
@@ -188,14 +186,14 @@ return [
                 // Logout the customer
                 'logout' => [
                     'validation_rules' => [
-                        'key' => 'required|exists:' . config('omnicrm-migration.table_name.organizations') . ',hash|max:36',
+                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
                     ]
                 ],
 
                 // Forgot Password Request for User
                 'forgot_password' => [
                     'validation_rules' => [
-                        'key' => 'required|exists:' . config('omnicrm-migration.table_name.organizations') . ',hash|max:36',
+                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
                         'email' => 'required|email'
                     ]
                 ],
@@ -226,57 +224,16 @@ return [
                 //Social authentication
                 'social_login' => [
                     'validation_rules' => [
-                        'key' => 'required|exists:' . config('omnicrm-migration.table_name.organizations') . ',hash|max:36',
+                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
                     ]
                 ],
                 'social_login_callback' => [
                     'validation_rules' => [
-                        'key' => 'required|exists:' . config('omnicrm-migration.table_name.organizations') . ',hash|max:36',
+                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
                     ]
                 ],
 
             ], // Customer Controller ends
-
-            // Catalogue Controller Requests
-            'catalogue' => [
-                'show' => [
-                    'validation_rules' => [
-                        'key' => 'required|exists:' . config('omnicrm-migration.table_name.organizations') . ',hash|max:36',
-                        'source' => 'required|min:8'
-                    ]
-                ],
-            ],
-
-            // Wallet Controller Requests
-            'wallet' => [
-                'create' => [
-                    'validation_rules' => [
-                        'name' => 'required|max:50',
-                        'max_limit_per_transaction' => 'required|numeric|min:0',
-                        'max_transactions_per_day' => 'required|numeric|min:0'
-                    ]
-                ],
-
-                'update' => [
-                    'validation_rules' => []
-                ],
-
-                'delete' => [
-                    'validation_rules' => []
-                ],
-
-                'attach' => [
-                    'validation_rules' => [
-                        'customer_identifier' => 'required|max:50',
-                        'max_limit_per_transaction' => 'required|numeric|min:0',
-                        'max_transactions_per_day' => 'required|numeric|min:0'
-                    ]
-                ],
-
-                'detach' => [
-                    'validation_rules' => []
-                ]
-            ], // Wallet Controller ends
         ]
     ]
 ];

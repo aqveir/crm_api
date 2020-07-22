@@ -13,7 +13,7 @@ class CreateApartmentAddressTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('omnicrm-migration.table_name.customer.apartment_address'), function (Blueprint $table) {
+        Schema::create(config('crmomni-migration.table_name.customer.apartment_address'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
             $table->string('name');
@@ -49,6 +49,6 @@ class CreateApartmentAddressTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(config('omnicrm-migration.table_name.customer.apartment_address'));
+        Schema::dropIfExists(config('crmomni-migration.table_name.customer.apartment_address'));
     } //Function ends
 } //Class ends

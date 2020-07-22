@@ -13,12 +13,15 @@ class CreateOrganizationsTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('omnicrm-migration.table_name.organizations'), function (Blueprint $table) {
+        Schema::create(config('crmomni-migration.table_name.organizations'), function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('hash')->nullable();
 
-            $table->string('name')->nullable();
-            $table->boolean('is_active')->default(true);
+            $table->string('name');
+            $table->string('sub_domain');
+            $table->integer('type_id');
+
+            $table->boolean('is_active')->default(false);
 
             //Audit Log Fields
             $table->integer('created_by')->default(0);
@@ -37,6 +40,6 @@ class CreateOrganizationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(config('omnicrm-migration.table_name.organizations'));
+        Schema::dropIfExists(config('crmomni-migration.table_name.organizations'));
     }
 }

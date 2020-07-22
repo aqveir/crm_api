@@ -10,7 +10,7 @@ trait LookupRelationship
 	public function values()
 	{
 		return $this->hasMany(
-			config('omnicrm-class.class_model.lookup_value'),
+			config('crmomni-class.class_model.lookup_value'),
 			'lookup_id', 'id'
 		);
 	}

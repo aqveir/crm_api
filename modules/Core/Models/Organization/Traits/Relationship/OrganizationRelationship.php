@@ -15,7 +15,7 @@ trait OrganizationRelationship
 	public function users()
 	{
 		return $this->hasMany(
-			config('omnicrm-class.class_model.user'),
+			config('crmomni-class.class_model.user.main'),
 			'org_id', 'id'
 		);
 	} //Function End
@@ -28,7 +28,7 @@ trait OrganizationRelationship
 	{
 		return $this->belongsToMany(
 			Configuration::class,
-			config('omnicrm-migration.table_name.organization_configurations'),
+			config('crmomni-migration.table_name.organization_configurations'),
 			'org_id', 'configuration_id'
 		)
 		->withPivot('value');

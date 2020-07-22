@@ -16,7 +16,10 @@ class OrganizationsTableSeeder extends Seeder
         $organizations = $this->dataOrganizations();
 
         foreach ($organizations as $organization) {
-            $response = factory(\Modules\Core\Models\Organization\Organization::class)->create();
+            $response = factory(\Modules\Core\Models\Organization\Organization::class)->create([
+                'name' => $organization['name'],
+                'sub_domain' => $organization['sub_domain'],
+            ]);
 
             //Save configurations
             if (!empty($organization['configurations'])) 
@@ -24,12 +27,20 @@ class OrganizationsTableSeeder extends Seeder
                 $response->configurations()->attach($organization['configurations']);
             } //End if            
         } //Loop ends
+
+
+        //Environemnt check
+        if (\App::environment() !== 'production') { 
+            factory(\Modules\Core\Models\Organization\Organization::class, 30)->create();
+        } //End if
     }
 
     private function dataOrganizations()
     {
         return  [
             [
+                'name' => 'EllaiSys',
+                'sub_domain' => 'ellaisys',
                 'configurations' => [
                     [
                         'configuration_id' => 1, 
@@ -40,8 +51,8 @@ class OrganizationsTableSeeder extends Seeder
                                 'mail_username' => '23e3c5cd6c3c51',
                                 'mail_password' => '4d519ca3c4e4c9',
                                 'mail_encrypt' => null,
-                                'mail_from_address' => 'support@ecomni.com',
-                                'mail_from_name' => 'Ecomni Mailbox'
+                                'mail_from_address' => 'support@ellaisys.com',
+                                'mail_from_name' => 'EllaiSys CRM Omni Account'
                             ]
                         )
                     ],
@@ -82,6 +93,8 @@ class OrganizationsTableSeeder extends Seeder
                 ]
             ],
             [
+                'name' => 'Demo',
+                'sub_domain' => 'demo',
                 'configurations' => [
                     [
                         'configuration_id' => 1, 
@@ -92,14 +105,13 @@ class OrganizationsTableSeeder extends Seeder
                                 'mail_username' => '23e3c5cd6c3c51',
                                 'mail_password' => '4d519ca3c4e4c9',
                                 'mail_encrypt' => null,
-                                'mail_from_address' => 'support@ecomni.com',
-                                'mail_from_name' => 'Ecomni Mailbox'
+                                'mail_from_address' => 'support@demo.com',
+                                'mail_from_name' => 'Demo CRM Omni Account'
                             ]
                         )
                     ]
                 ]
-            ],
-            [ ],
+            ]
         ];
     }
 }

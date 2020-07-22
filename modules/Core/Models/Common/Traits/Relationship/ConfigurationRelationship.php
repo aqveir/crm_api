@@ -13,7 +13,7 @@ trait ConfigurationRelationship
 	public function type()
 	{
 		return $this->hasOne(
-			config('omnicrm-class.class_model.lookup_value'),
+			config('crmomni-class.class_model.lookup_value'),
 			'id', 'type_id'
 		);
 	} //Function ends

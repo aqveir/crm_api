@@ -9,7 +9,7 @@ class CreateCustomerRequest extends FormRequest
 {
     public function rules()
     {
-        return Config::get('omnicrm-validation.request_handler.backend.customer.create.validation_rules');
+        return Config::get('crmomni-validation.request_handler.backend.customer.create.validation_rules');
     }
 
     public function authorize()

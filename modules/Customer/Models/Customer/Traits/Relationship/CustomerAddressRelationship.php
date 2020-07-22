@@ -16,7 +16,7 @@ trait CustomerAddressRelationship
 	public function type()
 	{
 		return $this->hasOne(
-			config('omnicrm-class.class_model.lookup_value'), 
+			config('crmomni-class.class_model.lookup_value'), 
 			'id', 'type_id'
 		);
 	}
@@ -28,7 +28,7 @@ trait CustomerAddressRelationship
 	public function state()
 	{
 		return $this->belongsTo(
-			config('omnicrm-class.class_model.customer.main'),  
+			config('crmomni-class.class_model.customer.main'),  
 			'state_id', 'id'
 		);
 	}
@@ -40,7 +40,7 @@ trait CustomerAddressRelationship
 	public function customer()
 	{
 		return $this->belongsTo(
-			config('omnicrm-class.class_model.customer.main'),  
+			config('crmomni-class.class_model.customer.main'),  
 			'customer_id', 'id'
 		);
 	}

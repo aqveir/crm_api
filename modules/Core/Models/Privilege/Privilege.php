@@ -2,7 +2,7 @@
 
 namespace Modules\Core\Models\Privilege;
 
-use Illuminate\Database\Eloquent\Model;
+use Modules\Core\Models\BaseModel as Model;
 use Modules\Core\Models\Privilege\Traits\Relationship\PrivilegeRelationship;
 
 /**
@@ -57,7 +57,7 @@ class Privilege extends Model
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->table = config('omnicrm-migration.table_name.privileges');
+        $this->table = config('crmomni-migration.table_name.privileges');
     }
 
 } //Class ends

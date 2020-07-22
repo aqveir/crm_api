@@ -82,7 +82,7 @@ class CustomerAddress extends Model {
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->table = config('omnicrm-migration.table_name.customer.addresses');
+        $this->table = config('crmomni-migration.table_name.customer.addresses');
     }
 
 } //Class ends

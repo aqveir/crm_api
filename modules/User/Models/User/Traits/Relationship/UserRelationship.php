@@ -14,7 +14,7 @@ trait UserRelationship
 	public function organization()
 	{
 		return $this->belongsTo(
-			config('omnicrm-class.class_model.organization'), 
+			config('crmomni-class.class_model.organization'), 
 			'org_id', 'id'
 		);
 	} //Function ends
@@ -26,7 +26,7 @@ trait UserRelationship
 	public function country()
 	{
 		return $this->hasOne(
-			config('omnicrm-class.class_model.country'), 
+			config('crmomni-class.class_model.country'), 
 			'id', 'country_id'
 		);
 	} //Function ends
@@ -38,7 +38,7 @@ trait UserRelationship
 	public function timezone()
 	{
 		return $this->hasOne(
-			config('omnicrm-class.class_model.timezone'), 
+			config('crmomni-class.class_model.timezone'), 
 			'id', 'timezone_id'
 		);
 	} //Function ends
@@ -50,8 +50,8 @@ trait UserRelationship
 	public function roles()
 	{
 		return $this->belongsToMany(
-			config('omnicrm-class.class_model.role'),
-			config('omnicrm-migration.table_name.user_roles'),
+			config('crmomni-class.class_model.role'),
+			config('crmomni-migration.table_name.user_roles'),
 			'user_id', 'role_id'
 		);
 	} //Function ends
@@ -63,8 +63,8 @@ trait UserRelationship
 	public function privileges()
 	{
 		return $this->belongsToMany(
-			config('omnicrm-class.class_model.privilege'),
-			config('omnicrm-migration.table_name.user_privileges'),
+			config('crmomni-class.class_model.privilege'),
+			config('crmomni-migration.table_name.user_privileges'),
 			'user_id', 'privilege_id'
 		);
 	} //Function ends
@@ -76,8 +76,8 @@ trait UserRelationship
 	public function grant_privileges()
 	{
 		return $this->belongsToMany(
-			config('omnicrm-class.class_model.privilege'),
-			config('omnicrm-migration.table_name.user_privileges'),
+			config('crmomni-class.class_model.privilege'),
+			config('crmomni-migration.table_name.user_privileges'),
 			'user_id', 'privilege_id'
 		)
 		->wherePivot('is_active', 1);
@@ -90,7 +90,7 @@ trait UserRelationship
 	public function availability()
 	{
 		return $this->hasOne(
-			config('omnicrm-class.class_model.user_availability'),
+			config('crmomni-class.class_model.user_availability'),
 			'user_id','id'
 		)
 		->whereNotNull('user_id');
@@ -103,7 +103,7 @@ trait UserRelationship
 	public function user_reportess()
 	{
 		return $this->hasMany(
-			config('omnicrm-class.class_model.user_reportees'),
+			config('crmomni-class.class_model.user_reportees'),
 			'reportee_id','id'
 		)
 		->whereNotNull('reportee_id');

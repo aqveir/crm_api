@@ -63,8 +63,8 @@ class OrganizationRepository extends EloquentRepository implements OrganizationC
         $objReturnValue=null;
         try {
             //Get cache configuration
-            $keyCache = config('omnichannel.settings.cache.organization.key');
-            $durationCache = config('omnichannel.settings.cache.organization.duration_in_sec');
+            $keyCache = config('core.settings.cache.organization.key');
+            $durationCache = config('core.settings.cache.organization.duration_in_sec');
 
             if (Cache::has($keyCache)) {
                 $objReturnValue = Cache::get($keyCache);
@@ -80,7 +80,7 @@ class OrganizationRepository extends EloquentRepository implements OrganizationC
         
         return $objReturnValue;
     } //Function ends
-    
+  
 
     /**
      * Get All Organization Information from DB

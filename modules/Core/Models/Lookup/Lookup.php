@@ -76,7 +76,7 @@ class Lookup extends Model
      */
     protected function serializeDate(\DateTimeInterface $date)
     {
-        return $date->format(config('omnichannel.settings.date_format_response_generic'));
+        return $date->format(config('crmomni.settings.date_format_response_generic'));
     }
 
 
@@ -87,7 +87,7 @@ class Lookup extends Model
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->table = config('omnicrm-migration.table_name.lookup');
+        $this->table = config('crmomni-migration.table_name.lookup');
     }
 
 } //Class ends

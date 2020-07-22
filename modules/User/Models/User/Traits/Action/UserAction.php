@@ -75,7 +75,7 @@ trait UserAction
 	{
 		$objReturnValue=null;
 		try {
-			$query = config('omnicrm-class.class_model.user')::where('hash', $hash);
+			$query = config('crmomni-class.class_model.user')::where('hash', $hash);
 			if($orgId>0) { $query = $query->where('org_id', $orgId); } //End if
 			$query = $query->orderBy('id', 'asc')->firstOrFail();
 
@@ -96,7 +96,7 @@ trait UserAction
 	{
 		$objReturnValue=null;
 		try {
-			$query = config('omnicrm-class.class_model.user')::where('id', $id);
+			$query = config('crmomni-class.class_model.user')::where('id', $id);
 			if($orgId>0) { $query = $query->where('org_id', $orgId); } //End if
 			$query = $query->orderBy('id', 'asc')->firstOrFail();
 
@@ -117,7 +117,7 @@ trait UserAction
 	{
 		$objReturnValue=null;
 		try {  
-			$query = config('omnicrm-class.class_model.user')::where('phone','like', '%'.$phone);
+			$query = config('crmomni-class.class_model.user')::where('phone','like', '%'.$phone);
 			$query = $query->where('is_active', 1)->firstOrFail();
 
 			$objReturnValue = $query;
@@ -136,7 +136,7 @@ trait UserAction
 	{
 		$objReturnValue=null;
 		try {  
-			$query = config('omnicrm-class.class_model.user')::where('virtual_phone_number','like', '%'.$virtualNumber);
+			$query = config('crmomni-class.class_model.user')::where('virtual_phone_number','like', '%'.$virtualNumber);
 			$query = $query->where('is_active', 1)->firstOrFail();
 
 			$objReturnValue = $query;
@@ -155,7 +155,7 @@ trait UserAction
 	{
 		$objReturnValue=null;
 		try {
-			$query = config('omnicrm-class.class_model.user')::where('org_id', $orgId);
+			$query = config('crmomni-class.class_model.user')::where('org_id', $orgId);
 			$query = $query->where('reports_to', $userId);
 			$query = $query->get();
 
@@ -176,7 +176,7 @@ trait UserAction
 	{
 		$objReturnValue=null;
 		try {
-			$query = config('omnicrm-class.class_model.role')::with(['users']);
+			$query = config('crmomni-class.class_model.role')::with(['users']);
 			$query = $query->whereHas('users', function ($inner_query) use ($userId) { 
                 $inner_query->where('user_id', $userId);
             });
@@ -251,7 +251,7 @@ trait UserAction
     {	
     	$objReturnValue=false;
     	try {
-    		$query = config('omnicrm-class.class_model.user')::where('org_id', $orgId);
+    		$query = config('crmomni-class.class_model.user')::where('org_id', $orgId);
     		$query = $query->where('hash', $hash);
     		$query = $query->update([
 	    				'first_name' => $request['first_name'], 

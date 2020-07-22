@@ -6,43 +6,47 @@ use Config;
 use Illuminate\Support\Facades\Log;
 
 use Modules\Core\Http\Controllers\ApiBaseController;
-use Modules\Api\Http\Requests\Backend\User\CreateUserRequest;
-use Modules\Api\Http\Requests\Backend\User\UpdateUserRequest;
+use Modules\User\Http\Requests\Backend\User\CreateUserRequest;
+use Modules\User\Http\Requests\Backend\User\UpdateUserRequest;
 
-use Modules\Core\Services\User\UserService;
+use Modules\User\Services\User\UserService;
+use Modules\User\Services\User\UserAuthService;
+
+use Symfony\Component\HttpFoundation\Response;
 
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
-class UserController extends ApiBaseController
+class SetUserController extends ApiBaseController
 {
 
     /**
-     * Create a new controller instance.
+     * Constructor.
      *
-     * @return void
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        parent::__construct();
     }
 
 
     /**
-     * Create New User
+     * Create User
      *
-     * @param CreateUserRequest $request
-     * @param \Modules\Core\Services\User\UserService $userService
+     * @param \Modules\User\Http\Requests\Backend\User\CreateUserRequest $request
+     * @param \Modules\User\Services\User\UserService $userService
+     * 
      * @return \Illuminate\Http\JsonResponse
      *
-     * @OA\Get(
+     * @OA\Post(
      *     path="/user",
      *     tags={"User"},
-     *     operationId="api.user.create",
+     *     operationId="api.backend.user.create",
      *     security={{"JWT_Bearer_Auth":{}}},
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
@@ -66,7 +70,28 @@ class UserController extends ApiBaseController
 
 
 
-
+    /**
+     * Update User
+     *
+     * @param \Modules\User\Http\Requests\Backend\User\UpdateUserRequest $request
+     * @param \Modules\User\Services\User\UserService $userService
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @OA\Put(
+     *     path="/user/{hash}",
+     *     tags={"User"},
+     *     operationId="api.backend.user.update",
+     *     security={{"JWT_Bearer_Auth":{}}},
+     *     @OA\Parameter(
+     *          parameter="hash", in="path", name="hash", description="Enter user identifier.",
+     *          @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(response=200, description="Request was successfully executed."),
+     *     @OA\Response(response=422, description="Model Validation Error"),
+     *     @OA\Response(response=500, description="Internal Server Error")
+     * )
+     */
     public function update(UpdateUserRequest $request, UserService $userService)
     {   
         try {

@@ -9,7 +9,7 @@ class UpdateRoleRequest extends FormRequest
 {
     public function rules()
     {
-        return Config::get('omnicrm-validation.request_handler.edit_role.validation_rules');
+        return Config::get('crmomni-validation.request_handler.edit_role.validation_rules');
     }
 
     public function authorize()

@@ -8,8 +8,12 @@ use Carbon\Carbon;
 use Modules\Core\Repositories\Organization\OrganizationRepository;
 
 use Modules\Core\Services\BaseService;
+use Modules\Core\Services\Role\RoleService;
+
+use Modules\Core\Events\OrganizationCreatedEvent;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
 use Exception;
@@ -35,21 +39,36 @@ class OrganizationService extends BaseService
 
 
     /**
-     * CountryService constructor.
+     * @var \Modules\Core\Services\Role\RoleService
+     */
+    protected $roleService;
+
+
+    /**
+     * Service constructor.
      *
      * @param \Modules\Core\Repositories\Organization\OrganizationRepository    $organizationRepository
+     * @param \Modules\Core\Services\Role\RoleService                           $roleService
      */
     public function __construct(
-        OrganizationRepository               $organizationRepository
+        OrganizationRepository              $organizationRepository,
+        RoleService                         $roleService
     ) {
-        $this->organizationRepository        = $organizationRepository;
+        $this->organizationRepository       = $organizationRepository;
+        $this->roleService                  = $roleService;
     } //Function ends
 
 
     /**
      * Get all organization data
+     * 
+     * @param \Illuminate\Support\Collection $request
+     * @param \bool $isActive (optional)
+     *
+     * @return mixed
+     * 
      */
-    public function getAll(Request $request, bool $isActive=null)
+    public function getAll(Collection $request, bool $isActive=null)
     {
         $objReturnValue=null;
         try {
@@ -69,14 +88,92 @@ class OrganizationService extends BaseService
 
 
     /**
-     * Get all organization data
+     * Get organization data by identifier
+     * 
+     * @param \Illuminate\Support\Collection $request
+     * @param \string $hash
+     * @param \bool $isActive (optional)
+     *
+     * @return mixed
+     * 
      */
-    public function getData(Request $request, string $hash, bool $isActive=null)
+    public function getData(Collection $request, string $hash, bool $isActive=null)
     {
         $objReturnValue=null;
         try {
             $objReturnValue = $this->organizationRepository->getOrganizationByHash($hash, $isActive);
                 
+        } catch(AccessDeniedHttpException $e) {
+            throw new AccessDeniedHttpException($e->getMessage());
+        } catch(BadRequestHttpException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        } catch(Exception $e) {
+            Log::error($e);
+            throw new HttpException(500);
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends
+
+
+    /**
+     * Create organization
+     * 
+     * @param \Illuminate\Support\Collection $request
+     *
+     * @return mixed
+     * 
+     */
+    public function create(Collection $request)
+    {
+        $objReturnValue=null;
+        try {
+            $data = $request->only('name', 'sub_domain', 'type_id')->toArray();
+
+            //Create organization
+            $organization = $this->organizationRepository->create($data);
+
+            if ($organization) {
+                //Create default role
+                $roles = $this->roleService->createDefaultRole($organization['id']);
+
+                //TODO: Create configuration data
+
+                //Raise event: New Organization Added
+                $organization['roles'] = $roles;
+                event(new OrganizationCreatedEvent($organization, $request));
+
+                //Organiztion object
+                $objReturnValue = $organization;
+            } //End if
+                
+        } catch(AccessDeniedHttpException $e) {
+            throw new AccessDeniedHttpException($e->getMessage());
+        } catch(BadRequestHttpException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        } catch(Exception $e) {
+            Log::error($e);
+            throw new HttpException(500);
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends
+
+
+    /**
+     * Update organization
+     * 
+     * @param \Illuminate\Support\Collection $request
+     * @param \string $hash
+     *
+     * @return mixed
+     * 
+     */
+    public function update(Collection $request, string $hash)
+    {
+        $objReturnValue=null;
+        try {
+            $objReturnValue = $this->organizationRepository->update($request, $hash);               
         } catch(AccessDeniedHttpException $e) {
             throw new AccessDeniedHttpException($e->getMessage());
         } catch(BadRequestHttpException $e) {

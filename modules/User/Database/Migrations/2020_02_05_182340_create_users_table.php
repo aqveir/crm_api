@@ -13,7 +13,7 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('omnicrm-migration.table_name.user.main'), function (Blueprint $table) {
+        Schema::create(config('crmomni-migration.table_name.user.main'), function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('hash')->nullable();
 
@@ -55,7 +55,7 @@ class CreateUsersTable extends Migration
             $table->softDeletes();
         });
 
-        Schema::create(config('omnicrm-migration.table_name.user.availability'), function (Blueprint $table) {
+        Schema::create(config('crmomni-migration.table_name.user.availability'), function (Blueprint $table) {
             $table->integer('user_id');
             $table->integer('status_id');
 
@@ -66,7 +66,7 @@ class CreateUsersTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create(config('omnicrm-migration.table_name.user.availability_history'), function (Blueprint $table) {
+        Schema::create(config('crmomni-migration.table_name.user.availability_history'), function (Blueprint $table) {
             $table->integer('user_id');
             $table->integer('status_id');
             $table->dateTime('timestamp')->useCurrent();
@@ -82,10 +82,10 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(config('omnicrm-migration.table_name.user.main'));
+        Schema::dropIfExists(config('crmomni-migration.table_name.user.main'));
 
-        Schema::dropIfExists(config('omnicrm-migration.table_name.user.availability'));
+        Schema::dropIfExists(config('crmomni-migration.table_name.user.availability'));
 
-        Schema::dropIfExists(config('omnicrm-migration.table_name.user.availability_history'));
+        Schema::dropIfExists(config('crmomni-migration.table_name.user.availability_history'));
     }
 }

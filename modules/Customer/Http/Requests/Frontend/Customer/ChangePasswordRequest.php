@@ -9,7 +9,7 @@ class ChangePasswordRequest extends FormRequest
 {
     public function rules()
     {
-        return Config::get('omnicrm-validation.request_handler.auth.change_password.validation_rules');
+        return Config::get('crmomni-validation.request_handler.auth.change_password.validation_rules');
     }
 
     

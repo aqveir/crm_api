@@ -13,7 +13,7 @@ class CreateUserRolesTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('omnicrm-migration.table_name.user.roles'), function (Blueprint $table) {
+        Schema::create(config('crmomni-migration.table_name.user.roles'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
             $table->integer('user_id');
@@ -32,6 +32,6 @@ class CreateUserRolesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(config('omnicrm-migration.table_name.user.roles'));
+        Schema::dropIfExists(config('crmomni-migration.table_name.user.roles'));
     }
 }

@@ -13,7 +13,7 @@ trait DocumentRelationship
 	public function type()
 	{
 		return $this->hasOne(
-			config('omnicrm-class.class_model.lookup_value'),
+			config('crmomni-class.class_model.lookup_value'),
 			'id', 'entity_type_id'
 		);
 	} //Function ends
@@ -25,7 +25,7 @@ trait DocumentRelationship
 	public function owner()
 	{
 		return $this->hasOne(
-			config('omnicrm-class.class_model.user'),
+			config('crmomni-class.class_model.user'),
 			'id', 'created_by'
 		);
 	} //Function ends

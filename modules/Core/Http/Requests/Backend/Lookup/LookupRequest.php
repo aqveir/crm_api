@@ -9,7 +9,7 @@ class LookupRequest extends FormRequest
 {
     public function rules()
     {
-        return Config::get('omnicrm-validation.request_handler.get_lookup_value.validation_rules');
+        return Config::get('crmomni-validation.request_handler.get_lookup_value.validation_rules');
     }
 
     public function authorize()

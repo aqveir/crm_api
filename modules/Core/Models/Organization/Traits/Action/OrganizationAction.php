@@ -78,7 +78,7 @@ trait OrganizationAction
             if($isDuplicate!=null) {
                 throw new DuplicateException('Organization Name Already Exist');      
             } else {
-                $query = config('omnicrm-class.class_model.organization')::where('id', $id);
+                $query = config('crmomni-class.class_model.organization')::where('id', $id);
                 $query = $query->update([
                             'name'=>$request['name'],
                             'modified_by' => $user_id,
@@ -107,7 +107,7 @@ trait OrganizationAction
     {
         $objReturnValue=null;
         try {
-            $query = config('omnicrm-class.class_model.organization')::where('name', $request['name']);
+            $query = config('crmomni-class.class_model.organization')::where('name', $request['name']);
             $query = $query->whereNotIn('id', [$id]);
             $query = $query->firstOrFail();
 

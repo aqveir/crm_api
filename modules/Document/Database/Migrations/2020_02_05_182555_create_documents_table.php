@@ -13,7 +13,7 @@ class CreateDocumentsTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('omnicrm-migration.table_name.documents'), function (Blueprint $table) {
+        Schema::create(config('crmomni-migration.table_name.documents'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
             // FK Relationships
@@ -44,6 +44,6 @@ class CreateDocumentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(config('omnicrm-migration.table_name.documents'));
+        Schema::dropIfExists(config('crmomni-migration.table_name.documents'));
     }
 }

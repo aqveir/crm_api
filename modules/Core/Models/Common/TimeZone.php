@@ -77,7 +77,7 @@ class TimeZone extends Model {
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->table = config('omnicrm-migration.table_name.timezones');
+        $this->table = config('crmomni-migration.table_name.timezones');
     }
 
 } //Class ends

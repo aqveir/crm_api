@@ -5,13 +5,12 @@ namespace Modules\User\Services\User;
 use Config;
 use Carbon\Carbon;
 
-use Modules\User\Models\User\User;
-
 use Modules\User\Repositories\User\UserRepository;
 
 use Modules\Core\Services\BaseService;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
 use Exception;
@@ -25,72 +24,119 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 /**
  * Class UserService
- * @package Modules\Core\Services\User
+ * @package Modules\User\Services\User
  */
 class UserService extends BaseService
 {
     /**
-     * @var Modules\Core\Repositories\User\UserRepository
+     * @var \Modules\Core\Repositories\User\UserRepository
      */
-    protected $userrepository;
+    protected $userRepository;
 
 
     /**
-     * @var \Modules\Core\Models\User\User
-     */
-    protected $user;
-
-
-    /**
-     * AuthService constructor.
+     * Service constructor.
      *
-     * @param \Modules\Core\Models\User\User    $user
+     * @param \Modules\Core\Repositories\User\UserRepository    $userRepository
      */
     public function __construct(
-        UserRepository $userrepository,
-        User $user
+        UserRepository              $userRepository
     ) {
-        $this->userrepository        = $userrepository;
-        $this->user                  = $user;
+        $this->userRepository       = $userRepository;
     } //Function ends
 
 
     /**
-     * @param \Illuminate\Http\Request $request
-     *
+     * Create Default User
+     * 
+     * @param \Illuminate\Support\Collection $payload
+     * @param \int $orgId
+     * 
      * @return mixed
      */
-    public function createUser(Request $request, int $orgId, bool $isRemoteAccessOnly=false)
+    public function createDefault(Collection $payload, int $orgId) 
     {
         $objReturnValue=null;
         try {
-            $payload = $request->only('username', 'password', 'email', 'first_name', 'last_name');
+            $data = $payload->only(['email', 'phone', 'first_name', 'last_name'])->toArray();
+            $data = array_merge($data, [
+                'username' => $data['email'],
+                'password' => config('user.settings.new_organization.default_password'),
+                'is_remote_access_only' => 0
+            ]);
+
+            //Create defult user
+            $user = $this->create(collect($data), $orgId, true);
+            if (empty($user)) {
+                throw new BadRequestHttpException();
+            } //End if
+
+            //Store Additional Settings
+            $user['is_active'] = true;
+            $user['is_pool'] = true;
+            $user['is_default'] = true;
+            if ($user->save()) {
+                throw new HttpException(500);
+            } //End if
+
+            //Assign to the return value
+            $objReturnValue = $user;
+
+        } catch(AccessDeniedHttpException $e) {
+            throw new AccessDeniedHttpException($e->getMessage());
+        } catch(BadRequestHttpException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        } catch(Exception $e) {
+            throw new HttpException(500);
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends    
+
+
+    /**
+     * Create User
+     * 
+     * @param \Illuminate\Support\Collection $payload
+     * @param \int $orgId
+     * @param \bool $isDefault (optional)
+     *
+     * @return mixed
+     */
+    public function create(Collection $payload, int $orgId, bool $isDefault=false)
+    {
+        $objReturnValue=null;
+        try {
+            $data = $payload->only([
+                'username', 'password', 'email', 
+                'phone', 'first_name', 'last_name',
+                'is_remote_access_only'
+            ])->toArray();
 
             // Duplicate check
-            $isDuplicate=$this->userrepository->exists($payload['username'], 'username');
-            if(!$isDuplicate) {
-
-                //Generate the hash code for the user
-                $hash=$this->generateRandomHash('u');
-
-                //Generate the data payload to create user
-                $payload = array_merge(
-                    $payload,
-                    [
-                        'hash' => $hash, 'org_id' => $orgId,
-                        'is_active' => 1, 'is_verified' => 0, 
-                        'is_remote_access_only' => $isRemoteAccessOnly
-                    ]
-                );
+            $isDuplicate=$this->userRepository->exists($data['username'], 'username');
+            if (!$isDuplicate) {
+                //Add Organisation data
+                $data = array_merge($data, [ 'org_id' => $orgId ]);
 
                 //Create User
-                $objReturnValue = $this->userrepository->create($payload);
+                $user = $this->userRepository->create($data);
             } else {
                 throw new BadRequestHttpException();
             } //End if
-        } catch(Exception $e) {
 
-        }
+            //Assign to the return value
+            $objReturnValue = $user;
+
+        } catch(AccessDeniedHttpException $e) {
+            throw new AccessDeniedHttpException($e->getMessage());
+        } catch(BadRequestHttpException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        } catch(Exception $e) {
+            Log::error($e);
+            throw new HttpException(500);
+        } //Try-catch ends
+
         return $objReturnValue;
     } //Function ends
 

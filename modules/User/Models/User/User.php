@@ -46,11 +46,11 @@ class User extends Model implements
      * @var array
      */
     protected $fillable = [
-        'hash', 'org_id', 'username', 'password',
+        'org_id', 'username', 'password',
         'first_name', 'middle_name', 'last_name',
         'country_id', 'timezone_id',
         'email', 'phone', 'virtual_phone_number',
-        'failed_attempts', 'is_active', 'last_login_at'
+        'is_remote_access_only'
     ];
 
     
@@ -104,7 +104,7 @@ class User extends Model implements
      */
     protected function serializeDate(\DateTimeInterface $date)
     {
-        return $date->format(config('omnichannel.settings.date_format_response_generic'));
+        return $date->format(config('crmomni.settings.date_format_response_generic'));
     } //Function ends
 
 
@@ -115,7 +115,7 @@ class User extends Model implements
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->table = config('omnicrm-migration.table_name.users');
+        $this->table = config('crmomni-migration.table_name.users');
     } //Function ends
 
 

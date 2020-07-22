@@ -13,7 +13,7 @@ class CreateCountryTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('omnicrm-migration.table_name.countries'), function (Blueprint $table) {
+        Schema::create(config('crmomni-migration.table_name.countries'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
             $table->string('alpha2_code')->unique();
@@ -50,6 +50,6 @@ class CreateCountryTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(config('omnicrm-migration.table_name.countries'));
+        Schema::dropIfExists(config('crmomni-migration.table_name.countries'));
     }
 }

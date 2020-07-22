@@ -28,26 +28,6 @@ return [
         |--------------------------------------------------------------------------
         */
         'cache' => [
-            'country' => [
-                'key' => '_cache_country_key_',
-                'duration_in_sec' => 86400,
-            ],
-
-            'currency' => [
-                'key' => '_cache_currency_key_',
-                'duration_in_sec' => 86400,
-            ], 
-
-            'lookup' => [
-                'key' => '_cache_lookup_key_',
-                'duration_in_sec' => 86400,
-            ], 
-
-            'organization' => [
-                'key' => '_cache_organization_key_',
-                'duration_in_sec' => 86400,
-            ],
-
             'user' => [
                 'key' => '_cache_user_key_',
                 'duration_in_sec' => 86400,

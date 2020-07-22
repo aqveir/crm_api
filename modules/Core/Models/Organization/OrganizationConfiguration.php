@@ -75,7 +75,7 @@ class OrganizationConfiguration extends Model {
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->table = config('omnicrm-migration.table_name.configurations');
+        $this->table = config('crmomni-migration.table_name.configurations');
     }
 
 } //Class ends

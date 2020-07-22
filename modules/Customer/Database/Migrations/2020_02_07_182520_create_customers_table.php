@@ -13,7 +13,7 @@ class CreateCustomersTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('omnicrm-migration.table_name.customer.main'), function (Blueprint $table) {
+        Schema::create(config('crmomni-migration.table_name.customer.main'), function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('hash')->nullable();
 
@@ -69,6 +69,6 @@ class CreateCustomersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(config('omnicrm-migration.table_name.customer.main'));
+        Schema::dropIfExists(config('crmomni-migration.table_name.customer.main'));
     }
 }

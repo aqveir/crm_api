@@ -3,6 +3,8 @@
 namespace Modules\Core\Events;
 
 use Modules\Core\Models\Organization\Organization;
+
+use Illuminate\Support\Collection;
 use Illuminate\Queue\SerializesModels;
 
 class OrganizationCreatedEvent
@@ -16,13 +18,20 @@ class OrganizationCreatedEvent
 
 
     /**
+     * Request Data as Collection variable
+     */
+    public $request;
+
+
+    /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Organization $organization)
+    public function __construct(Organization $organization, Collection $request)
     {
         $this->organization = $organization;
+        $this->request = $request;
     }
 
 

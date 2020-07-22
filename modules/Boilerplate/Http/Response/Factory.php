@@ -93,7 +93,7 @@ class Factory
      *
      * @return \Modules\Boilerplate\Http\Response
      */
-    public function collection(Collection $collection, $transformer, $parameters = [], Closure $after = null)
+    public function collection(Collection $collection, $transformer = null, $parameters = [], Closure $after = null)
     {
         if ($collection->isEmpty()) {
             $class = get_class($collection);
@@ -106,7 +106,11 @@ class Factory
             $parameters = [];
         }
 
-        $binding = $this->transformer->register($class, $transformer, $parameters, $after);
+        if ($transformer !== null) {
+            $binding = $this->transformer->register($class, $transformer, $parameters, $after);
+        } else {
+            $binding = $this->transformer->getBinding($collection);
+        }
 
         return new Response($collection, 200, [], $binding);
     }

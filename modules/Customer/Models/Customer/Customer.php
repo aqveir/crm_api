@@ -108,7 +108,7 @@ class Customer extends Model implements
      */
     protected function serializeDate(\DateTimeInterface $date)
     {
-        return $date->format(config('omnichannel.settings.date_format_response_generic'));
+        return $date->format(config('crmomni.settings.date_format_response_generic'));
     } //Function ends
 
 
@@ -119,7 +119,7 @@ class Customer extends Model implements
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->table = config('omnicrm-migration.table_name.customer.main');
+        $this->table = config('crmomni-migration.table_name.customer.main');
     } //Function ends
 
 

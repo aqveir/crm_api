@@ -2,7 +2,7 @@
 
 namespace Modules\Core\Models\Role;
 
-use Illuminate\Database\Eloquent\Model;
+use Modules\Core\Models\BaseModel as Model;
 use Modules\Core\Models\Role\Traits\Relationship\RoleRelationship;
 
 /**
@@ -26,7 +26,7 @@ class RolePrivilege extends Model
      * @var array
      */
     protected $fillable = [
-        'id','role_id','privilege_id','is_active',
+        'id', 'role_id', 'privilege_id', 'is_active',
     ];
 
     /**
@@ -54,6 +54,6 @@ class RolePrivilege extends Model
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->table = config('omnicrm-migration.table_name.role_privileges');
+        $this->table = config('crmomni-migration.table_name.role_privileges');
     } //Function ends
 }

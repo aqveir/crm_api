@@ -81,7 +81,7 @@ class Society extends Model {
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->table = config('omnicrm-migration.table_name.customer.society_address');
+        $this->table = config('crmomni-migration.table_name.customer.society_address');
     }
 
 } //Class ends

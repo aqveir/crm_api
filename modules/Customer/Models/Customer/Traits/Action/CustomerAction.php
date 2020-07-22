@@ -33,7 +33,7 @@ trait CustomerAction
 	{
 		$objReturnValue=null;
 		try {
-			$query = config('omnicrm-class.class_model.customer.main')::where('hash', '=', $hash);
+			$query = config('crmomni-class.class_model.customer.main')::where('hash', '=', $hash);
 			$query = $query->where('org_id', '=', $orgId);
 			$query = $query->orderBy('id', 'asc')->firstOrFail();
 
@@ -54,7 +54,7 @@ trait CustomerAction
 	{
 		$objReturnValue=null;
 		try {
-			$query = config('omnicrm-class.class_model.customer.main')::where('id', $id);
+			$query = config('crmomni-class.class_model.customer.main')::where('id', $id);
 			if($orgId>0) { $query = $query->where('org_id', $orgId); }
 			$query = $query->orderBy('id', 'asc')->firstOrFail();
 
@@ -351,7 +351,7 @@ trait CustomerAction
     public function getAllCustomerDataFromDB(int $orgId, int $userId=0) {
         $objReturnValue=null;
         try {
-            $query = config('omnicrm-class.class_model.customer.main')::with([
+            $query = config('crmomni-class.class_model.customer.main')::with([
                 'details', 'details.type','service_requests',
                 'service_requests.type', 'service_requests.status', 
                 'service_requests.owner']);
@@ -387,7 +387,7 @@ trait CustomerAction
     public function getAllCustomerMinifiedDataFromDB(int $orgId) {
         $objReturnValue=null;
         try {
-            $query = config('omnicrm-class.class_model.customer.main')::where('org_id', $orgId);
+            $query = config('crmomni-class.class_model.customer.main')::where('org_id', $orgId);
             $query = $query->orderBy('created_on', 'desc')->get();
             $query->makeHidden(['job_title','date_of_birth','date_of_aniversary']);
             $query->makeVisible(['created_on']);
@@ -465,7 +465,7 @@ trait CustomerAction
 
             //Get Customer By Id
             if ($orgId>0 && $CustomerId>0) {
-                $Customer = config('omnicrm-class.class_model.customer.main')::with([
+                $Customer = config('crmomni-class.class_model.customer.main')::with([
                     'addresses', 'details', 'addresses.type', 'details.type', 
                     'details.country','service_requests','company'
                 ]);

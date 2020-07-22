@@ -22,7 +22,7 @@ trait NoteAction
 		$objReturnValue=null;
 		
 		try {
-	        $query = config('omnicrm-class.class_model.note')::where('entity_type', $typeId);
+	        $query = config('crmomni-class.class_model.note')::where('entity_type', $typeId);
 	        $query = $query->where('reference_id', $referenceId);
 	        $query = $query->orderBy('created_on', 'desc');
 	        $query = $query->firstOrFail();

@@ -45,7 +45,7 @@ trait CustomerRelationship
 	{
 		return $this->belongsToMany(
 			CustomerDetail::class,
-			config('omnicrm-migration.table_name.wallet.customers'),
+			config('crmomni-migration.table_name.wallet.customers'),
 			'customer_id', 
 			'wallet_id'
 		)->wherePivot('is_active', 1);
@@ -76,7 +76,7 @@ trait CustomerRelationship
 	public function notes()
 	{
 		return $this->hasMany(
-			config('omnicrm-class.class_model.note'),
+			config('crmomni-class.class_model.note'),
 			'reference_id', 'id'
 		)
 		->whereHas('type', function($inner){$inner->where('key', 'entity_type_customer');})
@@ -91,7 +91,7 @@ trait CustomerRelationship
 	public function documents()
 	{
 		return $this->hasMany(
-			config('omnicrm-class.class_model.document'),
+			config('crmomni-class.class_model.document'),
 			'reference_id', 'id'
 		)
 		->whereHas('type', function($inner){$inner->where('key', 'entity_type_customer');})
@@ -105,7 +105,7 @@ trait CustomerRelationship
 	public function organization()
 	{
 		return $this->belongsTo(
-			config('omnicrm-class.class_model.organization'),
+			config('crmomni-class.class_model.organization'),
 			'customer_id', 'id'
 		);
 	}
@@ -117,7 +117,7 @@ trait CustomerRelationship
 	public function occupation()
 	{
 		return $this->hasOne(
-			config('omnicrm-class.class_model.lookup_value'),
+			config('crmomni-class.class_model.lookup_value'),
 			'id', 'occupation_id'
 		);
 	}
@@ -129,7 +129,7 @@ trait CustomerRelationship
 	public function gender()
 	{
 		return $this->hasOne(
-			config('omnicrm-class.class_model.lookup_value'),
+			config('crmomni-class.class_model.lookup_value'),
 			'id', 'gender_id'
 		);
 	}
@@ -141,7 +141,7 @@ trait CustomerRelationship
 	public function group()
 	{
 		return $this->hasOne(
-			config('omnicrm-class.class_model.lookup_value'),
+			config('crmomni-class.class_model.lookup_value'),
 			'id', 'group_id'
 		);
 	}
@@ -153,7 +153,7 @@ trait CustomerRelationship
 	public function type()
 	{
 		return $this->hasOne(
-			config('omnicrm-class.class_model.lookup_value'),
+			config('crmomni-class.class_model.lookup_value'),
 			'id', 'type_id'
 		);
 	}
