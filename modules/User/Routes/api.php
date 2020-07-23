@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use Modules\Boilerplate\Routing\Router;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,7 +12,47 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+$api = app(Router::class);
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+$api->version('v1', function (Router $api) {
+
+    // Unauthenticated OR Guest endpoints
+    $api->group(['middleware' => ['guest']], function(Router $api) {
+
+        // User Endpoint
+        $api->group(['prefix' => 'user'], function(Router $api) {
+            // Authentication
+            $api->post('login', 'Modules\\User\\Http\\Controllers\\Backend\\Auth\\UserAuthController@login');
+
+            // Password Management
+            $api->post('forgot', 'Modules\\User\\Http\\Controllers\\Backend\\Auth\\UserAuthController@forgot');
+            $api->post('reset', 'Modules\\User\\Http\\Controllers\\Backend\\Auth\\UserAuthController@reset');
+
+            // User Exists Validation
+            $api->get('exists', 'Modules\\User\\Http\\Controllers\\Backend\\User\\GetUserController@exists');
+
+            // User Activation
+            $api->get('activate', 'Modules\\User\\Http\\Controllers\\Backend\\User\\SetUserController@activate');
+        });
+    });
+
+    // Authenticated Endpoints for Backend
+    $api->group(['middleware' => ['auth:backend']], function(Router $api) {
+
+        // User Endpoints
+        $api->group(['prefix' => 'user'], function(Router $api) {
+            // Logout
+            $api->put('logout', 'Modules\\User\\Http\\Controllers\\Backend\\Auth\\UserAuthController@logout');
+
+            // Password Management
+            $api->put('changepass', 'Modules\\User\\Http\\Controllers\\Backend\\Auth\\UserAuthController@changePassword');
+
+            // User Management
+            $api->get('/', 'Modules\\User\\Http\\Controllers\\Backend\\User\\GetUserController@index');
+            $api->get('{hash}', 'Modules\\User\\Http\\Controllers\\Backend\\User\\GetUserController@show');
+            $api->post('/', 'Modules\\User\\Http\\Controllers\\Backend\\User\\SetUserController@create');
+            $api->put('{hash}', 'Modules\\User\\Http\\Controllers\\Backend\\User\\SetUserController@update');
+            $api->put('{hash}/roles', 'Modules\\User\\Http\\Controllers\\Backend\\User\\SetUserController@assignRoles');
+        });
+    });
 });

@@ -37,7 +37,8 @@ class Privilege extends Model
      * @var array
      */
     protected $hidden = [
-        'pivot',
+        'id', 'description', 'is_active', 'is_superadmin',
+        'created_at', 'updated_at', 'pivot',
     ];
 
 

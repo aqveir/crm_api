@@ -1,21 +1,21 @@
 <?php
 
-namespace Modules\Core\Repositories\User;
+namespace Modules\User\Repositories\User;
 
-use Modules\Core\Contracts\{UserContract};
+use Modules\User\Contracts\{UserContract};
 
-use Modules\Core\Models\User\User;
+use Modules\User\Models\User\User;
 use Modules\Core\Repositories\EloquentRepository;
 
 /**
  * Class UserRepository
- * @package Modules\Core\Repositories\User
+ * @package Modules\User\Repositories\User
  */
 class UserRepository extends EloquentRepository implements UserContract
 {
 
     /**
-     * UserRepository constructor.
+     * Repository constructor.
      *
      * @param  User  $model
      */

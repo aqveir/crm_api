@@ -19,7 +19,7 @@ return [
                 ],
             ], //Organization Controller ends
 
-            // Auth Controller Requests
+            // User Auth Controller Requests
             'auth' => [
                 //Authenticate user
                 'login' => [
@@ -75,14 +75,17 @@ return [
                     'release_token' => env('SIGN_UP_RELEASE_TOKEN', false),
 
                     'validation_rules' => [
+                        'key' => 'required_without:sub_domain|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        'sub_domain' => 'required_without:key|string|exists:' . config('crmomni-migration.table_name.organizations') . ',sub_domain|max:36',
+                        
                         'username' => 'required|max:36|unique:users,username',
                         'password' => 'required|string|min:6',
                         'first_name' => 'nullable|max:40',
                         'last_name' => 'nullable|max:40',
                         'email' => 'required|email|max:40',
-                        'phone' => 'nullable',
-                        'role' => 'required',
-                        'role.*.role_id' => 'required|numeric'
+                        'phone' => 'nullable|string|max:15',
+                        'country_idd' => 'required_with:phone|string|max:5',
+                        'roles' => 'required|array',
                     ]
                 ],
 

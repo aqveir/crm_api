@@ -22,6 +22,13 @@ return [
         'date_format' => 'Y-m-d H:i:s',
         'date_format_response_generic' => 'c',
 
+        'default' => [
+            'role' => [
+                'key_super_admin' => ['super_admin'],
+                'key_organization_owner' => ['organization_owner']
+            ]
+        ],        
+
         /*
         |--------------------------------------------------------------------------
         | Specifies the default cache settings by entities

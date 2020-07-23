@@ -59,6 +59,7 @@ class CustomerAuthService extends BaseService
      */
     protected $customerservice;
 
+
     /**
      * @var \Illuminate\Auth\AuthManager
      */
@@ -192,7 +193,7 @@ class CustomerAuthService extends BaseService
                 //Notify for Customer Authentication
                 event(new CustomerLoginEvent($customer));
 
-                //Attach token and params
+                //Attach token and other params
                 $customer['token_type'] = 'bearer';
                 $customer['token'] = $token;
                 $customer['created_on'] = time();

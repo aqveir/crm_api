@@ -5,9 +5,12 @@ namespace Modules\User\Services\User;
 use Config;
 use Carbon\Carbon;
 
+use Modules\Core\Repositories\Organization\OrganizationRepository;
 use Modules\User\Repositories\User\UserRepository;
 
 use Modules\Core\Services\BaseService;
+
+use Modules\User\Events\UserCreatedEvent;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -28,21 +31,31 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
  */
 class UserService extends BaseService
 {
+
     /**
-     * @var \Modules\Core\Repositories\User\UserRepository
+     * @var Modules\Core\Repositories\Organization\OrganizationRepository
+     */
+    protected $organizationRepository;
+
+
+    /**
+     * @var \Modules\User\Repositories\User\UserRepository
      */
     protected $userRepository;
 
 
     /**
      * Service constructor.
-     *
-     * @param \Modules\Core\Repositories\User\UserRepository    $userRepository
+     * 
+     * @param \Modules\Core\Repositories\Organization\OrganizationRepository    $organizationRepository
+     * @param \Modules\User\Repositories\User\UserRepository    $userRepository
      */
     public function __construct(
-        UserRepository              $userRepository
+        OrganizationRepository          $organizationRepository,
+        UserRepository                  $userRepository
     ) {
-        $this->userRepository       = $userRepository;
+        $this->organizationRepository   = $organizationRepository;
+        $this->userRepository           = $userRepository;
     } //Function ends
 
 
@@ -97,30 +110,44 @@ class UserService extends BaseService
     /**
      * Create User
      * 
+     * @param \string $orgHash
      * @param \Illuminate\Support\Collection $payload
-     * @param \int $orgId
-     * @param \bool $isDefault (optional)
+     * @param \bool $isAutoCreated (optional)
      *
      * @return mixed
      */
-    public function create(Collection $payload, int $orgId, bool $isDefault=false)
+    public function create(string $orgHash, Collection $payload, bool $isAutoCreated=false)
     {
         $objReturnValue=null;
         try {
+            //Authenticated User
+            $user = $this->getCurrentUser('backend');
+
+            if ($user->hasRoles(config('crmomni.settings.default.role.key_super_admin'))) {
+                //Get organization data
+                $organization = $this->getOrganizationByHash($orgHash);
+                $orgId = $organization['id'];
+            } else {
+                $orgId = $user['org_id'];
+            } //End if
+
+            //Build user data
             $data = $payload->only([
-                'username', 'password', 'email', 
-                'phone', 'first_name', 'last_name',
-                'is_remote_access_only'
+                'username', 'password', 'email', 'phone', 
+                'first_name', 'last_name', 'is_remote_access_only'
             ])->toArray();
 
             // Duplicate check
             $isDuplicate=$this->userRepository->exists($data['username'], 'username');
             if (!$isDuplicate) {
                 //Add Organisation data
-                $data = array_merge($data, [ 'org_id' => $orgId ]);
+                $data = array_merge($data, [ 'org_id' => $orgId, 'created_by' => $user['id'] ]);
 
                 //Create User
                 $user = $this->userRepository->create($data);
+
+                //Raise event: User Added
+                event(new UserCreatedEvent($user, $isAutoCreated));
             } else {
                 throw new BadRequestHttpException();
             } //End if

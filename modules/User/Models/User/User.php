@@ -6,6 +6,7 @@ use Hash;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 use Modules\Core\Models\BaseModel as Model;
+use Modules\User\Models\User\Traits\Action\UserAction;
 use Modules\User\Models\User\Traits\Relationship\UserRelationship;
 
 use Illuminate\Auth\Authenticatable;
@@ -31,6 +32,7 @@ class User extends Model implements
     use Authenticatable, Authorizable, CanResetPassword, MustVerifyEmail;
     use Notifiable, UserRelationship;
     use SoftDeletes;
+    use UserAction;
 
     /**
      * The database table used by the model.
@@ -50,7 +52,8 @@ class User extends Model implements
         'first_name', 'middle_name', 'last_name',
         'country_id', 'timezone_id',
         'email', 'phone', 'virtual_phone_number',
-        'is_remote_access_only'
+        'is_remote_access_only', 'failed_attempts', 'last_login_at', 
+        'created_by'
     ];
 
     
@@ -63,6 +66,7 @@ class User extends Model implements
         'id', 'org_id', 'country_id', 'timezone_id',
         'first_name', 'middle_name', 'last_name',
         'password', 'remember_token', 'is_remote_access_only',
+        'email', 'phone', 'virtual_phone_number',
         'is_verified', 'is_active', 'is_pool', 'is_default',
         'failed_attempts', 'max_failed_attempts', 'last_otp',
         'created_by', 'updated_by', 'deleted_by',

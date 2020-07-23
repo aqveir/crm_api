@@ -21,7 +21,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
-class SetUserController extends ApiBaseController
+class GetUserController extends ApiBaseController
 {
 
     /**
@@ -35,37 +35,34 @@ class SetUserController extends ApiBaseController
 
 
     /**
-     * Create User
+     * Get All Users
      *
      * @param \Modules\User\Http\Requests\Backend\User\CreateUserRequest $request
      * @param \Modules\User\Services\User\UserService $userService
      * 
      * @return \Illuminate\Http\JsonResponse
      *
-     * @OA\Post(
+     * @OA\Get(
      *     path="/user",
      *     tags={"User"},
-     *     operationId="api.backend.user.create",
+     *     operationId="api.backend.user.index",
      *     security={{"JWT_Bearer_Auth":{}}},
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function create(CreateUserRequest $request, UserService $userService)
-    {   
+    public function index(CreateUserRequest $request, UserService $userService)
+    {
         try {
             //Get Org Hash 
             $orgHash = $this->getOrgHashInRequest($request);
 
-            //Get IP Address
-            $ipAddress = $this->getIpAddressInRequest($request);
-
             //Create payload
             $payload = collect($request);
 
-            //Create customer
-            $data = $userService->create($orgHash, $payload, $ipAddress);
+            //Logout customer
+            $data = $userService->logout($orgHash, $payload);
 
             //Send http status out
             return $this->response->success(compact('data'));
@@ -79,17 +76,17 @@ class SetUserController extends ApiBaseController
 
 
     /**
-     * Update User
+     * Show User By Identifier
      *
      * @param \Modules\User\Http\Requests\Backend\User\UpdateUserRequest $request
      * @param \Modules\User\Services\User\UserService $userService
      * 
      * @return \Illuminate\Http\JsonResponse
      *
-     * @OA\Put(
+     * @OA\Get(
      *     path="/user/{hash}",
      *     tags={"User"},
-     *     operationId="api.backend.user.update",
+     *     operationId="api.backend.user.show",
      *     security={{"JWT_Bearer_Auth":{}}},
      *     @OA\Parameter(
      *          parameter="hash", in="path", name="hash", description="Enter user identifier.",
@@ -100,20 +97,17 @@ class SetUserController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function update(UpdateUserRequest $request, UserService $userService, string $hash)
+    public function show(UpdateUserRequest $request, UserService $userService, string $hash)
     {   
         try {
             //Get Org Hash 
             $orgHash = $this->getOrgHashInRequest($request);
 
-            //Get IP Address
-            $ipAddress = $this->getIpAddressInRequest($request);
-
             //Create payload
             $payload = collect($request);
 
             //Logout customer
-            $data = $userAuthService->logout($orgHash, $payload, $ipAddress);
+            $data = $userService->logout($orgHash, $payload, $hash);
 
             //Send http status out
             return $this->response->success(compact('data'));
@@ -127,15 +121,44 @@ class SetUserController extends ApiBaseController
 
 
     /**
+     * Check if the user exists
+     *
+     * @param \Modules\User\Http\Requests\Backend\User\UserExistsRequest $request
+     * @param \Modules\User\Services\User\UserService $userService
      * 
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @OA\Get(
+     *      path="/user/exists",
+     *      tags={"User"},
+     *      operationId="api.backend.user.exists",
+     *      @OA\Parameter(
+     *          ref="#/components/parameters/organization_key",
+     *      ),
+     *      @OA\Parameter(
+     *          parameter="user_phone", in="query", name="phone", description="Enter phone number w/o country code.",
+     *          @OA\Schema(type="string")
+     *      ),
+     *      @OA\Parameter(
+     *          parameter="user_email", in="query", name="email", description="Enter email address.",
+     *          @OA\Schema(type="string")
+     *      ),
+     *      @OA\Response(response=200, description="Request was successfully executed."),
+     *      @OA\Response(response=400, description="Bad Request"),
+     *      @OA\Response(response=422, description="Model Validation Error"),
+     *      @OA\Response(response=500, description="Internal Server Error")
+     * )
      */
-    public function activate(UserActivateRequest $request, UserService $userService, string $key)
+    public function exists(UserExistsRequest $request, UserService $userService)
     {
         try {
+            //Get Org Hash 
+            $orgHash = $this->getOrgHashInRequest($request);
+
             //Create payload
             $payload = collect($request);
 
-            $data = $userService->activate($payload, $key);
+            $data = $userService->validateUserExists($orgHash, $payload);
 
             //Send http status out
             return $this->response->success(compact('data'));

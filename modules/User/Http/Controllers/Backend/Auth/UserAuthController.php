@@ -6,15 +6,11 @@ use Config;
 use Illuminate\Support\Facades\Log;
 
 use Modules\Core\Http\Controllers\ApiBaseController;
-
-use Modules\User\Http\Requests\Backend\Auth\UserExistsRequest;
-use Modules\User\Http\Requests\Backend\Auth\UserActivateRequest;
 use Modules\User\Http\Requests\Backend\Auth\UserLoginRequest;
 use Modules\User\Http\Requests\Backend\Auth\UserLogoutRequest;
 use Modules\User\Http\Requests\Backend\Auth\UserForgotRequest;
 use Modules\User\Http\Requests\Backend\Auth\UserResetRequest;
 
-use Modules\User\Services\User\UserService;
 use Modules\User\Services\User\UserAuthService;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -41,71 +37,6 @@ class UserAuthController extends ApiBaseController
     {
         parent::__construct();
     }
-
-
-    /**
-     * Check if the user exists
-     *
-     * @param \Modules\User\Http\Requests\Backend\Auth\UserExistsRequest $request
-     * @param \Modules\User\Services\User\UserService $userService
-     * 
-     * @return \Illuminate\Http\JsonResponse
-     *
-     * @OA\Get(
-     *      path="/user/exists",
-     *      tags={"User"},
-     *      operationId="api.backend.user.exists",
-     *      @OA\Parameter(
-     *          ref="#/components/parameters/organization_key",
-     *      ),
-     *      @OA\Parameter(
-     *          parameter="user_phone", in="query", name="phone", description="Enter phone number w/o country code.",
-     *          @OA\Schema(type="string")
-     *      ),
-     *      @OA\Parameter(
-     *          parameter="user_email", in="query", name="email", description="Enter email address.",
-     *          @OA\Schema(type="string")
-     *      ),
-     *      @OA\Response(response=200, description="Request was successfully executed."),
-     *      @OA\Response(response=400, description="Bad Request"),
-     *      @OA\Response(response=422, description="Model Validation Error"),
-     *      @OA\Response(response=500, description="Internal Server Error")
-     * )
-     */
-    public function exists(UserExistsRequest $request, UserService $userService)
-    {
-        try {
-            //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request);
-
-            //Create payload
-            $payload = collect($request);
-
-            $data = $userService->validateUserExists($orgHash, $payload);
-
-            //Send http status out
-            return $this->response->success(compact('data'));
-        } catch(AccessDeniedHttpException $e) {
-            return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
-        } catch(Exception $e) {
-            return $this->response->fail([], Response::HTTP_BAD_REQUEST);
-        }
-    } //Function ends
-
-
-    public function activate(UserActivateRequest $request, UserAuthService $userAuthService, string $key)
-    {
-        try {
-            $data = $userAuthService->activate($request, $hash);
-
-            //Send http status out
-            return $this->response->success(compact('data'));
-        } catch(AccessDeniedHttpException $e) {
-            return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
-        } catch(Exception $e) {
-            return $this->response->fail([], Response::HTTP_BAD_REQUEST);
-        }
-    } //Function ends
 
 
     /**
@@ -221,7 +152,7 @@ class UserAuthController extends ApiBaseController
             $payload = collect($request->only('email'));
 
             //Forgot password request
-            $data = $userAuthService->forgot($orgHash, $payload, $ipAddress);
+            $data = $userAuthService->sendForgotPasswordResetLink($orgHash, $payload, $ipAddress);
 
             //Send http status out
             return $this->response->success(compact('data'));
@@ -247,7 +178,7 @@ class UserAuthController extends ApiBaseController
             $payload = collect($request->only('password', 'new_password'));
 
             //Reset Password request
-            $data = $userAuthService->reset($orgHash, $payload, $ipAddress);
+            $data = $userAuthService->resetPassword($orgHash, $payload, $ipAddress);
 
             //Send http status out
             return $this->response->success(compact('data'));

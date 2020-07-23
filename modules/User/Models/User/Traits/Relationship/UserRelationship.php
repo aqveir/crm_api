@@ -51,7 +51,7 @@ trait UserRelationship
 	{
 		return $this->belongsToMany(
 			config('crmomni-class.class_model.role'),
-			config('crmomni-migration.table_name.user_roles'),
+			config('crmomni-migration.table_name.user.roles'),
 			'user_id', 'role_id'
 		);
 	} //Function ends
@@ -77,7 +77,7 @@ trait UserRelationship
 	{
 		return $this->belongsToMany(
 			config('crmomni-class.class_model.privilege'),
-			config('crmomni-migration.table_name.user_privileges'),
+			config('crmomni-migration.table_name.user.privileges'),
 			'user_id', 'privilege_id'
 		)
 		->wherePivot('is_active', 1);

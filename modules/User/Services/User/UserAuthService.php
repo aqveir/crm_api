@@ -6,27 +6,31 @@ use Config;
 use Carbon\Carbon;
 
 use Modules\User\Models\User\User;
-use Modules\User\Models\User\Traits\Action\UserAction;
-use Modules\Core\Models\Lookup\Traits\Action\LookupValueAction;
-use Modules\User\Models\User\Traits\Action\UserAvailabilityAction;
 
 use Modules\User\Repositories\User\UserRepository;
 
 use Modules\Core\Services\BaseService;
 
+use Modules\User\Events\UserLoginEvent;
+use Modules\User\Events\UserLogoutEvent;
+
 use Illuminate\Http\Request;
-use Illuminate\Auth\Events\PasswordReset;
-use Illuminate\Auth\Passwords\PasswordBrokerManager;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Password;
 
 use Exception;
-use Tymon\JWTAuth\Exceptions\JWTException;
+use Modules\Core\Exceptions\DuplicateDataException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+
+use Illuminate\Auth\AuthManager;
+use Illuminate\Auth\Events\PasswordReset;
+use Illuminate\Auth\Passwords\PasswordBrokerManager;
+use Illuminate\Support\Facades\Password;
 
 /**
  * Class AuthService
@@ -34,6 +38,19 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
  */
 class UserAuthService extends BaseService
 {
+
+    /**
+     * @var Modules\User\Repositories\User\UserRepository
+     */
+    protected $userRepository;
+
+
+    /**
+     * @var \Illuminate\Auth\AuthManager
+     */
+    protected $authManager;
+
+
     /**
      * @var \Illuminate\Auth\Passwords\PasswordBrokerManager
      */
@@ -41,50 +58,44 @@ class UserAuthService extends BaseService
 
 
     /**
-     * @var Modules\Core\Repositories\User\UserRepository
-     */
-    protected $userrepository;
-
-
-    /**
-     * @var \Modules\Core\Models\User\User
-     */
-    protected $user;
-
-
-    /**
      * AuthService constructor.
      *
+     * @param \Illuminate\Auth\AuthManager                              $authManager
      * @param \Illuminate\Auth\Passwords\PasswordBrokerManager          $passwordBrokerManager
-     * @param \Modules\Core\Models\User\User                            $user
+     * @param \Modules\User\Repositories\User\UserRepository            $userRepository
      */
     public function __construct(
-        PasswordBrokerManager $passwordBrokerManager,
-        UserRepository $userrepository,
-        User $user)
+        AuthManager                         $authManager, 
+        PasswordBrokerManager               $passwordBrokerManager, 
+        UserRepository                      $userRepository
+    )
     {
-        $this->passwordBrokerManager = $passwordBrokerManager;
-        $this->userrepository        = $userrepository;
-        $this->user                  = $user;
+        $this->authManager                  = $authManager;
+        $this->passwordBrokerManager        = $passwordBrokerManager;
+        $this->userRepository               = $userRepository;
     } //Function ends
 
 
     /**
-     * @param $credentials
+     * Authenticate User
+     * 
+     * @param \string $orgHash
+     * @param \Illuminate\Support\Collection $credentials
+     * @param \string $ipAddress (optional)
      *
-     * @return bool
+     * @return mixed
      */
-    public function authenticate(string $orgHash, $credentials)
+    public function authenticate(string $orgHash, Collection $credentials, string $ipAddress='0.0.0.0')
     {
         try {
             //Create condition for 
-            $credentials = array_merge(
-                $credentials,
+            $data = array_merge(
+                $credentials->toArray(),
                 ['is_active' => 1, 'is_verified' => 1, 'is_remote_access_only' => 0]
             );
 
             //Authenticate User
-            $token = $this->guard()->attempt($credentials);
+            $token = $this->guard()->attempt($data);
             if(!empty($token)) {
 
                 //Check Organization Status
@@ -97,7 +108,7 @@ class UserAuthService extends BaseService
                 } //End if
             } else {
                 //Check if user exists and updated failed data
-                $user = $this->userrepository->getByColumn($credentials['username'], 'username');
+                $user = $this->userRepository->getByColumn($credentials['username'], 'username');
 
                 //Update user table
                 if($user) {
@@ -105,7 +116,7 @@ class UserAuthService extends BaseService
                         'failed_attempts' => $user['failed_attempts']+1,
                         'is_active' => ($user['max_failed_attempts']>0)?(($user['max_failed_attempts']>($user['failed_attempts']+1))):$user['is_active']
                     ];
-                    $this->userrepository->update($credentials['username'], 'username', $data);
+                    $this->userRepository->update($credentials['username'], 'username', $data);
                 } //End if 
                 
                 throw new AccessDeniedHttpException('ERROR_USER_AUTH_CREDENTIALS_PLUS_ACCESS');
@@ -116,9 +127,21 @@ class UserAuthService extends BaseService
                 'last_login_at' => Carbon::now(),
                 'failed_attempts' => 0,
             ];
-            $this->userrepository->update($credentials['username'], 'username', $data);
+            $this->userRepository->update($credentials['username'], 'username', $data);
 
-            return $token;
+            //Attach token and other params
+            $user['token_type'] = 'bearer';
+            $user['token'] = $token;
+            $user['created_on'] = time();
+            $user['expires_in'] = $this->guard()->factory()->getTTL() * 60;
+            $user['privileges'] = $user->getActivePrivileges();
+            $user['reportees'] = [];
+            $user['settings'] = $user->hasRoles(['super_admin']);
+
+            //Raise event: User Login
+            event(new UserLoginEvent($user));
+
+            return $user;
         } catch(AccessDeniedHttpException $e) {
             log::error('UserAuthService:authenticate:AccessDeniedHttpException:' . $e->getMessage());
             throw new AccessDeniedHttpException($e->getMessage());
@@ -133,115 +156,15 @@ class UserAuthService extends BaseService
 
 
     /**
-     * Create a Backend User
-     * 
-     * @param \Illuminate\Http\Request  $request
-     * @param bool                      $isRemoteAccessOnly
-     *
-     * @return mixed
-     */
-    public function createUser(Request $request, bool $isRemoteAccessOnly=false)
-    {
-        $objReturnValue=null;
-        try {
-            //Authenticated User
-            $user = $this->getCurrentUser('backend');
-
-            //Payload for user creation
-            $payload = $request->only('username', 'password', 'email', 'first_name', 'last_name');
-
-            // Duplicate check
-            $isDuplicate=$this->userrepository->exists($payload['username'], 'username');
-            if(!$isDuplicate) {
-
-                //Generate the data payload to create user
-                $payload = array_merge(
-                    $payload,
-                    [
-                        'org_id' => $user['org_id'],
-                        'is_active' => 1, 
-                        'is_verified' => 0, 
-                        'is_remote_access_only' => $isRemoteAccessOnly,
-                        'created_by' => $user['id']
-                    ]
-                );
-
-                //Create User
-                $objReturnValue = $this->userrepository->create($payload);
-            } else {
-                throw new BadRequestHttpException();
-            } //End if
-        } catch(Exception $e) {
-            throw new BadRequestHttpException();
-        }
-        return $objReturnValue;
-    } //Function ends
-
-
-    /**
-     * Get user details
-     *
-     * @return object (User)
-     */
-    public function getUserData(string $token)
-    {
-        $objReturnValue = null;
-
-        try {
-            $user = $this->getCurrentUser();
-            $user = $user->load('roles', 'grant_privileges');
-
-            if($user)
-            {
-                //Initialize params
-                $objReturnValue = $user;
-                $userPrivileges=[];
-          
-                //Check Roles with active privileges
-                $userRoles = $user->roles; //$this->getUserRole($query['org_id'], $query['id']);
-                if($user->roles) {
-                    //Iterate the roles for the user
-                    foreach($user->roles as $role) {
-                        if(!empty($role)) {
-                            //Iterate the privileges in each role
-                            foreach($role->active_privileges as $privilege) {
-                                //Duplicate check to add the privileges
-                                if(!in_array($privilege, $userPrivileges, TRUE)) {
-                                    array_push($userPrivileges, $privilege);
-                                } //End if
-                            } //Loop ends (privileges)
-                        } //End if
-                    } //Loop ends (roles)
-                } //End if
-                
-                //Check for extra granted privileges
-                foreach($user->grant_privileges as $privilege) {
-                    //Duplicate check to add the privileges
-                    if(!in_array($privilege, $userPrivileges, TRUE)) {
-                        array_push($userPrivileges, $privilege);
-                    } //End if
-                } //Loop ends (privileges)
-
-                $objReturnValue['privileges']=$userPrivileges;
-                $objReturnValue->makeHidden('privileges');
-            } //End if
-        } catch(Exception $e) {
-            log::error($e);
-            throw new HttpException(500);
-        }
-
-        return $objReturnValue;
-    } //Function ends
-
-
-    /**
      * Sedn the forgot password email to user
      * 
-     * @param \Illuminate\Http\Request $request
+     * @param \string $orgHash
+     * @param \Illuminate\Support\Collection $request
+     * @param \string $ipAddress (optional)
      *
      * @return bool
      */
-    public function sendForgotPasswordResetLink(Request $request)
+    public function sendForgotPasswordResetLink(string $orgHash, Collection $request, string $ipAddress='0.0.0.0')
     {
         $response = $this->passwordBrokerManager->sendResetLink(
             $request->only('email')
@@ -254,11 +177,13 @@ class UserAuthService extends BaseService
     /**
      * Reset the password for the user
      * 
-     * @param \Illuminate\Http\Request $request
+     * @param \string $orgHash
+     * @param \Illuminate\Support\Collection $credentials
+     * @param \string $ipAddress (optional)
      *
      * @return bool
      */
-    public function resetPassword(Request $request)
+    public function resetPassword(string $orgHash, Collection $request, string $ipAddress='0.0.0.0')
     {
         try {
             $response = $this->passwordBrokerManager->reset(
@@ -266,6 +191,7 @@ class UserAuthService extends BaseService
                 function (User $user, $password) {
                     $user->password = $password;
                     $user->save();
+
                     event(new PasswordReset($user));
                 }
             );
@@ -286,11 +212,13 @@ class UserAuthService extends BaseService
     /**
      * Logout the user
      * 
-     * @param \Illuminate\Http\Request $request
+     * @param \string $orgHash
+     * @param \Illuminate\Support\Collection $credentials
+     * @param \string $ipAddress (optional)
      *
      * @return mixed
      */
-    public function logout(Request $request)
+    public function logout(string $orgHash, Collection $credentials, string $ipAddress='0.0.0.0')
     {
         $objReturnValue = false;
 
@@ -305,9 +233,8 @@ class UserAuthService extends BaseService
                 //Pass true to force the token to be blacklisted "forever"
                 $objReturnValue = $this->guard('backend')->logout(true);
 
-                //Set User Status as offline
-                $response = $userService->setUserOffline($user, $user['id']);
-
+                //Raise event: User Logout
+                event(new UserLogoutEvent($user));
             } else {
                 throw new UnauthorizedHttpException('ERROR_USER_AUTH_ACCESS');
             } //End if

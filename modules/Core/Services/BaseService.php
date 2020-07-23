@@ -33,7 +33,7 @@ abstract class BaseService
     /**
      * @var  \Modules\Core\Repositories\Organization\OrganizationRepository
      */
-    protected $organizationrepository;
+    protected $organizationRepository;
 
     /**
      *
@@ -114,7 +114,7 @@ abstract class BaseService
 
         try {
             //Get organization data
-            $organization = $this->organizationrepository->getOrganizationByHash($hash);
+            $organization = $this->organizationRepository->getOrganizationByHash($hash);
 
             $objReturnValue = $organization;
         } catch(Exception $e) {
