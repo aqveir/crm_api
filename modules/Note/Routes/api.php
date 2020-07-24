@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use Modules\Boilerplate\Routing\Router;
 
 /*
 |--------------------------------------------------------------------------
@@ -12,7 +12,20 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+$api = app(Router::class);
 
-Route::middleware('auth:api')->get('/note', function (Request $request) {
-    return $request->user();
+$api->version('v1', function (Router $api) {
+
+    // Authenticated Endpoints for Backend
+    $api->group(['middleware' => ['auth:backend']], function(Router $api) {
+
+        // Note Endpoints
+        $api->group(['prefix' => 'note'], function(Router $api) {
+            $api->get('/', 'Modules\\Note\\Http\\Controllers\\Backend\\NoteController@index');
+            
+            $api->post('/', 'Modules\\Note\\Http\\Controllers\\Backend\\NoteController@create');
+            $api->put('{id}', 'Modules\\Note\\Http\\Controllers\\Backend\\NoteController@update');
+            $api->delete('{id}', 'Modules\\Note\\Http\\Controllers\\Backend\\NoteController@delete');
+        });
+    });
 });

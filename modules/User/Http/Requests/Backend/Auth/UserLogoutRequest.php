@@ -14,9 +14,7 @@ class UserLogoutRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
-        ];
+        return Config::get('crmomni-validation.request_handler.backend.auth.logout.validation_rules');
     }
 
     /**

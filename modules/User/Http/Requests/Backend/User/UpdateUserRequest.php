@@ -14,9 +14,7 @@ class UpdateUserRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
-        ];
+        return Config::get('crmomni-validation.request_handler.backend.user.update.validation_rules');
     }
 
     /**

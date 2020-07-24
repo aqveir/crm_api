@@ -14,28 +14,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
  */
 trait NoteAction
 {
-	/**
-	 * Get Latest/Recent Note Object
-	 */
-	public function getRecentNote($typeId, $referenceId)
-	{
-		$objReturnValue=null;
-		
-		try {
-	        $query = config('crmomni-class.class_model.note')::where('entity_type', $typeId);
-	        $query = $query->where('reference_id', $referenceId);
-	        $query = $query->orderBy('created_on', 'desc');
-	        $query = $query->firstOrFail();
-
-	        $objReturnValue = $query;		
-		} catch(Exception $e) {
-			$objReturnValue=null;
-			Log::error(json_encode($e));
-		} //Try-catch ends
-		
-		return $objReturnValue;
-	} //Function ends
-	
 
 	public function createNote($request)
 	{
@@ -79,20 +57,4 @@ trait NoteAction
 		return $objReturnValue;
 	} //End Function
 
-	/**
-	 * Get the recent note text
-	 */
-    public function getRecentNoteText(int $orgId, $servicerequestId) {
-        $strNoteText='';
-        try {
-            $type =  $this->getLookUpByValue($orgId, config('portiqo-crm.settings.lookup_value.service_request'));
-            $note = $this->getRecentNote($type->id, $servicerequestId);
-            $strNoteText=$note->note;
-        } catch(Exception $e) {
-            Log::error(json_encode($e));
-            $strNoteText='';
-        } //Try-catch ends
-        
-        return $strNoteText;
-    } //Function ends
 } //Trait ends

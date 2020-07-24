@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Contracts\Note;
+namespace  Module\Note\Contracts;
 
 /**
  * Interface NoteContract.

@@ -3,10 +3,10 @@
 namespace Module\Note\Repositories\Note;
 
 
-use App\Contracts\Note\{NoteContract};
+use  Module\Note\Contracts\{NoteContract};
 
-use App\Models\Note\Note;
-use App\Repositories\EloquentRepository;
+use Module\Note\Models\Note\Note;
+use Modules\Core\Repositories\EloquentRepository;
 
 /**
  * Class NoteRepository
@@ -50,22 +50,4 @@ class NoteRepository extends EloquentRepository implements NoteContract
 		return $objReturnValue;
 	} //Function ends
 	
-
-	/**
-	 * Get the recent note text
-	 */
-    public function getRecentNoteText(int $orgId, $servicerequestId) {
-        $strNoteText='';
-        try {
-            $type =  $this->getLookUpByValue($orgId, config('portiqo-crm.settings.lookup_value.service_request'));
-            $note = $this->getRecentNote($type->id, $servicerequestId);
-            $strNoteText=$note->note;
-        } catch(Exception $e) {
-            Log::error(json_encode($e));
-            $strNoteText='';
-        } //Try-catch ends
-        
-        return $strNoteText;
-    } //Function ends
-
 } //Class ends

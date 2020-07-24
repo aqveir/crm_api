@@ -14,9 +14,7 @@ class UserResetRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
-        ];
+        return Config::get('crmomni-validation.request_handler.backend.auth.reset_password.validation_rules');
     }
 
     /**

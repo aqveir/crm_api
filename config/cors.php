@@ -17,7 +17,14 @@ return [
 
     'paths' => ['api/*'],
 
-    'allowed_methods' => ['*'],
+    'allowed_methods' => [
+        'POST',
+        'GET',
+        'OPTIONS',
+        'PUT',
+        'PATCH',
+        'DELETE',
+    ],
 
     'allowed_origins' => ['*'],
 
@@ -27,8 +34,10 @@ return [
 
     'exposed_headers' => [],
 
+    /**
+     * Preflight request will respond with value for the max age header.
+     */
     'max_age' => 0,
 
-    'supports_credentials' => false,
-
+    'supports_credentials' => true,
 ];

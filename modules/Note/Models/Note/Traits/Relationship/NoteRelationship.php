@@ -25,7 +25,7 @@ trait NoteRelationship
 	public function owner()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.user'),
+			config('crmomni-class.class_model.user.main'),
 			'id', 'created_by'
 		);
 	} //Function ends

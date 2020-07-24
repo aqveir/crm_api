@@ -14,9 +14,7 @@ class UserActivateRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
-        ];
+        return Config::get('crmomni-validation.request_handler.backend.user.activate.validation_rules');
     }
 
     /**

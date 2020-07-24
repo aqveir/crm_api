@@ -12,9 +12,9 @@ return [
                         'sub_domain' => 'required|max:36|unique:' . config('crmomni-migration.table_name.organizations') . ',sub_domain',
                         'first_name' => 'required|string|max:40',
                         'last_name' => 'nullable|string|max:40',
-                        'email' => 'required|email|max:40',
-                        'phone' => 'required|string',
-                        'country_idd' => 'required'
+                        'email' => 'required|email|max:40|unique:users,email',
+                        'phone' => 'nullable|string|max:15',
+                        'country_idd' => 'required_with:phone|string|max:5',
                     ]
                 ],
             ], //Organization Controller ends
@@ -25,8 +25,8 @@ return [
                 'login' => [
                     'validation_rules' => [
                         'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
-                        'username' => 'required|min:6|max:36',
-                        'password' => 'required|min:8'
+                        'username' => 'required|email|min:6|max:40',
+                        'password' => 'required|string|min:6'
                     ]
                 ],
 
@@ -39,7 +39,7 @@ return [
                 // Forgot Password Request for User
                 'forgot_password' => [
                     'validation_rules' => [
-                        'email' => 'required|email'
+                        'email' => 'required|email|max:40'
                     ]
                 ],
 
@@ -49,8 +49,8 @@ return [
                     'release_token' => env('PASSWORD_RESET_RELEASE_TOKEN', false),
 
                     'validation_rules' => [
-                        'old_password' => 'required|string|min:8',
-                        'new_password' => 'required|confirmed|string|min:8'
+                        'old_password' => 'required|string|min:6',
+                        'new_password' => 'required|confirmed|string|min:6'
                     ]
                 ],
 
@@ -61,8 +61,8 @@ return [
 
                     'validation_rules' => [
                         'token' => 'required',
-                        'email' => 'required|email',
-                        'password' => 'required|confirmed'
+                        'email' => 'required|email|max:40',
+                        'password' => 'required|confirmed|string|min:6'
                     ]
                 ],
             ], //Auth Controller ends
@@ -82,7 +82,7 @@ return [
                         'password' => 'required|string|min:6',
                         'first_name' => 'nullable|max:40',
                         'last_name' => 'nullable|max:40',
-                        'email' => 'required|email|max:40',
+                        'email' => 'required|email|max:40|unique:users,email',
                         'phone' => 'nullable|string|max:15',
                         'country_idd' => 'required_with:phone|string|max:5',
                         'roles' => 'required|array',
@@ -91,17 +91,28 @@ return [
 
                 'update' => [
                     'validation_rules' => [
-                        'first_name' => 'required|max:40',
-                        'last_name' => 'required|max:40',
-                        'email' => 'required|email|max:40',
-                        'phone' => 'required'
+                        'key' => 'required_without:sub_domain|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        'sub_domain' => 'required_without:key|string|exists:' . config('crmomni-migration.table_name.organizations') . ',sub_domain|max:36',
+
+                        'first_name' => 'string|max:40',
+                        'last_name' => 'string|max:40',
+                        'email' => 'email|max:40|unique:users,email',
+                        'phone' => 'string|max:15',
+                        'country_idd' => 'required_with:phone|string|max:5',
                     ]
                 ],
 
                 // Check Existing User Request
-                'check_exists' => [
+                'exists' => [
                     'validation_rules' => [
-                        'user_name' => 'required|email'
+                        'user_name' => 'required|email|max:40'
+                    ]
+                ],
+
+                // Check Existing User Request
+                'activate' => [
+                    'validation_rules' => [
+                        
                     ]
                 ],
             ], // User Controller ends

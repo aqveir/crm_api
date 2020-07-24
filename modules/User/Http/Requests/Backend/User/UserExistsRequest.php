@@ -14,9 +14,7 @@ class UserExistsRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
-        ];
+        return Config::get('crmomni-validation.request_handler.backend.user.exists.validation_rules');
     }
 
     /**
