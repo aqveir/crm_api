@@ -39,7 +39,7 @@ return [
                 // Forgot Password Request for User
                 'forgot_password' => [
                     'validation_rules' => [
-                        'email' => 'required|email|max:40'
+                        'email' => 'required|email|max:40|exists:' . config('crmomni-migration.table_name.user.main') . ',email'
                     ]
                 ],
 

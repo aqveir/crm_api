@@ -14,3 +14,11 @@
 Route::prefix('user')->group(function() {
     Route::get('/', 'UserController@index');
 });
+
+//Reset Password Link For CRM Users
+Route::get('reset/{token}', ['as' => 'password.reset', function($token, Request $req) {
+	//$baseuri_webapp = config('crmomni.settings.base_url.web_app');
+    //return redirect($baseuri_webapp.'web/reset/'.$token);
+    //return redirect('web/reset/'.$token);
+    dd($token);
+}]);

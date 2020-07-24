@@ -95,7 +95,7 @@ class UserAuthController extends ApiBaseController
 
 
     /**
-     * Customer Logout or Revoke Token
+     * User Logout or Revoke Token
      *
      * @param \Modules\User\Http\Requests\Backend\Auth\UserLogoutRequest $request
      * @param \Modules\User\Services\User\UserAuthService $userAuthService
@@ -116,17 +116,11 @@ class UserAuthController extends ApiBaseController
     public function logout(UserLogoutRequest $request, UserAuthService $userAuthService)
     {
         try {
-            //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request);
-
-            //Get IP Address
-            $ipAddress = $this->getIpAddressInRequest($request);
-
             //Create payload
             $payload = collect($request);
 
             //Logout customer
-            $data = $userAuthService->logout($orgHash, $payload, $ipAddress);
+            $data = $userAuthService->logout($payload);
 
             //Send http status out
             return $this->response->success(compact('data'));
@@ -138,7 +132,25 @@ class UserAuthController extends ApiBaseController
         }
     } //Function ends
 
-
+    /**
+     * Forgot Password for User
+     *
+     * @param \Modules\User\Http\Requests\Backend\Auth\UserForgotRequest $request
+     * @param \Modules\User\Services\User\UserAuthService $userAuthService
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @OA\Get(
+     *      path="/user/forgot",
+     *      tags={"User"},
+     *      operationId="api.backend.user.forgot",
+     *      security={{"JWT_Bearer_Auth":{}}},
+     *      @OA\Response(response=200, description="Request was successfully executed."),
+     *      @OA\Response(response=400, description="Bad Request"),
+     *      @OA\Response(response=422, description="Model Validation Error"),
+     *      @OA\Response(response=500, description="Internal Server Error")
+     * )
+     */
     public function forgot(UserForgotRequest $request, UserAuthService $userAuthService)
     {
         try {

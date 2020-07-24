@@ -166,11 +166,24 @@ class UserAuthService extends BaseService
      */
     public function sendForgotPasswordResetLink(string $orgHash, Collection $request, string $ipAddress='0.0.0.0')
     {
-        $response = $this->passwordBrokerManager->sendResetLink(
-            $request->only('email')
-        );
+        $objReturnValue = false;
 
-        return $response === Password::RESET_LINK_SENT;
+        try {
+            $response = $this->passwordBrokerManager->sendResetLink(
+                $request->only('email')->toArray()
+            );
+
+            return $response === Password::RESET_LINK_SENT;
+        } catch(AccessDeniedHttpException $e) {
+            log::error('UserAuthService:sendForgotPasswordResetLink:AccessDeniedHttpException:' . $e->getMessage());
+            throw new AccessDeniedHttpException($e->getMessage());
+        } catch(UnauthorizedHttpException $e) {
+            log::error('UserAuthService:sendForgotPasswordResetLink:UnauthorizedHttpException:' . $e->getMessage());
+            throw new UnauthorizedHttpException($e->getMessage());
+        } catch(Exception $e) {
+            log::error('UserAuthService:sendForgotPasswordResetLink:Exception:' . $e->getMessage());
+            throw new HttpException(500);
+        } //Try Catch ends
     } //Function ends
 
 
@@ -212,13 +225,11 @@ class UserAuthService extends BaseService
     /**
      * Logout the user
      * 
-     * @param \string $orgHash
      * @param \Illuminate\Support\Collection $credentials
-     * @param \string $ipAddress (optional)
      *
      * @return mixed
      */
-    public function logout(string $orgHash, Collection $credentials, string $ipAddress='0.0.0.0')
+    public function logout(Collection $credentials)
     {
         $objReturnValue = false;
 
