@@ -1,17 +1,16 @@
 <?php
 
-namespace Module\Note\Repositories\Note;
+namespace Modules\Note\Repositories;
 
+use Modules\Note\Contracts\{NoteContract};
 
-use  Module\Note\Contracts\{NoteContract};
-
-use Module\Note\Models\Note\Note;
+use Modules\Note\Models\Note;
 use Modules\Core\Repositories\EloquentRepository;
 
 /**
  * Class NoteRepository
  * 
- * @package Module\Note\Repositories\Note
+ * @package Module\Note\Repositories
  */
 class NoteRepository extends EloquentRepository implements NoteContract
 {
@@ -19,7 +18,7 @@ class NoteRepository extends EloquentRepository implements NoteContract
     /**
      * Repository constructor.
      *
-     * @param  Customer  $model
+     * @param \Note  $model
      */
     public function __construct(Note $model)
     {

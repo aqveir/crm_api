@@ -476,10 +476,15 @@ abstract class EloquentRepository //implements RepositoryContract
      *
      * @return mixed
      */
-    public function update($item, string $column='id', array $attributes)
+    public function update($item, string $column='id', array $attributes, int $userId=null)
     {
         $model = $this->getByColumn($item, $column);
         $model->update($attributes);
+
+        if (!empty($userId)) {
+            $model['updated_by'] = $userId;
+            $model->save();
+        } //End if
         
         return $model;
     }

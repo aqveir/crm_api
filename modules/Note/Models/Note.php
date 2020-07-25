@@ -1,11 +1,11 @@
 <?php 
 
-namespace Modules\Note\Models\Note;
+namespace Modules\Note\Models;
 
 use Modules\Core\Models\BaseModel as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-use Modules\Note\Models\Note\Traits\Relationship\NoteRelationship;
+use Modules\Note\Models\Traits\Relationship\NoteRelationship;
 
 /**
  * Eloquent Model for Notes

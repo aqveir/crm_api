@@ -25,7 +25,7 @@ $api->version('v1', function (Router $api) {
             
             $api->post('/', 'Modules\\Note\\Http\\Controllers\\Backend\\NoteController@create');
             $api->put('{id}', 'Modules\\Note\\Http\\Controllers\\Backend\\NoteController@update');
-            $api->delete('{id}', 'Modules\\Note\\Http\\Controllers\\Backend\\NoteController@delete');
+            $api->delete('{id}', 'Modules\\Note\\Http\\Controllers\\Backend\\NoteController@destroy');
         });
     });
 });

@@ -7,9 +7,12 @@ use Illuminate\Support\Facades\Log;
 
 use Modules\Core\Http\Controllers\ApiBaseController;
 use Modules\Note\Http\Requests\Backend\CreateNoteRequest;
+use Modules\Note\Http\Requests\Backend\UpdateNoteRequest;
 use Modules\Note\Http\Requests\Backend\DeleteNoteRequest;
 
 use Modules\Note\Services\NoteService;
+
+use Symfony\Component\HttpFoundation\Response;
 
 use Exception;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -61,17 +64,11 @@ class NoteController extends ApiBaseController
     public function create(CreateNoteRequest $request, NoteService $service)
     {
         try {
-            //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request);
-
-            //Get IP Address
-            $ipAddress = $this->getIpAddressInRequest($request);
-
             //Create payload
             $payload = collect($request);
 
             //Create customer
-            $data = $userService->create($orgHash, $payload, $ipAddress);
+            $data = $service->create($payload);
 
             //Send http status out
             return $this->response->success(compact('data'));
@@ -105,13 +102,6 @@ class NoteController extends ApiBaseController
         return view('note::show');
     } //Function ends
 
-
-    /**
-     * Update the specified resource in storage.
-     * @param Request $request
-     * @param int $id
-     * @return Response
-     */
 
     /**
      * Update Note

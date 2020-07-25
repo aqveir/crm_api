@@ -1,9 +1,9 @@
 <?php
 
-namespace Modules\Note\Models\Note\Traits\Relationship;
+namespace Modules\Note\Models\Traits\Relationship;
 
 /**
- * Trait Note Relationship
+ * Trait Relationship
  */
 trait NoteRelationship
 {

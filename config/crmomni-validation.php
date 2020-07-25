@@ -128,6 +128,13 @@ return [
                     ]
                 ],
 
+                // Update Note validations
+                'update' => [
+                    'validation_rules' => [
+                        'note' => 'required|string|max:1000',
+                    ]
+                ],
+
                 // Delete Note validations
                 'delete' => [
                     'validation_rules' => [

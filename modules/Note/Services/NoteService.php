@@ -6,11 +6,14 @@ use Config;
 use Carbon\Carbon;
 
 use Modules\Core\Repositories\Organization\OrganizationRepository;
-use Modules\Note\Repositories\Note\NoteRepository;
+use Modules\Core\Repositories\Lookup\LookupValueRepository;
+use Modules\Note\Repositories\NoteRepository;
 
 use Modules\Core\Services\BaseService;
 
 use Modules\Note\Events\NoteCreatedEvent;
+use Modules\Note\Events\NoteUpdatedEvent;
+use Modules\Note\Events\NoteDeletedEvent;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -39,7 +42,13 @@ class NoteService extends BaseService
 
 
     /**
-     * @var \Modules\Note\Repositories\Note\NoteRepository
+     * @var Modules\Core\Repositories\Lookup\LookupValueRepository
+     */
+    protected $lookupRepository;
+
+
+    /**
+     * @var \Modules\Note\Repositories\NoteRepository
      */
     protected $noteRepository;
 
@@ -48,13 +57,16 @@ class NoteService extends BaseService
      * Service constructor.
      * 
      * @param \Modules\Core\Repositories\Organization\OrganizationRepository    $organizationRepository
-     * @param \Modules\Note\Repositories\Note\NoteRepository    $noteRepository
+     * @param \Modules\Core\Repositories\Lookup\LookupValueRepository           $lookupRepository
+     * @param \Modules\Note\Repositories\NoteRepository                         $noteRepository
      */
     public function __construct(
         OrganizationRepository          $organizationRepository,
+        LookupValueRepository           $lookupRepository,
         NoteRepository                  $noteRepository
     ) {
         $this->organizationRepository   = $organizationRepository;
+        $this->lookupRepository         = $lookupRepository;
         $this->noteRepository           = $noteRepository;
     } //Function ends
 
@@ -69,7 +81,7 @@ class NoteService extends BaseService
      */
     public function create(Collection $payload, bool $isAutoCreated=false)
     {
-        $objReturnValue=null;
+        $objReturnValue=null; $data=[];
         try {
             if ($isAutoCreated) {
                 //Build data
@@ -85,26 +97,38 @@ class NoteService extends BaseService
                     'entity_type_id', 'reference_id', 'note'
                 ])->toArray();
                 $data = array_merge($data, [
-                    'org_id' => $user['org_id'],
-                    'created_by' => $user['id']
+                    'org_id' => $user['org_id'], 
+                    'created_by' => $user['id'] 
                 ]);
             } //End if
 
+            //Lookup data
+            $entityType = $payload['entity_type'];
+            $lookupEntity = $this->lookupRepository->getLookUpByKey($data['org_id'], $entityType);
+            if (empty($lookupEntity))
+            {
+                throw new Exception('Unable to resolve the entity type');   
+            } //End if
+            $data['entity_type_id'] = $lookupEntity['id'];
+
             //Create Note
-            $note = $this->noteRepository->create($data);   
+            $note = $this->noteRepository->create($data);
+            $note->load('type', 'owner');
                 
-            //Raise event: Note Added
+            //Raise event: Note Created
             event(new NoteCreatedEvent($note, $isAutoCreated));                
 
             //Assign to the return value
             $objReturnValue = $note;
 
         } catch(AccessDeniedHttpException $e) {
+            log::error('NoteService:create:AccessDeniedHttpException:' . $e->getMessage());
             throw new AccessDeniedHttpException($e->getMessage());
         } catch(BadRequestHttpException $e) {
+            log::error('NoteService:create:BadRequestHttpException:' . $e->getMessage());
             throw new BadRequestHttpException($e->getMessage());
         } catch(Exception $e) {
-            Log::error($e);
+            log::error('NoteService:create:Exception:' . $e->getMessage());
             throw new HttpException(500);
         } //Try-catch ends
 
@@ -130,8 +154,8 @@ class NoteService extends BaseService
             //Build data
             $data = $payload->only(['note'])->toArray();
 
-            //Create Note
-            $note = $this->noteRepository->update($data);   
+            //Update Note
+            $note = $this->noteRepository->update($noteId, 'id', $data, $user['id']);
                 
             //Raise event: Note Updated
             event(new NoteUpdatedEvent($note));                
@@ -167,23 +191,18 @@ class NoteService extends BaseService
             //Authenticated User
             $user = $this->getCurrentUser('backend');
 
-            //Build data
-            $data = $payload->only([
-                'entity_type_id', 'reference_id', 'note'
-            ])->toArray();
-            $data = array_merge($data, [
-                'org_id' => $user['org_id'],
-                'created_by' => $user['id']
-            ]);
+            //Get Note
+            $note = $this->noteRepository->getById($noteId);
 
-            //Create Note
-            $note = $this->noteRepository->delete($data);   
-                
-            //Raise event: Note Deleted
-            event(new NoteDeletedEvent($note, $isAutoCreated));                
-
+            //Delete Note
+            $response = $this->noteRepository->deleteById($noteId, $user['id']);
+            if ($response) {
+                //Raise event: Note Deleted
+                event(new NoteDeletedEvent($note));
+            } //End if
+            
             //Assign to the return value
-            $objReturnValue = $note;
+            $objReturnValue = $response;
 
         } catch(AccessDeniedHttpException $e) {
             throw new AccessDeniedHttpException($e->getMessage());

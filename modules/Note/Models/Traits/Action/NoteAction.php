@@ -1,8 +1,8 @@
 <?php
 
-namespace Modules\Note\Models\Note\Traits\Action;
+namespace Modules\Note\Models\Traits\Action;
 
-use Modules\Note\Models\Note\Note;
+use Modules\Note\Models\Note;
 
 use Config;
 use Illuminate\Support\Facades\Log;
