@@ -164,11 +164,13 @@ class NoteService extends BaseService
             $objReturnValue = $note;
 
         } catch(AccessDeniedHttpException $e) {
+            log::error('NoteService:update:AccessDeniedHttpException:' . $e->getMessage());
             throw new AccessDeniedHttpException($e->getMessage());
         } catch(BadRequestHttpException $e) {
+            log::error('NoteService:update:BadRequestHttpException:' . $e->getMessage());
             throw new BadRequestHttpException($e->getMessage());
         } catch(Exception $e) {
-            Log::error($e);
+            log::error('NoteService:update:Exception:' . $e->getMessage());
             throw new HttpException(500);
         } //Try-catch ends
 
@@ -205,11 +207,13 @@ class NoteService extends BaseService
             $objReturnValue = $response;
 
         } catch(AccessDeniedHttpException $e) {
+            log::error('NoteService:delete:AccessDeniedHttpException:' . $e->getMessage());
             throw new AccessDeniedHttpException($e->getMessage());
         } catch(BadRequestHttpException $e) {
+            log::error('NoteService:delete:BadRequestHttpException:' . $e->getMessage());
             throw new BadRequestHttpException($e->getMessage());
         } catch(Exception $e) {
-            Log::error($e);
+            log::error('NoteService:delete:Exception:' . $e->getMessage());
             throw new HttpException(500);
         } //Try-catch ends
 
