@@ -155,6 +155,14 @@ return [
                     ]
                 ],
 
+                // Update Document validations
+                'update' => [
+                    'validation_rules' => [
+                        'title'           => 'string|max:1000',
+                        'description'     => 'string|max:1000',
+                    ]
+                ],
+
                 // Delete Document validations
                 'delete' => [
                     'validation_rules' => []

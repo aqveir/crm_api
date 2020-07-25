@@ -1,11 +1,11 @@
 <?php 
 
-namespace Modules\Document\Models\Document;
+namespace Modules\Document\Models;
 
 use Modules\Core\Models\BaseModel as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-use Modules\Document\Models\Document\Traits\Relationship\DocumentRelationship;
+use Modules\Document\Models\Traits\Relationship\DocumentRelationship;
 
 /**
  * Eloquent Model for Documents

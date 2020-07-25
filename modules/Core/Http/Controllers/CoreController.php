@@ -7,14 +7,14 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as BaseController;
 
 /**
- * @OA\OpenApi(
- *     @OA\Server(
+ *  @OA\OpenApi(
+ *      @OA\Server(
  *          url=SWAGGER_CONST_HOST
- *     ),
- *     @OA\Info(
+ *      ),
+ *       @OA\Info(
  *          version="3.0.0",
  *          title="CRM API Documentation"
- *     )
+ *      ),
  * )
  */
 

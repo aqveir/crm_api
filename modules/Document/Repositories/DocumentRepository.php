@@ -1,17 +1,16 @@
 <?php
 
-namespace App\Repositories\Document;
+namespace Modules\Document\Repositories;
 
+use Modules\Document\Contracts\{DocumentContract};
 
-use App\Contracts\Document\{DocumentContract};
-
-use App\Models\Document\Document;
-use App\Repositories\EloquentRepository;
+use Modules\Document\Models\Document;
+use Modules\Core\Repositories\EloquentRepository;
 
 /**
  * Class DocumentRepository
  * 
- * @package App\Repositories\Document
+ * @package Modules\Document\Repositories
  */
 class DocumentRepository extends EloquentRepository implements DocumentContract
 {

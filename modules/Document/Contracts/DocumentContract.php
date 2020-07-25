@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Contracts\Document;
+namespace Modules\Document\Contracts;
 
 /**
  * Interface DocumentContract.

@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Document\Models\Document\Traits\Relationship;
+namespace Modules\Document\Models\Traits\Relationship;
 
 /**
  * Trait Document Relationship
@@ -25,7 +25,7 @@ trait DocumentRelationship
 	public function owner()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.user'),
+			config('crmomni-class.class_model.user.main'),
 			'id', 'created_by'
 		);
 	} //Function ends
