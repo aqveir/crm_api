@@ -4,6 +4,7 @@ namespace Modules\Core\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 use Modules\Boilerplate\Routing\Helpers;
 use Modules\Core\Services\JsonResponseService;
@@ -11,6 +12,7 @@ use Modules\Core\Services\JsonResponseService;
 abstract class ApiBaseController extends CoreController
 {
     //use Helpers;
+    use AuthorizesRequests;
     
     
     /**

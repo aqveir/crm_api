@@ -10,6 +10,7 @@ use Modules\Note\Http\Requests\Backend\CreateNoteRequest;
 use Modules\Note\Http\Requests\Backend\UpdateNoteRequest;
 use Modules\Note\Http\Requests\Backend\DeleteNoteRequest;
 
+use Modules\Note\Models\Note;
 use Modules\Note\Services\NoteService;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -30,6 +31,7 @@ class NoteController extends ApiBaseController
     public function __construct()
     {
         parent::__construct();
+        $this->authorizeResource(Note::class);
     }
 
 
@@ -74,6 +76,8 @@ class NoteController extends ApiBaseController
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
+            return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
+        } catch(UnauthorizedHttpException $e) {
             return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
         } catch(Exception $e) {
             return $this->response->fail([], Response::HTTP_BAD_REQUEST);
