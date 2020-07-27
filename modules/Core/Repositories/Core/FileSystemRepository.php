@@ -32,7 +32,7 @@ class FileSystemRepository
 
                 //Get Document Related Info
                 $documentName = $request->document->getClientOriginalName();
-                $documentSize = $request->file('document')->getClientSize();
+                $documentSize = $request->file('document')->getSize();
 
                 if ($documentSize > $MAX_UPLOAD_FILESIZE) 
                 { 
@@ -48,6 +48,12 @@ class FileSystemRepository
                 //Save in the directory, if dir is not exist it will created automatically.
                 $urlDocument = Storage::putFile($filenameToStore, $request->file('document'), 'public');
 
+                //Send document object
+                $objReturnValue=[''];
+                $objReturnValue['file_path'] = $urlDocument;
+                $objReturnValue['file_name'] = $documentName;
+                $objReturnValue['file_size'] = $documentSize;
+
                 //Set Bucket and Folder For Upload Documents
                 //$s3_bucket = config('omnichannel.settings.document_file.s3_upload_bucket'); 
                 //$s3_folder = config('omnichannel.settings.document_file.s3_upload_folder'); 
@@ -59,9 +65,7 @@ class FileSystemRepository
                 // } else {
                 //     Storage::disk('s3')->put($s3_folder.'/'.$orgId.'/'.$doc_name, fopen($request->file('document'), 'r+'), 'public');
                 //     $urlDocument = Storage::disk('s3')->url($s3_bucket.'/'.$s3_folder.'/'.$orgId.'/'.$doc_name);
-                // } //End if-else  
-
-                $objReturnValue = $urlDocument;                 
+                // } //End if-else                  
             } //End if
         } catch(Exception $e) {
             $objReturnValue = null;

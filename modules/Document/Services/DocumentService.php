@@ -129,19 +129,22 @@ class DocumentService extends BaseService
 
             //Save the file to the storage
             $orgHash = $user->organization['hash'];
-            //$pathDocument=$this->filesystemRepository->upload($request, $orgHash, $folderName);
-            $pathDocument = 'test_path';
+            $data=$this->filesystemRepository->upload($request, $orgHash, $folderName);
+            if (empty($data)) {
+                throw new BadRequestHttpException();
+            } //End if
 
             //Generate the data payload
             $payload = $request->only('reference_id', 'title', 'description');
             $payload = array_merge(
                 $payload,
                 [
-                    'entity_type_id'=> $lookupEntity['id'],
-                    'file_path'     => $pathDocument,
-                    'is_full_path'  => 0,
-                    'org_id'        => $user['org_id'],
-                    'created_by'    => $user['id']
+                    'entity_type_id'    => $lookupEntity['id'],
+                    'file_path'         => $data['file_path'],
+                    'file_size_in_kb'   => ($data['file_size']>0)?($data['file_size']/1024):0,
+                    'is_full_path'      => 0,
+                    'org_id'            => $user['org_id'],
+                    'created_by'        => $user['id']
                 ]
             );
 
@@ -160,7 +163,6 @@ class DocumentService extends BaseService
             throw new BadRequestHttpException($e->getMessage());
         } catch(Exception $e) {
             log::error('DocumentService:create:Exception:' . $e->getMessage());
-            Log::error($e);
             throw new HttpException(500);
         } //Try-catch ends
 

@@ -22,6 +22,6 @@ $factory->define(Organization::class, function (Faker $faker) {
         'name' => $faker->name,
         'hash' => Str::random(10),
         'sub_domain' => $faker->domainWord,
-        'type_id' => 0
+        'industry_id' => 0
     ];
 });
