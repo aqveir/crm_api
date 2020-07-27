@@ -10,7 +10,11 @@ return [
         'timezones' => env('TABLE_NAME_PREFIX', '') . 'timezones',
 
         'backend_menus' => env('TABLE_NAME_PREFIX', '') . 'backend_menus',
-        'configurations' => env('TABLE_NAME_PREFIX', '') . 'configurations',
+
+        'configuration' => [
+            'main' => env('TABLE_NAME_PREFIX', '') . 'configurations',
+            'industry' => env('TABLE_NAME_PREFIX', '') . 'industry_configurations',
+        ],
 
         //Organization Entity
         'organizations' => env('TABLE_NAME_PREFIX', '') . 'organizations',
@@ -55,7 +59,6 @@ return [
             'agency' => [
                 'main' => env('TABLE_NAME_PREFIX', '') . 'agency',
             ],
-           
         ],
     ],
 ];

@@ -31,6 +31,25 @@ class LookupTableSeeder extends Seeder
 
     private function data() {
         return [
+            [ //Industry Type
+                'key' => 'industry_type',
+                'display_value' => 'Industry Type',
+                'description' => 'Type of Industry to be used on the tables for organization, configurations and alikes.',
+                'values' => [
+                    [
+                        'key' => 'industry_type_retail',
+                        'display_value' => 'Retail Industry',
+                    ],
+                    [
+                        'key' => 'industry_type_real_estate',
+                        'display_value' => 'Real Estate',
+                    ],
+                    [
+                        'key' => 'industry_type_travel',
+                        'display_value' => 'Travel & Tourisum',
+                    ]
+                ]
+            ],
             [ //Entity Type
                 'key' => 'entity_type',
                 'display_value' => 'Entity Type',
@@ -41,16 +60,16 @@ class LookupTableSeeder extends Seeder
                         'display_value' => 'Customer Entity',
                     ],
                     [
-                        'key' => 'entity_type_catalogue_product',
+                        'key' => 'entity_type_inventory',
                         'display_value' => 'Product Entity',
                     ],
                     [
-                        'key' => 'entity_type_order',
-                        'display_value' => 'Order Entity',
+                        'key' => 'entity_type_service_request',
+                        'display_value' => 'Service Request',
                     ],
                     [
-                        'key' => 'entity_type_order_product',
-                        'display_value' => 'Order-Product Entity',
+                        'key' => 'entity_type_event',
+                        'display_value' => 'Event',
                     ]
                 ]
             ],

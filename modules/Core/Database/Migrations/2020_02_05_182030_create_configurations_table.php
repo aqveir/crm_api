@@ -13,7 +13,7 @@ class CreateConfigurationsTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('crmomni-migration.table_name.configurations'), function (Blueprint $table) {
+        Schema::create(config('crmomni-migration.table_name.configuration.main'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
             $table->integer('type_id');
@@ -25,6 +25,13 @@ class CreateConfigurationsTable extends Migration
 
             $table->timestamps();
         });
+
+        Schema::create(config('crmomni-migration.table_name.configuration.industry'), function (Blueprint $table) {
+            $table->bigIncrements('id');
+
+            $table->integer('configuration_id');
+            $table->integer('industry_id');
+        });
     }
 
     /**
@@ -34,6 +41,8 @@ class CreateConfigurationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(config('crmomni-migration.table_name.configurations'));
+        Schema::dropIfExists(config('crmomni-migration.table_name.configuration.main'));
+
+        Schema::dropIfExists(config('crmomni-migration.table_name.configuration.industry'));
     }
 }

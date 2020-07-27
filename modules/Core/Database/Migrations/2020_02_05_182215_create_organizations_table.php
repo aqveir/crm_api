@@ -19,7 +19,28 @@ class CreateOrganizationsTable extends Migration
 
             $table->string('name');
             $table->string('sub_domain');
-            $table->integer('type_id');
+
+            //Organization Attributes
+            $table->string('logo')->nullable();
+            $table->integer('industry_id'); //e.g. Retail/Travel/ etc
+            $table->integer('timezone_id')->nullable();
+
+            //Organization Address
+            $table->string('address')->nullable();
+            $table->string('locality')->nullable();
+            $table->string('city')->nullable();
+            $table->integer('state_id')->nullable();
+            $table->integer('country_id')->nullable();
+            $table->string('zipcode')->nullable();
+
+            //Location Details
+            $table->integer('google_place_id')->nullable();
+            $table->decimal('longitude', 12, 8)->nullable();
+            $table->decimal('latitude', 12, 8)->nullable();            
+            
+            $table->string('website')->nullable();
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
 
             $table->boolean('is_active')->default(false);
 
