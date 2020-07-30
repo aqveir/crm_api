@@ -55,6 +55,15 @@ return [
             'apartment_address' => env('TABLE_NAME_PREFIX', '') . 'apartment_address',
         ],
 
+        //Preference Entities
+        'preference' => [
+            'main' => env('TABLE_NAME_PREFIX', '') . 'preferences',
+            'data' => env('TABLE_NAME_PREFIX', '') . 'preferences_data',
+            'data_value' => env('TABLE_NAME_PREFIX', '') . 'preferences_data_values',
+            'meta' => env('TABLE_NAME_PREFIX', '') . 'preferences_meta',
+            'meta_industries' => env('TABLE_NAME_PREFIX', '') . 'preferences_meta_industries',
+        ],
+
         'crm' => [
             'agency' => [
                 'main' => env('TABLE_NAME_PREFIX', '') . 'agency',

@@ -1,0 +1,13 @@
+{
+    "name": "Preference",
+    "alias": "preference",
+    "description": "",
+    "keywords": [],
+    "order": 0,
+    "providers": [
+        "Modules\\Preference\\Providers\\PreferenceServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

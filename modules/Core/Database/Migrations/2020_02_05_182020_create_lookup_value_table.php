@@ -22,6 +22,8 @@ class CreateLookupValueTable extends Migration
             $table->string('display_value')->nullable();
             $table->string('description')->nullable();
             $table->integer('order')->default(1);
+            $table->boolean('is_editable')->default(true);
+            $table->boolean('is_active')->default(true);
 
             $table->timestamps();
         });

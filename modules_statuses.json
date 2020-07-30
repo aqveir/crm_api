@@ -6,5 +6,6 @@
     "Note": true,
     "Document": true,
     "Feedback": true,
-    "Subscription": true
+    "Subscription": true,
+    "Preference": true
 }
