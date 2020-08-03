@@ -1,9 +1,9 @@
 <?php
 
-namespace Modules\User\Listeners;
+namespace Modules\Preference\Listeners;
 
 use Modules\Core\Events\OrganizationCreatedEvent;
-use Modules\User\Services\User\UserService;
+use Modules\Preference\Services\PreferenceService;
 
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -21,7 +21,7 @@ class NewOrganizationListener
      *
      * @return void
      */
-    public function __construct(UserService $service)
+    public function __construct(PreferenceService $service)
     {
         $this->service = $service;
     } //Function ends
@@ -37,8 +37,8 @@ class NewOrganizationListener
     {
         $organization = $event->organization;
         $request = $event->request;
-
-        //Create the default user
+        
+        //Create the default preferences
         $this->service->createDefault($request, $organization);
     } //Function ends
 

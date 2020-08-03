@@ -6,6 +6,7 @@ use Config;
 use Carbon\Carbon;
 
 use Modules\Core\Repositories\Organization\OrganizationRepository;
+use Modules\Core\Repositories\Lookup\LookupValueRepository;
 
 use Modules\Core\Services\BaseService;
 use Modules\Core\Services\Role\RoleService;
@@ -39,6 +40,12 @@ class OrganizationService extends BaseService
 
 
     /**
+     * @var Modules\Core\Repositories\Lookup\LookupValueRepository
+     */
+    protected $lookupRepository;
+
+
+    /**
      * @var \Modules\Core\Services\Role\RoleService
      */
     protected $roleService;
@@ -48,13 +55,16 @@ class OrganizationService extends BaseService
      * Service constructor.
      *
      * @param \Modules\Core\Repositories\Organization\OrganizationRepository    $organizationRepository
+     * @param \Modules\Core\Repositories\Lookup\LookupValueRepository           $lookupRepository
      * @param \Modules\Core\Services\Role\RoleService                           $roleService
      */
     public function __construct(
         OrganizationRepository              $organizationRepository,
+        LookupValueRepository               $lookupRepository,
         RoleService                         $roleService
     ) {
         $this->organizationRepository       = $organizationRepository;
+        $this->lookupRepository             = $lookupRepository;
         $this->roleService                  = $roleService;
     } //Function ends
 
@@ -128,7 +138,12 @@ class OrganizationService extends BaseService
     {
         $objReturnValue=null;
         try {
-            $data = $request->only('name', 'sub_domain', 'type_id')->toArray();
+            $keyIndustry = ($request->has('industry_type'))?$request['industry_type']:'industry_type_vanilla';
+            $industry = $this->lookupRepository->getLookUpByKey(0, $keyIndustry);
+
+            //Build Data
+            $data = $request->only('name', 'sub_domain', 'email', 'phone')->toArray();
+            $data['industry_id'] = $industry['id'];
 
             //Create organization
             $organization = $this->organizationRepository->create($data);

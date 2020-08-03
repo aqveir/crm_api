@@ -9,6 +9,55 @@ use Modules\Core\Models\Common\Configuration;
  */
 trait OrganizationRelationship
 {
+
+	/**
+	 * Industry
+	 */
+	public function industry()
+	{
+		return $this->hasOne(
+			config('crmomni-class.class_model.lookup_value'),
+			'id', 'industry_id'
+		);
+	} //Function ends
+
+
+	/**
+	 * Timezone
+	 */
+	public function timezone()
+	{
+		return $this->hasOne(
+			config('crmomni-class.class_model.lookup_value'),
+			'id', 'timezone_id'
+		);
+	} //Function ends
+
+
+	/**
+	 * State
+	 */
+	public function state()
+	{
+		return $this->hasOne(
+			config('crmomni-class.class_model.lookup_value'),
+			'id', 'state_id'
+		);
+	} //Function ends
+
+
+	/**
+	 * Country
+	 */
+	public function country()
+	{
+		return $this->hasOne(
+			config('crmomni-class.class_model.lookup_value'),
+			'id', 'country_id'
+		);
+	} //Function ends
+
+
 	/**
 	 * Users
 	 */

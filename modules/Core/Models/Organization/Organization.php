@@ -26,7 +26,10 @@ class Organization extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'sub_domain', 'type_id'
+        'name', 'sub_domain', 'industry_id', 'timezone_id',
+        'address', 'locality', 'city', 'state_id', 'country_id', 'zipcode',
+        'google_place_id', 'longitude', 'latitude',
+        'website', 'email', 'phone'
     ];
 
 
@@ -46,7 +49,9 @@ class Organization extends Model
      * @var array
      */
     protected $hidden = [
-        'id', 'is_active', 'type_id',
+        'id', 'is_active', 'industry_id', 'timezone_id',
+        'state_id', 'country_id',
+        'google_place_id', 'longitude', 'latitude',
         'created_by', 'updated_by', 'deleted_by',
         'created_at', 'updated_at', 'deleted_at'
     ]; 

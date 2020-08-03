@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\User\Services\User;
+namespace Modules\Preference\Services;
 
 use Config;
 use Carbon\Carbon;
@@ -8,11 +8,14 @@ use Carbon\Carbon;
 use Modules\Core\Models\Organization\Organization;
 
 use Modules\Core\Repositories\Organization\OrganizationRepository;
-use Modules\User\Repositories\User\UserRepository;
+use Modules\Core\Repositories\Lookup\LookupValueRepository;
+use Modules\Preference\Repositories\Meta\PreferenceMetaRepository;
+use Modules\Preference\Repositories\Preference\PreferenceRepository;
 
 use Modules\Core\Services\BaseService;
 
-use Modules\User\Events\UserCreatedEvent;
+// use Modules\Preference\Events\PreferenceCreatedEvent;
+// use Modules\Preference\Events\PreferenceUpdatedEvent;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -28,10 +31,10 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 /**
- * Class UserService
- * @package Modules\User\Services\User
+ * Class PreferenceService
+ * @package Modules\Preference\Services
  */
-class UserService extends BaseService
+class PreferenceService extends BaseService
 {
 
     /**
@@ -41,28 +44,46 @@ class UserService extends BaseService
 
 
     /**
-     * @var \Modules\User\Repositories\User\UserRepository
+     * @var Modules\Core\Repositories\Lookup\LookupValueRepository
      */
-    protected $userRepository;
+    protected $lookupRepository;
+
+
+    /**
+     * @var \Modules\Preference\Repositories\Meta\PreferenceMetaRepository
+     */
+    protected $preferenceMetaRepository;
+
+
+    /**
+     * @var \Modules\Preference\Repositories\Preference\PreferenceRepository
+     */
+    protected $preferenceRepository;
 
 
     /**
      * Service constructor.
      * 
      * @param \Modules\Core\Repositories\Organization\OrganizationRepository    $organizationRepository
-     * @param \Modules\User\Repositories\User\UserRepository    $userRepository
+     * @param \Modules\Core\Repositories\Lookup\LookupValueRepository           $lookupRepository
+     * @param \Modules\Preference\Repositories\Meta\PreferenceMetaRepository    $preferenceMetaRepository
+     * @param \Modules\Preference\Repositories\Preference\PreferenceRepository  $preferenceRepository
      */
     public function __construct(
         OrganizationRepository          $organizationRepository,
-        UserRepository                  $userRepository
+        LookupValueRepository           $lookupRepository,
+        PreferenceMetaRepository        $preferenceMetaRepository,
+        PreferenceRepository            $preferenceRepository
     ) {
         $this->organizationRepository   = $organizationRepository;
-        $this->userRepository           = $userRepository;
+        $this->lookupRepository         = $lookupRepository;
+        $this->preferenceMetaRepository = $preferenceMetaRepository;
+        $this->preferenceRepository     = $preferenceRepository;
     } //Function ends
 
 
     /**
-     * Create Default User
+     * Create Default Preferences
      * 
      * @param \Illuminate\Support\Collection $payload
      * @param \int $orgId
@@ -73,38 +94,42 @@ class UserService extends BaseService
     {
         $objReturnValue=null;
         try {
-            $data = $payload->only(['email', 'phone', 'first_name', 'last_name'])->toArray();
-            $data = array_merge($data, [
-                'username' => $data['email'],
-                'password' => config('user.settings.new_organization.default_password'),
-                'is_remote_access_only' => 0
-            ]);
+            $industry = $organization->industry()->first();
+            $industryKey = (!empty($industry))?($industry['key']):'industry_type_vanilla';
+
+            //Load preferences by industry type
+            $preferences = $this->preferenceMetaRepository->getDataByIndustryType($industryKey);
+            if (!empty($preferences)) {
+                foreach ($preferences as $key => $preference) {
+                    Log::info($preference);
+                } //Loop ends
+            } //End if
 
             //Create defult user
-            $user = $this->create($organization['hash'], collect($data), true);
-            if (empty($user)) {
-                throw new BadRequestHttpException();
-            } //End if
+            // $user = $this->create(collect($data), $orgId, true);
+            // if (empty($user)) {
+            //     throw new BadRequestHttpException();
+            // } //End if
 
-            //Store Additional Settings
-            $user['is_active'] = true;
-            $user['is_pool'] = true;
-            $user['is_default'] = true;
-            if (!($user->save())) {
-                throw new HttpException(500);
-            } //End if
+            // //Store Additional Settings
+            // $user['is_active'] = true;
+            // $user['is_pool'] = true;
+            // $user['is_default'] = true;
+            // if ($user->save()) {
+            //     throw new HttpException(500);
+            // } //End if
 
             //Assign to the return value
-            $objReturnValue = $user;
+            //$objReturnValue = $user;
 
         } catch(AccessDeniedHttpException $e) {
-            log::error('UserService:createDefault:AccessDeniedHttpException:' . $e->getMessage());
+            log::error('PreferenceService:createDefault:AccessDeniedHttpException:' . $e->getMessage());
             throw new AccessDeniedHttpException($e->getMessage());
         } catch(BadRequestHttpException $e) {
-            log::error('UserService:createDefault:BadRequestHttpException:' . $e->getMessage());
+            log::error('PreferenceService:createDefault:BadRequestHttpException:' . $e->getMessage());
             throw new BadRequestHttpException($e->getMessage());
         } catch(Exception $e) {
-            log::error('UserService:createDefault:Exception:' . $e->getMessage());
+            log::error('PreferenceService:createDefault:Exception:' . $e->getMessage());
             throw new HttpException(500);
         } //Try-catch ends
 
@@ -113,7 +138,7 @@ class UserService extends BaseService
 
 
     /**
-     * Create User
+     * Create Preference
      * 
      * @param \string $orgHash
      * @param \Illuminate\Support\Collection $payload
@@ -123,21 +148,17 @@ class UserService extends BaseService
      */
     public function create(string $orgHash, Collection $payload, bool $isAutoCreated=false)
     {
-        $objReturnValue = null;
-        $orgId = 0; $userId = 0;
-
+        $objReturnValue=null;
         try {
             //Authenticated User
             $user = $this->getCurrentUser('backend');
-            if (!empty($user)) {
-                if ($user->hasRoles(config('crmomni.settings.default.role.key_super_admin'))) {
-                    //Get organization data
-                    $organization = $this->getOrganizationByHash($orgHash);
-                    $orgId = $organization['id'];
-                } else {
-                    $orgId = $user['org_id'];
-                } //End if
-                $userId = $user['id'];
+
+            if ($user->hasRoles(config('crmomni.settings.default.role.key_super_admin'))) {
+                //Get organization data
+                $organization = $this->getOrganizationByHash($orgHash);
+                $orgId = $organization['id'];
+            } else {
+                $orgId = $user['org_id'];
             } //End if
 
             //Build user data
@@ -150,7 +171,7 @@ class UserService extends BaseService
             $isDuplicate=$this->userRepository->exists($data['username'], 'username');
             if (!$isDuplicate) {
                 //Add Organisation data
-                $data = array_merge($data, [ 'org_id' => $orgId, 'created_by' => $userId ]);
+                $data = array_merge($data, [ 'org_id' => $orgId, 'created_by' => $user['id'] ]);
 
                 //Create User
                 $user = $this->userRepository->create($data);
@@ -165,13 +186,11 @@ class UserService extends BaseService
             $objReturnValue = $user;
 
         } catch(AccessDeniedHttpException $e) {
-            log::error('UserService:create:AccessDeniedHttpException:' . $e->getMessage());
             throw new AccessDeniedHttpException($e->getMessage());
         } catch(BadRequestHttpException $e) {
-            log::error('UserService:create:BadRequestHttpException:' . $e->getMessage());
             throw new BadRequestHttpException($e->getMessage());
         } catch(Exception $e) {
-            log::error('UserService:create:Exception:' . $e->getMessage());
+            Log::error($e);
             throw new HttpException(500);
         } //Try-catch ends
 

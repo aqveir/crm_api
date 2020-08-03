@@ -15,6 +15,7 @@ return [
                         'email' => 'required|email|max:40|unique:users,email',
                         'phone' => 'nullable|string|max:15',
                         'country_idd' => 'required_with:phone|string|max:5',
+                        'industry_type' => 'string'
                     ]
                 ],
             ], //Organization Controller ends
