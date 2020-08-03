@@ -37,6 +37,10 @@ class LookupTableSeeder extends Seeder
                 'description' => 'Type of Industry to be used on the tables for organization, configurations and alikes.',
                 'values' => [
                     [
+                        'key' => 'industry_type_vanilla',
+                        'display_value' => 'Vanilla CRM',
+                    ],
+                    [
                         'key' => 'industry_type_retail',
                         'display_value' => 'Retail Industry',
                     ],
@@ -73,30 +77,38 @@ class LookupTableSeeder extends Seeder
                     ]
                 ]
             ],
-            [ //Organization Configuration Type
-                'key' => 'organization_interface_type',
+            [ //Data Type [Used in Org Interface types & Preferences types]
+                'key' => 'data_type',
                 'display_value' => 'Interface Type',
                 'description' => 'Type of Interface',
                 'values' => [
                     [
-                        'key' => 'organization_interface_type_string',
+                        'key' => 'data_type_string',
                         'display_value' => 'String',
                     ],
                     [
-                        'key' => 'organization_interface_type_number',
+                        'key' => 'data_type_number',
                         'display_value' => 'Number',
                     ],
                     [
-                        'key' => 'organization_interface_type_boolean',
+                        'key' => 'data_type_boolean',
                         'display_value' => 'Boolean',
                     ],
                     [
-                        'key' => 'organization_interface_type_json',
+                        'key' => 'data_type_json',
                         'display_value' => 'JSON Object',
                     ],
                     [
-                        'key' => 'organization_interface_type_dropdown',
+                        'key' => 'data_type_lookup',
                         'display_value' => 'DropDown Select',
+                    ],
+                    [
+                        'key' => 'data_type_location',
+                        'display_value' => 'Location',
+                    ],
+                    [
+                        'key' => 'data_type_external',
+                        'display_value' => 'External Data',
                     ]
                 ]
             ],

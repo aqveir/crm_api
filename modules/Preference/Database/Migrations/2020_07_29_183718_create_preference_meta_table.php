@@ -17,10 +17,14 @@ class CreatePreferenceMetaTable extends Migration
             $table->bigIncrements('id');
 
             $table->string('key')->unique();
+            $table->string('industry_key')->nullable();         //From Global Lookup Value - Key (Industry Types)
+            $table->string('type_key')->nullable();             //From Global Lookup Value - Key  (Data Types)          
             $table->string('display_value')->nullable();
             $table->string('description')->nullable();
-            $table->string('column_name')->nullable();
-            $table->integer('type_id')->nullable();             //From Global Lookup Value Table
+
+            $table->boolean('is_minimum')->default(false);      //Minimum data type
+            $table->boolean('is_maximum')->default(false);      //Maximum data type
+            $table->text('filter_json')->nullable();
             $table->text('data_json')->nullable();
             $table->boolean('is_multiple')->default(false);     //Allows multiple selection
             $table->string('keywords')->nullable();
@@ -28,10 +32,6 @@ class CreatePreferenceMetaTable extends Migration
             $table->boolean('is_active')->default(true);
 
             //Audit Log Fields
-            $table->integer('created_by')->default(0);
-            $table->integer('updated_by')->nullable();
-            $table->integer('deleted_by')->nullable();
-
             $table->timestamps();
             $table->softDeletes();
         });
