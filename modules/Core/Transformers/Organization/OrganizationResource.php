@@ -4,7 +4,7 @@ namespace Modules\Core\Transformers\Organization;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class OrganizationMiniResource extends JsonResource
+class OrganizationResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,7 +19,8 @@ class OrganizationMiniResource extends JsonResource
             'name' => $this->name,
             'sub_domain' => $this->sub_domain,
             'logo' => $this->logo,
-            'users_count' => $this->users_count,
+            'users' => $this->users,
+            'configurations' => $this->configurations,
             'last_updated_at' => $this->last_updated_at
         ];
     } //Function ends

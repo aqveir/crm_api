@@ -49,11 +49,12 @@ class Organization extends Model
      * @var array
      */
     protected $hidden = [
-        'id', 'is_active', 'industry_id', 'timezone_id',
-        'state_id', 'country_id',
+        'id', 'sub_domain', 'is_active', 'industry_id', 'timezone_id',
+        'address', 'locality', 'city', 'state_id', 'country_id', 'zipcode',
         'google_place_id', 'longitude', 'latitude',
+        'website', 'email', 'phone', 'logo',
         'created_by', 'updated_by', 'deleted_by',
-        'created_at', 'updated_at', 'deleted_at'
+        'created_at', 'updated_at', 'deleted_at', 'last_updated_at'
     ]; 
 
 

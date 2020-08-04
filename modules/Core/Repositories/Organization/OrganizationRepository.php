@@ -9,6 +9,9 @@ use Modules\Core\Contracts\{OrganizationContract};
 use Modules\Core\Models\Organization\Organization;
 use Modules\Core\Repositories\EloquentRepository;
 
+use Modules\Core\Transformers\Organization\OrganizationResource;
+use Modules\Core\Transformers\Organization\OrganizationMiniResource;
+
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
 
@@ -39,12 +42,15 @@ class OrganizationRepository extends EloquentRepository implements OrganizationC
 		$objReturnValue=null;
 		
 		try {
-            $query = $this->getAllOrganizationsData();
-            $query = $query->load(['users', 'configurations']);
+            $query = $this->model;
 	        $query = $query->where('hash', $hash);
-	        $query = $query->first();
+            $query = $query->first();
 
-	        $objReturnValue = $query;		
+            //lazy load relations
+            $query = $query->load(['users', 'configurations']);
+
+            //Transform data
+            $objReturnValue = new OrganizationResource($query);	
 		} catch(Exception $e) {
 			$objReturnValue=null;
 			throw new Exception($e);
@@ -95,7 +101,8 @@ class OrganizationRepository extends EloquentRepository implements OrganizationC
             $query = $query->orderBy('id', 'asc');
             $query = $query->get();
 
-            $objReturnValue = $query;
+            //Transform data
+            $objReturnValue = OrganizationMiniResource::collection($query);
         } catch(Exception $e) {
             $objReturnValue=null;
             Log::error(json_encode($e));

@@ -3,11 +3,10 @@
 namespace Modules\Core\Http\Controllers\Backend\Organization;
 
 use Config;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 use Modules\Core\Http\Controllers\ApiBaseController;
-
-use Illuminate\Http\Request;
 
 use Modules\Core\Services\Organization\OrganizationService;
 
