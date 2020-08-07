@@ -48,7 +48,7 @@ class GetLookupController extends ApiBaseController
      *     path="/lookup",
      *     tags={"Lookup"},
      *     operationId="api.lookup.getall",
-     *     security={{"JWT_Bearer_Auth":{}}},
+     *     security={{"omni_token":{}}},
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
      *     @OA\Response(response=500, description="Internal Server Error")
@@ -87,7 +87,7 @@ class GetLookupController extends ApiBaseController
      *     path="/lookup/{name}",
      *     tags={"Lookup"},
      *     operationId="api.lookup.getdata",
-     *     security={{"JWT_Bearer_Auth":{}}},
+     *     security={{"omni_token":{}}},
      *     @OA\Parameter(name="name", in="path", description="Name", required=true),
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),

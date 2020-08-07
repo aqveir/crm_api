@@ -57,7 +57,7 @@ class NoteController extends ApiBaseController
      *     path="/note",
      *     tags={"Note"},
      *     operationId="api.backend.note.create",
-     *     security={{"JWT_Bearer_Auth":{}}},
+     *     security={{"omni_token":{}}},
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
      *     @OA\Response(response=500, description="Internal Server Error")
@@ -119,7 +119,7 @@ class NoteController extends ApiBaseController
      *     path="/note/{id}",
      *     tags={"Note"},
      *     operationId="api.backend.note.update",
-     *     security={{"JWT_Bearer_Auth":{}}},
+     *     security={{"omni_token":{}}},
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
      *     @OA\Response(response=500, description="Internal Server Error")
@@ -157,7 +157,7 @@ class NoteController extends ApiBaseController
      *     path="/note/{id}",
      *     tags={"Note"},
      *     operationId="api.backend.note.delete",
-     *     security={{"JWT_Bearer_Auth":{}}},
+     *     security={{"omni_token":{}}},
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
      *     @OA\Response(response=500, description="Internal Server Error")

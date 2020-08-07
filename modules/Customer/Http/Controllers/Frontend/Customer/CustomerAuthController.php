@@ -229,7 +229,7 @@ class CustomerAuthController extends ApiBaseController
      *      path="/customer/logout",
      *      tags={"Customer"},
      *      operationId="api.frontend.customer.logout",
-     *      security={{"JWT_Bearer_Auth":{}}},
+     *      security={{"omni_token":{}}},
      *      @OA\Parameter(
      *          ref="#/components/parameters/organization_key",
      *      ),

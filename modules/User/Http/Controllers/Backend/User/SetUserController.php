@@ -46,7 +46,7 @@ class SetUserController extends ApiBaseController
      *     path="/user",
      *     tags={"User"},
      *     operationId="api.backend.user.create",
-     *     security={{"JWT_Bearer_Auth":{}}},
+     *     security={{"omni_token":{}}},
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
      *     @OA\Response(response=500, description="Internal Server Error")
@@ -90,7 +90,7 @@ class SetUserController extends ApiBaseController
      *     path="/user/{hash}",
      *     tags={"User"},
      *     operationId="api.backend.user.update",
-     *     security={{"JWT_Bearer_Auth":{}}},
+     *     security={{"omni_token":{}}},
      *     @OA\Parameter(
      *          parameter="hash", in="path", name="hash", description="Enter user identifier.",
      *          @OA\Schema(type="string")

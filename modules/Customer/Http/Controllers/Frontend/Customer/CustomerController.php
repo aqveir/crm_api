@@ -48,7 +48,7 @@ class CustomerController extends ApiBaseController
      *      path="/customer",
      *      tags={"Customer"},
      *      operationId="api.frontend.customer.data",
-     *      security={{"JWT_Bearer_Auth":{}}},
+     *      security={{"omni_token":{}}},
      *      @OA\Parameter(
      *          ref="#/components/parameters/organization_key",
      *      ),

@@ -36,7 +36,7 @@ class SavePrivilegeController extends Controller
      *     path="/privilege",
      *     tags={"Privilege"},
      *     operationId="api.privilege.create",
-     *     security={{"JWT_Bearer_Auth":{}}},
+     *     security={{"omni_token":{}}},
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
      *     @OA\Response(response=500, description="Internal Server Error")

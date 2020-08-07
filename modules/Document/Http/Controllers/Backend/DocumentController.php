@@ -55,7 +55,7 @@ class DocumentController extends ApiBaseController
      *     path="/document",
      *     tags={"Document"},
      *     operationId="api.backend.document.create",
-     *     security={{"JWT_Bearer_Auth":{}}},
+     *     security={{"omni_token":{}}},
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
      *     @OA\Response(response=500, description="Internal Server Error")
@@ -101,7 +101,7 @@ class DocumentController extends ApiBaseController
      *     path="/document/{id}",
      *     tags={"Document"},
      *     operationId="api.backend.document.update",
-     *     security={{"JWT_Bearer_Auth":{}}},
+     *     security={{"omni_token":{}}},
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
      *     @OA\Response(response=500, description="Internal Server Error")
@@ -139,7 +139,7 @@ class DocumentController extends ApiBaseController
      *     path="/document/{id}",
      *     tags={"Document"},
      *     operationId="api.backend.document.delete",
-     *     security={{"JWT_Bearer_Auth":{}}},
+     *     security={{"omni_token":{}}},
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
      *     @OA\Response(response=500, description="Internal Server Error")

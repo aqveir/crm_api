@@ -13,7 +13,8 @@ use Illuminate\Routing\Controller as BaseController;
  *      ),
  *       @OA\Info(
  *          version="3.0.0",
- *          title="CRM API Documentation"
+ *          title="CRM API Documentation",
+ *          termsOfService="http://swagger.io/terms/",
  *      ),
  * )
  */
@@ -44,6 +45,17 @@ use Illuminate\Routing\Controller as BaseController;
  *      required=false,
  *      description="Provide the language code, defaults to *en_US*",
  *      @OA\Schema(type="string", default="en_US")
+ * )
+ */
+
+ /**
+ * @OA\SecurityScheme(
+ *     type="http",
+ *     description="Security Scheme for API Access Token",
+ *     in="header",
+ *     scheme="bearer",
+ *     securityScheme="omni_token",
+ *     name="authorization"
  * )
  */
 class CoreController extends BaseController
