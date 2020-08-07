@@ -35,6 +35,7 @@ class LookupTableSeeder extends Seeder
                 'key' => 'industry_type',
                 'display_value' => 'Industry Type',
                 'description' => 'Type of Industry to be used on the tables for organization, configurations and alikes.',
+                'is_editable' => false,
                 'values' => [
                     [
                         'key' => 'industry_type_vanilla',
@@ -58,6 +59,7 @@ class LookupTableSeeder extends Seeder
                 'key' => 'entity_type',
                 'display_value' => 'Entity Type',
                 'description' => 'Type or Entity to be used on the tables for notes, feedback and alikes.',
+                'is_editable' => false,
                 'values' => [
                     [
                         'key' => 'entity_type_customer',
@@ -81,6 +83,7 @@ class LookupTableSeeder extends Seeder
                 'key' => 'data_type',
                 'display_value' => 'Interface Type',
                 'description' => 'Type of Interface',
+                'is_editable' => false,
                 'values' => [
                     [
                         'key' => 'data_type_string',
@@ -112,50 +115,76 @@ class LookupTableSeeder extends Seeder
                     ]
                 ]
             ],
-            [ //Backend User Status
-                'key' => 'backend_user_status',
-                'display_value' => 'Backend User Status',
-                'description' => 'Status of Backend Users',
+            [ //User Availavility Status
+                'key' => 'user_status',
+                'display_value' => 'User Status',
+                'description' => 'Status of Users',
+                'is_editable' => false,
                 'values' => [
                     [
-                        'key' => 'backend_user_status_online',
+                        'key' => 'user_status_online',
                         'display_value' => 'Online',
                     ],
                     [
-                        'key' => 'backend_user_status_offline',
+                        'key' => 'user_status_offline',
                         'display_value' => 'Offline',
                     ],
                     [
-                        'key' => 'backend_user_status_busy',
+                        'key' => 'user_status_busy',
                         'display_value' => 'Busy',
                     ],
                     [
-                        'key' => 'backend_user_status_available',
+                        'key' => 'user_status_available',
                         'display_value' => 'Available',
                     ],
                 ]
             ],
-            [ //Store Type
-                'key' => 'store_type',
-                'display_value' => 'Store Type',
-                'description' => 'Type of the Store/Outlet',
+            [ //Telephony Direction
+                'key' => 'telephony_direction',
+                'display_value' => 'Telephony Call Direction Type',
+                'description' => 'Status used to display Telephony Communication Direction',
+                'is_editable' => false,
                 'values' => [
                     [
-                        'key' => 'store_type_warehouse',
-                        'display_value' => 'Warehouse',
+                        'key' => 'telephony_direction_incoming',
+                        'display_value' => 'In-coming OR Inbound',
                     ],
                     [
-                        'key' => 'store_type_retail',
-                        'display_value' => 'Retail Shop',
+                        'key' => 'telephony_direction_outgoing',
+                        'display_value' => 'Out-going or Outbound',
+                    ],
+                ]
+            ],
+            [ //Telephony Call Status
+                'key' => 'telephony_call_status_type',
+                'display_value' => 'Telephony Call Status Type',
+                'description' => 'Status used and displayed for Telephony Calls',
+                'is_editable' => false,
+                'values' => [
+                    [
+                        'key' => 'telephony_call_status_type_queued',
+                        'display_value' => 'Queued',
                     ],
                     [
-                        'key' => 'store_type_distribution_center',
-                        'display_value' => 'Distribution Center',
+                        'key' => 'telephony_call_status_type_in_progress',
+                        'display_value' => 'In Progress',
                     ],
                     [
-                        'key' => 'store_type_virtual_digital',
-                        'display_value' => 'Virtual Digital Store',
+                        'key' => 'telephony_call_status_type_busy',
+                        'display_value' => 'Busy',
                     ],
+                    [
+                        'key' => 'telephony_call_status_type_no_answer',
+                        'display_value' => 'No Answer',
+                    ],
+                    [
+                        'key' => 'telephony_call_status_type_failed',
+                        'display_value' => 'Failed',
+                    ],
+                    [
+                        'key' => 'telephony_call_status_type_completed',
+                        'display_value' => 'Completed',
+                    ],                    
                 ]
             ],
             [ //Customer Type
@@ -164,8 +193,9 @@ class LookupTableSeeder extends Seeder
                 'description' => 'Types of the Customer',
                 'values' => [
                     [
-                        'key' => 'customer_type_guest',
-                        'display_value' => 'Guest',
+                        'key' => 'customer_type_default',
+                        'display_value' => 'Default OR Guest',
+                        'is_editable' => false,
                     ],
                     [
                         'key' => 'customer_type_retailer',
@@ -193,10 +223,12 @@ class LookupTableSeeder extends Seeder
                     [
                         'key' => 'customer_gender_male',
                         'display_value' => 'Male',
+                        'is_editable' => false,
                     ],
                     [
                         'key' => 'customer_gender_female',
                         'display_value' => 'Female',
+                        'is_editable' => false,
                     ],
                     [
                         'key' => 'customer_gender_others',
@@ -212,10 +244,12 @@ class LookupTableSeeder extends Seeder
                     [
                         'key' => 'customer_detail_type_email',
                         'display_value' => 'Email',
+                        'is_editable' => false,
                     ],
                     [
                         'key' => 'customer_detail_type_phone',
                         'display_value' => 'Phone',
+                        'is_editable' => false,
                     ],
                     [
                         'key' => 'customer_detail_type_socialhandle',
@@ -235,14 +269,17 @@ class LookupTableSeeder extends Seeder
                     [
                         'key' => 'customer_detail_type_email_work',
                         'display_value' => 'Work',
+                        'is_editable' => false,
                     ],
                     [
                         'key' => 'customer_detail_type_email_personal',
                         'display_value' => 'Personal',
+                        'is_editable' => false,
                     ],
                     [
                         'key' => 'customer_detail_type_phone_mobile',
                         'display_value' => 'Phone-Mobile',
+                        'is_editable' => false,
                     ],
                     [
                         'key' => 'customer_detail_type_phone_landline',
@@ -278,6 +315,7 @@ class LookupTableSeeder extends Seeder
                     [
                         'key' => 'customer_address_type_home',
                         'display_value' => 'Home',
+                        'is_editable' => false,
                     ],
                     [
                         'key' => 'customer_address_type_work',
@@ -286,6 +324,29 @@ class LookupTableSeeder extends Seeder
                     [
                         'key' => 'customer_address_type_other',
                         'display_value' => 'Other',
+                    ],
+                ]
+            ],
+            [ //Store Type
+                'key' => 'store_type',
+                'display_value' => 'Store Type',
+                'description' => 'Type of the Store/Outlet',
+                'values' => [
+                    [
+                        'key' => 'store_type_warehouse',
+                        'display_value' => 'Warehouse',
+                    ],
+                    [
+                        'key' => 'store_type_retail',
+                        'display_value' => 'Retail Shop',
+                    ],
+                    [
+                        'key' => 'store_type_distribution_center',
+                        'display_value' => 'Distribution Center',
+                    ],
+                    [
+                        'key' => 'store_type_virtual_digital',
+                        'display_value' => 'Virtual Digital Store',
                     ],
                 ]
             ],

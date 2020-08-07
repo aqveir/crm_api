@@ -2,7 +2,7 @@
 
 namespace Modules\Core\Repositories;
 
-use App\Contracts\Common\RepositoryContract;
+use Modules\Core\Contracts\Common\{RepositoryContract};
 
 use Illuminate\Database\Eloquent\Model;
 

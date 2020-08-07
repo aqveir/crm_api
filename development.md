@@ -17,7 +17,8 @@ z:\xampp\php\php artisan module:make-listener NotifyUsersOfANewPost <module_name
 z:\xampp\php\php artisan module:make-mail SendWeeklyPostsEmail <module_name>
 z:\xampp\php\php artisan module:make-controller PostController <module_name>
 z:\xampp\php\php artisan module:make-request Frontend/GetBlogPostsRequest <module_name>
-z:\xampp\php\php artisan module:make-policy PolicyName Blog
+z:\xampp\php\php artisan module:make-policy PolicyName <module_name>
+z:\xampp\php\php artisan module:make-resource PostResource <module_name>
 ```
 
 ## Migrations

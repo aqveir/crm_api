@@ -7,5 +7,6 @@
     "Document": true,
     "Feedback": true,
     "Subscription": true,
-    "Preference": true
+    "Preference": true,
+    "CloudTelephony": true
 }

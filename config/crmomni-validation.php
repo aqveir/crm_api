@@ -264,6 +264,37 @@ return [
                 ],
 
             ], // Customer Controller ends
+        ],
+
+        'telephony' => [
+            //Exotel Provider
+            'exotel' => [
+                //Voice-Call Handler
+                'voice' => [
+                    'callback' => [
+                        'validation_rules' => [
+                            'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        ]
+                    ],
+
+                    'details' => [
+                        'validation_rules' => [
+                            'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        ]
+                    ],
+
+                    'passthru' => [
+                        'validation_rules' => [
+                            'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        ]
+                    ],
+                ],
+
+                //Message-SMS Handler
+                'sms' => [
+
+                ]
+            ]
         ]
     ]
 ];

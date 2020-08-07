@@ -19,6 +19,7 @@ class CreateLookupTable extends Migration
             $table->string('key')->unique();
             $table->string('display_value')->nullable();
             $table->string('description')->nullable();
+            $table->boolean('is_editable')->default(true);
 
             $table->timestamps();
         });
