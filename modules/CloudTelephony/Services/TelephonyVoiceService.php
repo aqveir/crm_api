@@ -5,9 +5,10 @@ namespace Modules\CloudTelephony\Services;
 use Config;
 use Carbon\Carbon;
 
+use Modules\Core\Models\Organization\Organization;
+
 use Modules\Core\Repositories\Organization\OrganizationRepository;
 use Modules\Core\Repositories\Lookup\LookupValueRepository;
-//use Modules\Note\Repositories\NoteRepository;
 
 use Modules\Core\Services\BaseService;
 
@@ -21,6 +22,8 @@ use Illuminate\Support\Facades\Log;
 
 use Exception;
 use Modules\Core\Exceptions\DuplicateDataException;
+use Modules\CloudTelephony\Exceptions\TelephonyNoProviderException;
+use Modules\CloudTelephony\Exceptions\TelephonyConfigurationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -72,63 +75,58 @@ class TelephonyVoiceService extends BaseService
 
 
     /**
-     * Create User
+     * Make a Telephony Call
      * 
+     * @param \string $orgHash
+     * @param \string $provider
      * @param \Illuminate\Support\Collection $payload
-     * @param \bool $isAutoCreated (optional)
      *
      * @return mixed
      */
-    public function create(Collection $payload, bool $isAutoCreated=false)
+    public function makecall(string $orgHash, Collection $payload)
     {
         $objReturnValue=null; $data=[];
         try {
-            if ($isAutoCreated) {
-                //Build data
-                $data = $payload->only([
-                    'entity_type_id', 'reference_id', 'note', 'org_id', 'created_by'
-                ])->toArray();
-            } else {
-                //Authenticated User
-                $user = $this->getCurrentUser('backend');
+            //Get organization data
+            $organization = $this->getOrganizationByHash($orgHash);
 
-                //Build data
-                $data = $payload->only([
-                    'entity_type_id', 'reference_id', 'note'
-                ])->toArray();
-                $data = array_merge($data, [
-                    'org_id' => $user['org_id'], 
-                    'created_by' => $user['id'] 
-                ]);
+            //Configurations
+            $configurations = $organization->configurations();
+            $telephonyProviders = $configurations->getByType('configuration_telephony_providers');
+
+            if ($telephonyProviders=='configuration_telephony_providers_none') {
+                throw new TelephonyNoProviderException();
             } //End if
 
-            //Lookup data
-            $entityType = $payload['entity_type'];
-            $lookupEntity = $this->lookupRepository->getLookUpByKey($data['org_id'], $entityType);
-            if (empty($lookupEntity))
-            {
-                throw new Exception('Unable to resolve the entity type');   
-            } //End if
-            $data['entity_type_id'] = $lookupEntity['id'];
 
-            //Create Note
-            $note = $this->noteRepository->create($data);
-            $note->load('type', 'owner');
+
+            // //Lookup data
+            // $entityType = $payload['entity_type'];
+            // $lookupEntity = $this->lookupRepository->getLookUpByKey($data['org_id'], $entityType);
+            // if (empty($lookupEntity))
+            // {
+            //     throw new Exception('Unable to resolve the entity type');   
+            // } //End if
+            // $data['entity_type_id'] = $lookupEntity['id'];
+
+            // //Create Note
+            // $note = $this->noteRepository->create($data);
+            // $note->load('type', 'owner');
                 
-            //Raise event: Note Created
-            event(new NoteCreatedEvent($note, $isAutoCreated));                
+            //Raise event
+            $this->raiseEvent($organization, $payload);
 
             //Assign to the return value
-            $objReturnValue = $note;
+            $objReturnValue = $payload;
 
-        } catch(AccessDeniedHttpException $e) {
-            log::error('NoteService:create:AccessDeniedHttpException:' . $e->getMessage());
-            throw new AccessDeniedHttpException($e->getMessage());
-        } catch(BadRequestHttpException $e) {
-            log::error('NoteService:create:BadRequestHttpException:' . $e->getMessage());
+        } catch(TelephonyNoProviderException $e) {
+            log::error('TelephonyVoiceService:makecall:TelephonyNoProviderException:' . $e->getMessage());
+            throw new BadRequestHttpException($e->getMessage());
+        } catch(TelephonyConfigurationException $e) {
+            log::error('TelephonyVoiceService:makecall:TelephonyConfigurationException:' . $e->getMessage());
             throw new BadRequestHttpException($e->getMessage());
         } catch(Exception $e) {
-            log::error('NoteService:create:Exception:' . $e->getMessage());
+            log::error('TelephonyVoiceService:makecall:Exception:' . $e->getMessage());
             throw new HttpException(500);
         } //Try-catch ends
 
@@ -137,40 +135,48 @@ class TelephonyVoiceService extends BaseService
 
 
     /**
-     * Update Note
+     * Save Telephony Callback
      * 
+     * @param \string $orgHash
+     * @param \string $provider
      * @param \Illuminate\Support\Collection $payload
-     * @param \int $noteId
      *
      * @return mixed
      */
-    public function update(Collection $payload, int $noteId)
+    public function callback(string $orgHash, string $provider, Collection $payload)
     {
-        $objReturnValue=null;
+        $objReturnValue=null; $data=[];
         try {
-            //Authenticated User
-            $user = $this->getCurrentUser('backend');
+            //Get organization data
+            $organization = $this->getOrganizationByHash($orgHash);
 
-            //Build data
-            $data = $payload->only(['note'])->toArray();
+            // //Lookup data
+            // $entityType = $payload['entity_type'];
+            // $lookupEntity = $this->lookupRepository->getLookUpByKey($data['org_id'], $entityType);
+            // if (empty($lookupEntity))
+            // {
+            //     throw new Exception('Unable to resolve the entity type');   
+            // } //End if
+            // $data['entity_type_id'] = $lookupEntity['id'];
 
-            //Update Note
-            $note = $this->noteRepository->update($noteId, 'id', $data, $user['id']);
+            // //Create Note
+            // $note = $this->noteRepository->create($data);
+            // $note->load('type', 'owner');
                 
-            //Raise event: Note Updated
-            event(new NoteUpdatedEvent($note));                
+            //Raise event
+            $this->raiseEvent($organization, $payload);
 
             //Assign to the return value
-            $objReturnValue = $note;
+            $objReturnValue = $payload;
 
         } catch(AccessDeniedHttpException $e) {
-            log::error('NoteService:update:AccessDeniedHttpException:' . $e->getMessage());
+            log::error('TelephonyVoiceService:create:AccessDeniedHttpException:' . $e->getMessage());
             throw new AccessDeniedHttpException($e->getMessage());
         } catch(BadRequestHttpException $e) {
-            log::error('NoteService:update:BadRequestHttpException:' . $e->getMessage());
+            log::error('TelephonyVoiceService:create:BadRequestHttpException:' . $e->getMessage());
             throw new BadRequestHttpException($e->getMessage());
         } catch(Exception $e) {
-            log::error('NoteService:update:Exception:' . $e->getMessage());
+            log::error('TelephonyVoiceService:create:Exception:' . $e->getMessage());
             throw new HttpException(500);
         } //Try-catch ends
 
@@ -179,41 +185,73 @@ class TelephonyVoiceService extends BaseService
 
 
     /**
-     * Delete Note
+     * Save Telephony Details
      * 
+     * @param \string $orgHash
+     * @param \string $provider
      * @param \Illuminate\Support\Collection $payload
-     * @param \int $noteId
      *
      * @return mixed
      */
-    public function delete(Collection $payload, int $noteId)
+    public function details(string $orgHash, string $provider, Collection $payload)
     {
         $objReturnValue=null;
         try {
-            //Authenticated User
-            $user = $this->getCurrentUser('backend');
+            //Get organization data
+            $organization = $this->getOrganizationByHash($orgHash);
 
-            //Get Note
-            $note = $this->noteRepository->getById($noteId);
+            //Raise event
+            $this->raiseEvent($organization, $payload);               
 
-            //Delete Note
-            $response = $this->noteRepository->deleteById($noteId, $user['id']);
-            if ($response) {
-                //Raise event: Note Deleted
-                event(new NoteDeletedEvent($note));
-            } //End if
-            
             //Assign to the return value
-            $objReturnValue = $response;
+            $objReturnValue = $payload;
 
         } catch(AccessDeniedHttpException $e) {
-            log::error('NoteService:delete:AccessDeniedHttpException:' . $e->getMessage());
+            log::error('TelephonyVoiceService:update:AccessDeniedHttpException:' . $e->getMessage());
             throw new AccessDeniedHttpException($e->getMessage());
         } catch(BadRequestHttpException $e) {
-            log::error('NoteService:delete:BadRequestHttpException:' . $e->getMessage());
+            log::error('TelephonyVoiceService:update:BadRequestHttpException:' . $e->getMessage());
             throw new BadRequestHttpException($e->getMessage());
         } catch(Exception $e) {
-            log::error('NoteService:delete:Exception:' . $e->getMessage());
+            log::error('TelephonyVoiceService:update:Exception:' . $e->getMessage());
+            throw new HttpException(500);
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends
+
+
+    /**
+     * Raise Telephony Event
+     * 
+     * @param \Modules\Core\Models\Organization\Organization $organization
+     * @param \Illuminate\Support\Collection $payload
+     *
+     * @return mixed
+     */
+    private function raiseEvent(Organization $organization, Collection $payload)
+    {
+        $objReturnValue=null;
+        try {
+
+            switch ($payload['status']) {
+                case 'telephony_call_status_type_completed':
+                    event(new TelephonyCallCompleted($organization, $payload));
+                    break;
+                
+                default:
+                    //Do nothing
+                    break;
+            } //End switch
+
+        } catch(AccessDeniedHttpException $e) {
+            log::error('TelephonyVoiceService:raiseEvent:AccessDeniedHttpException:' . $e->getMessage());
+            throw new AccessDeniedHttpException($e->getMessage());
+        } catch(BadRequestHttpException $e) {
+            log::error('TelephonyVoiceService:raiseEvent:BadRequestHttpException:' . $e->getMessage());
+            throw new BadRequestHttpException($e->getMessage());
+        } catch(Exception $e) {
+            log::error('TelephonyVoiceService:raiseEvent:Exception:' . $e->getMessage());
             throw new HttpException(500);
         } //Try-catch ends
 

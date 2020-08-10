@@ -120,6 +120,7 @@ class NoteController extends ApiBaseController
      *     tags={"Note"},
      *     operationId="api.backend.note.update",
      *     security={{"omni_token":{}}},
+     *     @OA\Parameter(ref="#/components/parameters/identifier"),
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
      *     @OA\Response(response=500, description="Internal Server Error")
@@ -158,6 +159,7 @@ class NoteController extends ApiBaseController
      *     tags={"Note"},
      *     operationId="api.backend.note.delete",
      *     security={{"omni_token":{}}},
+     *     @OA\Parameter(ref="#/components/parameters/identifier"),
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
      *     @OA\Response(response=500, description="Internal Server Error")

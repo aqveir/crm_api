@@ -57,11 +57,11 @@ class CustomerAuthController extends ApiBaseController
      *          ref="#/components/parameters/organization_key",
      *      ),
      *      @OA\Parameter(
-     *          parameter="customer_phone", in="query", name="phone", description="Enter phone number w/o country code.",
+     *          in="query", name="phone", description="Enter phone number w/o country code.", required=false,
      *          @OA\Schema(type="string")
      *      ),
      *      @OA\Parameter(
-     *          parameter="customer_email", in="query", name="email", description="Enter email address.",
+     *          in="query", name="email", description="Enter email address.", required=false,
      *          @OA\Schema(type="string")
      *      ),
      *      @OA\Response(response=200, description="Request was successfully executed."),

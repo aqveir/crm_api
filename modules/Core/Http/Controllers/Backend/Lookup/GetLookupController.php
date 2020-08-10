@@ -88,7 +88,7 @@ class GetLookupController extends ApiBaseController
      *     tags={"Lookup"},
      *     operationId="api.lookup.getdata",
      *     security={{"omni_token":{}}},
-     *     @OA\Parameter(name="name", in="path", description="Name", required=true),
+     *     @OA\Parameter(name="name", in="path", description="Name", required=true, @OA\Schema(type="string")),
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
      *     @OA\Response(response=500, description="Internal Server Error")

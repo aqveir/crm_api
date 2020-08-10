@@ -91,7 +91,7 @@ class GetOrganizationController extends ApiBaseController
      *     tags={"Organization"},
      *     operationId="api.organization.get.data",
      *     security={{"omni_token":{}}},
-     *     @OA\Parameter(name="hash", in="path", description="Organization Identifier", required=true),
+     *     @OA\Parameter(ref="#/components/parameters/hash_identifier"),
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
      *     @OA\Response(response=500, description="Internal Server Error")

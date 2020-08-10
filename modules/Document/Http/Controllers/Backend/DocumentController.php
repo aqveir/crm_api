@@ -102,6 +102,7 @@ class DocumentController extends ApiBaseController
      *     tags={"Document"},
      *     operationId="api.backend.document.update",
      *     security={{"omni_token":{}}},
+     *     @OA\Parameter(ref="#/components/parameters/identifier"),
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
      *     @OA\Response(response=500, description="Internal Server Error")
@@ -140,6 +141,7 @@ class DocumentController extends ApiBaseController
      *     tags={"Document"},
      *     operationId="api.backend.document.delete",
      *     security={{"omni_token":{}}},
+     *     @OA\Parameter(ref="#/components/parameters/identifier"),
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
      *     @OA\Response(response=500, description="Internal Server Error")

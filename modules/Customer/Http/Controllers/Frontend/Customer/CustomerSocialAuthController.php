@@ -43,7 +43,7 @@ class CustomerSocialAuthController extends ApiBaseController
      *      @OA\Parameter(
      *          ref="#/components/parameters/organization_key",
      *      ),
-     *      @OA\Parameter(name="social", in="path", description="Social Auth Provider", required=true),
+     *      @OA\Parameter(name="social", in="path", description="Social Auth Provider", required=true, @OA\Schema(type="string")),
      *      @OA\Response(response=200, description="Request was successfully executed."),
      *      @OA\Response(response=400, description="Bad Request"),
      *      @OA\Response(response=422, description="Model Validation Error"),
@@ -74,7 +74,7 @@ class CustomerSocialAuthController extends ApiBaseController
      *      @OA\Parameter(
      *          ref="#/components/parameters/organization_key",
      *      ),
-     *      @OA\Parameter(name="social", in="path", description="Social Auth Provider", required=true),
+     *      @OA\Parameter(name="social", in="path", description="Social Auth Provider", required=true, @OA\Schema(type="string")),
      *      @OA\Response(response=200, description="Request was successfully executed."),
      *      @OA\Response(response=400, description="Bad Request"),
      *      @OA\Response(response=422, description="Model Validation Error"),

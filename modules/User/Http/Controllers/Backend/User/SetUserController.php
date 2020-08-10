@@ -91,10 +91,7 @@ class SetUserController extends ApiBaseController
      *     tags={"User"},
      *     operationId="api.backend.user.update",
      *     security={{"omni_token":{}}},
-     *     @OA\Parameter(
-     *          parameter="hash", in="path", name="hash", description="Enter user identifier.",
-     *          @OA\Schema(type="string")
-     *     ),
+     *     @OA\Parameter(ref="#/components/parameters/hash_identifier"),
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
      *     @OA\Response(response=500, description="Internal Server Error")

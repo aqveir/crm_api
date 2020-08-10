@@ -78,4 +78,5 @@ class VoiceCallPassthruResource extends JsonResource
         }
         return $objReturnValue;
     } //Function ends
-}
+
+} //Class ends

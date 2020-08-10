@@ -39,10 +39,40 @@ class ConfigurationTableSeeder extends Seeder
                     ]
                 )
             ],
+            [ //Telephony - Providers Selection
+                'type_id' => '1',
+                'key' => 'configuration_telephony_providers',
+                'display_value' => 'Telephony Providers',
+                'schema' => json_encode(
+                    [
+                        [
+                            'provider_key' => 'configuration_telephony_providers_none',
+                            'display_value' => 'None'
+                        ],
+                        [
+                            'provider_key' => 'configuration_telephony_providers_exotel',
+                            'display_value' => 'Exotel'
+                        ],
+                        [
+                            'provider_key' => 'configuration_telephony_providers_twilio',
+                            'display_value' => 'Twilio'
+                        ],
+                        [
+                            'provider_key' => 'configuration_telephony_providers_1',
+                            'display_value' => 'Provider 1'
+                        ],
+                        [
+                            'provider_key' => 'configuration_telephony_providers_1',
+                            'display_value' => 'Provider 2'
+                        ],
+                    ]
+                )
+            ],
             [ //Telephony - Exotel Configuration
                 'type_id' => '1',
                 'key' => 'configuration_telephony_exotel',
                 'display_value' => 'Telephony - Exotel Configuration',
+                'filter' => 'configuration_telephony_providers_exotel',
                 'schema' => json_encode(
                     [
                         'exotel_sid' => 'omnichannel',

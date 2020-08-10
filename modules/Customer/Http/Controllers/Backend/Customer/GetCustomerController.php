@@ -87,6 +87,7 @@ class GetCustomerController extends ApiBaseController
      *      tags={"Customer"},
      *      operationId="api.backend.customer.data",
      *      security={{"omni_token":{}}},
+     *      @OA\Parameter(ref="#/components/parameters/hash_identifier"),
      *      @OA\Response(response=200, description="Request was successfully executed."),
      *      @OA\Response(response=400, description="Bad Request"),
      *      @OA\Response(response=422, description="Model Validation Error"),

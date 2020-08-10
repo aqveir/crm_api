@@ -51,9 +51,7 @@ class UserAuthController extends ApiBaseController
      *      path="/user/login",
      *      tags={"User"},
      *      operationId="api.backend.user.login",
-     *      @OA\Parameter(
-     *          ref="#/components/parameters/organization_key",
-     *      ),
+     *      @OA\Parameter(ref="#/components/parameters/organization_key"),
      *      @OA\RequestBody(
      *          @OA\MediaType(
      *              mediaType="application/x-www-form-urlencoded",

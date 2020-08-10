@@ -17,17 +17,16 @@ $api = app(Router::class);
 $api->version('v1', function (Router $api) {
 
     // Unauthenticated Endpoints for Telephony
-    $api->group(['middleware' => ['guest']], function(Router $api) {
+    $api->group(['prefix' => 'telephony', 'middleware' => ['guest']], function(Router $api) {
 
         // Exotel Endpoints
         $api->group(['prefix' => 'exotel'], function(Router $api) {
-            //Exotels Call Details
+            //Exotels Calls
             $api->any('call/callback','Modules\\CloudTelephony\\Http\\Controllers\\Exotel\\VoiceController@callback');
-            $api->any('call/details','Modules\\CloudTelephony\\Http\\Controllers\\Exotel\\VoiceController@details');
             $api->any('call/passthru','Modules\\CloudTelephony\\Http\\Controllers\\Exotel\\VoiceController@passthru');
 
-            //Exotels SMS Details
-            $api->any('sms/details','Modules\\CloudTelephony\\Http\\Controllers\\Exotel\\SmsController@details');
+            //Exotels SMS
+            $api->any('sms/callback','Modules\\CloudTelephony\\Http\\Controllers\\Exotel\\SmsController@callback');
         });
     });
 });

@@ -88,10 +88,7 @@ class GetUserController extends ApiBaseController
      *     tags={"User"},
      *     operationId="api.backend.user.show",
      *     security={{"omni_token":{}}},
-     *     @OA\Parameter(
-     *          parameter="hash", in="path", name="hash", description="Enter user identifier.",
-     *          @OA\Schema(type="string")
-     *     ),
+     *     @OA\Parameter(ref="#/components/parameters/hash_identifier"),
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
      *     @OA\Response(response=500, description="Internal Server Error")
@@ -136,11 +133,11 @@ class GetUserController extends ApiBaseController
      *          ref="#/components/parameters/organization_key",
      *      ),
      *      @OA\Parameter(
-     *          parameter="user_phone", in="query", name="phone", description="Enter phone number w/o country code.",
+     *          in="query", name="phone", description="Enter phone number w/o country code.", required=false,
      *          @OA\Schema(type="string")
      *      ),
      *      @OA\Parameter(
-     *          parameter="user_email", in="query", name="email", description="Enter email address.",
+     *          in="query", name="email", description="Enter email address.", required=false,
      *          @OA\Schema(type="string")
      *      ),
      *      @OA\Response(response=200, description="Request was successfully executed."),
