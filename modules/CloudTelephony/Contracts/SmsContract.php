@@ -3,10 +3,10 @@
 namespace Modules\CloudTelephony\Contracts;
 
 /**
- * Interface CallContract.
+ * Interface SmsContract.
  *
  */
-interface CallContract
+interface SmsContract
 {
 
 } //Interface Ends
