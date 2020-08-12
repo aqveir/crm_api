@@ -19,8 +19,8 @@ class CreateConfigurationsTable extends Migration
             $table->integer('type_id');
             $table->string('key')->unique();
             $table->string('display_value')->nullable();
+            $table->text('filter')->nullable();
             $table->text('schema')->nullable();
-
             $table->boolean('is_active')->default(true);
 
             $table->timestamps();
