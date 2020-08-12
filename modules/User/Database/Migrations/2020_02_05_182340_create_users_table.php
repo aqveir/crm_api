@@ -69,7 +69,7 @@ class CreateUsersTable extends Migration
         Schema::create(config('crmomni-migration.table_name.user.availability_history'), function (Blueprint $table) {
             $table->integer('user_id');
             $table->integer('status_id');
-            $table->dateTime('timestamp')->useCurrent();
+            $table->timestamp('timestamp')->useCurrent();
             $table->ipAddress('ip_address')->nullable();
         });
     }
