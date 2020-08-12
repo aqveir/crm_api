@@ -98,11 +98,13 @@ class RolesTableSeeder extends Seeder
                 foreach ($role['privileges'] as $keyPrivilege) {
                     $privilege =  \Modules\Core\Models\Privilege\Privilege::where('key', $keyPrivilege)->first();
 
-                    $join = \Modules\Core\Models\Role\RolePrivilege::create([
-                        'role_id' => $response['id'],
-                        'privilege_id' => $privilege['id'],
-                        'is_active' => 1
-                    ]);
+                    if (!empty($privilege)) {
+                        $join = \Modules\Core\Models\Role\RolePrivilege::create([
+                            'role_id' => $response['id'],
+                            'privilege_id' => $privilege['id'],
+                            'is_active' => 1
+                        ]);
+                    } //End if
                 } //Loop ends
             } //End if
         } //Loop ends

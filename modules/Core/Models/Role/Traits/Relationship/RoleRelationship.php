@@ -22,7 +22,7 @@ trait RoleRelationship
 			config('crmomni-class.class_model.privilege'),
 			config('crmomni-migration.table_name.role_privileges'),
 			'role_id', 'privilege_id'
-		);
+		)->withTimestamps();
 	}
 
 	public function active_privileges()

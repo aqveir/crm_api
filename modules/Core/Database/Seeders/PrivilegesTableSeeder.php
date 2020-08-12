@@ -30,29 +30,22 @@ class PrivilegesTableSeeder extends Seeder
                 'key' => 'edit_organization_data',
                 'display_value' => 'Edit/Amend Organization Data',
             ],
+            
             [
-                'key' => 'list_all_organization_stores',
-                'display_value' => 'Show All Stores in the Organization',
+                'key' => 'list_all_organization_accounts',
+                'display_value' => 'Show All Accounts in the Organization',
             ],
             [
-                'key' => 'add_new_stores_data',
-                'display_value' => 'Add Store Data',
+                'key' => 'add_new_account_data',
+                'display_value' => 'Add Account Data',
             ],
             [
-                'key' => 'edit_stores_data',
-                'display_value' => 'Edit/Amend Store Data',
+                'key' => 'edit_account_data',
+                'display_value' => 'Edit/Manage Account Data',
             ],
             [
-                'key' => 'list_all_organization_catalogue',
-                'display_value' => 'Show Product Catalogue in the Organization',
-            ],
-            [
-                'key' => 'add_new_catalogue_data',
-                'display_value' => 'Add Product Catalogue',
-            ],
-            [
-                'key' => 'edit_catalogue_data',
-                'display_value' => 'Edit/Amend Product Catalogue',
+                'key' => 'delete_account_data',
+                'display_value' => 'Delete Account Data',
             ],
 
             [
@@ -96,6 +89,28 @@ class PrivilegesTableSeeder extends Seeder
             [ //delete_document
                 'key' => 'delete_document',
                 'display_value' => 'Delete Document',
+            ],
+
+            //Tele-Communication Privileges
+            [
+                'key' => 'allow_call_outgoing',
+                'display_value' => 'Outgoing Call',
+            ],
+            [
+                'key' => 'allow_call_incoming',
+                'display_value' => 'Incoming Call',
+            ],
+            [
+                'key' => 'allow_sms_outgoing',
+                'display_value' => 'Send SMS',
+            ],
+            [
+                'key' => 'allow_msg_outgoing',
+                'display_value' => 'Send Messages',
+            ],
+            [
+                'key' => 'allow_email_outgoing',
+                'display_value' => 'Send E-Mail',
             ],
         ];
 

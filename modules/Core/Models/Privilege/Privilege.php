@@ -27,7 +27,7 @@ class Privilege extends Model
      * @var array
      */
     protected $fillable = [
-        'name',
+        'key', 'display_value', 'description'
     ];
 
     

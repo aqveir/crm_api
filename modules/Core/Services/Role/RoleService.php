@@ -6,6 +6,7 @@ use Config;
 use Carbon\Carbon;
 
 use Modules\Core\Repositories\Role\RoleRepository;
+use Modules\Core\Repositories\Privilege\PrivilegeRepository;
 
 use Modules\Core\Services\BaseService;
 
@@ -36,30 +37,46 @@ class RoleService extends BaseService
 
 
     /**
+     * @var \Modules\Core\Repositories\Privilege\PrivilegeRepository
+     */
+    protected $privilegeRepository;
+
+
+    /**
      * Service constructor.
      *
-     * @param \Modules\Core\Repositories\Role\RoleRepository    $roleRepository
+     * @param \Modules\Core\Repositories\Role\RoleRepository                $roleRepository
+     * @param \Modules\Core\Repositories\Privilege\PrivilegeRepository      $privilegeRepository
      */
     public function __construct(
-        RoleRepository               $roleRepository
+        RoleRepository                  $roleRepository,
+        PrivilegeRepository             $privilegeRepository
     ) {
-        $this->roleRepository        = $roleRepository;
+        $this->roleRepository           = $roleRepository;
+        $this->privilegeRepository      = $privilegeRepository;
     } //Function ends
 
 
     /**
      * Create New Default Role for the New Organization
      *
-     * @return integer
+     * @return object
      */
     public function createDefaultRole(int $orgId) {
         $objReturnValue=null;
         try {
             //Create New Elevated Role for this Organization
-            $payload = config('core.settings.new_organization.default_role');
+            $roles = config('core.settings.new_organization.default_roles');
+            foreach ($roles as $role) {
+                $response = $this->create(collect($role), $orgId);
 
-            return $this->create(collect($payload), $orgId);
+                //Add response to array
+                if (!empty($response)) {
+                    $objReturnValue = (empty($objReturnValue))?[]:$objReturnValue;
+                    array_push($objReturnValue, $response);
+                } //End if
 
+            } //Loop ends
         } catch(AccessDeniedHttpException $e) {
             throw new AccessDeniedHttpException($e->getMessage());
         } catch(BadRequestHttpException $e) {
@@ -76,7 +93,7 @@ class RoleService extends BaseService
     /**
      * Create Role for the Organization
      *
-     * @return integer
+     * @return object
      */
     public function create(Collection $request, int $orgId) {
         $objReturnValue=null;
@@ -90,8 +107,22 @@ class RoleService extends BaseService
             } //End if
             
             //Assign Privileges to the Role
-            $data = $request->only('privileges');
-            $role->privileges()->attach($data['privileges']);
+            $data = $request->only('privileges')->toArray();
+
+            //Get all active privileges
+            $privileges = $this->privilegeRepository->getPrivilegesByNames($data['privileges'], 'key', true);
+
+            //Get all privileges id into an array
+            $privilegesId = null;
+            if (!empty($privileges)) {
+                $privilegesId=[];
+                foreach ($privileges as $privilege) {
+                    array_push($privilegesId, $privilege['id']);
+                } //Loop ends
+
+                //Attach the privileges to the role
+                $role->privileges()->attach($privilegesId);                
+            } //End if
 
             //Return the Newly Created Role
             $objReturnValue = $role;            

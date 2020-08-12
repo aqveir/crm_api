@@ -86,4 +86,16 @@ abstract class BaseModel extends Model
         return $objReturnValue;
     } //Function ends
 
+
+    /**
+     * Scope a query to only include active users.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', 1);
+    } //Function ends
+
 } //Class ends

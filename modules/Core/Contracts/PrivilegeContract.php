@@ -3,10 +3,10 @@
 namespace Modules\Core\Contracts;
 
 /**
- * Interface PrivilegesContract.
+ * Interface PrivilegeContract.
  *
  */
-interface PrivilegesContract
+interface PrivilegeContract
 {
 
 } //Interface Ends
