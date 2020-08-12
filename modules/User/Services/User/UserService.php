@@ -138,6 +138,12 @@ class UserService extends BaseService
                     $orgId = $user['org_id'];
                 } //End if
                 $userId = $user['id'];
+            } elseif ($isAutoCreated) { //Default creation
+                //Get organization data
+                $organization = $this->getOrganizationByHash($orgHash);
+                $orgId = $organization['id'];
+            } else {
+                throw new AccessDeniedHttpException();
             } //End if
 
             //Build user data

@@ -7,6 +7,7 @@ use Carbon\Carbon;
 
 use Modules\User\Models\User\User;
 
+use Modules\Core\Repositories\Organization\OrganizationRepository;
 use Modules\User\Repositories\User\UserRepository;
 
 use Modules\Core\Services\BaseService;
@@ -38,6 +39,10 @@ use Illuminate\Support\Facades\Password;
  */
 class UserAuthService extends BaseService
 {
+    /**
+     * @var Modules\Core\Repositories\Organization\OrganizationRepository
+     */
+    protected $organizationRepository;
 
     /**
      * @var Modules\User\Repositories\User\UserRepository
@@ -59,17 +64,19 @@ class UserAuthService extends BaseService
 
     /**
      * AuthService constructor.
-     *
-     * @param \Illuminate\Auth\AuthManager                              $authManager
-     * @param \Illuminate\Auth\Passwords\PasswordBrokerManager          $passwordBrokerManager
-     * @param \Modules\User\Repositories\User\UserRepository            $userRepository
+     * @param \Modules\Core\Repositories\Organization\OrganizationRepository    $organizationRepository
+     * @param \Illuminate\Auth\AuthManager                                      $authManager
+     * @param \Illuminate\Auth\Passwords\PasswordBrokerManager                  $passwordBrokerManager
+     * @param \Modules\User\Repositories\User\UserRepository                    $userRepository
      */
     public function __construct(
+        OrganizationRepository              $organizationRepository,
         AuthManager                         $authManager, 
         PasswordBrokerManager               $passwordBrokerManager, 
         UserRepository                      $userRepository
     )
     {
+        $this->organizationRepository       = $organizationRepository;
         $this->authManager                  = $authManager;
         $this->passwordBrokerManager        = $passwordBrokerManager;
         $this->userRepository               = $userRepository;
@@ -88,6 +95,12 @@ class UserAuthService extends BaseService
     public function authenticate(string $orgHash, Collection $credentials, string $ipAddress='0.0.0.0')
     {
         try {
+            //Get organization data
+            $organization = $this->getOrganizationByHash($orgHash);
+            if (!$organization['is_active']) {
+                throw new UnauthorizedHttpException('Organization is inactive.');
+            } //End if
+
             //Create condition for 
             $data = array_merge(
                 $credentials->toArray(),
