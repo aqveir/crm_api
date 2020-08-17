@@ -58,11 +58,6 @@ class CreateUsersTable extends Migration
         Schema::create(config('crmomni-migration.table_name.user.availability'), function (Blueprint $table) {
             $table->integer('user_id');
             $table->integer('status_id');
-
-            //Audit Log Fields
-            $table->integer('created_by')->default(0);
-            $table->integer('updated_by')->nullable();
-
             $table->timestamps();
         });
 

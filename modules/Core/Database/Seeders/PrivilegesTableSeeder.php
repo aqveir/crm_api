@@ -17,6 +17,7 @@ class PrivilegesTableSeeder extends Seeder
             [
                 'key' => 'list_all_organizations',
                 'display_value' => 'Show All Organizations',
+                'is_secure' => true
             ],
             [
                 'key' => 'read_organization_data',
@@ -25,6 +26,7 @@ class PrivilegesTableSeeder extends Seeder
             [
                 'key' => 'add_organization_data',
                 'display_value' => 'Add Organization Data',
+                'is_secure' => true
             ],
             [
                 'key' => 'edit_organization_data',
@@ -118,6 +120,7 @@ class PrivilegesTableSeeder extends Seeder
             $response = factory(\Modules\Core\Models\Privilege\Privilege::class)->create([
                 'key' => $privilege['key'],
                 'display_value' => $privilege['display_value'],
+                'is_secure' => isset($privilege['is_secure'])?$privilege['is_secure']:false,
             ]);
         } //Loop ends
     } //Function ends

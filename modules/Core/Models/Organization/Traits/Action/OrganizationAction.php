@@ -3,9 +3,8 @@
 namespace Modules\Core\Models\Organization\Traits\Action;
 
 use Config;
-use Illuminate\Support\Facades\Log;
-
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 use Exception;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -20,6 +19,34 @@ use App\Exceptions\DuplicateException;
  */
 trait OrganizationAction
 {
+
+    /**
+     * Get Organization Configurations Based On Key
+     *
+     * @return objReturnValue
+     */
+    public function getOrganizationConfigurationByKey(string $configKey)
+    {
+        $objReturnValue=null;
+        try {
+            //Get all configurations
+            $configurations = $this->configurations()->get();
+
+            if (!empty($configurations)) {
+                $objReturnValue = collect($configurations)->firstWhere('key', $configKey);                
+            } //End if   
+        } catch (Exception $e) {
+            log::error('OrganizationAction:getOrganizationConfigurationByKey:Exception:' . $e->getMessage());
+            $objReturnValue=null;
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //End Function
+
+
+
+
+
     /**
      * Get User Organization Settings 
      *

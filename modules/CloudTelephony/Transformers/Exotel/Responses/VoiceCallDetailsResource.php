@@ -63,13 +63,14 @@ class VoiceCallDetailsResource extends JsonResource
                 'transaction_id'    => $this['Sid'],
                 'direction'         => $callDirection,
                 'status'            => $callStatus,
-                'recording_url'     => $urlRecording,
                 'duration'          => $callDuration,
+                'recording_url'     => $urlRecording,
                 'uri'               => isset($this['Uri'])?$this['Uri']:null,
                 'created_at'        => isset($this['StartTime'])?$this['StartTime']:null,
                 'updated_at'        => isset($this['DateUpdated'])?$this['DateUpdated']:null,
                 'to_number'         => isset($this['To'])?$this['To']:null,
                 'from_number'       => isset($this['From'])?$this['From']:null,
+                'sid_number'        => isset($this['PhoneNumberSid'])?$this['PhoneNumberSid']:null,
                 // 'proxy'             => isset($this['digits'])?$this['digits']:'0',
                 // 'whom_number'       => ''
             ];

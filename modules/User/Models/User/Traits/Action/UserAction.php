@@ -45,7 +45,7 @@ trait UserAction
 		} //Try-Catch ends
 		
 		return $returnValue;
-	} //Method ends
+	} //Function End
 
 
     /**
@@ -94,6 +94,6 @@ trait UserAction
         } //Try-catch ends
 
         return $objReturnValue;
-    } //End Function
+    } //Function End
 
 } //Trait ends

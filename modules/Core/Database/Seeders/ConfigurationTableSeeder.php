@@ -24,7 +24,7 @@ class ConfigurationTableSeeder extends Seeder
     {
         return  [
             [ //Email - SMTP Configuration
-                'type_id' => '1',
+                'type_id' => '12',
                 'key' => 'configuration_mail_smtp',
                 'display_value' => 'Mail SMTP Configuration',
                 'schema' => json_encode(
@@ -40,7 +40,7 @@ class ConfigurationTableSeeder extends Seeder
                 )
             ],
             [ //Telephony - Providers Selection
-                'type_id' => '1',
+                'type_id' => '9',
                 'key' => 'configuration_telephony_providers',
                 'display_value' => 'Telephony Providers',
                 'schema' => json_encode(
@@ -69,19 +69,21 @@ class ConfigurationTableSeeder extends Seeder
                 )
             ],
             [ //Telephony - Exotel Configuration
-                'type_id' => '1',
+                'type_id' => '12',
                 'key' => 'configuration_telephony_exotel',
                 'display_value' => 'Telephony - Exotel Configuration',
                 'filter' => 'configuration_telephony_providers_exotel',
                 'schema' => json_encode(
                     [
-                        'exotel_sid' => 'omnichannel',
-                        'exotel_token' => 'hfisdf78yfhasdufsd8yfhs'
+                        'exotel_subdomain' => 'exotel_subdomain',
+                        'exotel_sid' => 'enter_exotel_sid',
+                        'exotel_api_key' => 'enter_exotel_api_key',
+                        'exotel_api_token' => 'enter_exotel_api_token'
                     ]
                 )
             ],
             [ //Telephony - IndiaSMS Configuration
-                'type_id' => '1',
+                'type_id' => '12',
                 'key' => 'configuration_telephony_indiasms',
                 'display_value' => 'Telephony - IndiaSMS Configuration',
                 'schema' => json_encode(
@@ -104,13 +106,13 @@ class ConfigurationTableSeeder extends Seeder
                 )
             ],
             [ //Telephony - Outgoing Phone Number
-                'type_id' => '1',
+                'type_id' => '9',
                 'key' => 'configuration_telephony_outgoing_phone_number',
                 'display_value' => 'Telephony - Outgoing Phone Number',
                 'schema' => '987654321'
             ],
             [ //Telephony - Outgoing SMS Number
-                'type_id' => '1',
+                'type_id' => '9',
                 'key' => 'configuration_telephony_outgoing_sms_number',
                 'display_value' => 'Telephony - Outgoing SMS Number',
                 'schema' => '987654321'

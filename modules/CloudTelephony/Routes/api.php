@@ -27,6 +27,9 @@ $api->version('v1', function (Router $api) {
 
             //Exotels SMS
             $api->any('sms/callback','Modules\\CloudTelephony\\Http\\Controllers\\Exotel\\SmsController@callback');
+
+            //TODO: Delete this
+            $api->any('call/customer','Modules\\CloudTelephony\\Http\\Controllers\\Exotel\\VoiceController@test');
         });
     });
 });

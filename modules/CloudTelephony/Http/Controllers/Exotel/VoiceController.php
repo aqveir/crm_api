@@ -135,4 +135,28 @@ class VoiceController extends ApiBaseController
         }
     } //Function ends
 
+
+    public function test(VoiceCallPassthruRequest $request, TelephonyVoiceService $service) {
+        try {
+            //Get Org Hash 
+            $orgHash = $this->getOrgHashInRequest($request);
+
+            //Create payload
+            $payload = collect($request);
+
+            //Process telephony details
+            $data = $service->makecall($orgHash, $payload);
+
+            //Send http status out
+            return $this->response->success(compact('data'));
+            
+        } catch(AccessDeniedHttpException $e) {
+            return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
+        } catch(UnauthorizedHttpException $e) {
+            return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
+        } catch(Exception $e) {
+            return $this->response->fail([], Response::HTTP_BAD_REQUEST);
+        }
+    } //Function ends
+
 } //Class ends

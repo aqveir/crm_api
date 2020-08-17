@@ -58,10 +58,16 @@ class OrganizationsTableSeeder extends Seeder
                     ],
                     [
                         'configuration_id' => 2, 
+                        'value' => 'configuration_telephony_providers_exotel' 
+                    ],
+                    [
+                        'configuration_id' => 3, 
                         'value' => json_encode(
                             [
-                                'exotel_sid' => 'omnichannel',
-                                'exotel_token' => 'hfisdf78yfhasdufsd8yfhs'
+                                'exotel_subdomain' => '@api.exotel.com',
+                                'exotel_sid' => 'ellaisys1',
+                                'exotel_api_key' => '6ec3bbe2fc1ca0f0d9fba19f2a4007a75847e2323538a895',
+                                'exotel_api_token' => '1d9ccab757bc93a3ce4583adf539bf2c6ea6beb3c3ef62c8'
                             ]
                         )
                     ],
@@ -87,8 +93,8 @@ class OrganizationsTableSeeder extends Seeder
                         )
                     ],
                     [
-                        'configuration_id' => 4, 
-                        'value' => '123456789'
+                        'configuration_id' => 5, 
+                        'value' => '09513886363'
                     ]
                 ]
             ],
@@ -109,6 +115,25 @@ class OrganizationsTableSeeder extends Seeder
                                 'mail_from_name' => 'Demo CRM Omni Account'
                             ]
                         )
+                    ],
+                    [
+                        'configuration_id' => 2, 
+                        'value' => 'configuration_telephony_providers_exotel' 
+                    ],
+                    [
+                        'configuration_id' => 3, 
+                        'value' => json_encode(
+                            [
+                                'exotel_subdomain' => '@api.exotel.com',
+                                'exotel_sid' => 'portiqo',
+                                'exotel_api_key' => 'portiqo',
+                                'exotel_api_token' => '9d6555a64e9b1bbf94a3ba3fd3e87363d63d54a1'
+                            ]
+                        )
+                    ],
+                    [
+                        'configuration_id' => 5, 
+                        'value' => '08047179477'
                     ]
                 ]
             ]

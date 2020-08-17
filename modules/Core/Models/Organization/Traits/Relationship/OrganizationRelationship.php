@@ -81,5 +81,6 @@ trait OrganizationRelationship
 			'org_id', 'configuration_id'
 		)
 		->withPivot('value');
-	}
+	} //Function End
+
 } //Trait Ends

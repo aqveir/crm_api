@@ -4,6 +4,9 @@ namespace Modules\CloudTelephony\Repositories\Exotel;
 
 use Modules\CloudTelephony\Contracts\{VoiceCallContract};
 
+use Ellaisys\Exotel\ExotelCall;
+use Modules\CloudTelephony\Transformers\Exotel\Responses\VoiceCallDetailsResource;
+
 
 /**
  * Class VoiceCallRepository.
@@ -18,22 +21,32 @@ class VoiceCallRepository implements VoiceCallContract
      *
      * @param \string  $provider
      */
-    public function __construct(Note $model)
+    public function __construct()
     {
-        $this->model = $model;
     }
 
 
 	/**
 	 * Call To Connect Two Numbers
 	 */
-	public function makeCallToConnectTwoNumbers(int $typeId, int $referenceId)
+	public function makeCallToConnectTwoNumbers(array $payload, array $settings, string $callbackUrl=null)
 	{
 		$objReturnValue=null;
 		
 		try {
+			//Make Exotel Call
+			$response = ExotelCall::dial(
+				$payload['from_number'], $payload['to_number'], $payload['virtual_number'],
+				$settings, $callbackUrl
+			);
 
-	        $objReturnValue = $query;		
+			//Return transformed response
+			if (!empty($response) && $response['Call']) {
+				$objReturnValue = new VoiceCallDetailsResource($response['Call']);
+			} else {
+				$objReturnValue = $response['Call'];
+			} //End if
+	        		
 		} catch(Exception $e) {
 			$objReturnValue=null;
 			Log::error(json_encode($e));

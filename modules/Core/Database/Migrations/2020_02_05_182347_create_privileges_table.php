@@ -20,7 +20,7 @@ class CreatePrivilegesTable extends Migration
             $table->string('display_value')->nullable();
             $table->string('description')->nullable();
             $table->boolean('is_active')->default(true);
-            $table->boolean('is_superadmin')->default(false);
+            $table->boolean('is_secure')->default(false);
 
             $table->timestamps();
         });

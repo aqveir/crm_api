@@ -4,6 +4,7 @@ namespace Modules\Core\Models\Organization;
 
 use Modules\Core\Models\BaseModel as Model;
 use Modules\Core\Models\Organization\Traits\Relationship\OrganizationRelationship;
+use Modules\Core\Models\Organization\Traits\Action\OrganizationAction;
 
 /**
  * Organization Model
@@ -11,6 +12,7 @@ use Modules\Core\Models\Organization\Traits\Relationship\OrganizationRelationshi
 class Organization extends Model
 {
     use OrganizationRelationship;
+    use OrganizationAction;
 
 	/**
      * The database table used by the model.

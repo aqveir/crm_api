@@ -9,6 +9,7 @@ use Modules\Core\Models\Organization\Organization;
 
 use Modules\Core\Repositories\Organization\OrganizationRepository;
 use Modules\Core\Repositories\Lookup\LookupValueRepository;
+use Modules\CloudTelephony\Repositories\Exotel\VoiceCallRepository as ExotelVoiceCallRepository;
 
 use Modules\Core\Services\BaseService;
 
@@ -51,9 +52,9 @@ class TelephonyVoiceService extends BaseService
 
 
     /**
-     * @var \Modules\Note\Repositories\NoteRepository
+     * @var \ExotelVoiceCallRepository
      */
-    protected $noteRepository;
+    protected $exotelVoiceCallRepository;
 
 
     /**
@@ -61,16 +62,17 @@ class TelephonyVoiceService extends BaseService
      * 
      * @param \Modules\Core\Repositories\Organization\OrganizationRepository    $organizationRepository
      * @param \Modules\Core\Repositories\Lookup\LookupValueRepository           $lookupRepository
-     * @param \Modules\Note\Repositories\NoteRepository                         $noteRepository
+     * @param \ExotelVoiceCallRepository                                        $exotelVoiceCallRepository
+     * 
      */
     public function __construct(
-        OrganizationRepository          $organizationRepository,
-        LookupValueRepository           $lookupRepository
-        //NoteRepository                  $noteRepository
+        OrganizationRepository              $organizationRepository,
+        LookupValueRepository               $lookupRepository,
+        ExotelVoiceCallRepository           $exotelVoiceCallRepository
     ) {
-        $this->organizationRepository   = $organizationRepository;
-        $this->lookupRepository         = $lookupRepository;
-        //$this->noteRepository           = $noteRepository;
+        $this->organizationRepository       = $organizationRepository;
+        $this->lookupRepository             = $lookupRepository;
+        $this->exotelVoiceCallRepository    = $exotelVoiceCallRepository;
     } //Function ends
 
 
@@ -85,19 +87,50 @@ class TelephonyVoiceService extends BaseService
      */
     public function makecall(string $orgHash, Collection $payload)
     {
-        $objReturnValue=null; $data=[];
+        $objReturnValue=null; $data=[]; $response=null; $callbackUrl=null;
         try {
             //Get organization data
             $organization = $this->getOrganizationByHash($orgHash);
 
-            //Configurations
-            $configurations = $organization->configurations();
-            $telephonyProviders = $configurations->getByType('configuration_telephony_providers');
-
-            if ($telephonyProviders=='configuration_telephony_providers_none') {
+            //Load Telephony Provider from Configuration
+            $configuration = $organization->getOrganizationConfigurationByKey('configuration_telephony_providers');
+            if (empty($configuration) || empty($configuration['pivot']['value'])) {
                 throw new TelephonyNoProviderException();
             } //End if
 
+            //TODO: Load calling data
+            //------------------------------------------
+            $payload = $payload->toArray();
+            $payload['to_number'] = '09423009635';
+            $payload['from_number'] = '09158999635';
+            $payload['virtual_number'] = '08047179477';
+            //------------------------------------------
+
+            //Check Telephony Providers
+            $telephonyProvider = $configuration['pivot']['value'];
+
+            switch ($telephonyProvider) {
+                case 'configuration_telephony_providers_exotel':
+                    //Load configuration
+                    $configuration = $organization->getOrganizationConfigurationByKey('configuration_telephony_exotel');
+                    if (empty($configuration) || empty($configuration['pivot']['value'])) {
+                        throw new TelephonyConfigurationException();
+                    } //End if
+                    $settings = json_decode(($configuration['pivot']['value']), true);
+
+                    //Callback URL
+                    $callbackUrl = url(config('cloudtelephony.exotel.call.callback-url'));
+                    $callbackUrl .= "?key=" . $orgHash;
+                    
+                    $response = $this->exotelVoiceCallRepository->makeCallToConnectTwoNumbers($payload, $settings, $callbackUrl);
+                    break;
+                
+                default:
+                    throw new TelephonyNoProviderException();
+                    break;
+            } //End switch
+
+            return $response;
 
 
             // //Lookup data
