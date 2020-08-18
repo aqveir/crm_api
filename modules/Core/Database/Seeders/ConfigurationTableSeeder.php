@@ -39,9 +39,9 @@ class ConfigurationTableSeeder extends Seeder
                     ]
                 )
             ],
-            [ //Telephony - Providers Selection
+            [ //Telephony - Call Providers Selection
                 'type_id' => '9',
-                'key' => 'configuration_telephony_providers',
+                'key' => 'configuration_telephony_call_providers',
                 'display_value' => 'Telephony Providers',
                 'schema' => json_encode(
                     [
@@ -82,9 +82,39 @@ class ConfigurationTableSeeder extends Seeder
                     ]
                 )
             ],
+            [ //Telephony - SMS Providers Selection
+                'type_id' => '9',
+                'key' => 'configuration_telephony_sms_providers',
+                'display_value' => 'Telephony Providers',
+                'schema' => json_encode(
+                    [
+                        [
+                            'provider_key' => 'configuration_telephony_providers_none',
+                            'display_value' => 'None'
+                        ],
+                        [
+                            'provider_key' => 'configuration_telephony_providers_exotel',
+                            'display_value' => 'Exotel'
+                        ],
+                        [
+                            'provider_key' => 'configuration_telephony_providers_twilio',
+                            'display_value' => 'Twilio'
+                        ],
+                        [
+                            'provider_key' => 'configuration_telephony_providers_indiasms',
+                            'display_value' => 'India SMS'
+                        ],
+                        [
+                            'provider_key' => 'configuration_telephony_providers_2',
+                            'display_value' => 'Provider 2'
+                        ],
+                    ]
+                )
+            ],
             [ //Telephony - IndiaSMS Configuration
                 'type_id' => '12',
                 'key' => 'configuration_telephony_indiasms',
+                'filter' => 'configuration_telephony_providers_indiasms',
                 'display_value' => 'Telephony - IndiaSMS Configuration',
                 'schema' => json_encode(
                     [

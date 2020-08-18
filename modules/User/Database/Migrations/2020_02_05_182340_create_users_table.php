@@ -35,11 +35,15 @@ class CreateUsersTable extends Migration
             
             $table->rememberToken();
             $table->dateTime('last_login_at')->nullable();
-            $table->boolean('is_verified')->default(false);
             $table->boolean('is_active')->default(true);
             $table->boolean('is_remote_access_only')->default(false);
             $table->integer('failed_attempts')->default(0);
             $table->integer('max_failed_attempts')->default(0);
+
+            //Verification
+            $table->boolean('is_verified')->default(false);
+            $table->string('verification_token')->nullable();
+            $table->timestamp('verified_at')->nullable();
 
             //Fields for Tele calling & Activity allocation
             $table->string('virtual_phone_number')->nullable(); //Tele caller virtual number      
@@ -59,6 +63,7 @@ class CreateUsersTable extends Migration
             $table->integer('user_id');
             $table->integer('status_id');
             $table->timestamps();
+            $table->ipAddress('ip_address')->nullable();
         });
 
         Schema::create(config('crmomni-migration.table_name.user.availability_history'), function (Blueprint $table) {

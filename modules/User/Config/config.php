@@ -15,7 +15,19 @@ return [
         //New Organization Settings
         'new_organization' => [
             'default_text' => 'System created.',
-            'default_password' => 'temp@1234'
+            'default_password' => 'temp@1234',
+            'email' => [
+                'action_label' => 'Activate Account',
+                'url' => '/user/activate/{activation_token}?email={user_email}&source=web'
+            ]
         ],
+
+        //Create User in Existing Organization
+        'new_user' => [
+            'email' => [
+                'action_label' => 'Verify Email',
+                'url' => '/user/verify/{activation_token}?key={org_hash}&email={user_email}&source=web'
+            ]
+        ]
     ]
 ];

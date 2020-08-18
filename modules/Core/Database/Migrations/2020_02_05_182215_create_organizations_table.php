@@ -42,7 +42,7 @@ class CreateOrganizationsTable extends Migration
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
 
-            $table->boolean('is_active')->default(false);
+            $table->boolean('is_active')->default(true);
 
             //Audit Log Fields
             $table->integer('created_by')->default(0);

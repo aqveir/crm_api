@@ -18,6 +18,8 @@ class UserTableSeeder extends Seeder
             'username' => 'admin@ellaisys.com',
             'password' => 'password',
             'email' => 'admin@ellaisys.com',
+            'first_name' => 'EllaiSys',
+            'last_name' => 'Admin',
             'is_verified' => true
         ]);
 

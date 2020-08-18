@@ -13,6 +13,12 @@
 
 Route::prefix('user')->group(function() {
     Route::get('/', 'UserController@index');
+
+    //Verify New User in Existing Organization
+    Route::get('verify/{token}', 'Backend\\User\\SetUserController@verify');
+
+    //Activate New User and Create New Organization
+    Route::get('activate/{token}', 'Backend\\User\\SetUserController@activate');
 });
 
 //Reset Password Link For CRM Users

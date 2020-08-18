@@ -9,8 +9,8 @@ use Modules\Core\Models\BaseModel as Model;
 use Modules\User\Models\User\Traits\Action\UserAction;
 use Modules\User\Models\User\Traits\Relationship\UserRelationship;
 
+use Illuminate\Support\Str;
 use Illuminate\Auth\Authenticatable;
-use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -29,11 +29,11 @@ class User extends Model implements
     AuthorizableContract,
     CanResetPasswordContract
 {
-    use Authenticatable, Authorizable, CanResetPassword, MustVerifyEmail;
-    use Notifiable, UserRelationship;
+    use Authenticatable, Authorizable, CanResetPassword;
+    use UserRelationship, UserAction;
+    use Notifiable;
     use SoftDeletes;
-    use UserAction;
-
+    
     /**
      * The database table used by the model.
      *
@@ -52,8 +52,9 @@ class User extends Model implements
         'first_name', 'middle_name', 'last_name',
         'country_id', 'timezone_id',
         'email', 'phone', 'virtual_phone_number',
-        'is_remote_access_only', 'failed_attempts', 'last_login_at', 
-        'created_by'
+        'is_remote_access_only', 'failed_attempts',
+        'verification_token', 'is_verified',
+        'last_login_at', 'created_by'
     ];
 
     
@@ -67,8 +68,9 @@ class User extends Model implements
         'first_name', 'middle_name', 'last_name',
         'password', 'remember_token', 'is_remote_access_only',
         'email', 'phone', 'virtual_phone_number',
-        'is_verified', 'is_active', 'is_pool', 'is_default',
+        'is_active', 'is_pool', 'is_default',
         'failed_attempts', 'max_failed_attempts', 'last_otp',
+        'verification_token', 'is_verified', 
         'created_by', 'updated_by', 'deleted_by',
         'created_at', 'updated_at', 'deleted_at'
     ];
@@ -79,8 +81,8 @@ class User extends Model implements
      * @var array
      */
     protected $dates = [
-        'last_login_at',
-        'created_at', 'updated_at', 'deleted_at',
+        'last_login_at', 'verified_at',
+        'created_at', 'updated_at', 'deleted_at', 
         'last_updated_at'
     ];
 
@@ -148,6 +150,18 @@ class User extends Model implements
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = Hash::make($value);
+    }
+
+
+    /**
+     * Automatically creates verification token.
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setVerificationTokenAttribute($value)
+    {
+        $this->attributes['verification_token'] = Str::random(32);
     }
 
 

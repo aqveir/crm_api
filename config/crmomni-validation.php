@@ -70,6 +70,17 @@ return [
 
             // User Controller Requests
             'user' => [
+                // User Registration Request
+                'register' => [
+                    'validation_rules' => [
+                        'first_name' => 'required|max:40',
+                        'last_name' => 'nullable|max:40',
+                        'email' => 'required|email|max:40|unique:users,email',
+                        'phone' => 'required|string|max:15',
+                        'country_idd' => 'required_with:phone|string|max:5',
+                    ]
+                ],
+
                 // User Creation Request
                 'create' => [
                     // This option must be set to true if you want to release a token
@@ -110,10 +121,20 @@ return [
                     ]
                 ],
 
-                // Check Existing User Request
+                // Verify User Request
+                'verify' => [
+                    'validation_rules' => [
+                        'key' => 'required_without:sub_domain|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        'sub_domain' => 'required_without:key|string|exists:' . config('crmomni-migration.table_name.organizations') . ',sub_domain|max:36',
+
+                        'email' => 'required|email|max:40|exists:' . config('crmomni-migration.table_name.user.main') . ',email',
+                    ]
+                ],
+
+                // Activate User Account Request
                 'activate' => [
                     'validation_rules' => [
-                        
+                        'email' => 'required|email|max:40|exists:' . config('crmomni-migration.table_name.user.main') . ',email',
                     ]
                 ],
             ], // User Controller ends

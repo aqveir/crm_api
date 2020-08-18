@@ -32,7 +32,10 @@ $api->version('v1', function (Router $api) {
             $api->get('exists', 'Modules\\User\\Http\\Controllers\\Backend\\User\\GetUserController@exists');
 
             // User Activation
-            $api->get('activate', 'Modules\\User\\Http\\Controllers\\Backend\\User\\SetUserController@activate');
+            $api->get('activate/{token}', 'Modules\\User\\Http\\Controllers\\Backend\\User\\SetUserController@activate');
+
+            // User Registration
+            $api->post('register', 'Modules\\User\\Http\\Controllers\\Backend\\User\\SetUserController@register');
         });
     });
 

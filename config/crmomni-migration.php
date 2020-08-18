@@ -35,7 +35,8 @@ return [
             'availability' => env('TABLE_NAME_PREFIX', '') . 'user_availability',
             'availability_history' => env('TABLE_NAME_PREFIX', '') . 'user_availability_history',
             'roles' => env('TABLE_NAME_PREFIX', '') . 'user_roles',
-            'privileges' => env('TABLE_NAME_PREFIX', '') . 'user_privileges',            
+            'privileges' => env('TABLE_NAME_PREFIX', '') . 'user_privileges',
+            'registration' => env('TABLE_NAME_PREFIX', '') . 'user_registration',
         ],
         
         //Common Application Entities
