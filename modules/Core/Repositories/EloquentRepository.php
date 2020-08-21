@@ -115,11 +115,16 @@ abstract class EloquentRepository //implements RepositoryContract
      *
      * @return \Illuminate\Database\Eloquent\Model
      */
-    public function first()
+    public function first(bool $fail=false)
     {
         $this->newQuery()->eagerLoad()->setClauses()->setScopes();
 
-        $model = $this->query->firstOrFail();
+        //Check the condition for using right method
+        if ($fail) {
+            $model = $this->query->firstOrFail();
+        } else {
+            $model = $this->query->first();
+        } //End if        
 
         $this->unsetClauses();
 
@@ -127,7 +132,7 @@ abstract class EloquentRepository //implements RepositoryContract
     }
     public function firstOrFail()
     {
-        return $this->first();
+        return $this->first(true);
     }
 
 

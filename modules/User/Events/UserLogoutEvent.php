@@ -16,13 +16,20 @@ class UserLogoutEvent
 
 
     /**
+     * IP Address
+     */
+    public $ipAddress;
+
+
+    /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct(User $user, string $ipAddress)
     {
         $this->user = $user;
+        $this->ipAddress = $ipAddress;
     }
 
     

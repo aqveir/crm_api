@@ -9,6 +9,7 @@ use Modules\User\Models\User\User;
 
 use Modules\Core\Repositories\Organization\OrganizationRepository;
 use Modules\User\Repositories\User\UserRepository;
+use Modules\User\Repositories\User\UserAvailabilityRepository;
 
 use Modules\Core\Services\BaseService;
 
@@ -152,7 +153,7 @@ class UserAuthService extends BaseService
             $user['settings'] = $user->hasRoles(['super_admin']);
 
             //Raise event: User Login
-            event(new UserLoginEvent($user));
+            event(new UserLoginEvent($user, $ipAddress));
 
             return $user;
         } catch(AccessDeniedHttpException $e) {
@@ -239,10 +240,11 @@ class UserAuthService extends BaseService
      * Logout the user
      * 
      * @param \Illuminate\Support\Collection $credentials
+     * @param \string $ipAddress (optional)
      *
      * @return mixed
      */
-    public function logout(Collection $credentials)
+    public function logout(Collection $credentials, string $ipAddress='0.0.0.0')
     {
         $objReturnValue = false;
 
@@ -258,7 +260,7 @@ class UserAuthService extends BaseService
                 $objReturnValue = $this->guard('backend')->logout(true);
 
                 //Raise event: User Logout
-                event(new UserLogoutEvent($user));
+                event(new UserLogoutEvent($user, $ipAddress));
             } else {
                 throw new UnauthorizedHttpException('ERROR_USER_AUTH_ACCESS');
             } //End if

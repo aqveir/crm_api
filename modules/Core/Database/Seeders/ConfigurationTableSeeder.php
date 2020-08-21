@@ -51,20 +51,20 @@ class ConfigurationTableSeeder extends Seeder
                         ],
                         [
                             'provider_key' => 'configuration_telephony_providers_exotel',
-                            'display_value' => 'Exotel'
+                            'display_value' => 'Exotel India'
                         ],
+                        [
+                            'provider_key' => 'configuration_telephony_providers_knowlarity',
+                            'display_value' => 'Knowlarity India'
+                        ],
+                        [
+                            'provider_key' => 'configuration_telephony_providers_servetel',
+                            'display_value' => 'Servetel India'
+                        ],                        
                         [
                             'provider_key' => 'configuration_telephony_providers_twilio',
                             'display_value' => 'Twilio'
-                        ],
-                        [
-                            'provider_key' => 'configuration_telephony_providers_1',
-                            'display_value' => 'Provider 1'
-                        ],
-                        [
-                            'provider_key' => 'configuration_telephony_providers_1',
-                            'display_value' => 'Provider 2'
-                        ],
+                        ]
                     ]
                 )
             ],

@@ -114,11 +114,14 @@ class UserAuthController extends ApiBaseController
     public function logout(UserLogoutRequest $request, UserAuthService $userAuthService)
     {
         try {
+            //Get IP Address
+            $ipAddress = $this->getIpAddressInRequest($request);
+
             //Create payload
             $payload = collect($request);
 
             //Logout customer
-            $data = $userAuthService->logout($payload);
+            $data = $userAuthService->logout($payload, $ipAddress);
 
             //Send http status out
             return $this->response->success(compact('data'));
@@ -126,6 +129,7 @@ class UserAuthController extends ApiBaseController
         } catch(AccessDeniedHttpException $e) {
             return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
         } catch(Exception $e) {
+            log::error('UserAuthController:logout:Exception:' . $e->getMessage());
             return $this->response->fail([], Response::HTTP_BAD_REQUEST);
         }
     } //Function ends

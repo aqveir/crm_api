@@ -137,6 +137,11 @@ return [
                         'email' => 'required|email|max:40|exists:' . config('crmomni-migration.table_name.user.main') . ',email',
                     ]
                 ],
+
+                // User Availability
+                'availbility' => [
+                    'validation_rules' => []
+                ]
             ], // User Controller ends
 
             // Note Controller Requests

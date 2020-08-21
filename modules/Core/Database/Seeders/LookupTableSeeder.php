@@ -134,8 +134,8 @@ class LookupTableSeeder extends Seeder
                         'display_value' => 'Busy',
                     ],
                     [
-                        'key' => 'user_status_available',
-                        'display_value' => 'Available',
+                        'key' => 'user_status_away',
+                        'display_value' => 'Away',
                     ],
                 ]
             ],

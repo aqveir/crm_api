@@ -56,6 +56,9 @@ $api->version('v1', function (Router $api) {
             $api->post('/', 'Modules\\User\\Http\\Controllers\\Backend\\User\\SetUserController@create');
             $api->put('{hash}', 'Modules\\User\\Http\\Controllers\\Backend\\User\\SetUserController@update');
             $api->put('{hash}/roles', 'Modules\\User\\Http\\Controllers\\Backend\\User\\SetUserController@assignRoles');
+
+            // User Availability
+            $api->post('status/{key}', 'Modules\\User\\Http\\Controllers\\Backend\\User\\SetUserAvailabilityController@update');
         });
     });
 });

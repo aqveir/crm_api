@@ -1,17 +1,17 @@
 <?php
 
-namespace Modules\User\Models\Register;
+namespace Modules\User\Models\User;
 
 use Modules\Core\Models\BaseModel as Model;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Crypt;
 
 /**
- * User Model
+ * User Availability History Model
  */
-class RegisterUser extends Model {
-    use Notifiable;
+class UserAvailabilityHistory extends Model {
 
+    const UPDATED_AT = null;
+    
+    
     /**
      * The database table used by the model.
      *
@@ -26,9 +26,7 @@ class RegisterUser extends Model {
      * @var array
      */
     protected $fillable = [
-        'first_name', 'middle_name', 'last_name',
-        'email', 'phone', 'password',
-        'country_id', 'ip_address'
+        'user_id', 'status_id', 'ip_address'
     ];
 
     
@@ -38,8 +36,7 @@ class RegisterUser extends Model {
      * @var array
      */
     protected $hidden = [
-        'id',
-        'created_at', 'updated_at'
+        'created_at'
     ];
 
 
@@ -48,7 +45,7 @@ class RegisterUser extends Model {
      * @var array
      */
     protected $dates = [
-        'created_at', 'updated_at', 'verified_at'
+        'created_at'
     ];
 
 
@@ -86,31 +83,7 @@ class RegisterUser extends Model {
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->table = config('crmomni-migration.table_name.user.register');
+        $this->table = config('crmomni-migration.table_name.user.availability_history');
     } //Function ends
-
-
-    /**
-     * Automatically creates hash for the user password.
-     *
-     * @param  string  $value
-     * @return void
-     */
-    public function setPasswordAttribute($value)
-    {
-        $this->attributes['password'] = Crypt::encrypt($value);
-    }
-
-
-    /**
-     * Automatically creates verification token.
-     *
-     * @param  string  $value
-     * @return void
-     */
-    public function setVerificationTokenAttribute($value)
-    {
-        $this->attributes['verification_token'] = Str::random(32);
-    }
 
 } //Class ends

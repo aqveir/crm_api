@@ -2,23 +2,17 @@
 
 namespace Modules\User\Events;
 
-use Modules\User\Models\User\User;
+use Modules\User\Models\User\UserAvailability;
 use Illuminate\Queue\SerializesModels;
 
-class UserLoginEvent
+class UserAvailabilitySavedEvent
 {
     use SerializesModels;
 
     /**
      * User Model variable
      */
-    public $user;
-
-
-    /**
-     * IP Address
-     */
-    public $ipAddress;
+    public $userAvailability;
 
 
     /**
@@ -26,13 +20,12 @@ class UserLoginEvent
      *
      * @return void
      */
-    public function __construct(User $user, string $ipAddress)
+    public function __construct(UserAvailability $userAvailability)
     {
-        $this->user = $user;
-        $this->ipAddress = $ipAddress;
+        $this->userAvailability = $userAvailability;
     }
 
-    
+
     /**
      * Get the channels the event should be broadcast on.
      *
