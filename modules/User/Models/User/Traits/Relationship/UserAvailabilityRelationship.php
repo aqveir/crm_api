@@ -24,7 +24,7 @@ trait UserAvailabilityRelationship
 	public function user()
 	{
 		return $this->belongsTo(
-			config('crmomni-class.class_model.user'),
+			config('crmomni-class.class_model.user.main'),
 			'user_id', 'id'
 		);
 	} //Function ends

@@ -4,11 +4,13 @@ namespace Modules\User\Models\User;
 
 use Modules\Core\Models\BaseModel as Model;
 use Modules\User\Events\UserAvailabilitySavedEvent;
+use Modules\User\Models\User\Traits\Relationship\UserAvailabilityRelationship;
 
 /**
  * User Availability Model
  */
 class UserAvailability extends Model {
+    use UserAvailabilityRelationship;
     
     /**
      * The database table used by the model.

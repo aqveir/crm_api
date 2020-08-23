@@ -7,6 +7,8 @@ use Carbon\Carbon;
 
 use Modules\Core\Repositories\Organization\OrganizationRepository;
 use Modules\User\Repositories\User\UserAvailabilityRepository;
+use Modules\User\Repositories\User\UserRepository;
+use Modules\User\Transformers\Resources\UserAvailabilityResource;
 
 use Modules\Core\Services\BaseService;
 
@@ -44,17 +46,108 @@ class UserAvailabilityService extends BaseService
 
 
     /**
+     * @var \Modules\User\Repositories\User\UserRepository
+     */
+    protected $userRepository;
+
+
+    /**
      * Service constructor.
      * 
      * @param \Modules\Core\Repositories\Organization\OrganizationRepository    $organizationRepository
      * @param \Modules\User\Repositories\User\UserAvailabilityRepository        $useravailabilityRepository
+     * @param \Modules\User\Repositories\User\UserRepository                    $userRepository
      */
     public function __construct(
         OrganizationRepository              $organizationRepository,
-        UserAvailabilityRepository          $useravailabilityRepository
+        UserAvailabilityRepository          $useravailabilityRepository,
+        UserRepository                      $userRepository
     ) {
         $this->organizationRepository       = $organizationRepository;
         $this->useravailabilityRepository   = $useravailabilityRepository;
+        $this->userRepository               = $userRepository;
+    } //Function ends
+
+
+    /**
+     * Fetch User Availability
+     * 
+     * @param \Illuminate\Support\Collection $payload
+     * @param \string $hash
+     *
+     * @return mixed
+     */
+    public function fetch(Collection $payload, string $hash=null) {
+        $objReturnValue = null;
+
+        try {
+            $user = null;
+            if (empty($hash)) {
+                $user = $this->getCurrentUser('backend'); //Authenticated User
+            } else {
+                $user = $this->userRepository->getUserByHash($hash);
+            } //End if
+
+            //Fetch record
+            $response = $this->useravailabilityRepository
+                ->where('user_id', $user['id'])
+                ->first();
+
+            $response->load(['user', 'status']);
+
+            $objReturnValue = new UserAvailabilityResource($response);
+        } catch(NotFoundHttpException $e) {
+            log::error('UserAvailabilityService:fetch:NotFoundHttpException:' . $e->getMessage());
+            throw new NotFoundHttpException();
+        } catch(BadRequestHttpException $e) {
+            log::error('UserAvailabilityService:fetch:BadRequestHttpException:' . $e->getMessage());
+            throw new BadRequestHttpException($e->getMessage());
+        } catch(Exception $e) {
+            log::error('UserAvailabilityService:fetch:Exception:' . $e->getMessage());
+            throw new HttpException(500);
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends
+
+
+    /**
+     * User Availability Details
+     * 
+     * @param \string $orgHash
+     * @param \Illuminate\Support\Collection $payload
+     * @param \string $statusKey
+     *
+     * @return mixed
+     */
+    public function detail(string $orgHash, Collection $payload, string $statusKey) {
+        $objReturnValue = null;
+
+        try {
+            //Get organization data
+            $organization = $this->getOrganizationByHash($orgHash);
+
+            //Get request data
+            $data = $payload->toArray();
+
+            $statusKey = $this->getStatusKey($statusKey);
+
+            //Fetch record
+            $response = $this->useravailabilityRepository->getRecordsByStatus($organization['id'], $statusKey);
+
+            $objReturnValue = $response;
+        } catch(NotFoundHttpException $e) {
+            log::error('UserAvailabilityService:detail:NotFoundHttpException:' . $e->getMessage());
+            throw new NotFoundHttpException();
+        } catch(BadRequestHttpException $e) {
+            log::error('UserAvailabilityService:detail:BadRequestHttpException:' . $e->getMessage());
+            throw new BadRequestHttpException($e->getMessage());
+        } catch(Exception $e) {
+            log::error('UserAvailabilityService:detail:Exception:' . $e->getMessage());
+            throw new HttpException(500);
+        } //Try-catch ends
+
+        return $objReturnValue;
     } //Function ends
 
 
@@ -141,6 +234,50 @@ class UserAvailabilityService extends BaseService
         } //Try-catch ends
 
         return $objReturnValue;
+    } //Function ends
+
+
+    /**
+     * Get Availability Status
+     * 
+     * @param \string $key 
+     *
+     * @return mixed
+     */
+    private function getStatusKey(string $key) {
+        $objReturnValue = null; $statusKey = null;
+
+        try {
+            //Set Availability Status Key
+            switch ($key) {
+                case 'online':
+                    $statusKey = 'user_status_online';
+                    break;
+
+                case 'away':
+                    $statusKey = 'user_status_away';
+                    break;
+                
+                default:
+                    # code...
+                    break;
+            } //Switch ends
+
+            //Assign to the return value
+            $objReturnValue =  $statusKey;
+
+        } catch(ExistingDataException $e) {
+            throw new ExistingDataException();
+        } catch(BadRequestHttpException $e) {
+            log::error('UserService:register:BadRequestHttpException:' . $e->getMessage());
+            throw new BadRequestHttpException($e->getMessage());
+        } catch(Exception $e) {
+            log::error('UserService:register:Exception:' . $e->getMessage());
+            throw new HttpException(500);
+        } //Try-catch ends
+
+        return $objReturnValue;
+
     } //Function ends
 
 } //Class ends

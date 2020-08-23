@@ -5,6 +5,8 @@ namespace Modules\CloudTelephony\Transformers\Exotel;
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+use Exception;
+
 class VoiceCallbackResource extends JsonResource
 {
     /**

@@ -36,6 +36,11 @@ $api->version('v1', function (Router $api) {
 
             // User Registration
             $api->post('register', 'Modules\\User\\Http\\Controllers\\Backend\\User\\SetUserController@register');
+
+            // User Availability Status
+            $api->group(['prefix' => 'status'], function(Router $api) { 
+                $api->get('{key}', 'Modules\\User\\Http\\Controllers\\Backend\\User\\GetUserAvailabilityController@detail');
+            });
         });
     });
 
@@ -44,6 +49,14 @@ $api->version('v1', function (Router $api) {
 
         // User Endpoints
         $api->group(['prefix' => 'user'], function(Router $api) {
+
+            // User Availability Status
+            $api->group(['prefix' => 'status'], function(Router $api) {
+                $api->get('/', 'Modules\\User\\Http\\Controllers\\Backend\\User\\GetUserAvailabilityController@view');
+                $api->post('{key}', 'Modules\\User\\Http\\Controllers\\Backend\\User\\SetUserAvailabilityController@update');
+            });
+            $api->get('{hash}/status', 'Modules\\User\\Http\\Controllers\\Backend\\User\\GetUserAvailabilityController@show');
+
             // Logout
             $api->put('logout', 'Modules\\User\\Http\\Controllers\\Backend\\Auth\\UserAuthController@logout');
 
@@ -56,9 +69,6 @@ $api->version('v1', function (Router $api) {
             $api->post('/', 'Modules\\User\\Http\\Controllers\\Backend\\User\\SetUserController@create');
             $api->put('{hash}', 'Modules\\User\\Http\\Controllers\\Backend\\User\\SetUserController@update');
             $api->put('{hash}/roles', 'Modules\\User\\Http\\Controllers\\Backend\\User\\SetUserController@assignRoles');
-
-            // User Availability
-            $api->post('status/{key}', 'Modules\\User\\Http\\Controllers\\Backend\\User\\SetUserAvailabilityController@update');
         });
     });
 });

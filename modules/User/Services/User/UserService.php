@@ -54,7 +54,7 @@ class UserService extends BaseService
      * Service constructor.
      * 
      * @param \Modules\Core\Repositories\Organization\OrganizationRepository    $organizationRepository
-     * @param \Modules\User\Repositories\User\UserRepository    $userRepository
+     * @param \Modules\User\Repositories\User\UserRepository                    $userRepository
      */
     public function __construct(
         OrganizationRepository          $organizationRepository,
@@ -194,6 +194,15 @@ class UserService extends BaseService
     } //Function ends
 
 
+    /**
+     * Verify User Email
+     * 
+     * @param \string $orgHash
+     * @param \Illuminate\Support\Collection $payload
+     * @param \string $token
+     *
+     * @return mixed
+     */
     public function verify(string $orgHash, Collection $payload, string $token) {
         $objReturnValue = null;
 
@@ -236,6 +245,14 @@ class UserService extends BaseService
     } //Function ends
 
 
+    /**
+     * Activate User Account
+     * 
+     * @param \Illuminate\Support\Collection $payload
+     * @param \string $token
+     *
+     * @return mixed
+     */
     public function activate(Collection $payload, string $token) {
         $objReturnValue = null;
         $orgId = 0; $userId = 0;
