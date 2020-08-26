@@ -33,40 +33,6 @@ class UserAvailabilityRepository extends EloquentRepository
     /**
 	 * Record the User Availability
 	 */
-	public function getRecordsByStatus(int $orgId, string $statusKey)
-	{
-		$objReturnValue=null;
-		
-		try {
-            //Get status from lookup
-            $status = $this->getLookupByKey($statusKey);
-
-            //Check data
-            $model = UserAvailability::with(['user', 'status'])
-                ->whereHas('user', function ($inner_query) {
-                    $inner_query->where('is_active', 1);
-                })
-                ->whereHas('status', function ($inner_query) use ($statusKey) {
-                    $inner_query->where('key', $statusKey);
-                })
-                ->get();
-
-	        $objReturnValue = $model;		
-		} catch(ExistingDataException $e) {
-			log::warning('UserAvailabilityRepository:getRecordsByStatus:ExistingDataException:' . $e->getMessage());
-            throw new ExistingDataException();
-		} catch(Exception $e) {
-            log::error('UserAvailabilityRepository:getRecordsByStatus:Exception:' . $e->getMessage());
-			$objReturnValue=null;
-		} //Try-catch ends
-		
-		return $objReturnValue;
-    } //Function ends
-
-
-    /**
-	 * Record the User Availability
-	 */
 	public function record(int $userId, string $statusKey, string $ipAddress=null)
 	{
 		$objReturnValue=null;

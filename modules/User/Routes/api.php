@@ -38,9 +38,7 @@ $api->version('v1', function (Router $api) {
             $api->post('register', 'Modules\\User\\Http\\Controllers\\Backend\\User\\SetUserController@register');
 
             // User Availability Status
-            $api->group(['prefix' => 'status'], function(Router $api) { 
-                $api->get('{key}', 'Modules\\User\\Http\\Controllers\\Backend\\User\\GetUserAvailabilityController@detail');
-            });
+            $api->get('status/{key}', 'Modules\\User\\Http\\Controllers\\Backend\\User\\GetUserController@detail');
         });
     });
 

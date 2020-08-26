@@ -2,6 +2,8 @@
 
 namespace Modules\User\Models\User\Traits\Relationship;
 
+use Modules\User\Models\User\UserAvailability;
+
 /**
  * Class User Relationship
  */
@@ -90,7 +92,7 @@ trait UserRelationship
 	public function availability()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.user_availability'),
+			UserAvailability::class,
 			'user_id','id'
 		)
 		->whereNotNull('user_id');

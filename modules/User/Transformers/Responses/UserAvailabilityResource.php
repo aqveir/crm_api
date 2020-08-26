@@ -2,7 +2,7 @@
 
 namespace Modules\User\Transformers\Resources;
 
-use Illuminate\Http\Resources\Json\Resource;
+use Illuminate\Http\Resources\Json\Responses;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 use Exception;

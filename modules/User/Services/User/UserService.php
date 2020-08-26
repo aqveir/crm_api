@@ -9,6 +9,7 @@ use Modules\Core\Models\Organization\Organization;
 
 use Modules\Core\Repositories\Organization\OrganizationRepository;
 use Modules\User\Repositories\User\UserRepository;
+use Modules\User\Traits\UserAvailabilityAction;
 
 use Modules\Core\Services\BaseService;
 
@@ -37,6 +38,7 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
  */
 class UserService extends BaseService
 {
+    use UserAvailabilityAction;
 
     /**
      * @var Modules\Core\Repositories\Organization\OrganizationRepository
@@ -327,6 +329,48 @@ class UserService extends BaseService
             throw new BadRequestHttpException($e->getMessage());
         } catch(Exception $e) {
             log::error('UserService:register:Exception:' . $e->getMessage());
+            throw new HttpException(500);
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends
+
+
+    /**
+     * User Availability Details
+     * 
+     * @param \string $orgHash
+     * @param \Illuminate\Support\Collection $payload
+     * @param \string $statusKey
+     *
+     * @return mixed
+     */
+    public function getUserByStatus(string $orgHash, Collection $payload, string $statusKey) {
+        $objReturnValue = null;
+
+        try {
+            //Get organization data
+            $organization = $this->getOrganizationByHash($orgHash);
+
+            //Get request data
+            $data = $payload->toArray();
+
+            //Passing Params
+            $statusKey = $this->getStatusKey($statusKey);
+            $roleKey = $data['role'];
+
+            //Fetch record
+            $response = $this->userRepository->getRecordsByStatus($organization['id'], $statusKey, $roleKey);
+
+            $objReturnValue = $response;
+        } catch(NotFoundHttpException $e) {
+            log::error('UserService:getUserByStatus:NotFoundHttpException:' . $e->getMessage());
+            throw new NotFoundHttpException();
+        } catch(BadRequestHttpException $e) {
+            log::error('UserService:getUserByStatus:BadRequestHttpException:' . $e->getMessage());
+            throw new BadRequestHttpException($e->getMessage());
+        } catch(Exception $e) {
+            log::error('UserService:getUserByStatus:Exception:' . $e->getMessage());
             throw new HttpException(500);
         } //Try-catch ends
 

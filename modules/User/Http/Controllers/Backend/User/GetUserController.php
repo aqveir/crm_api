@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Log;
 use Modules\Core\Http\Controllers\ApiBaseController;
 use Modules\User\Http\Requests\Backend\User\CreateUserRequest;
 use Modules\User\Http\Requests\Backend\User\UpdateUserRequest;
+use Modules\User\Http\Requests\Backend\User\UserStatusRequest;
+
+use Modules\User\Transformers\Responses\UserStatusJsonResponseResource;
+use Modules\User\Transformers\Responses\UserStatusTextResponseResource;
 
 use Modules\User\Services\User\UserService;
 
@@ -159,6 +163,78 @@ class GetUserController extends ApiBaseController
 
             //Send http status out
             return $this->response->success(compact('data'));
+        } catch(AccessDeniedHttpException $e) {
+            return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
+        } catch(Exception $e) {
+            return $this->response->fail([], Response::HTTP_BAD_REQUEST);
+        }
+    } //Function ends
+
+
+    /**
+     * Get Users By Availability Status
+     *
+     * @param \Modules\User\Http\Requests\Backend\User\UserStatusRequest $request
+     * @param \Modules\User\Services\User\UserService $userService
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @OA\Get(
+     *     path="/user/status/{status}",
+     *     tags={"User"},
+     *     operationId="api.backend.user.availability.status.detail",
+     *     security={{"omni_token":{}}},
+     *     @OA\Parameter(
+     *          in="path", name="status", description="Enter user availability status (i.e. online, away)", required=true,
+     *          @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(ref="#/components/parameters/organization_key"),
+     *     @OA\Parameter(
+     *          in="query", name="role_key", description="Enter role key", required=true,
+     *          @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(response=200, description="Request was successfully executed."),
+     *     @OA\Response(response=500, description="Internal Server Error")
+     * )
+     */
+    public function detail(UserStatusRequest $request, UserService $service, string $status)
+    {   
+        try {
+            //Get Org Hash 
+            $orgHash = $this->getOrgHashInRequest($request);
+
+            //Create payload
+            $payload = collect($request);
+
+            //Set Status
+            $response = $service->getUserByStatus($orgHash, $payload, $status);
+
+
+            //Output formats
+            $outputFormat = ($request->has('output'))?$request['output']:'hash,full_name,phone';
+            $phoneFormat = ($request->has('phoneformat'))?$request['phoneformat']:'0[number]';
+
+            //Send http status out
+            switch ($request->headers->get('CONTENT-TYPE')) {
+                case 'application/json':
+                    $data = new UserStatusJsonResponseResource(collect($response), $outputFormat, $phoneFormat);
+                    return $this->response->success(compact('data'));
+                    break;
+
+                case 'application/xml':
+                    $data = $response;
+                    return $data;
+                    break;
+
+                default:
+                    $data = new UserStatusTextResponseResource(collect($response), $outputFormat, $phoneFormat);
+                    $data = (!empty($data))?implode(",", json_decode(json_encode($data))):null;
+                    return $data;
+                    break;
+            } //Switch ends
+            
+        } catch(NotFoundHttpException $e) {
+            return $this->response->fail([], Response::HTTP_BAD_REQUEST);
         } catch(AccessDeniedHttpException $e) {
             return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
         } catch(Exception $e) {

@@ -138,10 +138,18 @@ return [
                     ]
                 ],
 
+                //User Status Request: Intended for telecallers
+                'status' => [
+                    'validation_rules' => [
+                        'key' => 'required_without:sub_domain|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        'role' => 'required|string',
+                    ]
+                ],
+
                 // User Availability
                 'availbility' => [
                     'validation_rules' => []
-                ]
+                ],
             ], // User Controller ends
 
             // Note Controller Requests
