@@ -43,15 +43,6 @@ class CreateRoleController extends ApiBaseController
      *
      * @return \Illuminate\Http\JsonResponse
      *
-     * @OA\Get(
-     *     path="/role",
-     *     tags={"Role"},
-     *     operationId="api.role.create",
-     *     security={{"omni_token":{}}}, 
-     *     @OA\Response(response=200, description="Request was successfully executed."),
-     *     @OA\Response(response=422, description="Model Validation Error"),
-     *     @OA\Response(response=500, description="Internal Server Error")
-     * )
      */
     public function create(CreateRoleRequest $request, JWTAuth $JWTAuth)
     {   

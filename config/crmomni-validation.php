@@ -20,6 +20,89 @@ return [
                 ],
             ], //Organization Controller ends
 
+            // LookUp Controller Requests
+            'lookup' => [
+                // Lookup data fetch-show
+                'fetch' => [
+                    'validation_rules' => [
+                        'key' => 'required_without:sub_domain|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        'sub_domain' => 'required_without:key|string|exists:' . config('crmomni-migration.table_name.organizations') . ',sub_domain|max:36',
+                    ]
+                ],
+
+                // LookUp Create Request
+                'create' => [
+                    'validation_rules' => [
+                        'name' => 'required|max:25',
+                        'description' => 'max:40'
+                    ]
+                ],
+
+                // LookUp Update Request
+                'update' => [
+                    'validation_rules' => [
+                        'id' => 'required|numeric',
+                        'name' => 'required|max:25',
+                        'description' => 'nullable|max:250'
+                    ]
+                ],
+            ], // LookUp Controller ends
+
+            // Privilege Controller Requests
+            'privilege' => [
+                // Privilege Create Request
+                'create' => [
+                    'validation_rules' => [
+                        'name' => 'required|max:25',
+                        'description' => 'max:40'
+                    ]
+                ],
+
+                // Privilege Update Request
+                'update' => [
+                    'validation_rules' => [
+                        'id' => 'required|numeric',
+                        'name' => 'required|max:25',
+                        'description' => 'nullable|max:250'
+                    ]
+                ],
+            ], // Privilege Controller ends
+
+            // Role Controller Requests
+            'role' => [
+                // Role fetch-show
+                'fetch' => [
+                    'validation_rules' => [
+                        'key' => 'required_without:sub_domain|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        'sub_domain' => 'required_without:key|string|exists:' . config('crmomni-migration.table_name.organizations') . ',sub_domain|max:36',
+                    ]
+                ],
+
+                // Role Create Request
+                'create' => [
+                    'validation_rules' => [
+                        'key' => 'required_without:sub_domain|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        'sub_domain' => 'required_without:key|string|exists:' . config('crmomni-migration.table_name.organizations') . ',sub_domain|max:36',
+
+                        'display_value' => 'required|max:255',
+                        'description' => 'max:255',
+                        'privileges' => 'required|array',
+                    ]
+                ],
+
+                // Role Update Request
+                'update' => [
+                    'validation_rules' => [
+                        'key' => 'required_without:sub_domain|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        'sub_domain' => 'required_without:key|string|exists:' . config('crmomni-migration.table_name.organizations') . ',sub_domain|max:36',
+
+                        'display_value' => 'required|max:255',
+                        'description' => 'max:255',
+                        'privileges' => 'required|array',
+                    ]
+                ],
+            ], //Role Controller ends
+
             // User Auth Controller Requests
             'auth' => [
                 //Authenticate user
@@ -203,7 +286,6 @@ return [
                     'validation_rules' => []
                 ],
             ], //Document Controller ends
-
         ],
 
         'frontend' => [

@@ -27,21 +27,6 @@ class SavePrivilegeController extends Controller
         $this->middleware('auth:api', []);
     }
 
-    /**
-     * Create New Privilege
-     *
-     * @return \Illuminate\Http\JsonResponse
-     *
-     * @OA\Get(
-     *     path="/privilege",
-     *     tags={"Privilege"},
-     *     operationId="api.privilege.create",
-     *     security={{"omni_token":{}}},
-     *     @OA\Response(response=200, description="Request was successfully executed."),
-     *     @OA\Response(response=422, description="Model Validation Error"),
-     *     @OA\Response(response=500, description="Internal Server Error")
-     * )
-     */
     public function create(CreatePrivilegeRequest $request, JWTAuth $JWTAuth)
     {
         // Get user object from the token

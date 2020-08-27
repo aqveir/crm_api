@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Api\V1\Requests\Role;
+namespace Modules\Core\Http\Requests\Backend\Role;
 
 use Config;
 use Modules\Boilerplate\Http\FormRequest;
@@ -9,7 +9,7 @@ class UpdateRoleRequest extends FormRequest
 {
     public function rules()
     {
-        return Config::get('crmomni-validation.request_handler.edit_role.validation_rules');
+        return Config::get('crmomni-validation.request_handler.backend.role.update.validation_rules');
     }
 
     public function authorize()

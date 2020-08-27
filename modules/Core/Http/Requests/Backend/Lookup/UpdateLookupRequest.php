@@ -9,7 +9,7 @@ class UpdateLookupRequest extends FormRequest
 {
     public function rules()
     {
-        return Config::get('crmomni-validation.request_handler.lookup.update.validation_rules');
+        return Config::get('crmomni-validation.request_handler.backend.lookup.update.validation_rules');
     }
 
     public function authorize()

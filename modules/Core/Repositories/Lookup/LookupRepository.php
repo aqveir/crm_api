@@ -4,28 +4,26 @@ namespace Modules\Core\Repositories\Lookup;
 
 use Config;
 
-use App\Contracts\Lookup\{LookupValueContract};
-
-use Modules\Core\Models\Lookup\LookupValue;
+use Modules\Core\Models\Lookup\Lookup;
 use Modules\Core\Repositories\EloquentRepository;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
 
 /**
- * Class LookupValueRepository
+ * Class LookupRepository
  * 
  * @package Modules\Core\Repositories\Lookup
  */
-class LookupValueRepository extends EloquentRepository
+class LookupRepository extends EloquentRepository
 {
 
     /**
-     * LookupValueRepository constructor.
+     * LookupRepository constructor.
      *
-     * @param  LookupValue  $model
+     * @param  Lookup  $model
      */
-    public function __construct(LookupValue $model)
+    public function __construct(Lookup $model)
     {
         $this->model = $model;
     }
@@ -85,8 +83,8 @@ class LookupValueRepository extends EloquentRepository
         $objReturnValue=null;
         try {
             //Get cache configuration
-            $keyCache = config('core.settings.cache.lookup_value.key').'_'.(string)$orgId;
-            $durationCache = config('core.settings.cache.lookup_value.duration_in_sec');
+            $keyCache = config('core.settings.cache.lookup.key').'_'.(string)$orgId;
+            $durationCache = config('core.settings.cache.lookup.duration_in_sec');
 
             if (Cache::has($keyCache)) {
                 $objReturnValue = Cache::get($keyCache);
@@ -113,8 +111,8 @@ class LookupValueRepository extends EloquentRepository
         $objReturnValue=null;
         try {
             $query = $this->model;
-            $query = $query->where('org_id', $orgId);
-            $query = $query->orWhere('org_id', 0);
+            // $query = $query->where('org_id', $orgId);
+            // $query = $query->orWhere('org_id', 0);
             $query = $query->orderBy('id', 'asc');
             $query = $query->get();
 

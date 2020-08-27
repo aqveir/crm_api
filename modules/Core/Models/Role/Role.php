@@ -29,14 +29,18 @@ class Role extends Model
         'org_id', 'key', 'display_value', 'description'
     ];
 
+
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
     protected $hidden = [
-        'org_id', 'pivot', 'created_at', 'updated_at',
+        'org_id', 'pivot', 
+        'created_by', 'updated_by',
+        'created_at', 'updated_at',
     ];
+
 
     /**
      *
@@ -46,6 +50,33 @@ class Role extends Model
         'created_at', 'updated_at',
     ];
 
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['last_updated_at'];
+
+
+    /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = [];
+
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
+
+    
     /**
      * Default constructor
      * @param array $attributes
@@ -54,5 +85,6 @@ class Role extends Model
     {
         parent::__construct($attributes);
         $this->table = config('crmomni-migration.table_name.roles');
-    }
-}
+    } //Function ends
+
+} //Class ends

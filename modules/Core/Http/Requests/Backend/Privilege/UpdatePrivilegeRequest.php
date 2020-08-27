@@ -5,11 +5,11 @@ namespace Modules\Core\Http\Requests\Backend\Privilege;
 use Config;
 use Modules\Boilerplate\Http\FormRequest;
 
-class CreatePrivilegeRequest extends FormRequest
+class UpdatePrivilegeRequest extends FormRequest
 {
     public function rules()
     {
-        return Config::get('crmomni-validation.request_handler.backend.privilege.create.validation_rules');
+        return Config::get('crmomni-validation.request_handler.backend.privilege.update.validation_rules');
     }
 
     public function authorize()

@@ -21,6 +21,11 @@ return [
                 'duration_in_sec' => 86400,
             ], 
 
+            'lookup_value' => [
+                'key' => '_cache_lookup_value_key_',
+                'duration_in_sec' => 86400,
+            ], 
+
             'organization' => [
                 'key' => '_cache_organization_key_',
                 'duration_in_sec' => 86400,
