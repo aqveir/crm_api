@@ -1,3 +1,7 @@
 [submodule "exotel"]
 	path = packages/ellaisys/exotel
 	url = https://ellaisys@bitbucket.org/ellaisys/eis_exotel_library.git
+
+[submodule "cognito"]
+	path = packages/ellaisys/exotel
+	url = https://github.com/ellaisys/aws-cognito.git
