@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c88d8c36240bf0d456b8de1bf879c946",
+    "content-hash": "f0ea5158637dc32d7285f43ef31c6b8f",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -642,6 +642,71 @@
                 "validator"
             ],
             "time": "2020-06-16T20:11:17+00:00"
+        },
+        {
+            "name": "ellaisys/telephony-exotel",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ellaisys/telephony-exotel.git",
+                "reference": "2cd926b3353bae7ad0419a448ae1968fb74f62c6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ellaisys/telephony-exotel/zipball/2cd926b3353bae7ad0419a448ae1968fb74f62c6",
+                "reference": "2cd926b3353bae7ad0419a448ae1968fb74f62c6",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/guzzle": "^6.0",
+                "php": "^7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.5"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Ellaisys\\Exotel\\Providers\\ExotelServiceProvider"
+                    ],
+                    "aliases": {
+                        "ExotelCall": "Ellaisys\\Exotel\\Facades\\ExotelCallFacade"
+                    }
+                },
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Ellaisys\\Exotel\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "EllaiSys",
+                    "email": "support@ellaisys.com",
+                    "homepage": "https://ellaisys.github.io/",
+                    "role": "owner"
+                }
+            ],
+            "description": "Cloud Telephony Library - Exotel",
+            "homepage": "https://github.com/ellaisys/telephony-exotel",
+            "keywords": [
+                "CTI",
+                "cloud telephony",
+                "ellaisys",
+                "exotel",
+                "laravel",
+                "php",
+                "telephony"
+            ],
+            "time": "2020-10-20T20:48:31+00:00"
         },
         {
             "name": "fideloper/proxy",
@@ -7599,7 +7664,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "ellaisys/telephony-exotel": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

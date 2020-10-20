@@ -1,7 +1,7 @@
-[submodule "exotel"]
-	path = packages/ellaisys/exotel
-	url = https://ellaisys@bitbucket.org/ellaisys/eis_exotel_library.git
+[submodule "telephony-exotel"]
+	path = packages/ellaisys/telephony-exotel
+	url = https://github.com/ellaisys/telephony-exotel.git
 
-[submodule "cognito"]
-	path = packages/ellaisys/cognito
+[submodule "aws-cognito"]
+	path = packages/ellaisys/aws-cognito
 	url = https://github.com/ellaisys/aws-cognito.git
