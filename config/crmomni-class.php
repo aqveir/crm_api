@@ -15,7 +15,7 @@ use Modules\Core\Models\Privilege\Privilege;
 use Modules\Core\Models\Organization\Organization;
 
 use Modules\User\Models\User\User;
-use Modules\Customer\Models\Customer\Customer;
+use Modules\Contact\Models\Contact\Contact;
 use Modules\Feedback\Models\Feedback\Feedback;
 use Modules\Note\Models\Note\Note;
 use Modules\Document\Models\Document\Document;
@@ -46,9 +46,9 @@ return [
             'main' => User::class,
         ],        
 
-        //Customer Classes
-        'customer' => [
-            'main' => Customer::class
+        //Contact Classes
+        'contact' => [
+            'main' => Contact::class
         ],
 
         //Other Functional Classes

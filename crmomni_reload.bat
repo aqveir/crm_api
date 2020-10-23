@@ -18,7 +18,7 @@ echo "DB created."
 
 echo "Creating meta and dummy data ..."
 z:\xampp\php\php artisan module:seed Core
-z:\xampp\php\php artisan module:seed Customer
+z:\xampp\php\php artisan module:seed Contact
 z:\xampp\php\php artisan module:seed User
 z:\xampp\php\php artisan module:seed Preference
 rem z:\xampp\php\php artisan module:seed Wallet

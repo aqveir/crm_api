@@ -93,18 +93,13 @@ class TelephonyVoiceService extends BaseService
             $organization = $this->getOrganizationByHash($orgHash);
 
             //Load Telephony Provider from Configuration
-            $configuration = $organization->getOrganizationConfigurationByKey('configuration_telephony_providers');
+            $configuration = $organization->getOrganizationConfigurationByKey('configuration_telephony_call_providers');
             if (empty($configuration) || empty($configuration['pivot']['value'])) {
                 throw new TelephonyNoProviderException();
             } //End if
 
-            //TODO: Load calling data
-            //------------------------------------------
+            //Convert payload to Array
             $payload = $payload->toArray();
-            $payload['to_number'] = '09423009635';
-            $payload['from_number'] = '09158999635';
-            $payload['virtual_number'] = '08047179477';
-            //------------------------------------------
 
             //Check Telephony Providers
             $telephonyProvider = $configuration['pivot']['value'];
@@ -118,6 +113,13 @@ class TelephonyVoiceService extends BaseService
                     } //End if
                     $settings = json_decode(($configuration['pivot']['value']), true);
 
+                    //Get Exotel Outgoing Number
+                    $virtualNumber = $organization->getOrganizationConfigurationByKey('configuration_telephony_outgoing_phone_number');
+                    if (empty($virtualNumber) || empty($virtualNumber['pivot']['value'])) {
+                        throw new TelephonyConfigurationException();
+                    } //End if
+                    $payload['virtual_number'] = json_encode(($virtualNumber['pivot']['value']), true);
+
                     //Callback URL
                     $callbackUrl = url(config('cloudtelephony.exotel.call.callback-url'));
                     $callbackUrl .= "?key=" . $orgHash;
@@ -129,25 +131,9 @@ class TelephonyVoiceService extends BaseService
                     throw new TelephonyNoProviderException();
                     break;
             } //End switch
-
-            return $response;
-
-
-            // //Lookup data
-            // $entityType = $payload['entity_type'];
-            // $lookupEntity = $this->lookupRepository->getLookUpByKey($data['org_id'], $entityType);
-            // if (empty($lookupEntity))
-            // {
-            //     throw new Exception('Unable to resolve the entity type');   
-            // } //End if
-            // $data['entity_type_id'] = $lookupEntity['id'];
-
-            // //Create Note
-            // $note = $this->noteRepository->create($data);
-            // $note->load('type', 'owner');
                 
             //Raise event
-            $this->raiseEvent($organization, $payload);
+            $this->raiseEvent($organization, collect($responnse));
 
             //Assign to the return value
             $objReturnValue = $payload;
@@ -268,12 +254,20 @@ class TelephonyVoiceService extends BaseService
         try {
 
             switch ($payload['status']) {
+                case 'telephony_call_status_type_queued':
+                case 'telephony_call_status_type_in_progress':
+                    event(new TelephonyCallInProgress($organization, $payload));
+                    break;
+
                 case 'telephony_call_status_type_completed':
                     event(new TelephonyCallCompleted($organization, $payload));
                     break;
-                
+
+                case 'telephony_call_status_type_failed':
+                case 'telephony_call_status_type_busy':
+                case 'telephony_call_status_type_no_answer':
                 default:
-                    //Do nothing
+                    event(new TelephonyCallNotConnected($organization, $payload));
                     break;
             } //End switch
 

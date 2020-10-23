@@ -85,7 +85,7 @@ return [
 
         'customers' => [
             'driver' => 'eloquent',
-            'model' => Modules\Customer\Models\Customer\Customer::class,
+            'model' => Modules\Contact\Models\Contact\Contact::class,
         ],
 
         // 'users' => [

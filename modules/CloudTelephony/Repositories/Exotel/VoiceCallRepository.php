@@ -5,7 +5,7 @@ namespace Modules\CloudTelephony\Repositories\Exotel;
 use Modules\CloudTelephony\Contracts\{VoiceCallContract};
 
 use Ellaisys\Exotel\ExotelCall;
-use Modules\CloudTelephony\Transformers\Exotel\Responses\VoiceCallDetailsResource;
+use Modules\CloudTelephony\Transformers\Exotel\Responses\VoiceCallDetailsResource as ExotelVoiceCallDetailsResource;
 
 
 /**
@@ -42,9 +42,9 @@ class VoiceCallRepository implements VoiceCallContract
 
 			//Return transformed response
 			if (!empty($response) && $response['Call']) {
-				$objReturnValue = new VoiceCallDetailsResource($response['Call']);
+				$objReturnValue = new ExotelVoiceCallDetailsResource($response['Call']);
 			} else {
-				$objReturnValue = $response['Call'];
+				$objReturnValue = $response;
 			} //End if
 	        		
 		} catch(Exception $e) {

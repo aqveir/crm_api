@@ -49,7 +49,7 @@ return [
     'facebook' => [
         'client_id' => env('FACEBOOK_CLIENT_ID', '1354596034729954'),
         'client_secret' => env('FACEBOOK_CLIENT_SECRET', 'a4182a1236d4ff9c1820f6799b472c7b'),
-        'redirect' => env('FACEBOOK_CLIENT_REDIRECT', 'https://crmomni.com/api/customer/login/facebook/callback'),
+        'redirect' => env('FACEBOOK_CLIENT_REDIRECT', 'https://crmomni.com/api/contact/login/facebook/callback'),
     ],
     'twitter' => [
         'client_id' => env('TWITTER_CLIENT_ID'),

@@ -1,7 +1,7 @@
 {
     "Boilerplate": true,
     "Core": true,
-    "Customer": true,
+    "Contact": true,
     "User": true,
     "Note": true,
     "Document": true,

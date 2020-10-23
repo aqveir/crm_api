@@ -45,8 +45,8 @@ return [
         'feedbacks' => env('TABLE_NAME_PREFIX', '') . 'feedbacks',
         'documents' => env('TABLE_NAME_PREFIX', '') . 'documents',
 
-        //Customer Entities
-        'customer' => [
+        //Contact Entities
+        'contact' => [
             'main' => env('TABLE_NAME_PREFIX', '') . 'customers',
             'details' => env('TABLE_NAME_PREFIX', '') . 'customer_details',
             'addresses' => env('TABLE_NAME_PREFIX', '') . 'customer_addresses',

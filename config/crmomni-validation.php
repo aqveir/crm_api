@@ -286,12 +286,22 @@ return [
                     'validation_rules' => []
                 ],
             ], //Document Controller ends
+
+            // Contact Controller Requests
+            'contact' => [
+                // Telephony
+                'telephony' => [
+                    'validation_rules' => [
+                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                    ]
+                ],
+            ],
         ],
 
         'frontend' => [
-            // Customer Controller Requests
-            'customer' => [
-                //Get the customer data
+            // Contact Controller Requests
+            'contact' => [
+                //Get the contact data
                 'show' => [
                     'validation_rules' => [
                         'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
@@ -318,7 +328,7 @@ return [
                     ]
                 ],
 
-                // Authenticate the customer
+                // Authenticate the contact
                 'login' => [
                     'validation_rules' => [
                         'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
@@ -329,7 +339,7 @@ return [
                     ]
                 ],
 
-                // Logout the customer
+                // Logout the contact
                 'logout' => [
                     'validation_rules' => [
                         'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
@@ -379,7 +389,7 @@ return [
                     ]
                 ],
 
-            ], // Customer Controller ends
+            ], // Contact Controller ends
         ],
 
         'telephony' => [

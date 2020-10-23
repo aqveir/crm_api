@@ -93,8 +93,8 @@ class OrganizationsTableSeeder extends Seeder
                         )
                     ],
                     [
-                        'configuration_id' => 5, 
-                        'value' => '09513886363'
+                        'configuration_id' => 6, 
+                        'value' => '08047494247'
                     ]
                 ]
             ],
@@ -132,8 +132,8 @@ class OrganizationsTableSeeder extends Seeder
                         )
                     ],
                     [
-                        'configuration_id' => 5, 
-                        'value' => '08047179477'
+                        'configuration_id' => 6, 
+                        'value' => '08047494247'
                     ]
                 ]
             ]

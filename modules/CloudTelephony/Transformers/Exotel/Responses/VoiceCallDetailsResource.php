@@ -27,9 +27,6 @@ class VoiceCallDetailsResource extends JsonResource
             $callStatus = (isset($this['Status']))?$this['Status']:null;
             switch ($callStatus) {
                 case 'queued':
-                    $callStatus = 'telephony_call_status_type_queued';
-                    break;
-
                 case 'ringing':
                     $callStatus = 'telephony_call_status_type_queued';
                     break;

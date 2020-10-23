@@ -55,11 +55,11 @@ return [
         'static' => [
             'key' => [
                 'lookup_value' => [
-                    //Customer Details Types
+                    //Contact Details Types
                     'phone' => 'customer_detail_type_phone',
                     'email' => 'customer_detail_type_email',
 
-                    //Customer Address Types
+                    //Contact Address Types
                     'home'  => 'customer_address_type_home',
                     'work'  => 'customer_address_type_work'
                 ]

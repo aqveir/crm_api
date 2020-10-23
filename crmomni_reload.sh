@@ -28,7 +28,7 @@ echo "DB created."
 
 echo "Creating meta and dummy data ..."
 sudo php artisan module:seed Core
-sudo php artisan module:seed Customer
+sudo php artisan module:seed Contact
 sudo php artisan module:seed User
 sudo php artisan module:seed Preference
 echo "Data created..."
