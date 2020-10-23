@@ -94,7 +94,7 @@ class GetContactController extends ApiBaseController
      *      @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function data(Request $request, ContactService $service, string $hash)
+    public function show(Request $request, ContactService $service, string $hash)
     {   
         try {
             //Get data of the Contact
