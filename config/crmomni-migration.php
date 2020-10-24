@@ -47,10 +47,10 @@ return [
 
         //Contact Entities
         'contact' => [
-            'main' => env('TABLE_NAME_PREFIX', '') . 'customers',
-            'details' => env('TABLE_NAME_PREFIX', '') . 'customer_details',
-            'addresses' => env('TABLE_NAME_PREFIX', '') . 'customer_addresses',
-            'company' => env('TABLE_NAME_PREFIX', '') . 'customer_company',
+            'main' => env('TABLE_NAME_PREFIX', '') . 'contacts',
+            'details' => env('TABLE_NAME_PREFIX', '') . 'contact_details',
+            'addresses' => env('TABLE_NAME_PREFIX', '') . 'contact_addresses',
+            'company' => env('TABLE_NAME_PREFIX', '') . 'contact_company',
             
             'society_address' => env('TABLE_NAME_PREFIX', '') . 'society_address',
             'apartment_address' => env('TABLE_NAME_PREFIX', '') . 'apartment_address',

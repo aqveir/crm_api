@@ -58,7 +58,7 @@ class ContactDetailService extends BaseService
     public function __construct(
         LookupValueRepository               $lookuprepository,
         OrganizationRepository              $organizationrepository,
-        ContactDetailRepository            $customerdetailrepository
+        ContactDetailRepository             $customerdetailrepository
     ) {
         $this->lookuprepository             = $lookuprepository;
         $this->organizationrepository       = $organizationrepository;
@@ -67,7 +67,7 @@ class ContactDetailService extends BaseService
 
 
     /**
-     * Contact Exists
+     * Get Contact Details by Identifier (i.e. Phone, Email)
      * 
      * @param \Illuminate\Http\Request $request
      * 
@@ -77,11 +77,11 @@ class ContactDetailService extends BaseService
     {
         $objReturnValue=false;
         try {
-            $type_key = null;
+            $typeKey = null;
             if (is_numeric($identifier)) {
-                $type_key = config('omnichannel.settings.static.key.lookup_value.phone');
+                $typeKey = config('omnichannel.settings.static.key.lookup_value.phone');
             } else {
-                $type_key = config('omnichannel.settings.static.key.lookup_value.email');
+                $typeKey = config('omnichannel.settings.static.key.lookup_value.email');
             } //End if
 
             //Check if the Contact exists

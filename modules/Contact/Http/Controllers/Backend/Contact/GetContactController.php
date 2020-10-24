@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 use Modules\Core\Http\Controllers\ApiBaseController;
-use Modules\Contact\Http\Requests\Backend\Contact\GetAllContactRequest;
+use Modules\Contact\Http\Requests\Backend\Contact\GetContactRequest;
 
 use Modules\Contact\Services\Contact\ContactService;
 
@@ -38,7 +38,7 @@ class GetContactController extends ApiBaseController
     /**
      * Get All Contacts (Backend)
      *
-     * @param \Modules\Api\Http\Requests\Frontend\Contact\GetAllContactRequest $request
+     * @param \Modules\Api\Http\Requests\Frontend\Contact\GetContactRequest $request
      * @param \Modules\Contact\Services\Contact\ContactService $service
      * 
      * @return \Illuminate\Http\JsonResponse
@@ -54,11 +54,17 @@ class GetContactController extends ApiBaseController
      *      @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function index(GetAllContactRequest $request, ContactService $service)
+    public function index(GetContactRequest $request, ContactService $service)
     {   
         try {
+            //Get Org Hash 
+            $orgHash = $this->getOrgHashInRequest($request);
+
+            //Create payload
+            $payload = collect($request);
+
             //Get collection of all contacts
-            $data=$service->getContactData($request, 1);
+            $data=$service->getFullData($orgHash, $payload);
 
             //Send http status out
             return $this->response->success(compact('data'));
@@ -97,8 +103,14 @@ class GetContactController extends ApiBaseController
     public function show(Request $request, ContactService $service, string $hash)
     {   
         try {
+            //Get Org Hash 
+            $orgHash = $this->getOrgHashInRequest($request);
+
+            //Create payload
+            $payload = collect($request);
+
             //Get data of the Contact
-            $data=$service->getFullData($request, $hash);
+            $data=$service->getFullDataByHash($orgHash, $payload, $hash);
 
             //Send http status out
             return $this->response->success(compact('data'));

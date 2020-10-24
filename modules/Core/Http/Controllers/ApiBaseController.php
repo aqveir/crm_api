@@ -2,6 +2,7 @@
 
 namespace Modules\Core\Http\Controllers;
 
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -60,6 +61,29 @@ abstract class ApiBaseController extends CoreController
      */
     public function getIpAddressInRequest(Request $request) {
         return $request->ip();
+    } //Function ends
+
+
+    /**
+     * Get Current Authenticated User
+     */
+    public function getCurrentUser(string $orgHash=null) {
+
+        //Get user 
+        $user = Auth::guard('backend')->user();
+
+        //Validate current user with provided organization
+        if (!empty($orgHash)) {
+            if ($user && $user['organization'] && ($user['organization']['hash']==$orgHash)) {
+                $returnValue = $user;
+            } else {
+                $returnValue = null;
+            } //End if
+        } else {
+            $returnValue = $user;
+        } //End if
+
+        return $returnValue;
     } //Function ends
     
 } //Class ends

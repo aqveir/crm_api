@@ -2,9 +2,11 @@
 
 namespace Modules\CloudTelephony\Repositories\Exotel;
 
-use Modules\CloudTelephony\Contracts\{VoiceCallContract};
+use Exception;
+use Illuminate\Support\Facades\Log;
 
 use Ellaisys\Exotel\ExotelCall;
+use Modules\CloudTelephony\Contracts\{VoiceCallContract};
 use Modules\CloudTelephony\Transformers\Exotel\Responses\VoiceCallDetailsResource as ExotelVoiceCallDetailsResource;
 
 
@@ -41,15 +43,18 @@ class VoiceCallRepository implements VoiceCallContract
 			);
 
 			//Return transformed response
-			if (!empty($response) && $response['Call']) {
+			if (!empty($response) && isset($response['Call'])) {
 				$objReturnValue = new ExotelVoiceCallDetailsResource($response['Call']);
+			} else if (!empty($response) && isset($response['RestException'])) {
+				throw new Exception($response['RestException']['Message']);
 			} else {
 				$objReturnValue = $response;
 			} //End if
 	        		
 		} catch(Exception $e) {
+			Log::error('VoiceCallRepository:makeCallToConnectTwoNumbers:Exception:' . $e->getMessage());
 			$objReturnValue=null;
-			Log::error(json_encode($e));
+			throw $e;
 		} //Try-catch ends
 		
 		return $objReturnValue;

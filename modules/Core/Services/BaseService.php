@@ -6,6 +6,7 @@ use Config;
 use Carbon\Carbon;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
@@ -147,6 +148,19 @@ abstract class BaseService
         } //try-catch ends
 
         return $objReturnValue;
+    } //Function ends
+
+
+    /**
+     * Return Forced Params
+     * 
+     * @param  \Illuminate\Support\Collection $payload
+     * 
+     * @return  bool
+     */
+    public function isForced(Collection $payload)
+    {
+        return ($payload->has('forced'))?($payload['forced']==1):false;
     } //Function ends
 
 } //Class ends

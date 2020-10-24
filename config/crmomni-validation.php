@@ -289,6 +289,12 @@ return [
 
             // Contact Controller Requests
             'contact' => [
+                'index' => [
+                    'validation_rules' => [
+                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                    ]
+                ],
+
                 // Telephony
                 'telephony' => [
                     'validation_rules' => [

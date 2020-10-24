@@ -37,14 +37,14 @@ class TelephonyController extends ApiBaseController
 
 
     /**
-     * Make a Telephony Call to Contact
+     * Make a Telephony Call to Contact using Default Preferred Number
      *
      * @param \Modules\Api\Http\Requests\Backend\Contact\TelephonyRequest $request
      * @param \Modules\Contact\Services\Contact\ContactTelephonyService $service
      * 
      * @return \Illuminate\Http\JsonResponse
      *
-     * @OA\Get(
+     * @OA\Post(
      *      path="/contact/{hash}/call",
      *      tags={"Contact"},
      *      operationId="api.backend.contact.call",
@@ -57,7 +57,35 @@ class TelephonyController extends ApiBaseController
      *      @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function show(TelephonyRequest $request, ContactTelephonyService $service, string $hash, int $id=0)
+    public function call(TelephonyRequest $request, ContactTelephonyService $service, string $hash)
+    {
+        return $this->callToProxy($request, $service, $hash);
+    } //Function ends
+
+
+
+    /**
+     * Make a Telephony Call to Contact using Proxy Number
+     *
+     * @param \Modules\Api\Http\Requests\Backend\Contact\TelephonyRequest $request
+     * @param \Modules\Contact\Services\Contact\ContactTelephonyService $service
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @OA\Post(
+     *      path="/contact/{hash}/call/{proxy}",
+     *      tags={"Contact"},
+     *      operationId="api.backend.contact.call.proxy",
+     *      security={{"omni_token":{}}},
+     *      @OA\Parameter(ref="#/components/parameters/organization_key"),
+     *      @OA\Parameter(ref="#/components/parameters/hash_identifier"),
+     *      @OA\Response(response=200, description="Request was successfully executed."),
+     *      @OA\Response(response=400, description="Bad Request"),
+     *      @OA\Response(response=422, description="Model Validation Error"),
+     *      @OA\Response(response=500, description="Internal Server Error")
+     * )
+     */
+    public function callToProxy(TelephonyRequest $request, ContactTelephonyService $service, string $hash, string $proxy=null)
     {
         try {
             //Get Org Hash 
@@ -66,14 +94,11 @@ class TelephonyController extends ApiBaseController
             //Get IP Address
             $ipAddress = $this->getIpAddressInRequest($request);
 
-            //Authenticated User
-            $user = auth()->guard('backend')->user();
-
             //Create payload
             $payload = collect($request);
 
             //Call the 
-            $data = $service->makeCall($orgHash, $hash, $id, $payload, $ipAddress);
+            $data = $service->makeCall($orgHash, $hash, $proxy, $payload, $ipAddress);
 
             //Send http status out
             return $this->response->success(compact('data'));

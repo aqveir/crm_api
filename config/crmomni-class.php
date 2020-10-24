@@ -17,8 +17,8 @@ use Modules\Core\Models\Organization\Organization;
 use Modules\User\Models\User\User;
 use Modules\Contact\Models\Contact\Contact;
 use Modules\Feedback\Models\Feedback\Feedback;
-use Modules\Note\Models\Note\Note;
-use Modules\Document\Models\Document\Document;
+use Modules\Note\Models\Note;
+use Modules\Document\Models\Document;
 
 return [
 

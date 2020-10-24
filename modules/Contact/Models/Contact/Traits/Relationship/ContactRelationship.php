@@ -75,13 +75,17 @@ trait ContactRelationship
 	 */
 	public function notes()
 	{
-		return $this->hasMany(
-			config('crmomni-class.class_model.note'),
-			'reference_id', 'id'
-		)
-		->whereHas('type', function($inner){$inner->where('key', 'entity_type_contact');})
-		->orderBy('created_at', 'desc')
-		->take(5);
+		if (class_exists(config('crmomni-class.class_model.note'))) {
+			return $this->hasMany(
+				config('crmomni-class.class_model.note'),
+				'reference_id', 'id'
+			)
+			->whereHas('type', function($inner){$inner->where('key', 'entity_type_contact');})
+			->orderBy('created_at', 'desc')
+			->take(5);
+		} else {
+			return [];
+		} //End if
 	}
 
 

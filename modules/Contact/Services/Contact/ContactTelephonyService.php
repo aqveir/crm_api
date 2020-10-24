@@ -19,6 +19,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
+use Modules\Contact\Events\ContactCallOutgoingEvent;
+
 use Exception;
 use Modules\Core\Exceptions\DuplicateDataException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -69,11 +71,13 @@ class ContactTelephonyService extends BaseService
     public function __construct(
         LookupValueRepository               $lookuprepository,
         OrganizationRepository              $organizationrepository,
-        ContactRepository                  $customerrepository
+        ContactRepository                   $customerrepository,
+        ContactDetailRepository             $customerdetailrepository
     ) {
         $this->lookuprepository             = $lookuprepository;
         $this->organizationrepository       = $organizationrepository;
         $this->customerrepository           = $customerrepository;
+        $this->customerdetailrepository     = $customerdetailrepository;
     } //Function ends
 
 
@@ -85,218 +89,51 @@ class ContactTelephonyService extends BaseService
      * 
      * @return bool
      */
-    public function makeCall(string $orgHash, string $hash, int $id, Collection $payload, string $ipAddress)
+    public function makeCall(string $orgHash, string $contactHash, string $proxy=null, Collection $payload, string $ipAddress)
     {
         $objReturnValue=false;
         try {
             //Get organization data
             $organization = $this->organizationrepository->getOrganizationByHash($orgHash);
 
-            $type_key = config('omnichannel.settings.static.key.lookup_value.phone');
-            $data = $payload['phone'];
-
-            //Check if the Contact exists
-            $response = $this->customerdetailrepository->getContactDetailsByIdentifier($organization['id'], $data, null, true, true);
-
-            $objReturnValue = !empty($response);
-        } catch(ModelNotFoundException $e) {
-            Log::error('ContactService:validateContactExists:ModelNotFoundException:' . $e->getMessage());
-        } catch (Exception $e) {
-            log::error('ContactService:validateContactExists:Exception:' . $e->getMessage());
-            throw new HttpException(500);
-        } //Try-catch ends
-
-        return $objReturnValue;
-    } //Function ends
-
-
-    /**
-     * Get Contact Full Data By Hash Identifier (Backend)
-     * 
-     * @param \Illuminate\Http\Request $request
-     * @param string $hash
-     * 
-     * @return object
-     */
-    public function getFullData(Request $request, string $hash)
-    {
-        $objReturnValue=null;
-        try {
             //Authenticated User
             $user = $this->getCurrentUser('backend');
-
-            //Load Contact Data
-            $objReturnValue = $this->customerrepository->getFullDataFromDB($user['org_id'], $hash);
-
-        } catch(Exception $e) {
-            log::error($e);
-        }
-        return $objReturnValue;
-    } //Function ends
-
-
-    /**
-     * Get Contact Full Data By Hash Identifier (Frontend)
-     * 
-     * @param \Illuminate\Http\Request $request
-     * 
-     * @return object
-     */
-    public function getContactFullData(string $orgHash, Request $request)
-    {
-        $objReturnValue=null;
-        try {
-            //Get organization data
-            $organization = $this->getOrganizationByHash($orgHash);
-            if(empty($organization)) {
-                throw new AccessDeniedHttpException();
+            if ($user && empty($user['phone'])) {
+                throw new ModelNotFoundException();
             } //End if
 
-            //Authenticated User
-            $contact = $this->getCurrentUser('frontend');
+            //Get Contact Data
+            $contact = $this->customerrepository->getFullDataByIdentifier($user['org_id'], $contactHash);
 
-            log::info(json_encode($contact).'->'. $organization['id'].'->'.$contact['hash']);
+            //Contact Details Type
+            $typeKey = config('crmomni.settings.static.key.lookup_value.phone');
+            $detailsType = $this->lookuprepository->getLookUpByKey($user['org_id'], $typeKey);
 
-            //Load Contact Data
-            $objReturnValue = $this->customerrepository->getFullDataFromDB($organization['id'], $contact['hash']);
+            //Check if the Contact exists
+            $response = $this->customerdetailrepository->getContactDetailsByTypeId($user['org_id'], $contact['id'], $detailsType['id'], empty($proxy), $proxy);
+            if ($response) {
+                //Build payload
+                $telephonyPayload = [
+                    'org_hash'      => $organization['hash'],
+                    'to_id'         => $contact['id'],
+                    'to_name'       => $contact['full_name'],
+                    'to_number'     => $response['identifier_masked'],
+                    'from_id'       => $user['id'],
+                    'from_name'     => $user['full_name'],
+                    'from_number'   => $user['phone']
+                ];
+                $payload = collect(array_merge($telephonyPayload, $payload->toArray()));
 
-        } catch(AccessDeniedHttpException $e) {
-            throw new AccessDeniedHttpException();
-        } catch(UnauthorizedHttpException $e) {
-            throw new UnauthorizedHttpException();
-        } catch(Exception $e) {
-            throw new Exception($e);
-        } //Try-catch ends
-        return $objReturnValue;
-    } //Function ends
-
-
-    /**
-     * Function to return the phone number of a contact
-     *
-     * @return objReturnValue
-     */
-    public function getContactPhone(int $orgId=0, $contact, string $proxy=null, $isPrimary=null)
-    {
-        $objReturnValue = null;
-        try {
-            //Get Phone Type for the Organization
-            $type = $this->lookuprepository->getLookUpByKey($orgId, config('omnichannel.settings.static.key.lookup_value.phone'));
-
-            //Get phone details for a contact
-            $isPrimary = ($proxy!=null)?null:true;
-            $contactDetail = $this->customerdetailrepository->getContactDetailsByType($contact['id'], $type['id'], $isPrimary, $proxy);
-
-            if($contactDetail!=null) {
-                $country_code = '91'; //$contactDetail['country']['code'];
-                $phone_number = $contactDetail['identifier'];
-                $objReturnValue = '+'.$country_code.$phone_number;
-            } else { throw new BadRequestHttpException(); } //End if-else
-            
-        } catch(Exception $e) {
-            Log::error(json_encode($e));
-            throw new NotFoundHttpException();
-        } //Try-Catch ends
-
-        return $objReturnValue;
-    } //Function ends
-
-
-    /**
-     * Create New Contact
-     * 
-     * @param string $orgHash
-     * @param \Illuminate\Support\Collection $payload
-     * @param string $ipAddress (optional)
-     * @param string $provider (optional)
-     * @param int $createdBy (optional)
-     * @param bool $isEmailValid (optional)
-     * @param bool $isPhoneValid (optional)
-     * 
-     */
-    public function create(
-        string $orgHash, Collection $payload, string $ipAddress='0.0.0.0',
-        string $provider=null, int $createdBy=0,
-        bool $isEmailValid=false, bool $isPhoneValid=false
-    )
-    {
-        $objReturnValue=null;
-
-        try {
-            //Get organization data
-            $organization = $this->getOrganizationByHash($orgHash);
-
-            //Data for validation
-            $dataValidate = ($payload->only(['email', 'phone']))->toArray();
-
-            //Duplicate check
-            $isDuplicate=$this->customerdetailrepository->validate($organization['id'], $dataValidate);
-            if (!$isDuplicate) {
-
-                //Generate the data payload to create user
-                $payload = $payload->only('password', 'first_name', 'middle_name', 'last_name');
-                $payload = array_merge(
-                    $payload,
-                    [
-                        'org_id' => $organization['id'],
-                        'last_otp' => null,
-                        'group_id' => 0,
-                        'created_by' => $createdBy,
-                        'ip_address' => $ipAddress
-                    ]
-                );
-
-                //Create Contact
-                $contact = $this->customerrepository->create($payload);
-
-                //Create Contact details - Email
-                if(!empty($payload['email'])) {
-                    //Get Email Type for the Organization
-                    $type = $this->getLookupValueByKey($organization['id'], config('omnichannel.settings.static.key.lookup_value.email'));
-
-                    $payloadDetails = [
-                        'org_id' => $organization['id'],
-                        'type_id' => (empty($type)?0:$type['id']),
-                        'contact_id' => $contact['id'],
-                        'identifier' => $payload['email'],
-                        'is_primary' => 1,
-                        'is_verified' => $isEmailValid,
-                        'created_by'=> $createdBy
-                    ];
-                    $this->customerdetailrepository->create($payloadDetails);
-                } //End if
-
-                //Create Contact details - Phone
-                if(!empty($payload['phone'])) {
-                    //Get Phone Type for the Organization
-                    $type = $this->getLookupValueByKey($organization['id'], config('omnichannel.settings.static.key.lookup_value.phone'));
-
-                    $payloadDetails = [
-                        'org_id' => $organization['id'],
-                        'type_id' => (empty($type)?0:$type['id']),
-                        'contact_id' => $contact['id'],
-                        'identifier' => $payload['phone'],
-                        'is_primary' => 1,
-                        'is_verified' => $isPhoneValid,
-                        'created_by'=> $createdBy
-                    ];
-                    $this->customerdetailrepository->create($payloadDetails);
-                } //End if
-
-                //Notify user to Activate Account
-                //$contact->notify(new ContactActivationNotification($contact));
-
-                //Raise event: New Contact Added
-                event(new ContactAddedEvent($contact));
-
-                $objReturnValue=$contact;
-            } else {
-                throw new DuplicateDataException();
+                //Raise event to initiate outgoing call
+                event(new ContactCallOutgoingEvent($payload, $contact));
             } //End if
-        } catch(DuplicateDataException $e) {
-            throw new DuplicateDataException();
-        } catch(Exception $e) {
-            throw new HttpException(500);
+
+            $objReturnValue = $payload;
+        } catch(ModelNotFoundException $e) {
+            Log::error('ContactTelephonyService:makeCall:ModelNotFoundException:' . $e->getMessage());
+        } catch (Exception $e) {
+            log::error('ContactTelephonyService:makeCall:Exception:' . $e->getMessage());
+            throw new HttpException(500, $e->getMessage());
         } //Try-catch ends
 
         return $objReturnValue;

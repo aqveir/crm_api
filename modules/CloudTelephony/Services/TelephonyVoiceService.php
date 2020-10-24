@@ -131,6 +131,11 @@ class TelephonyVoiceService extends BaseService
                     throw new TelephonyNoProviderException();
                     break;
             } //End switch
+
+            //Check for response
+            if (empty($response)) {
+                throw new Exception('Telephony Response Error');
+            } //End if
                 
             //Raise event
             $this->raiseEvent($organization, collect($responnse));
@@ -146,7 +151,7 @@ class TelephonyVoiceService extends BaseService
             throw new BadRequestHttpException($e->getMessage());
         } catch(Exception $e) {
             log::error('TelephonyVoiceService:makecall:Exception:' . $e->getMessage());
-            throw new HttpException(500);
+            throw new HttpException(500, $e->getMessage());
         } //Try-catch ends
 
         return $objReturnValue;

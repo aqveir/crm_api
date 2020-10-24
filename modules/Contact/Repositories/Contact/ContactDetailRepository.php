@@ -34,13 +34,13 @@ class ContactDetailRepository extends EloquentRepository
     /**
      * Get Contact Detail By ContactId, TypeId
      */
-    public function getContactDetailsByTypeId(int $orgId, int $customerId, int $typeId, bool $isPrimary=null, strng $proxy=null)
+    public function getContactDetailsByTypeId(int $orgId, int $contactId, int $typeId, bool $isPrimary=null, strng $proxy=null)
     {
         $objReturnValue=null;
         try {
             $query = $this->model;
             $query = $query->where('org_id', $orgId);
-            $query = $query->where('contact_id', $customerId);
+            $query = $query->where('contact_id', $contactId);
             $query = $query->where('type_id', $typeId);
             if(!empty($proxy)) { $query = $query->where('proxy', $proxy); } //End if 
             if(!empty($isPrimary)) { $query = $query->where('is_primary', $isPrimary); } //End if

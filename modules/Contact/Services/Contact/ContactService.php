@@ -70,8 +70,8 @@ class ContactService extends BaseService
     public function __construct(
         LookupValueRepository               $lookuprepository,
         OrganizationRepository              $organizationrepository,
-        ContactRepository                  $customerrepository,
-        ContactDetailRepository            $customerdetailrepository
+        ContactRepository                   $customerrepository,
+        ContactDetailRepository             $customerdetailrepository
     ) {
         $this->lookuprepository             = $lookuprepository;
         $this->organizationrepository       = $organizationrepository;
@@ -123,22 +123,52 @@ class ContactService extends BaseService
 
 
     /**
-     * Get Contact Full Data By Hash Identifier (Backend)
+     * Get All Contact Full Data (Backend)
      * 
-     * @param \Illuminate\Http\Request $request
-     * @param string $hash
+     * @param \Illuminate\Support\Collection $payload
      * 
      * @return object
      */
-    public function getFullData(Request $request, string $hash)
+    public function getFullData(string $orgHash, Collection $payload)
     {
         $objReturnValue=null;
         try {
             //Authenticated User
             $user = $this->getCurrentUser('backend');
 
+            //Forced params
+            $isForcedFromDB = $this->isForced($payload);
+
             //Load Contact Data
-            $objReturnValue = $this->customerrepository->getFullDataFromDB($user['org_id'], $hash);
+            $objReturnValue = $this->customerrepository->getFullData($user['org_id'], $orgHash, $isForcedFromDB);
+
+        } catch(Exception $e) {
+            log::error($e);
+        }
+        return $objReturnValue;
+    } //Function ends
+
+
+    /**
+     * Get Contact Full Data By Hash Identifier (Backend)
+     * 
+     * @param \Illuminate\Support\Collection $payload
+     * @param string $hash (Customer Hash)
+     * 
+     * @return object
+     */
+    public function getFullDataByHash(string $orgHash, Collection $payload, string $hash)
+    {
+        $objReturnValue=null;
+        try {
+            //Authenticated User
+            $user = $this->getCurrentUser('backend');
+
+            //Forced params
+            $isForcedFromDB = $this->isForced($payload);
+
+            //Load Contact Data
+            $objReturnValue = $this->customerrepository->getFullDataByIdentifier($user['org_id'], $hash, $isForcedFromDB);
 
         } catch(Exception $e) {
             log::error($e);

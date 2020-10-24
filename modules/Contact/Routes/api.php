@@ -68,8 +68,8 @@ $api->version('v1', function (Router $api) {
             $api->put('{hash}', 'Modules\\Contacts\\Http\\Controllers\\Frontend\\Contact\\ContactController@update');
 
             //Telephony
-            $api->get('{hash}/call', 'Modules\\Contact\\Http\\Controllers\\Backend\\Contact\\TelephonyController@makecall');
-            $api->get('{hash}/call/{id}', 'Modules\\Contact\\Http\\Controllers\\Backend\\Contact\\TelephonyController@makecall');
+            $api->post('{hash}/call', 'Modules\\Contact\\Http\\Controllers\\Backend\\Contact\\TelephonyController@call');
+            $api->post('{hash}/call/{proxy}', 'Modules\\Contact\\Http\\Controllers\\Backend\\Contact\\TelephonyController@callToProxy');
         });
     });
 });
