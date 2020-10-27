@@ -8,5 +8,6 @@
     "Feedback": true,
     "Subscription": true,
     "Preference": true,
-    "CloudTelephony": true
+    "CloudTelephony": true,
+    "ServiceRequest": true
 }

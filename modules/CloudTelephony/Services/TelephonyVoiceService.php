@@ -13,9 +13,9 @@ use Modules\CloudTelephony\Repositories\Exotel\VoiceCallRepository as ExotelVoic
 
 use Modules\Core\Services\BaseService;
 
-// use Modules\Note\Events\NoteCreatedEvent;
-// use Modules\Note\Events\NoteUpdatedEvent;
-// use Modules\Note\Events\NoteDeletedEvent;
+use Modules\CloudTelephony\Events\Call\TelephonyCallInProgressEvent;
+use Modules\CloudTelephony\Events\Call\TelephonyCallCompletedEvent;
+use Modules\CloudTelephony\Events\Call\TelephonyCallNotConnectedEvent;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -179,29 +179,26 @@ class TelephonyVoiceService extends BaseService
             // $lookupEntity = $this->lookupRepository->getLookUpByKey($data['org_id'], $entityType);
             // if (empty($lookupEntity))
             // {
-            //     throw new Exception('Unable to resolve the entity type');   
+            //     throw new Exception('Unable to resolve the entity type');
             // } //End if
             // $data['entity_type_id'] = $lookupEntity['id'];
-
-            // //Create Note
-            // $note = $this->noteRepository->create($data);
-            // $note->load('type', 'owner');
                 
-            //Raise event
+            //Raise events
+            event(new TelephonyCallCallbackReceivedEvent($organization, $payload));
             $this->raiseEvent($organization, $payload);
 
             //Assign to the return value
             $objReturnValue = $payload;
 
         } catch(AccessDeniedHttpException $e) {
-            log::error('TelephonyVoiceService:create:AccessDeniedHttpException:' . $e->getMessage());
-            throw new AccessDeniedHttpException($e->getMessage());
+            log::error('TelephonyVoiceService:callback:AccessDeniedHttpException:' . $e->getMessage());
+            throw $e;
         } catch(BadRequestHttpException $e) {
-            log::error('TelephonyVoiceService:create:BadRequestHttpException:' . $e->getMessage());
-            throw new BadRequestHttpException($e->getMessage());
+            log::error('TelephonyVoiceService:callback:BadRequestHttpException:' . $e->getMessage());
+            throw $e;
         } catch(Exception $e) {
-            log::error('TelephonyVoiceService:create:Exception:' . $e->getMessage());
-            throw new HttpException(500);
+            log::error('TelephonyVoiceService:callback:Exception:' . $e->getMessage());
+            throw new Exception(500, $e->getMessage());
         } //Try-catch ends
 
         return $objReturnValue;
@@ -261,18 +258,18 @@ class TelephonyVoiceService extends BaseService
             switch ($payload['status']) {
                 case 'telephony_call_status_type_queued':
                 case 'telephony_call_status_type_in_progress':
-                    event(new TelephonyCallInProgress($organization, $payload));
+                    event(new TelephonyCallInProgressEvent($organization, $payload));
                     break;
 
                 case 'telephony_call_status_type_completed':
-                    event(new TelephonyCallCompleted($organization, $payload));
+                    event(new TelephonyCallCompletedEvent($organization, $payload));
                     break;
 
                 case 'telephony_call_status_type_failed':
                 case 'telephony_call_status_type_busy':
                 case 'telephony_call_status_type_no_answer':
                 default:
-                    event(new TelephonyCallNotConnected($organization, $payload));
+                    event(new TelephonyCallNotConnectedEvent($organization, $payload));
                     break;
             } //End switch
 

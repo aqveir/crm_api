@@ -1,0 +1,13 @@
+{
+    "name": "ServiceRequest",
+    "alias": "servicerequest",
+    "description": "",
+    "keywords": [],
+    "order": 0,
+    "providers": [
+        "Modules\\ServiceRequest\\Providers\\ServiceRequestServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

@@ -4,7 +4,6 @@ namespace Modules\Contact\Models\Contact\Traits\Relationship;
 
 use Exception;
 use Modules\Contact\Models\Contact\Company;
-use Modules\Contact\Models\Contact\ContactAddress;
 use Modules\Contact\Models\Contact\ContactDetail;
 use Modules\Wallet\Models\Wallet\Wallet;
 use Modules\OMS\Models\Order\Order;
@@ -20,10 +19,10 @@ trait ContactRelationship
 	public function addresses()
 	{
 		return $this->hasMany(
-			ContactAddress::class, 
+			'Modules\Contact\Models\Contact\ContactAddress', 
 			'contact_id', 'id'
 		);
-	}
+	} //Function ends
 
 
 	/**
@@ -32,10 +31,10 @@ trait ContactRelationship
 	public function details()
 	{
 		return $this->hasMany(
-			ContactDetail::class, 
+			'Modules\Contact\Models\Contact\ContactDetail', 
 			'contact_id', 'id'
 		);
-	}
+	} //Function ends
 
 
 	/**
@@ -49,7 +48,7 @@ trait ContactRelationship
 			'contact_id', 
 			'wallet_id'
 		)->wherePivot('is_active', 1);
-	}
+	}//Function ends
 
 
 	/**
@@ -80,17 +79,18 @@ trait ContactRelationship
 				config('crmomni-class.class_model.note'),
 				'reference_id', 'id'
 			)
-			->whereHas('type', function($inner){$inner->where('key', 'entity_type_contact');})
+			->with(['type', 'owner'])
+			->whereHas('type', function($inner_query){$inner_query->where('key', 'entity_type_contact');})
 			->orderBy('created_at', 'desc')
 			->take(5);
 		} else {
 			return [];
 		} //End if
-	}
+	} //Function ends
 
 
 	/**
-	 * Top5 Notes for the Contact
+	 * Documents for the Contact
 	 */
 	public function documents()
 	{
@@ -98,9 +98,11 @@ trait ContactRelationship
 			config('crmomni-class.class_model.document'),
 			'reference_id', 'id'
 		)
-		->whereHas('type', function($inner){$inner->where('key', 'entity_type_contact');})
+		->with(['type', 'owner'])
+		->whereHas('type', function($inner_query){$inner_query->where('key', '=', 'entity_type_contact');})
+        ->where('is_active', 1)
 		->orderBy('created_at', 'desc');
-	}
+	} //Function ends
 
 
 	/**
@@ -112,7 +114,7 @@ trait ContactRelationship
 			config('crmomni-class.class_model.organization'),
 			'contact_id', 'id'
 		);
-	}
+	} //Function ends
 
 
 	/**
@@ -124,7 +126,7 @@ trait ContactRelationship
 			config('crmomni-class.class_model.lookup_value'),
 			'id', 'occupation_id'
 		);
-	}
+	} //Function ends
 
 
 	/**
@@ -136,7 +138,7 @@ trait ContactRelationship
 			config('crmomni-class.class_model.lookup_value'),
 			'id', 'gender_id'
 		);
-	}
+	} //Function ends
 
 
 	/**
@@ -148,7 +150,7 @@ trait ContactRelationship
 			config('crmomni-class.class_model.lookup_value'),
 			'id', 'group_id'
 		);
-	}
+	} //Function ends
 
 
 	/**
@@ -160,6 +162,6 @@ trait ContactRelationship
 			config('crmomni-class.class_model.lookup_value'),
 			'id', 'type_id'
 		);
-	}
+	} //Function ends
 
 } //Trait ends
