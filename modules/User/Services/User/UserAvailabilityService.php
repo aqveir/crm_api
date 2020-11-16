@@ -129,23 +129,8 @@ class UserAvailabilityService extends BaseService
             //Authenticated User
             $user = $this->getCurrentUser('backend');
 
-            //Set Availability Status Key
-            switch ($key) {
-                case 'online':
-                    $statusKey = 'user_status_online';
-                    break;
-
-                case 'away':
-                    $statusKey = 'user_status_away';
-                    break;
-                
-                default:
-                    # code...
-                    break;
-            } //Switch ends
-
             //Assign to the return value
-            $objReturnValue = $this->record($user['id'], $statusKey, $ipAddress);
+            $objReturnValue = $this->record($user['id'], $key, $ipAddress);
 
         } catch(ExistingDataException $e) {
             throw new ExistingDataException();
