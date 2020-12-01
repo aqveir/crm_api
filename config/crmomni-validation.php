@@ -221,6 +221,14 @@ return [
                     ]
                 ],
 
+                //Get User data
+                'fetch' => [
+                    'validation_rules' => [
+                        'key' => 'required_without:sub_domain|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        'sub_domain' => 'required_without:key|string|exists:' . config('crmomni-migration.table_name.organizations') . ',sub_domain|max:36',
+                    ]
+                ],
+
                 //User Status Request: Intended for telecallers
                 'status' => [
                     'validation_rules' => [

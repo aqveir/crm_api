@@ -6,10 +6,12 @@ use Config;
 use Illuminate\Support\Facades\Log;
 
 use Modules\Core\Http\Controllers\ApiBaseController;
+use Modules\User\Http\Requests\Backend\User\GetUserRequest;
 use Modules\User\Http\Requests\Backend\User\CreateUserRequest;
 use Modules\User\Http\Requests\Backend\User\UpdateUserRequest;
 use Modules\User\Http\Requests\Backend\User\UserStatusRequest;
 
+use Modules\User\Transformers\Responses\UserMinifiedResource;
 use Modules\User\Transformers\Responses\UserStatusJsonResponseResource;
 use Modules\User\Transformers\Responses\UserStatusTextResponseResource;
 
@@ -39,34 +41,40 @@ class GetUserController extends ApiBaseController
 
 
     /**
-     * Get All Users
+     * Get All Users for an Organization
      *
-     * @param \Modules\User\Http\Requests\Backend\User\CreateUserRequest $request
+     * @param \Modules\User\Http\Requests\Backend\User\GetUserRequest $request
      * @param \Modules\User\Services\User\UserService $userService
      * 
      * @return \Illuminate\Http\JsonResponse
      *
      * @OA\Get(
-     *     path="/user",
+     *     path="/organization/{ohash}/user",
      *     tags={"User"},
      *     operationId="api.backend.user.index",
      *     security={{"omni_token":{}}},
+     *     @OA\Parameter(
+     *          in="path", name="ohash", description="Enter roganization code or key", required=true,
+     *          @OA\Schema(type="string")
+     *     ),
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function index(CreateUserRequest $request, UserService $userService)
+    public function index(GetUserRequest $request, UserService $userService, string $ohash)
     {
         try {
             //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request);
+            $orgHash = $ohash;
 
             //Create payload
             $payload = collect($request);
 
-            //Logout customer
-            $data = $userService->logout($orgHash, $payload);
+            //Fetch Users data for Organization
+            $response = $userService->getUsersByOrganization($orgHash, $payload);
+
+            $data = new UserMinifiedResource(collect($response));
 
             //Send http status out
             return $this->response->success(compact('data'));
@@ -82,33 +90,75 @@ class GetUserController extends ApiBaseController
     /**
      * Show User By Identifier
      *
-     * @param \Modules\User\Http\Requests\Backend\User\UpdateUserRequest $request
+     * @param \Modules\User\Http\Requests\Backend\User\GetUserRequest $request
      * @param \Modules\User\Services\User\UserService $userService
      * 
      * @return \Illuminate\Http\JsonResponse
      *
      * @OA\Get(
-     *     path="/user/{hash}",
+     *     path="/organization/{ohash}/user/{hash}",
      *     tags={"User"},
      *     operationId="api.backend.user.show",
      *     security={{"omni_token":{}}},
+     *     @OA\Parameter(
+     *          in="path", name="ohash", description="Enter roganization code or key", required=true,
+     *          @OA\Schema(type="string")
+     *     ),
      *     @OA\Parameter(ref="#/components/parameters/hash_identifier"),
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function show(UpdateUserRequest $request, UserService $userService, string $hash)
+    public function show(GetUserRequest $request, UserService $userService, string $ohash, string $hash)
     {   
         try {
             //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request);
+            $orgHash = $ohash;
 
             //Create payload
             $payload = collect($request);
 
-            //Logout customer
-            $data = $userService->logout($orgHash, $payload, $hash);
+            //Fetch User record
+            $data = $userService->getUserDataByOrganization($payload, $orgHash, $hash);
+
+            //Send http status out
+            return $this->response->success(compact('data'));
+            
+        } catch(AccessDeniedHttpException $e) {
+            return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
+        } catch(Exception $e) {
+            return $this->response->fail([], Response::HTTP_BAD_REQUEST);
+        }
+    } //Function ends
+
+
+    /**
+     * Show User Profile Data By User Token
+     *
+     * @param \Modules\User\Http\Requests\Backend\User\GetUserRequest $request
+     * @param \Modules\User\Services\User\UserService $userService
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @OA\Get(
+     *     path="/user/profile",
+     *     tags={"User"},
+     *     operationId="api.backend.user.profile",
+     *     security={{"omni_token":{}}},
+     *     @OA\Response(response=200, description="Request was successfully executed."),
+     *     @OA\Response(response=422, description="Model Validation Error"),
+     *     @OA\Response(response=500, description="Internal Server Error")
+     * )
+     */
+    public function profile(GetUserRequest $request, UserService $userService)
+    {
+        try {
+            //Create payload
+            $payload = collect($request);
+
+            //Fetch User record
+            $data = $userService->getUserDataByOrganization($payload, null, null, true);
 
             //Send http status out
             return $this->response->success(compact('data'));
@@ -208,7 +258,6 @@ class GetUserController extends ApiBaseController
 
             //Set Status
             $response = $service->getUserByStatus($orgHash, $payload, $status);
-
 
             //Output formats
             $outputFormat = ($request->has('output'))?$request['output']:'hash,full_name,phone';

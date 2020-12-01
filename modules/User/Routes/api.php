@@ -61,6 +61,12 @@ $api->version('v1', function (Router $api) {
             // Password Management
             $api->put('changepass', 'Modules\\User\\Http\\Controllers\\Backend\\Auth\\UserAuthController@changePassword');
 
+            // Get User Profile
+            $api->get('profile', 'Modules\\User\\Http\\Controllers\\Backend\\User\\GetUserController@profile');
+        });
+
+        // Organization Endpoints
+        $api->group(['prefix' => 'organization/{ohash}/user'], function(Router $api) {
             // User Management
             $api->get('/', 'Modules\\User\\Http\\Controllers\\Backend\\User\\GetUserController@index');
             $api->get('{hash}', 'Modules\\User\\Http\\Controllers\\Backend\\User\\GetUserController@show');
