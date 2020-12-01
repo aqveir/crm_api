@@ -377,4 +377,116 @@ class UserService extends BaseService
         return $objReturnValue;
     } //Function ends
 
+
+    /**
+     * Fetch Users for an Oraganization
+     * 
+     * @param \string $orgHash
+     * @param \Illuminate\Support\Collection $payload
+     * 
+     * @return mixed
+     */
+    public function getUsersByOrganization(string $orgHash, Collection $payload) {
+        $objReturnValue = null;
+        $orgId = 0; $userId = 0;
+
+        try {
+            //Authenticated User
+            $user = $this->getCurrentUser('backend');
+            if (!empty($user)) {
+                if ($user->hasRoles(config('crmomni.settings.default.role.key_super_admin'))) {
+                    //Get organization data
+                    $organization = $this->getOrganizationByHash($orgHash);
+                    $orgId = $organization['id'];
+                } else {
+                    $orgId = $user['org_id'];
+                } //End if
+                $userId = $user['id'];
+            } else {
+                throw new AccessDeniedHttpException();
+            } //End if
+
+            //Get request data
+            $data = $payload->toArray();
+
+            //Fetch records
+            $response = $this->userRepository
+                ->where('org_id', $orgId)
+                ->get();
+
+            $objReturnValue = $response;
+        } catch(NotFoundHttpException $e) {
+            log::error('UserService:getUsersByOrganization:NotFoundHttpException:' . $e->getMessage());
+            throw new NotFoundHttpException();
+        } catch(BadRequestHttpException $e) {
+            log::error('UserService:getUsersByOrganization:BadRequestHttpException:' . $e->getMessage());
+            throw new BadRequestHttpException($e->getMessage());
+        } catch(Exception $e) {
+            log::error('UserService:getUsersByOrganization:Exception:' . $e->getMessage());
+            throw new HttpException(500);
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends
+
+
+    /**
+     * Fetch Single User Data for an Oraganization OR Current User Profile
+     * 
+     * @param  \Illuminate\Support\Collection $payload
+     * @param  \string $orgHash
+     * @param  \string $userHash
+     * @param  \boolean $isCurrentUser (default false)
+     * 
+     * @return mixed
+     */
+    public function getUserDataByOrganization(Collection $payload, string $orgHash=null, string $userHash=null, bool $isCurrentUser=false) {
+        $objReturnValue = null;
+        $orgId = 0; $userId = 0;
+
+        try {
+            //Authenticated User
+            $user = $this->getCurrentUser('backend');
+            if (!empty($user)) {
+                if ($user->hasRoles(config('crmomni.settings.default.role.key_super_admin'))) {
+                    //Get organization data
+                    $organization = $this->getOrganizationByHash($orgHash);
+                    $orgId = $organization['id'];
+                } else {
+                    $orgId = $user['org_id'];
+                } //End if
+                $userId = $user['id'];
+            } else {
+                throw new AccessDeniedHttpException();
+            } //End if
+
+            //Set the user hash in case the request is for current user
+            if ($isCurrentUser) {
+                $userHash = $user['hash'];
+            } //End if
+
+            //Get request data
+            $data = $payload->toArray();
+
+            //Fetch record
+            $response = $this->userRepository
+                ->where('hash', $userHash)
+                ->where('org_id', $orgId)
+                ->first();
+
+            $objReturnValue = $response;
+        } catch(NotFoundHttpException $e) {
+            log::error('UserService:getUserDataByOrganization:NotFoundHttpException:' . $e->getMessage());
+            throw new NotFoundHttpException();
+        } catch(BadRequestHttpException $e) {
+            log::error('UserService:getUserDataByOrganization:BadRequestHttpException:' . $e->getMessage());
+            throw new BadRequestHttpException($e->getMessage());
+        } catch(Exception $e) {
+            log::error('UserService:getUserDataByOrganization:Exception:' . $e->getMessage());
+            throw new HttpException(500);
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends
+
 } //Class ends
