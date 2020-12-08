@@ -44,7 +44,7 @@ class GetContactController extends ApiBaseController
      * @return \Illuminate\Http\JsonResponse
      *
      * @OA\Post(
-     *      path="/contact",
+     *      path="/contact/fetch",
      *      tags={"Contact"},
      *      operationId="api.backend.contact.all",
      *      security={{"omni_token":{}}},

@@ -63,8 +63,9 @@ $api->version('v1', function (Router $api) {
         // Contact Endpoints
         $api->group(['prefix' => 'contact'], function(Router $api) {
             // Contact Management
-            $api->get('/', 'Modules\\Contact\\Http\\Controllers\\Backend\\Contact\\GetContactController@index');
+            $api->post('fetch', 'Modules\\Contact\\Http\\Controllers\\Backend\\Contact\\GetContactController@index');
             $api->get('{hash}', 'Modules\\Contact\\Http\\Controllers\\Backend\\Contact\\GetContactController@show');
+            $api->post('/', 'Modules\\Contacts\\Http\\Controllers\\Frontend\\Contact\\ContactController@create');
             $api->put('{hash}', 'Modules\\Contacts\\Http\\Controllers\\Frontend\\Contact\\ContactController@update');
 
             //Telephony

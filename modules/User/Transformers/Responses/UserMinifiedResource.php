@@ -45,13 +45,12 @@ class UserMinifiedResource extends ResourceCollection
                     'country',
                     'is_active', 'last_login_at', 'last_updated_at'
                 ]);
-                $response['avatar'] = null;
+                $response['avatar'] = 'assets/media/svg/avatars/001-boy.svg';
 
                 array_push($objReturnValue, $response);
             } //Loop ends
         } catch(Exception $e) {
             $objReturnValue=null;
-            throw $e;
         }
         return $objReturnValue;
     } //Function ends
