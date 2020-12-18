@@ -139,8 +139,13 @@ class ContactService extends BaseService
             //Forced params
             $isForcedFromDB = $this->isForced($payload);
 
+            //Page number and size limit
+            $page = ($payload->has('page'))?$payload['page']:1;
+            $size = ($payload->has('size'))?$payload['size']:10;
+
             //Load Contact Data
-            $objReturnValue = $this->customerrepository->getFullData($user['org_id'], $orgHash, $isForcedFromDB);
+            $objReturnValue = $this->customerrepository
+                ->getFullData($user['org_id'], $orgHash, $isForcedFromDB, $page, $size);
 
         } catch(Exception $e) {
             log::error($e);

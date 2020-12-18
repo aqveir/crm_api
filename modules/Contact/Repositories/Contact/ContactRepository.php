@@ -94,6 +94,8 @@ class ContactRepository extends EloquentRepository implements ContactContract
         try {
             $contact = $this->model
                 ->where('org_id', $orgId)
+                ->skip(($page - 1) * $size)
+                ->take($size)
                 ->get();
 
             $objReturnValue = $contact;
