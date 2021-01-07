@@ -12,6 +12,9 @@ use Modules\Core\Services\JsonResponseService;
 
 use Modules\Core\Models\Organization\Organization;
 
+use Exception;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+
 abstract class ApiBaseController extends CoreController
 {
     //use Helpers;
@@ -65,7 +68,11 @@ abstract class ApiBaseController extends CoreController
         $urlHost = $request->getHost();
 
         $organization = Organization::where('sub_domain', $urlHost)->first();
-        return ($organization)?$organization['hash']:null;
+        if ($organization) {
+            return $organization['hash'];
+        } else {
+            throw new AccessDeniedHttpException();
+        } //End if
     } //Function ends
 
 
