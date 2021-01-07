@@ -10,6 +10,8 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Modules\Boilerplate\Routing\Helpers;
 use Modules\Core\Services\JsonResponseService;
 
+use Modules\Core\Models\Organization\Organization;
+
 abstract class ApiBaseController extends CoreController
 {
     //use Helpers;
@@ -52,7 +54,18 @@ abstract class ApiBaseController extends CoreController
      * Check the key param in request and return the OrgHash value.
      */
     public function getOrgHashInRequest(Request $request) {
-        return $request->has('key')?$request['key']:null;
+        return $request->has('key')?$request['key']:$this->getOrgHashFromHost($request);
+    } //Function ends
+
+
+    /**
+     * Check the URL Host name in request and return the OrgHash value.
+     */
+    public function getOrgHashFromHost(Request $request) {
+        $urlHost = $request->getHost();
+
+        $organization = Organization::where('sub_domain', $urlHost)->first();
+        return ($organization)?$organization['hash']:null;
     } //Function ends
 
 

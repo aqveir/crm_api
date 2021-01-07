@@ -108,7 +108,7 @@ return [
                 //Authenticate user
                 'login' => [
                     'validation_rules' => [
-                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        'key' => 'sometimes|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
                         'username' => 'required|email|min:6|max:40',
                         'password' => 'required|string|min:6'
                     ]

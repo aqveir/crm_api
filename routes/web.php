@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Reset Password Link For CRM Users
+// Reset Password Link For CRM Users
 Route::get('reset_password/{token}/crm', ['as' => 'crmomni.user.password.reset', function(string $token, Request $request) {
 	$backendUri = config('crmomni.settings.backend_uri');
 	return redirect($backendUri.'/reset/'.$token);
