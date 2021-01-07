@@ -17,3 +17,6 @@ yarn-error.log
 # Adding Application level files
 /resources/views/vendor
 /storage/api-docs/api-docs.json
+
+# Ignore folders in public folder
+/public/**
