@@ -2,18 +2,20 @@
 
 return [
 
-    /*
-    |--------------------------------------------------------------------------
-    | Back-end URI prefix
-    |--------------------------------------------------------------------------
-    |
-    | Specifies the URL name used for accessing back-end pages.
-    | For example: backend -> http://localhost/backend
-    |
-    */
-    'backendUri' => env('APPLICATION_BACKEND_URI', 'console'),
-
     'settings' => [
+
+        /*
+        |--------------------------------------------------------------------------
+        | Back-end URI prefix
+        |--------------------------------------------------------------------------
+        |
+        | Specifies the URL name used for accessing back-end pages.
+        | For example: backend -> http://localhost/console
+        |
+        */
+        'backend_uri' => env('APPLICATION_BACKEND_URI', '/console'),
+
+
         /*
         |--------------------------------------------------------------------------
         | Specifies the default date format.
@@ -27,7 +29,38 @@ return [
                 'key_super_admin' => ['super_admin'],
                 'key_organization_owner' => ['organization_owner']
             ]
-        ],        
+        ],  
+
+        
+        /*
+        |--------------------------------------------------------------------------
+        | Specifies the default region for infrastucture setup
+        |--------------------------------------------------------------------------
+        */
+        'regions' => [
+            'crmomni.com' => [
+                'database' => [
+                    'url' => env('DATABASE_URL'),
+                    'host' => '127.0.0.1',
+                    'port' => '3306',
+                    'database' => env('DB_DATABASE', 'eis_omnicrm'),
+                    'username' => env('DB_USERNAME', 'eis_omnicrm_db_user'),
+                    'password' => 'Ellaisys@123',
+                ],
+                'elastic' => [
+
+                ]
+            ],
+            'crmomni.net' => [
+
+            ],
+            'crmomni.co.in' => [
+
+            ],
+
+            'default' => 'crmomni.com'
+        ],
+     
 
         /*
         |--------------------------------------------------------------------------
