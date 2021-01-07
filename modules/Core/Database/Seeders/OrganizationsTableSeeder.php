@@ -43,7 +43,7 @@ class OrganizationsTableSeeder extends Seeder
         return  [
             [
                 'name' => 'EllaiSys',
-                'sub_domain' => 'ellaisys',
+                'sub_domain' => 'ellaisys.crmomni.com',
                 'industry' => 'industry_type_travel',
                 'configurations' => [
                     [
@@ -104,7 +104,7 @@ class OrganizationsTableSeeder extends Seeder
             ],
             [
                 'name' => 'Demo',
-                'sub_domain' => 'demo',
+                'sub_domain' => 'demo.crmomni.com',
                 'industry' => 'industry_type_vanilla',
                 'configurations' => [
                     [
@@ -144,7 +144,7 @@ class OrganizationsTableSeeder extends Seeder
             ],
             [
                 'name' => 'Portiqo',
-                'sub_domain' => 'portiqo',
+                'sub_domain' => 'portiqo.crmomni.com',
                 'industry' => 'industry_type_real_estate',
                 'configurations' => [
                     [
@@ -172,6 +172,67 @@ class OrganizationsTableSeeder extends Seeder
                                 'exotel_subdomain' => '@api.exotel.com',
                                 'exotel_sid' => 'portiqo',
                                 'exotel_api_key' => 'portiqo',
+                                'exotel_api_token' => '9d6555a64e9b1bbf94a3ba3fd3e87363d63d54a1'
+                            ]
+                        )
+                    ],
+                    [
+                        'configuration_id' => 3, 
+                        'value' => json_encode(
+                            [
+                                'api_endpoint' => 'https://app.indiasms.com/sendsms/bulksms.php',
+                                'api_username' => 'api_username',
+                                'api_password ' => 'api_password',
+                                'api_verb' => 'GET',
+                                'sms_type' => 'TEXT',
+                                'sender' => 'your-6char-senderid',
+                                'payload_signature' => [
+                                    'username' => '[api_username]',
+                                    'password' => '[api_password]',
+                                    'type' => '[sms_type]',
+                                    'sender' => '[sender]',
+                                    'mobile' => '[!mobile_number!]',
+                                    'message' => '[!sms_message!]'
+                                ]
+                            ]
+                        )
+                    ],
+                    [
+                        'configuration_id' => 6, 
+                        'value' => '08047494247'
+                    ]
+                ]
+            ],
+            [
+                'name' => 'Kerasi',
+                'sub_domain' => 'kesari.crmomni.com',
+                'industry' => 'industry_type_travel',
+                'configurations' => [
+                    [
+                        'configuration_id' => 1, 
+                        'value' => json_encode(
+                            [
+                                'mail_host' => 'smtp.mailtrap.io',
+                                'mail_port' => 2525,
+                                'mail_username' => '23e3c5cd6c3c51',
+                                'mail_password' => '4d519ca3c4e4c9',
+                                'mail_encrypt' => null,
+                                'mail_from_address' => 'support@ellaisys.com',
+                                'mail_from_name' => 'EllaiSys CRM Omni Account'
+                            ]
+                        )
+                    ],
+                    [
+                        'configuration_id' => 2, 
+                        'value' => 'configuration_telephony_providers_exotel' 
+                    ],
+                    [
+                        'configuration_id' => 3, 
+                        'value' => json_encode(
+                            [
+                                'exotel_subdomain' => '@api.exotel.com',
+                                'exotel_sid' => 'kesari',
+                                'exotel_api_key' => 'kesari',
                                 'exotel_api_token' => '9d6555a64e9b1bbf94a3ba3fd3e87363d63d54a1'
                             ]
                         )

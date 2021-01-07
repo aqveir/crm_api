@@ -56,7 +56,13 @@ abstract class ApiBaseController extends CoreController
     /**
      * Check the key param in request and return the OrgHash value.
      */
-    public function getOrgHashInRequest(Request $request) {
+    public function getOrgHashInRequest(Request $request, bool $isForcedHostCheck=false) {
+
+        //Force the Host check
+        if ($isForcedHostCheck) {
+            return $this->getOrgHashFromHost($request);
+        } //End if
+
         return $request->has('key')?$request['key']:$this->getOrgHashFromHost($request);
     } //Function ends
 
