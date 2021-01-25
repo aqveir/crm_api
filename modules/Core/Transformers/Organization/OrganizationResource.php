@@ -19,6 +19,11 @@ class OrganizationResource extends JsonResource
             'name'              => $this->name,
             'sub_domain'        => $this->sub_domain,
             'logo'              => $this->logo,
+            'website'           => $this->website,
+            'email'             => $this->email,
+            'phone'             => $this->phone,
+            'country'           => $this->country,
+            'industry'          => $this->industry,
             'users'             => $this->users,
             'configurations'    => $this->configurations,
             'last_updated_at'   => $this->last_updated_at

@@ -49,11 +49,11 @@ $api->version('v1', function (Router $api) {
             $api->put('logout', 'Modules\\Contact\\Http\\Controllers\\Frontend\\Contact\\ContactAuthController@logout');
 
             // Password Management
-            $api->put('changepass', 'Modules\\Contact\\Http\\Controllers\\Frontend\\Auth\\ChangePasswordController@changePassword');
+            //$api->put('changepass', 'Modules\\Contact\\Http\\Controllers\\Frontend\\Auth\\ChangePasswordController@changePassword');
 
             // Contact Management
-            $api->get('profile', 'Modules\\Contact\\Http\\Controllers\\Frontend\\Contact\\ContactController@show');
-            $api->put('/', 'Modules\\Contacts\\Http\\Controllers\\Frontend\\Contact\\ContactController@update');
+            //$api->get('profile', 'Modules\\Contact\\Http\\Controllers\\Frontend\\Contact\\ContactController@show');
+            //$api->put('/', 'Modules\\Contacts\\Http\\Controllers\\Frontend\\Contact\\ContactController@update');
         });
     });
 
@@ -65,8 +65,8 @@ $api->version('v1', function (Router $api) {
             // Contact Management
             $api->post('fetch', 'Modules\\Contact\\Http\\Controllers\\Backend\\Contact\\GetContactController@index');
             $api->get('{hash}', 'Modules\\Contact\\Http\\Controllers\\Backend\\Contact\\GetContactController@show');
-            $api->post('/', 'Modules\\Contacts\\Http\\Controllers\\Frontend\\Contact\\ContactController@create');
-            $api->put('{hash}', 'Modules\\Contacts\\Http\\Controllers\\Frontend\\Contact\\ContactController@update');
+            //$api->post('/', 'Modules\\Contacts\\Http\\Controllers\\Frontend\\Contact\\ContactController@create');
+            //$api->put('{hash}', 'Modules\\Contacts\\Http\\Controllers\\Frontend\\Contact\\ContactController@update');
 
             //Telephony
             $api->post('{hash}/call', 'Modules\\Contact\\Http\\Controllers\\Backend\\Contact\\TelephonyController@call');

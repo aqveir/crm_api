@@ -11,6 +11,6 @@
 |
 */
 
-Route::prefix('note')->group(function() {
-    Route::get('/', 'NoteController@index');
-});
+// Route::prefix('note')->group(function() {
+//     Route::get('/', 'NoteController@index');
+// });

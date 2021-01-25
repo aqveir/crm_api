@@ -126,14 +126,14 @@ class NoteController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function update(UpdateNoteRequest $request, NoteService $service, $id)
+    public function update(UpdateNoteRequest $request, NoteService $service, Note $note)
     {
         try {
             //Create payload
             $payload = collect($request);
 
             //Update note
-            $data = $service->update($payload, $id);
+            $data = $service->update($payload, $note['id']);
 
             //Send http status out
             return $this->response->success(compact('data'));

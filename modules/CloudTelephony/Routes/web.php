@@ -11,6 +11,6 @@
 |
 */
 
-Route::prefix('cloudtelephony')->group(function() {
-    Route::get('/', 'CloudTelephonyController@index');
-});
+// Route::prefix('cloudtelephony')->group(function() {
+//     Route::get('/', 'CloudTelephonyController@index');
+// });

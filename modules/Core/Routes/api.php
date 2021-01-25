@@ -14,40 +14,49 @@ use Modules\Boilerplate\Routing\Router;
 */
 $api = app(Router::class);
 
-$api->version('v1', function (Router $api) {
+$api->version('v1', [
+        'prefix' => 'api',
+        'middleware' => ['api'],
+        'namespace' => 'Modules\Core\Http\Controllers',
+        'domain' => config('crmomni.settings.domain')
+    ], function (Router $api) {
 
     // Unauthenticated OR Guest endpoints
     $api->group(['middleware' => ['guest']], function(Router $api) {
         // Organization Endpoint
         $api->group(['prefix' => 'organization'], function(Router $api) {
-            // Create
-            $api->post('/', 'Modules\\Core\\Http\\Controllers\\Backend\\Organization\\SetOrganizationController@create');
-
-            $api->get('/', 'Modules\\Core\\Http\\Controllers\\Backend\\Organization\\GetOrganizationController@index');
-            $api->get('{hash}', 'Modules\\Core\\Http\\Controllers\\Backend\\Organization\\GetOrganizationController@data');
         });
     });
 
     // Authenticated Endpoints for Backend
-    $api->group(['middleware' => ['auth:backend']], function(Router $api) { 
+    $api->group(['middleware' => ['auth:backend']], function(Router $api) {
+        // Organization Endpoint
+        $api->group(['prefix' => 'organization'], function(Router $api) {
+            $api->post('/', 'Backend\\Organization\\OrganizationController@create');
+            $api->get('{organization}', 'Backend\\Organization\\OrganizationController@update');
+
+            $api->get('/', 'Backend\\Organization\\OrganizationController@index');
+            $api->get('{organization}', 'Backend\\Organization\\OrganizationController@show');
+        });
+
         // Lookup Endpoint
         $api->group(['prefix' => 'lookup'], function(Router $api) {
-            $api->get('/', 'Modules\\Core\\Http\\Controllers\\Backend\\Lookup\\LookupController@index');
-            $api->get('{key}', 'Modules\\Core\\Http\\Controllers\\Backend\\Lookup\\LookupController@show');
+            $api->get('/', 'Backend\\Lookup\\LookupController@index');
+            $api->get('{key}', 'Backend\\Lookup\\LookupController@show');
 
-            $api->post('/', 'Modules\\Core\\Http\\Controllers\\Backend\\Lookup\\LookupController@create');
-            $api->put('{key}', 'Modules\\Core\\Http\\Controllers\\Backend\\Lookup\\LookupController@update');
-            $api->delete('{key}', 'Modules\\Core\\Http\\Controllers\\Backend\\Lookup\\LookupController@destroy');
+            $api->post('/', 'Backend\\Lookup\\LookupController@create');
+            $api->put('{key}', 'Backend\\Lookup\\LookupController@update');
+            $api->delete('{key}', 'Backend\\Lookup\\LookupController@destroy');
         });
 
         // Role Endpoint
         $api->group(['prefix' => 'role'], function(Router $api) {
-            $api->get('/', 'Modules\\Core\\Http\\Controllers\\Backend\\Role\\RoleController@index');
-            $api->get('{key}', 'Modules\\Core\\Http\\Controllers\\Backend\\Role\\RoleController@show');
+            $api->get('/', 'Backend\\Role\\RoleController@index');
+            $api->get('{key}', 'Backend\\Role\\RoleController@show');
 
-            $api->post('/', 'Modules\\Core\\Http\\Controllers\\Backend\\Role\\RoleController@create');
-            $api->put('{key}', 'Modules\\Core\\Http\\Controllers\\Backend\\Role\\RoleController@update');
-            $api->delete('{key}', 'Modules\\Core\\Http\\Controllers\\Backend\\Role\\RoleController@destroy');
+            $api->post('/', 'Backend\\Role\\RoleController@create');
+            $api->put('{key}', 'Backend\\Role\\RoleController@update');
+            $api->delete('{key}', 'Backend\\Role\\RoleController@destroy');
         });
     });
 });

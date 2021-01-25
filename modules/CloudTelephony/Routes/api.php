@@ -26,7 +26,7 @@ $api->version('v1', function (Router $api) {
             $api->any('call/passthru','Modules\\CloudTelephony\\Http\\Controllers\\Exotel\\VoiceController@passthru');
 
             //Exotels SMS
-            $api->any('sms/callback','Modules\\CloudTelephony\\Http\\Controllers\\Exotel\\SmsController@callback');
+            //$api->any('sms/callback','Modules\\CloudTelephony\\Http\\Controllers\\Exotel\\SmsController@callback');
 
             //TODO: Delete this
             $api->any('call/customer','Modules\\CloudTelephony\\Http\\Controllers\\Exotel\\VoiceController@test');

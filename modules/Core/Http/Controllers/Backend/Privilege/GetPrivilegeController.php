@@ -25,7 +25,7 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 class GetPrivilegeController extends ApiBaseController
 {
     /**
-     * Create a new GetOrganizationController instance.
+     * Create a Controller instance.
      *
      * @return void
      */

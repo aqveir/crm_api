@@ -70,7 +70,7 @@ class UserAuthController extends ApiBaseController
     {
         try {
             //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request, true);
+            $orgHash = $this->getOrgHashInRequest($request);
 
             //Get IP Address
             $ipAddress = $this->getIpAddressInRequest($request);

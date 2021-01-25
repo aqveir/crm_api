@@ -12,7 +12,7 @@
 */
 
 Route::prefix('user')->group(function() {
-    Route::get('/', 'UserController@index');
+    //Route::get('/', 'UserController@index');
 
     //Verify New User in Existing Organization
     Route::get('verify/{token}', 'Backend\\User\\SetUserController@verify');
