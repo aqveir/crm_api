@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Core\Http\Controllers\Backend\Organization;
+namespace Modules\Core\Http\Controllers\Backend;
 
 use Config;
 use Illuminate\Http\Request;
@@ -109,6 +109,9 @@ class OrganizationController extends ApiBaseController
     public function show(Request $request, OrganizationService $organizationService, string $account, Organization $organization)
     {
         try {
+            //Get Org Hash 
+            $orgHash = $this->getOrgHashInRequest($request);
+
             //Get IP Address
             $ipAddress = $this->getIpAddressInRequest($request);
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Core\Http\Controllers\Backend\Privilege;
+namespace Modules\Core\Http\Controllers\Backend;
 
 use Config;
 use Illuminate\Http\Request;

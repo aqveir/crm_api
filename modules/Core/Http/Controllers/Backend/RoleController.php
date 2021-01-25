@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Core\Http\Controllers\Backend\Lookup;
+namespace Modules\Core\Http\Controllers\Backend;
 
 use Config;
 use Illuminate\Http\Request;
@@ -8,11 +8,11 @@ use Illuminate\Support\Facades\Log;
 
 use Modules\Core\Http\Controllers\ApiBaseController;
 
-use Modules\Core\Http\Requests\Backend\Lookup\FetchLookupRequest;
-use Modules\Core\Http\Requests\Backend\Lookup\CreateLookupRequest;
-use Modules\Core\Http\Requests\Backend\Lookup\UpdateLookupRequest;
+use Modules\Core\Http\Requests\Backend\Role\FetchRoleRequest;
+use Modules\Core\Http\Requests\Backend\Role\CreateRoleRequest;
+use Modules\Core\Http\Requests\Backend\Role\UpdateRoleRequest;
 
-use Modules\Core\Services\Lookup\LookupService;
+use Modules\Core\Services\Role\RoleService;
 
 use Symfony\Component\HttpFoundation\Response;
 
@@ -25,9 +25,9 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 /**
- * Controller for Lookup Data
+ * Controller for Role Data
  */
-class LookupController extends ApiBaseController
+class RoleController extends ApiBaseController
 {
 
     /**
@@ -41,17 +41,17 @@ class LookupController extends ApiBaseController
 
 
     /**
-     * Get All Organizations
+     * Get All Roles
      * 
-     * @param \Modules\Core\Http\Requests\Backend\Lookup\FetchLookupRequest $request
-     * @param \Modules\Core\Services\Lookup\LookupService $service
+     * @param \Modules\Core\Http\Requests\Backend\Role\FetchRoleRequest $request
+     * @param \Modules\Core\Services\Role\RoleService $service
      *
      * @return \Illuminate\Http\JsonResponse
      *
      * @OA\Get(
-     *     path="/lookup",
-     *     tags={"Lookup"},
-     *     operationId="api.lookup.index",
+     *     path="/role",
+     *     tags={"Role"},
+     *     operationId="api.role.index",
      *     security={{"omni_token":{}}},
      *     @OA\Parameter(ref="#/components/parameters/organization_key"),
      *     @OA\Response(response=200, description="Request was successfully executed."),
@@ -59,7 +59,7 @@ class LookupController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function index(FetchLookupRequest $request, LookupService $service)
+    public function index(FetchRoleRequest $request, RoleService $service)
     {
         try {
             //Get Org Hash 
@@ -68,7 +68,7 @@ class LookupController extends ApiBaseController
             //Create payload
             $payload = collect($request);
 
-            //Fetch all lookup data
+            //Fetch all role data
             $data = $service->index($orgHash, $payload);
 
             //Send http status out
@@ -76,6 +76,8 @@ class LookupController extends ApiBaseController
             
         } catch(AccessDeniedHttpException $e) {
             return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
+        } catch(NotFoundHttpException $e) {
+            return $this->response->fail([], Response::HTTP_NOT_FOUND);
         } catch(Exception $e) {
             return $this->response->fail([], Response::HTTP_BAD_REQUEST);
         }
@@ -83,18 +85,18 @@ class LookupController extends ApiBaseController
 
 
     /**
-     * Get Lookup Data by Key
+     * Get Role Data by Key
      * 
-     * @param \Modules\Core\Http\Requests\Backend\Lookup\FetchLookupRequest $request
-     * @param \Modules\Core\Services\Lookup\LookupService $service
+     * @param \Modules\Core\Http\Requests\Backend\Role\FetchRoleRequest $request
+     * @param \Modules\Core\Services\Role\RoleService $service
      * @param \string $key
      * 
      * @return \Illuminate\Http\JsonResponse
      *
      * @OA\Get(
-     *     path="/lookup/{key}",
-     *     tags={"Lookup"},
-     *     operationId="api.lookup.show",
+     *     path="/role/{key}",
+     *     tags={"Role"},
+     *     operationId="api.role.show",
      *     security={{"omni_token":{}}},
      *     @OA\Parameter(ref="#/components/parameters/organization_key"),
      *     @OA\Parameter(name="key", in="path", description="Key", required=true, @OA\Schema(type="string")),
@@ -103,7 +105,7 @@ class LookupController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function show(FetchLookupRequest $request, LookupService $service, string $key)
+    public function show(FetchRoleRequest $request, RoleService $service, string $key)
     {
         try {
             //Get Org Hash 
@@ -112,7 +114,7 @@ class LookupController extends ApiBaseController
             //Create payload
             $payload = collect($request);
 
-            //Fetch all lookup data
+            //Fetch all role data
             $data = $service->show($orgHash, $payload, $key);
 
             //Send http status out
@@ -127,18 +129,18 @@ class LookupController extends ApiBaseController
 
 
     /**
-     * Create Lookup Data
+     * Create Role Data
      * 
-     * @param \Modules\Core\Http\Requests\Backend\Lookup\CreateLookupRequest $request
-     * @param \Modules\Core\Services\Lookup\LookupService $service
+     * @param \Modules\Core\Http\Requests\Backend\Role\CreateRoleRequest $request
+     * @param \Modules\Core\Services\Role\RoleService $service
      * @param \string $key
      * 
      * @return \Illuminate\Http\JsonResponse
      *
      * @OA\Post(
-     *     path="/lookup",
-     *     tags={"Lookup"},
-     *     operationId="api.lookup.create",
+     *     path="/role",
+     *     tags={"Role"},
+     *     operationId="api.role.create",
      *     security={{"omni_token":{}}},
      *     @OA\Parameter(ref="#/components/parameters/organization_key"),
      *     @OA\Response(response=200, description="Request was successfully executed."),
@@ -146,7 +148,7 @@ class LookupController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function create(CreateLookupRequest $request, LookupService $service)
+    public function create(CreateRoleRequest $request, RoleService $service)
     {
         try {
             //Get Org Hash 
@@ -155,8 +157,8 @@ class LookupController extends ApiBaseController
             //Create payload
             $payload = collect($request);
 
-            //Fetch all lookup data
-            $data = $service->show($orgHash, $payload, $key);
+            //Fetch all role data
+            $data = $service->create($payload, 0, $orgHash);
 
             //Send http status out
             return $this->response->success(compact('data'));
@@ -170,18 +172,18 @@ class LookupController extends ApiBaseController
 
 
     /**
-     * Update Lookup Data by Key
+     * Update Role Data by Key
      * 
-     * @param \Modules\Core\Http\Requests\Backend\Lookup\UpdateLookupRequest $request
-     * @param \Modules\Core\Services\Lookup\LookupService $service
+     * @param \Modules\Core\Http\Requests\Backend\Role\UpdateRoleRequest $request
+     * @param \Modules\Core\Services\Role\RoleService $service
      * @param \string $key
      * 
      * @return \Illuminate\Http\JsonResponse
      *
      * @OA\Put(
-     *     path="/lookup/{key}",
-     *     tags={"Lookup"},
-     *     operationId="api.lookup.update",
+     *     path="/role/{key}",
+     *     tags={"Role"},
+     *     operationId="api.role.update",
      *     security={{"omni_token":{}}},
      *     @OA\Parameter(ref="#/components/parameters/organization_key"),
      *     @OA\Parameter(name="key", in="path", description="Key", required=true, @OA\Schema(type="string")),
@@ -190,7 +192,7 @@ class LookupController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function update(UpdateLookupRequest $request, LookupService $service, string $key)
+    public function update(UpdateRoleRequest $request, RoleService $service, string $key)
     {
         try {
             //Get Org Hash 
@@ -199,8 +201,8 @@ class LookupController extends ApiBaseController
             //Create payload
             $payload = collect($request);
 
-            //Fetch all lookup data
-            $data = $service->show($orgHash, $payload, $key);
+            //Fetch all role data
+            $data = $service->update($orgHash, $payload, $key);
 
             //Send http status out
             return $this->response->success(compact('data'));
@@ -214,18 +216,18 @@ class LookupController extends ApiBaseController
 
     
     /**
-     * Delete Lookup Data by Key
+     * Delete Role Data by Key
      * 
-     * @param \Modules\Core\Http\Requests\Backend\Lookup\FetchLookupRequest $request
-     * @param \Modules\Core\Services\Lookup\LookupService $service
+     * @param \Modules\Core\Http\Requests\Backend\Role\FetchRoleRequest $request
+     * @param \Modules\Core\Services\Role\RoleService $service
      * @param \string $key
      * 
      * @return \Illuminate\Http\JsonResponse
      *
      * @OA\Delete(
-     *     path="/lookup/{key}",
-     *     tags={"Lookup"},
-     *     operationId="api.lookup.delete",
+     *     path="/role/{key}",
+     *     tags={"Role"},
+     *     operationId="api.role.delete",
      *     security={{"omni_token":{}}},
      *     @OA\Parameter(ref="#/components/parameters/organization_key"),
      *     @OA\Parameter(name="key", in="path", description="Key", required=true, @OA\Schema(type="string")),
@@ -234,7 +236,7 @@ class LookupController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function delete(FetchLookupRequest $request, LookupService $service, string $key)
+    public function delete(FetchRoleRequest $request, RoleService $service, string $key)
     {
         try {
             //Get Org Hash 
@@ -243,7 +245,7 @@ class LookupController extends ApiBaseController
             //Create payload
             $payload = collect($request);
 
-            //Fetch all lookup data
+            //Fetch all role data
             $data = $service->show($orgHash, $payload, $key);
 
             //Send http status out
@@ -255,4 +257,5 @@ class LookupController extends ApiBaseController
             return $this->response->fail([], Response::HTTP_BAD_REQUEST);
         }
     } //Function ends
+
 } //Class ends

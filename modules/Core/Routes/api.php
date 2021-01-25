@@ -32,31 +32,31 @@ $api->version('v1', [
     $api->group(['middleware' => ['auth:backend']], function(Router $api) {
         // Organization Endpoint
         $api->group(['prefix' => 'organization'], function(Router $api) {
-            $api->post('/', 'Backend\\Organization\\OrganizationController@create');
-            $api->get('{organization}', 'Backend\\Organization\\OrganizationController@update');
+            $api->post('/', 'Backend\\OrganizationController@create');
+            $api->get('{organization}', 'Backend\\OrganizationController@update');
 
-            $api->get('/', 'Backend\\Organization\\OrganizationController@index');
-            $api->get('{organization}', 'Backend\\Organization\\OrganizationController@show');
+            $api->get('/', 'Backend\\OrganizationController@index');
+            $api->get('{organization}', 'Backend\\OrganizationController@show');
         });
 
         // Lookup Endpoint
         $api->group(['prefix' => 'lookup'], function(Router $api) {
-            $api->get('/', 'Backend\\Lookup\\LookupController@index');
-            $api->get('{key}', 'Backend\\Lookup\\LookupController@show');
+            $api->get('/', 'Backend\\LookupController@index');
+            $api->get('{key}', 'Backend\\LookupController@show');
 
-            $api->post('/', 'Backend\\Lookup\\LookupController@create');
-            $api->put('{key}', 'Backend\\Lookup\\LookupController@update');
-            $api->delete('{key}', 'Backend\\Lookup\\LookupController@destroy');
+            $api->post('/', 'Backend\\LookupController@create');
+            $api->put('{key}', 'Backend\\LookupController@update');
+            $api->delete('{key}', 'Backend\\LookupController@destroy');
         });
 
         // Role Endpoint
         $api->group(['prefix' => 'role'], function(Router $api) {
-            $api->get('/', 'Backend\\Role\\RoleController@index');
-            $api->get('{key}', 'Backend\\Role\\RoleController@show');
+            $api->get('/', 'Backend\\RoleController@index');
+            $api->get('{key}', 'Backend\\RoleController@show');
 
-            $api->post('/', 'Backend\\Role\\RoleController@create');
-            $api->put('{key}', 'Backend\\Role\\RoleController@update');
-            $api->delete('{key}', 'Backend\\Role\\RoleController@destroy');
+            $api->post('/', 'Backend\\RoleController@create');
+            $api->put('{key}', 'Backend\\RoleController@update');
+            $api->delete('{key}', 'Backend\\RoleController@destroy');
         });
     });
 });
