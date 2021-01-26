@@ -2,7 +2,10 @@
 
 namespace Modules\Core\Providers;
 
+use Modules\Core\Models\Role\Role;
 use Modules\Core\Models\Organization\Organization;
+
+use Modules\Core\Policies\RolePolicy;
 use Modules\Core\Policies\OrganizationPolicy;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -16,6 +19,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
+        Role::class => RolePolicy::class,
         Organization::class => OrganizationPolicy::class
     ];
 

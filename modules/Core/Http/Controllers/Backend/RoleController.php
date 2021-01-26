@@ -6,6 +6,8 @@ use Config;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
+use Modules\Core\Models\Role\Role;
+
 use Modules\Core\Http\Controllers\ApiBaseController;
 
 use Modules\Core\Http\Requests\Backend\Role\FetchRoleRequest;
@@ -37,6 +39,7 @@ class RoleController extends ApiBaseController
     public function __construct()
     {
         parent::__construct();
+        $this->authorizeResource(Role::class, 'role');
     }
 
 

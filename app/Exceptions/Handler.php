@@ -5,6 +5,8 @@ namespace App\Exceptions;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+
 class Handler extends ExceptionHandler
 {
     /**
@@ -36,6 +38,11 @@ class Handler extends ExceptionHandler
      */
     public function report(Throwable $exception)
     {
+        //Handle policy errors
+        if ($exception instanceof \Illuminate\Auth\Access\AuthorizationException) {
+            throw new AccessDeniedHttpException();
+        } //End if
+        
         parent::report($exception);
     }
 

@@ -29,13 +29,39 @@ trait UserAction
 		$returnValue = false;
         try {
             if ($roles) {
-                //Check Roles with active privileges
+                //Get User Roles
                 $user_roles = collect($this->roles()->get());
 
                 //Find in collection
                 $exists = false;
                 foreach ($roles as $key=>$roleName) {
                     $boolData = $user_roles->contains('key', $roleName);
+                    $exists = (($key>0)?$exists:true) && $boolData;
+                    $returnValue = ($isStrict)?($exists):($returnValue || $boolData);                  
+                } //Loop ends
+            } //End if
+        } catch (Exception $e) {
+			$returnValue = false;
+		} //Try-Catch ends
+		
+		return $returnValue;
+    } //Function End
+    
+
+	/**
+	 * Check if the User has the given privileges
+	 */
+    public function hasPrivileges(Array $privileges, bool $isStrict=false) {
+		$returnValue = false;
+        try {
+            if ($privileges) {
+                //Get active privileges
+                $user_privileges = collect($this->getActivePrivileges());
+
+                //Find in collection
+                $exists = false;
+                foreach ($privileges as $key=>$privilegeName) {
+                    $boolData = $user_privileges->contains('key', $privilegeName);
                     $exists = (($key>0)?$exists:true) && $boolData;
                     $returnValue = ($isStrict)?($exists):($returnValue || $boolData);                  
                 } //Loop ends

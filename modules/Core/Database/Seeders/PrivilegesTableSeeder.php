@@ -25,12 +25,38 @@ class PrivilegesTableSeeder extends Seeder
             ],
             [
                 'key' => 'add_organization_data',
-                'display_value' => 'Add Organization Data',
+                'display_value' => 'Add Organization',
                 'is_secure' => true
             ],
             [
                 'key' => 'edit_organization_data',
                 'display_value' => 'Edit/Amend Organization Data',
+            ],
+            [
+                'key' => 'delete_organization_data',
+                'display_value' => 'Delete Organization',
+                'is_secure' => true
+            ],
+
+            [
+                'key' => 'list_all_roles',
+                'display_value' => 'Show All Organization Roles',
+            ],
+            [
+                'key' => 'read_role_data',
+                'display_value' => 'Read/View Role Data',
+            ],
+            [
+                'key' => 'add_role_data',
+                'display_value' => 'Add Role',
+            ],
+            [
+                'key' => 'edit_role_data',
+                'display_value' => 'Edit/Amend Role Data',
+            ],
+            [
+                'key' => 'delete_role_data',
+                'display_value' => 'Delete Role',
             ],
             
             [
