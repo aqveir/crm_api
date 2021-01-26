@@ -50,10 +50,10 @@ $api->version('v1', function (Router $api) {
 
             // User Availability Status
             $api->group(['prefix' => 'status'], function(Router $api) {
-                $api->get('/', 'Modules\\User\\Http\\Controllers\\Backend\\User\\GetUserAvailabilityController@view');
-                $api->post('{key}', 'Modules\\User\\Http\\Controllers\\Backend\\User\\SetUserAvailabilityController@update');
+                $api->get('/', 'Modules\\User\\Http\\Controllers\\Backend\\User\\UserAvailabilityController@view');
+                $api->post('{key}', 'Modules\\User\\Http\\Controllers\\Backend\\User\\UserAvailabilityController@update');
             });
-            $api->get('{hash}/status', 'Modules\\User\\Http\\Controllers\\Backend\\User\\GetUserAvailabilityController@show');
+            $api->get('{hash}/status', 'Modules\\User\\Http\\Controllers\\Backend\\User\\UserAvailabilityController@show');
 
             // Logout
             $api->put('logout', 'Modules\\User\\Http\\Controllers\\Backend\\Auth\\UserAuthController@logout');
