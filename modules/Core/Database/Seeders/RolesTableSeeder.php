@@ -19,8 +19,13 @@ class RolesTableSeeder extends Seeder
                 'key' => 'super_admin',
                 'display_value' => 'Super Administrator',
                 'privileges' => [
-                    'list_all_organizations', 'read_organization_data', 
-                    'edit_organization_data'
+                    //Manage Organization
+                    'list_all_organizations', 'read_organization_data',
+                    'add_organization', 'edit_organization',
+                    'delete_organization',
+
+                    //Manage Roles
+                    'list_all_roles'
                 ]
             ],
             [
@@ -39,12 +44,12 @@ class RolesTableSeeder extends Seeder
                     'add_new_catalogue_data', 'edit_catalogue_data',
 
                     //Manage Customer
-                    'list_all_organization_customers', 'add_new_customer_data',
-                    'edit_customer_data', 'delete_customer_data', 
+                    'list_all_organization_customers', 'add_customer',
+                    'edit_customer', 'delete_customer', 
                     'show_customer_unmasked_data',
 
                     //Manage Notes
-                    'add_new_note', 'delete_note',
+                    'add_note', 'delete_note',
 
                     //Manage Documents
                     'add_new_document', 'delete_document'
@@ -63,7 +68,7 @@ class RolesTableSeeder extends Seeder
                     'show_customer_masked_data',
 
                     //Manage Notes
-                    'add_new_note', 'delete_note',
+                    'add_note', 'delete_note',
 
                     //Manage Documents
                     'add_new_document', 'delete_document'
@@ -79,7 +84,7 @@ class RolesTableSeeder extends Seeder
                     'show_customer_masked_data',
 
                     //Manage Notes
-                    'add_new_note',
+                    'add_note',
 
                     //Manage Documents
                     'add_new_document',

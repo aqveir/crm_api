@@ -17,7 +17,7 @@ class OrganizationMiniResource extends JsonResource
         return [
             'hash' => $this->hash,
             'name' => $this->name,
-            'sub_domain' => $this->sub_domain,
+            'subdomain' => $this->subdomain,
             'logo' => $this->logo,
             'users_count' => $this->users_count,
             'last_updated_at' => $this->last_updated_at

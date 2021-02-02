@@ -60,7 +60,7 @@ class OrganizationController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function index(Request $request, OrganizationService $organizationService, string $account)
+    public function index(Request $request, OrganizationService $organizationService, string $subdomain)
     {
         try {
             //Get Org Hash 
@@ -106,7 +106,7 @@ class OrganizationController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function show(Request $request, OrganizationService $organizationService, string $account, Organization $organization)
+    public function show(Request $request, OrganizationService $organizationService, string $subdomain, Organization $organization)
     {
         try {
             //Get Org Hash 
@@ -177,7 +177,7 @@ class OrganizationController extends ApiBaseController
     } //Function ends
 
 
-    public function update(UpdateOrganizationRequest $request, OrganizationService $organizationService, string $account, Organization $organization)
+    public function update(UpdateOrganizationRequest $request, OrganizationService $organizationService, string $subdomain, Organization $organization)
     {
         $objReturnValue=null;
         try {

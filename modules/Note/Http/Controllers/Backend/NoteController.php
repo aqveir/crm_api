@@ -63,7 +63,7 @@ class NoteController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function create(CreateNoteRequest $request, NoteService $service, string $account)
+    public function create(CreateNoteRequest $request, NoteService $service, string $subdomain)
     {
         try {
             //Create payload
@@ -104,7 +104,7 @@ class NoteController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function update(UpdateNoteRequest $request, NoteService $service, string $account, Note $note)
+    public function update(UpdateNoteRequest $request, NoteService $service, string $subdomain, Note $note)
     {
         try {
             //Create payload
@@ -143,7 +143,7 @@ class NoteController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function destroy(DeleteNoteRequest $request, NoteService $service, string $account, Note $note)
+    public function destroy(DeleteNoteRequest $request, NoteService $service, string $subdomain, Note $note)
     {
         try {
             //Create payload

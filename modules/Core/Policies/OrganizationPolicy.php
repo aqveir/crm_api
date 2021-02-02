@@ -83,7 +83,7 @@ class OrganizationPolicy
      */
     public function create(User $user)
     {
-        if ($user->hasPrivileges(['add_organization_data'])) {
+        if ($user->hasPrivileges(['add_organization'])) {
             return true;
         } //End if
     } //Function ends
@@ -101,7 +101,7 @@ class OrganizationPolicy
     {
         if ($user->hasRoles(['super_admin'])) {
             return true;
-        } elseif ($user->hasRoles(['organization_admin']) || $user->hasPrivileges(['edit_organization_data'])) {
+        } elseif ($user->hasRoles(['organization_admin']) || $user->hasPrivileges(['edit_organization'])) {
             return $user->organization['id'] == $organization['id'];
         } else {
             return false;
@@ -119,7 +119,7 @@ class OrganizationPolicy
      */
     public function delete(User $user, Organization $organization)
     {
-        if ($user->hasRoles(['delete_organization_data'])) {
+        if ($user->hasRoles(['delete_organization'])) {
             return true;
         } //End if
     } //Function ends

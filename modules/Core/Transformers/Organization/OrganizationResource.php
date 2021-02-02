@@ -17,7 +17,7 @@ class OrganizationResource extends JsonResource
         return [
             'hash'              => $this->hash,
             'name'              => $this->name,
-            'sub_domain'        => $this->sub_domain,
+            'subdomain'        => $this->subdomain,
             'logo'              => $this->logo,
             'website'           => $this->website,
             'email'             => $this->email,

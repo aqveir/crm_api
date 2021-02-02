@@ -21,7 +21,7 @@ class OrganizationsTableSeeder extends Seeder
 
             $response = factory(\Modules\Core\Models\Organization\Organization::class)->create([
                 'name' => $organization['name'],
-                'sub_domain' => $organization['sub_domain'],
+                'subdomain' => $organization['subdomain'],
                 'industry_id' => $industry['id'],
             ]);
             
@@ -43,7 +43,7 @@ class OrganizationsTableSeeder extends Seeder
         return  [
             [
                 'name' => 'EllaiSys',
-                'sub_domain' => 'ellaisys.crmomni.com',
+                'subdomain' => 'ellaisys',
                 'industry' => 'industry_type_travel',
                 'configurations' => [
                     [
@@ -104,7 +104,7 @@ class OrganizationsTableSeeder extends Seeder
             ],
             [
                 'name' => 'Demo',
-                'sub_domain' => 'demo.crmomni.com',
+                'subdomain' => 'demo',
                 'industry' => 'industry_type_vanilla',
                 'configurations' => [
                     [
@@ -144,7 +144,7 @@ class OrganizationsTableSeeder extends Seeder
             ],
             [
                 'name' => 'Portiqo',
-                'sub_domain' => 'portiqo.crmomni.com',
+                'subdomain' => 'portiqo',
                 'industry' => 'industry_type_real_estate',
                 'configurations' => [
                     [
@@ -205,7 +205,7 @@ class OrganizationsTableSeeder extends Seeder
             ],
             [
                 'name' => 'Kerasi',
-                'sub_domain' => 'kesari.crmomni.com',
+                'subdomain' => 'kesari',
                 'industry' => 'industry_type_travel',
                 'configurations' => [
                     [

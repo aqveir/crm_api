@@ -13,7 +13,7 @@ return [
         | For example: backend -> http://localhost/console
         |
         */
-        'domain' => env('APPLICATION_DOAMIN', '{account}.crmomni.com'),
+        'domain' => env('APPLICATION_DOAMIN', '{subdomain}.crmomni.com'),
 
         /*
         |--------------------------------------------------------------------------

@@ -83,7 +83,7 @@ class RolePolicy
      */
     public function create(User $user)
     {
-        if ($user->hasPrivileges(['add_organization_data'])) {
+        if ($user->hasPrivileges(['add_organization'])) {
             return true;
         } //End if
     } //Function ends
@@ -101,7 +101,7 @@ class RolePolicy
     {
         if ($user->hasRoles(['super_admin'])) {
             return true;
-        } elseif ($user->hasRoles(['organization_admin']) || $user->hasPrivileges(['edit_organization_data'])) {
+        } elseif ($user->hasRoles(['organization_admin']) || $user->hasPrivileges(['edit_organization'])) {
             return $user->organization['id'] == $role['id'];
         } else {
             return false;
@@ -119,7 +119,7 @@ class RolePolicy
      */
     public function delete(User $user, Role $role)
     {
-        if ($user->hasRoles(['delete_organization_data'])) {
+        if ($user->hasRoles(['delete_organization'])) {
             return true;
         } //End if
     } //Function ends

@@ -18,7 +18,8 @@ class CreateOrganizationsTable extends Migration
             $table->string('hash')->nullable();
 
             $table->string('name');
-            $table->string('sub_domain');
+            $table->string('subdomain');
+            $table->string('custom_domain')->nullable();
 
             //Organization Attributes
             $table->string('logo')->nullable();

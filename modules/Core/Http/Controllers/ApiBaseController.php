@@ -73,7 +73,7 @@ abstract class ApiBaseController extends CoreController
     public function getOrgHashFromHost(Request $request) {
         $urlHost = $request->getHost();
 
-        $organization = Organization::where('sub_domain', $urlHost)->first();
+        $organization = Organization::where('subdomain', $urlHost)->first();
         if ($organization) {
             return $organization['hash'];
         } else {

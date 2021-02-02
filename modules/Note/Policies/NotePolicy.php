@@ -48,7 +48,7 @@ class NotePolicy
      */
     public function create(User $user)
     {
-        if ($user->hasPrivileges(['add_new_note'])) {
+        if ($user->hasPrivileges(['add_note'])) {
             return true;
         } //End if
     } //Function ends

@@ -142,7 +142,7 @@ class OrganizationService extends BaseService
             $industry = $this->lookupRepository->getLookUpByKey(0, $keyIndustry);
 
             //Build Data
-            $data = $request->only('name', 'sub_domain', 'email', 'phone')->toArray();
+            $data = $request->only('name', 'subdomain', 'email', 'phone')->toArray();
             $data['industry_id'] = $industry['id'];
 
             //Create organization
