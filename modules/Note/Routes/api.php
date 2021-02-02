@@ -14,18 +14,23 @@ use Modules\Boilerplate\Routing\Router;
 */
 $api = app(Router::class);
 
-$api->version('v1', function (Router $api) {
+$api->version('v1', [
+        'prefix' => 'api',
+        'middleware' => ['api'],
+        'namespace' => 'Modules\Note\Http\Controllers',
+        'domain' => config('crmomni.settings.domain')
+    ], function (Router $api) {
 
     // Authenticated Endpoints for Backend
     $api->group(['middleware' => ['auth:backend']], function(Router $api) {
 
         // Note Endpoints
         $api->group(['prefix' => 'note'], function(Router $api) {
-            $api->get('/', 'Modules\\Note\\Http\\Controllers\\Backend\\NoteController@index');
+            $api->get('/', 'Backend\\NoteController@index');
             
-            $api->post('/', 'Modules\\Note\\Http\\Controllers\\Backend\\NoteController@create');
-            $api->put('{id}', 'Modules\\Note\\Http\\Controllers\\Backend\\NoteController@update');
-            $api->delete('{id}', 'Modules\\Note\\Http\\Controllers\\Backend\\NoteController@destroy');
+            $api->post('/', 'Backend\\NoteController@create');
+            $api->put('{note}', 'Backend\\NoteController@update');
+            $api->delete('{note}', 'Backend\\NoteController@destroy');
         });
     });
 });

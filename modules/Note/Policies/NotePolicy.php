@@ -24,7 +24,7 @@ class NotePolicy
 
 
     /**
-     * Determine if the given note can be created by the user.
+     * Determine if the given action can be created by the user.
      *
      * @param  \Modules\User\Models\User\User  $user
      * @param  \Modules\Note\Models\Note  $note
@@ -33,28 +33,29 @@ class NotePolicy
      */
     public function before(User $user, $ability)
     {
-        if ($user->hasRoles(['super_admin'])) {
+        if ($user->hasRoles(['organization_admin'])) {
             return true;
         } //End if
     }
 
 
     /**
-     * Determine if the given note can be created by the user.
+     * Determine if the given action (create) can be executed by the user.
      *
      * @param  \Modules\User\Models\User\User  $user
-     * @param  \Modules\Note\Models\Note  $note
      * 
      * @return bool
      */
     public function create(User $user)
     {
-        return $user->id === 1;
+        if ($user->hasPrivileges(['add_new_note'])) {
+            return true;
+        } //End if
     } //Function ends
 
 
     /**
-     * Determine if the given note can be updated by the user.
+     * Determine if the given action (update) can be executed by the user.
      *
      * @param  \Modules\User\Models\User\User  $user
      * @param  \Modules\Note\Models\Note  $note
@@ -68,7 +69,7 @@ class NotePolicy
 
 
     /**
-     * Determine if the given note can be deleted by the user.
+     * Determine if the given action (delete) can be executed by the user.
      *
      * @param  \Modules\User\Models\User\User  $user
      * @param  \Modules\Note\Models\Note  $note
@@ -77,7 +78,15 @@ class NotePolicy
      */
     public function delete(User $user, Note $note)
     {
-        return $user->id === $note->created_by;
+        if ($user->hasPrivileges(['delete_note'])) {
+            if ($user->hasRoles(['organization_admin'])) {
+                return ($user->organization['id'] == $note->owner->organization['id']);
+            } else {
+                return ($user['id'] == $note->owner['id']);
+            } //End if            
+        } else {
+            return false;
+        } //End if
     } //Function ends
 
 } //Class ends

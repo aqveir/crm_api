@@ -31,7 +31,7 @@ class NoteController extends ApiBaseController
     public function __construct()
     {
         parent::__construct();
-        $this->authorizeResource(Note::class);
+        $this->authorizeResource(Note::class, 'note');
     }
 
 
@@ -63,7 +63,7 @@ class NoteController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function create(CreateNoteRequest $request, NoteService $service)
+    public function create(CreateNoteRequest $request, NoteService $service, string $account)
     {
         try {
             //Create payload
@@ -86,28 +86,6 @@ class NoteController extends ApiBaseController
 
 
     /**
-     * Store a newly created resource in storage.
-     * @param Request $request
-     * @return Response
-     */
-    public function store(Request $request)
-    {
-        //
-    } //Function ends
-
-
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Response
-     */
-    public function show($id)
-    {
-        return view('note::show');
-    } //Function ends
-
-
-    /**
      * Update Note
      *
      * @param \Modules\Note\Http\Requests\Backend\UpdateNoteRequest $request
@@ -126,7 +104,7 @@ class NoteController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function update(UpdateNoteRequest $request, NoteService $service, Note $note)
+    public function update(UpdateNoteRequest $request, NoteService $service, string $account, Note $note)
     {
         try {
             //Create payload
@@ -165,14 +143,14 @@ class NoteController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function destroy(DeleteNoteRequest $request, NoteService $service, $id)
+    public function destroy(DeleteNoteRequest $request, NoteService $service, string $account, Note $note)
     {
         try {
             //Create payload
             $payload = collect($request);
 
             //Delete note
-            $data = $service->delete($payload, $id);
+            $data = $service->delete($payload, $note['id']);
 
             //Send http status out
             return $this->response->success(compact('data'));
