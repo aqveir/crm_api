@@ -1,14 +1,15 @@
 # INSTALLATION STEPS
 This is the installation steps for Omni CRM API solution structure.
+In case you plan to install the application in the folder named 'crmomni_api', such that this is your application root folder, then replace the placeholder below **{{INSTALLATION_FOLDER_NAME}}** with **crmomni_api**
 
 ## STEP-1: Clone Code from GIT
 ```sh
-$ git clone https://ellaisys@bitbucket.org/ellaisys/eis_crmomni_api.git <<INSTALLATION_FOLDER_NAME>>
+$ git clone https://bitbucket.org/ellaisys/eis_crmomni_api.git {{INSTALLATION_FOLDER_NAME}}
 ```
 
 ## STEP-2: Install dependencies
 ```sh
-$ php composer.phar install  <-- IN WINDOWS
+$ php composer.phar install
 ```
 
 ## STEP-3: Set Environment veriables
@@ -19,20 +20,23 @@ $ php composer.phar install  <-- IN WINDOWS
 - Open the "httpd-vhosts.conf" in the "<xampp_install_directory>\apache\conf\extra" folder
 - Add below content
 
-> Listen 8181
-> 
-> <VirtualHost *:8181>
-> 	ServerName localhost
-> 	DocumentRoot "<<INSTALLATION_PATH>>/<<INSTALLATION_FOLDER_NAME>>/public"
-> 	DirectoryIndex index.php
-> 	<Directory "<<INSTALLATION_PATH>>/<<INSTALLATION_FOLDER_NAME>>/public">
-> 		Options Indexes FollowSymLinks
-> 		AllowOverride All
-> 		Require all granted
-> 	</Directory>
-> 	ErrorLog "<<INSTALLATION_PATH>>/logs/error.log"
-> 	CustomLog "<<INSTALLATION_PATH>>/logs/access.log" common
-> </VirtualHost>
+```xml
+Listen 8181
+
+<VirtualHost *:8181>
+    ServerName localhost
+    DocumentRoot "{{INSTALLATION_PATH}}/{{INSTALLATION_FOLDER_NAME}}/public"
+    DirectoryIndex index.php
+    <Directory "{{INSTALLATION_PATH}}/{{INSTALLATION_FOLDER_NAME}}/public">
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    ErrorLog "{{INSTALLATION_PATH}}/logs/error.log"
+    CustomLog "{{INSTALLATION_PATH}}/logs/access.log" common
+</VirtualHost>
+```
 
 ## STEP-5: Execute App Install Script
 ```sh
