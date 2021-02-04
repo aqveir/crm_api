@@ -5,6 +5,8 @@ namespace Modules\Agency\Services;
 use Config;
 use Carbon\Carbon;
 
+use Modules\Core\Models\Organization\Organization;
+
 use Modules\Core\Repositories\Organization\OrganizationRepository;
 use Modules\Core\Repositories\Lookup\LookupValueRepository;
 use Modules\Agency\Repositories\AgencyRepository;
@@ -71,14 +73,48 @@ class AgencyService extends BaseService
 
 
     /**
+     * Create Default Agency
+     * 
+     * @param \Illuminate\Support\Collection $payload
+     * @param \Modules\Core\Models\Organization\Organization $organization
+     * 
+     * @return mixed
+     */
+    public function createDefault(Collection $payload, Organization $organization) 
+    {
+        $objReturnValue=null;
+        try {
+            $orgHash = $organization['hash'];
+
+            $data = null;
+
+            $objReturnValue = $this->create($orgHash, $data, true);
+
+        } catch(AccessDeniedHttpException $e) {
+            log::error('AgencyService:createDefault:AccessDeniedHttpException:' . $e->getMessage());
+            throw new AccessDeniedHttpException($e->getMessage());
+        } catch(BadRequestHttpException $e) {
+            log::error('AgencyService:createDefault:BadRequestHttpException:' . $e->getMessage());
+            throw new BadRequestHttpException($e->getMessage());
+        } catch(Exception $e) {
+            log::error('AgencyService:createDefault:Exception:' . $e->getMessage());
+            throw new HttpException(500);
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends
+
+
+    /**
      * Create Agency
      * 
+     * @param \string $orgHash
      * @param \Illuminate\Support\Collection $payload
      * @param \bool $isAutoCreated (optional)
      *
      * @return mixed
      */
-    public function create(Collection $payload, bool $isAutoCreated=false)
+    public function create(string $orgHash, Collection $payload, bool $isAutoCreated=false)
     {
         $objReturnValue=null; $data=[];
         try {
@@ -121,13 +157,13 @@ class AgencyService extends BaseService
             $objReturnValue = $note;
 
         } catch(AccessDeniedHttpException $e) {
-            log::error('NoteService:create:AccessDeniedHttpException:' . $e->getMessage());
+            log::error('AgencyService:create:AccessDeniedHttpException:' . $e->getMessage());
             throw new AccessDeniedHttpException($e->getMessage());
         } catch(BadRequestHttpException $e) {
-            log::error('NoteService:create:BadRequestHttpException:' . $e->getMessage());
+            log::error('AgencyService:create:BadRequestHttpException:' . $e->getMessage());
             throw new BadRequestHttpException($e->getMessage());
         } catch(Exception $e) {
-            log::error('NoteService:create:Exception:' . $e->getMessage());
+            log::error('AgencyService:create:Exception:' . $e->getMessage());
             throw new HttpException(500);
         } //Try-catch ends
 
@@ -163,13 +199,13 @@ class AgencyService extends BaseService
             $objReturnValue = $note;
 
         } catch(AccessDeniedHttpException $e) {
-            log::error('NoteService:update:AccessDeniedHttpException:' . $e->getMessage());
+            log::error('AgencyService:update:AccessDeniedHttpException:' . $e->getMessage());
             throw new AccessDeniedHttpException($e->getMessage());
         } catch(BadRequestHttpException $e) {
-            log::error('NoteService:update:BadRequestHttpException:' . $e->getMessage());
+            log::error('AgencyService:update:BadRequestHttpException:' . $e->getMessage());
             throw new BadRequestHttpException($e->getMessage());
         } catch(Exception $e) {
-            log::error('NoteService:update:Exception:' . $e->getMessage());
+            log::error('AgencyService:update:Exception:' . $e->getMessage());
             throw new HttpException(500);
         } //Try-catch ends
 
@@ -206,13 +242,13 @@ class AgencyService extends BaseService
             $objReturnValue = $response;
 
         } catch(AccessDeniedHttpException $e) {
-            log::error('NoteService:delete:AccessDeniedHttpException:' . $e->getMessage());
+            log::error('AgencyService:delete:AccessDeniedHttpException:' . $e->getMessage());
             throw new AccessDeniedHttpException($e->getMessage());
         } catch(BadRequestHttpException $e) {
-            log::error('NoteService:delete:BadRequestHttpException:' . $e->getMessage());
+            log::error('AgencyService:delete:BadRequestHttpException:' . $e->getMessage());
             throw new BadRequestHttpException($e->getMessage());
         } catch(Exception $e) {
-            log::error('NoteService:delete:Exception:' . $e->getMessage());
+            log::error('AgencyService:delete:Exception:' . $e->getMessage());
             throw new HttpException(500);
         } //Try-catch ends
 

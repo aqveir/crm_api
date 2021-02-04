@@ -6,7 +6,8 @@
     "order": 0,
     "providers": [
         "Modules\\Agency\\Providers\\AgencyServiceProvider",
-        "Modules\\Agency\\Providers\\AuthServiceProvider"
+        "Modules\\Agency\\Providers\\AuthServiceProvider",
+        "Modules\\Agency\\Providers\\EventServiceProvider"
     ],
     "aliases": {},
     "files": [],

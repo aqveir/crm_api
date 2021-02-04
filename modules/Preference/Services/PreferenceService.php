@@ -105,23 +105,6 @@ class PreferenceService extends BaseService
                 } //Loop ends
             } //End if
 
-            //Create defult user
-            // $user = $this->create(collect($data), $orgId, true);
-            // if (empty($user)) {
-            //     throw new BadRequestHttpException();
-            // } //End if
-
-            // //Store Additional Settings
-            // $user['is_active'] = true;
-            // $user['is_pool'] = true;
-            // $user['is_default'] = true;
-            // if ($user->save()) {
-            //     throw new HttpException(500);
-            // } //End if
-
-            //Assign to the return value
-            //$objReturnValue = $user;
-
         } catch(AccessDeniedHttpException $e) {
             log::error('PreferenceService:createDefault:AccessDeniedHttpException:' . $e->getMessage());
             throw new AccessDeniedHttpException($e->getMessage());
