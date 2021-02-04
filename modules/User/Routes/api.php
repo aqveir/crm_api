@@ -14,7 +14,12 @@ use Modules\Boilerplate\Routing\Router;
 */
 $api = app(Router::class);
 
-$api->version('v1', function (Router $api) {
+$api->version('v1', [
+        'prefix' => 'api',
+        'middleware' => ['api'],
+        'namespace' => 'Modules\User\Http\Controllers',
+        'domain' => config('crmomni.settings.domain')
+    ], function (Router $api) {
 
     // Unauthenticated OR Guest endpoints
     $api->group(['middleware' => ['guest']], function(Router $api) {
@@ -22,23 +27,23 @@ $api->version('v1', function (Router $api) {
         // User Endpoint
         $api->group(['prefix' => 'user'], function(Router $api) {
             // Authentication
-            $api->post('login', 'Modules\\User\\Http\\Controllers\\Backend\\Auth\\UserAuthController@login');
+            $api->post('login', 'Backend\\Auth\\UserAuthController@login');
 
             // Password Management
-            $api->post('forgot', 'Modules\\User\\Http\\Controllers\\Backend\\Auth\\UserAuthController@forgot');
-            $api->post('reset', 'Modules\\User\\Http\\Controllers\\Backend\\Auth\\UserAuthController@reset');
+            $api->post('forgot', 'Backend\\Auth\\UserAuthController@forgot');
+            $api->post('reset', 'Backend\\Auth\\UserAuthController@reset');
 
             // User Exists Validation
-            $api->get('exists', 'Modules\\User\\Http\\Controllers\\Backend\\User\\GetUserController@exists');
+            $api->get('exists', 'Backend\\User\\GetUserController@exists');
 
             // User Activation
-            $api->get('activate/{token}', 'Modules\\User\\Http\\Controllers\\Backend\\User\\SetUserController@activate');
+            $api->get('activate/{token}', 'Backend\\User\\SetUserController@activate');
 
             // User Registration
-            $api->post('register', 'Modules\\User\\Http\\Controllers\\Backend\\User\\SetUserController@register');
+            $api->post('register', 'Backend\\User\\SetUserController@register');
 
             // User Availability Status
-            $api->get('status/{key}', 'Modules\\User\\Http\\Controllers\\Backend\\User\\GetUserController@detail');
+            $api->get('status/{key}', 'Backend\\User\\GetUserController@detail');
         });
     });
 
@@ -50,29 +55,29 @@ $api->version('v1', function (Router $api) {
 
             // User Availability Status
             $api->group(['prefix' => 'status'], function(Router $api) {
-                $api->get('/', 'Modules\\User\\Http\\Controllers\\Backend\\User\\UserAvailabilityController@view');
-                $api->post('{key}', 'Modules\\User\\Http\\Controllers\\Backend\\User\\UserAvailabilityController@update');
+                $api->get('/', 'Backend\\User\\UserAvailabilityController@view');
+                $api->post('{key}', 'Backend\\User\\UserAvailabilityController@update');
             });
-            $api->get('{hash}/status', 'Modules\\User\\Http\\Controllers\\Backend\\User\\UserAvailabilityController@show');
+            $api->get('{hash}/status', 'Backend\\User\\UserAvailabilityController@show');
 
             // Logout
-            $api->put('logout', 'Modules\\User\\Http\\Controllers\\Backend\\Auth\\UserAuthController@logout');
+            $api->put('logout', 'Backend\\Auth\\UserAuthController@logout');
 
             // Password Management
-            $api->put('changepass', 'Modules\\User\\Http\\Controllers\\Backend\\Auth\\UserAuthController@changePassword');
+            $api->put('changepass', 'Backend\\Auth\\UserAuthController@changePassword');
 
             // Get User Profile
-            $api->get('profile', 'Modules\\User\\Http\\Controllers\\Backend\\User\\GetUserController@profile');
+            $api->get('profile', 'Backend\\User\\GetUserController@profile');
         });
 
         // Organization Endpoints
         $api->group(['prefix' => 'organization/{ohash}/user'], function(Router $api) {
             // User Management
-            $api->get('/', 'Modules\\User\\Http\\Controllers\\Backend\\User\\GetUserController@index');
-            $api->get('{hash}', 'Modules\\User\\Http\\Controllers\\Backend\\User\\GetUserController@show');
-            $api->post('/', 'Modules\\User\\Http\\Controllers\\Backend\\User\\SetUserController@create');
-            $api->put('{hash}', 'Modules\\User\\Http\\Controllers\\Backend\\User\\SetUserController@update');
-            $api->put('{hash}/roles', 'Modules\\User\\Http\\Controllers\\Backend\\User\\SetUserController@assignRoles');
+            $api->get('/', 'Backend\\User\\GetUserController@index');
+            $api->get('{hash}', 'Backend\\User\\GetUserController@show');
+            $api->post('/', 'Backend\\User\\SetUserController@create');
+            $api->put('{hash}', 'Backend\\User\\SetUserController@update');
+            $api->put('{hash}/roles', 'Backend\\User\\SetUserController@assignRoles');
         });
     });
 });

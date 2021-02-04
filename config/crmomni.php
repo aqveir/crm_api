@@ -15,6 +15,19 @@ return [
         */
         'domain' => env('APPLICATION_DOAMIN', '{subdomain}.crmomni.com'),
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | Whitelisted Administration Subdomains
+        |--------------------------------------------------------------------------
+        |
+        | Specifies the URL name used for accessing back-end pages.
+        | For example: backend -> http://localhost/console
+        |
+        */
+        'whitelisted_subdomains' => env('APPLICATION_WHITELIST_SUBDOAMIN', ['localhost', 'ellaisys']),
+
+
         /*
         |--------------------------------------------------------------------------
         | Back-end URI prefix

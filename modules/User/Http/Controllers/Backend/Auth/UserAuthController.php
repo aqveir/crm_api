@@ -66,11 +66,11 @@ class UserAuthController extends ApiBaseController
      *      @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function login(UserLoginRequest $request, UserAuthService $userAuthService)
+    public function login(UserLoginRequest $request, UserAuthService $userAuthService, string $subdomain)
     {
         try {
             //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request);
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain, true);
 
             //Get IP Address
             $ipAddress = $this->getIpAddressInRequest($request);
@@ -133,6 +133,7 @@ class UserAuthController extends ApiBaseController
         }
     } //Function ends
 
+
     /**
      * Forgot Password for User
      *
@@ -152,11 +153,11 @@ class UserAuthController extends ApiBaseController
      *      @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function forgot(UserForgotRequest $request, UserAuthService $userAuthService)
+    public function forgot(UserForgotRequest $request, UserAuthService $userAuthService, string $subdomain)
     {
         try {
             //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request);
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
 
             //Get IP Address
             $ipAddress = $this->getIpAddressInRequest($request);
@@ -178,11 +179,11 @@ class UserAuthController extends ApiBaseController
     } //Function ends
 
     
-    public function reset(UserResetRequest $request, UserAuthService $userAuthService)
+    public function reset(UserResetRequest $request, UserAuthService $userAuthService, string $subdomain)
     {
         try {
             //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request);
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
 
             //Get IP Address
             $ipAddress = $this->getIpAddressInRequest($request);

@@ -29,6 +29,11 @@ return [
         'privileges' => env('TABLE_NAME_PREFIX', '') . 'privileges',
         'role_privileges' => env('TABLE_NAME_PREFIX', '') . 'role_privileges',
 
+        //Agency Entities
+        'agency' => [
+            'main' => env('TABLE_NAME_PREFIX', '') . 'agencies',
+        ],
+
         //Backend User Entities
         'user' => [
             'main' => env('TABLE_NAME_PREFIX', '') . 'users',

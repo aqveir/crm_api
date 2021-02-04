@@ -9,5 +9,6 @@
     "Subscription": true,
     "Preference": true,
     "CloudTelephony": true,
-    "ServiceRequest": true
+    "ServiceRequest": true,
+    "Agency": true
 }

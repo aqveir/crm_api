@@ -33,7 +33,7 @@ abstract class BaseModel extends Model
             if ($includeYear) {
                 $hash .= (string) $dtCurrent->format('Ym');
             } //End if
-            $hash .= (string) $dtCurrent->valueOf();
+            $hash .= (string) md5($dtCurrent->valueOf());
 
             $objReturnValue = strtolower($hash);
         } catch(Exception $e) {

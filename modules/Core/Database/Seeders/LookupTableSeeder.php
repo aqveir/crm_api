@@ -187,6 +187,30 @@ class LookupTableSeeder extends Seeder
                     ],                    
                 ]
             ],
+            [ //Agency Type
+                'key' => 'agency_type',
+                'display_value' => 'Agency Type',
+                'description' => 'Agency Type used',
+                'is_editable' => false,
+                'values' => [
+                    [
+                        'key' => 'agency_type_internal',
+                        'display_value' => 'Internal Agency',
+                    ],
+                    [
+                        'key' => 'agency_type_external',
+                        'display_value' => 'External Agency',
+                    ],
+                    [
+                        'key' => 'agency_type_service_request',
+                        'display_value' => 'Service Request',
+                    ],
+                    [
+                        'key' => 'agency_type_event',
+                        'display_value' => 'Event',
+                    ]
+                ]
+            ],
             [ //Customer Type
                 'key' => 'customer_type',
                 'display_value' => 'Customer Types',

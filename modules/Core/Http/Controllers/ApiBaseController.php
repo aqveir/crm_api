@@ -14,6 +14,7 @@ use Modules\Core\Models\Organization\Organization;
 
 use Exception;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 abstract class ApiBaseController extends CoreController
 {
@@ -56,29 +57,78 @@ abstract class ApiBaseController extends CoreController
     /**
      * Check the key param in request and return the OrgHash value.
      */
-    public function getOrgHashInRequest(Request $request, bool $isForcedHostCheck=false) {
+    public function getOrgHashInRequest(Request $request, ?string $subdomain, bool $isForcedHostCheck=false) {
+        try {
+            $returnValue = null;
 
-        //Force the Host check
-        if ($isForcedHostCheck) {
-            return $this->getOrgHashFromHost($request);
-        } //End if
+            //Get current user (from token)
+            $user = $this->getCurrentUser();
 
-        return $request->has('key')?$request['key']:$this->getOrgHashFromHost($request);
+            //Data check
+            if (empty($subdomain) && empty($user)) {
+                throw new UnauthorizedHttpException();
+            } //End if
+
+            //Get Whitelisted subdomains
+            $subdomainsWhitelisted = config('crmomni.settings.whitelisted_subdomains');
+
+            //Check administrative domain
+            if (in_array($subdomain, $subdomainsWhitelisted) && (!$isForcedHostCheck)){
+                $returnValue = $request->has('key')?$request['key']:$this->getOrgHashFromHost($subdomain, $user);
+            } else {
+                $returnValue = $this->getOrgHashFromHost($subdomain, $user, $isForcedHostCheck);
+            } //end if
+
+            if (empty($returnValue)) {
+                throw new Exception();
+            } //End if
+
+            return $returnValue;
+        } catch(Exception $e) {
+            throw $e;
+        } //try-catch ends
     } //Function ends
 
 
     /**
      * Check the URL Host name in request and return the OrgHash value.
      */
-    public function getOrgHashFromHost(Request $request) {
-        $urlHost = $request->getHost();
+    public function getOrgHashFromHost(string $subdomain, $user, bool $isForcedHostCheck=false) {
+        try {
+            $returnValue = null;
+            $orgHashSubDomain=null;
 
-        $organization = Organization::where('subdomain', $urlHost)->first();
-        if ($organization) {
-            return $organization['hash'];
-        } else {
+            //SubDomain check
+            if (!empty($subdomain) || $isForcedHostCheck) {
+                $organization = Organization::where('subdomain', $subdomain)->firstOrFail();
+                if ($organization) {
+                    $orgHashSubDomain = $organization['hash'];
+                } //End if
+            } //End if
+            
+            //Check user and domain conditions
+            if (empty($user)) {
+                if (empty($orgHashSubDomain)) {
+                    throw new AccessDeniedHttpException();
+                } else {
+                    $returnValue = $orgHashSubDomain;
+                } //End if
+            } else {
+                if (empty($orgHashSubDomain)) {
+                    $returnValue = $user->organization['hash'];
+                } else {
+                    if ($user->organization['hash'] == $orgHashSubDomain) {
+                        $returnValue = $orgHashSubDomain; 
+                    } else {
+                        throw new UnauthorizedHttpException();
+                    } //End if
+                } //End if
+            } //End if
+        } catch(Exception $e) {
             throw new AccessDeniedHttpException();
-        } //End if
+        } //Try-catch ends
+
+        return $returnValue;
     } //Function ends
 
 
@@ -93,10 +143,11 @@ abstract class ApiBaseController extends CoreController
     /**
      * Get Current Authenticated User
      */
-    public function getCurrentUser(string $orgHash=null) {
+    public function getCurrentUser(string $orgHash=null, string $guard='backend') {
+        $returnValue = null;
 
         //Get user 
-        $user = Auth::guard('backend')->user();
+        $user = Auth::guard($guard)->user();
 
         //Validate current user with provided organization
         if (!empty($orgHash)) {

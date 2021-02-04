@@ -25,8 +25,7 @@ return [
                 // Lookup data fetch-show
                 'fetch' => [
                     'validation_rules' => [
-                        'key' => 'required_without:subdomain|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
-                        'subdomain' => 'required_without:key|string|exists:' . config('crmomni-migration.table_name.organizations') . ',subdomain|max:36',
+                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
                     ]
                 ],
 
@@ -73,16 +72,14 @@ return [
                 // Role fetch-show
                 'fetch' => [
                     'validation_rules' => [
-                        'key' => 'required_without:subdomain|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
-                        'subdomain' => 'required_without:key|string|exists:' . config('crmomni-migration.table_name.organizations') . ',subdomain|max:36',
+                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
                     ]
                 ],
 
                 // Role Create Request
                 'create' => [
                     'validation_rules' => [
-                        'key' => 'required_without:subdomain|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
-                        'subdomain' => 'required_without:key|string|exists:' . config('crmomni-migration.table_name.organizations') . ',subdomain|max:36',
+                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
 
                         'display_value' => 'required|max:255',
                         'description' => 'max:255',
@@ -93,8 +90,7 @@ return [
                 // Role Update Request
                 'update' => [
                     'validation_rules' => [
-                        'key' => 'required_without:subdomain|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
-                        'subdomain' => 'required_without:key|string|exists:' . config('crmomni-migration.table_name.organizations') . ',subdomain|max:36',
+                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
 
                         'display_value' => 'required|max:255',
                         'description' => 'max:255',
@@ -108,7 +104,6 @@ return [
                 //Authenticate user
                 'login' => [
                     'validation_rules' => [
-                        'key' => 'sometimes|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
                         'username' => 'required|email|min:6|max:40',
                         'password' => 'required|string|min:6'
                     ]
@@ -170,9 +165,7 @@ return [
                     'release_token' => env('SIGN_UP_RELEASE_TOKEN', false),
 
                     'validation_rules' => [
-                        'key' => 'required_without:subdomain|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
-                        'subdomain' => 'required_without:key|string|exists:' . config('crmomni-migration.table_name.organizations') . ',subdomain|max:36',
-                        
+                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
                         'username' => 'required|max:36|unique:users,username',
                         'password' => 'required|string|min:6',
                         'first_name' => 'nullable|max:40',
@@ -186,8 +179,7 @@ return [
 
                 'update' => [
                     'validation_rules' => [
-                        'key' => 'required_without:subdomain|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
-                        'subdomain' => 'required_without:key|string|exists:' . config('crmomni-migration.table_name.organizations') . ',subdomain|max:36',
+                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
 
                         'first_name' => 'string|max:40',
                         'last_name' => 'string|max:40',
@@ -207,9 +199,6 @@ return [
                 // Verify User Request
                 'verify' => [
                     'validation_rules' => [
-                        'key' => 'required_without:subdomain|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
-                        'subdomain' => 'required_without:key|string|exists:' . config('crmomni-migration.table_name.organizations') . ',subdomain|max:36',
-
                         'email' => 'required|email|max:40|exists:' . config('crmomni-migration.table_name.user.main') . ',email',
                     ]
                 ],
@@ -224,15 +213,14 @@ return [
                 //Get User data
                 'fetch' => [
                     'validation_rules' => [
-                        'key' => 'required_without:subdomain|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
-                        'subdomain' => 'required_without:key|string|exists:' . config('crmomni-migration.table_name.organizations') . ',subdomain|max:36',
+                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
                     ]
                 ],
 
                 //User Status Request: Intended for telecallers
                 'status' => [
                     'validation_rules' => [
-                        'key' => 'required_without:subdomain|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
                         'role' => 'required|string',
                     ]
                 ],
