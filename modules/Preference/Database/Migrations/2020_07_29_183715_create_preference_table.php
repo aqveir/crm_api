@@ -23,6 +23,8 @@ class CreatePreferenceTable extends Migration
             $table->string('column_name')->nullable();
             $table->integer('type_id')->nullable();             //From Global Lookup Value Table
             $table->integer('data_id')->nullable();             //From Preference Data Table
+            $table->boolean('is_minimum')->default(false);      //Minimum data type
+            $table->boolean('is_maximum')->default(false);      //Maximum data type
             $table->boolean('is_multiple')->default(false);     //Allows multiple selection
             $table->string('keywords')->nullable();
             $table->integer('order')->default(1);

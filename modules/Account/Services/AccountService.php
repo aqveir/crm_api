@@ -84,11 +84,20 @@ class AccountService extends BaseService
     {
         $objReturnValue=null;
         try {
-            $orgHash = $organization['hash'];
+            //Build data for default account
+            $data = [
+                'org_id' => $organization['id'],
+                'name' => config('account.settings.new_organization.account.name'),
+                'description' => config('account.settings.new_organization.account.default_text'),
+                'email' => $organization['email'],
+                'phone' => $organization['phone'],
+                'account_type' => config('account.settings.new_organization.account.account_type'),
+                'is_default' => true,
+                'created_by' => 0
+            ];
 
-            $data = null;
-
-            $objReturnValue = $this->create($orgHash, $data, true);
+            //Create default account
+            $objReturnValue = $this->create($organization['hash'], collect($data), true);
 
         } catch(AccessDeniedHttpException $e) {
             log::error('AccountService:createDefault:AccessDeniedHttpException:' . $e->getMessage());
@@ -121,7 +130,9 @@ class AccountService extends BaseService
             if ($isAutoCreated) {
                 //Build data
                 $data = $payload->only([
-                    'entity_type_id', 'reference_id', 'note', 'org_id', 'created_by'
+                    'org_id',
+                    'name', 'description', 
+                    'email', 'phone', 'created_by'
                 ])->toArray();
             } else {
                 //Authenticated User
@@ -129,7 +140,8 @@ class AccountService extends BaseService
 
                 //Build data
                 $data = $payload->only([
-                    'entity_type_id', 'reference_id', 'note'
+                    'name', 'description', 
+                    'email', 'phone',
                 ])->toArray();
                 $data = array_merge($data, [
                     'org_id' => $user['org_id'], 
@@ -138,23 +150,23 @@ class AccountService extends BaseService
             } //End if
 
             //Lookup data
-            $entityType = $payload['entity_type'];
-            $lookupEntity = $this->lookupRepository->getLookUpByKey($data['org_id'], $entityType);
+            $accountType = $payload['account_type'];
+            $lookupEntity = $this->lookupRepository->getLookUpByKey($data['org_id'], $accountType);
             if (empty($lookupEntity))
             {
                 throw new Exception('Unable to resolve the entity type');   
             } //End if
-            $data['entity_type_id'] = $lookupEntity['id'];
+            $data['type_id'] = $lookupEntity['id'];
 
             //Create Account
-            $note = $this->accountRepository->create($data);
-            $note->load('type', 'owner');
+            $account = $this->accountRepository->create($data);
+            $account->load('type', 'owner');
                 
             //Raise event: Account Created
-            event(new NoteCreatedEvent($note, $isAutoCreated));                
+            event(new AccountCreatedEvent($account, $isAutoCreated));                
 
             //Assign to the return value
-            $objReturnValue = $note;
+            $objReturnValue = $account;
 
         } catch(AccessDeniedHttpException $e) {
             log::error('AccountService:create:AccessDeniedHttpException:' . $e->getMessage());

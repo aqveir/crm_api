@@ -24,4 +24,28 @@ class PreferenceRepository extends EloquentRepository implements PreferenceContr
         $this->model = $model;
     }
 
+
+    /**
+     * Save Preferences by array
+     * 
+     * @param  array  $data
+     *
+     * @return array
+     */
+    public function savePreferences(Array $payload)
+    {
+        $objReturnValue = null;
+        try {
+            $data = $this->model
+                ->insert($payload);
+
+            //Record exists
+            $objReturnValue = !empty($data)?$data:null;            
+        } catch(Exception $e) {
+            throw new Exception($e);
+        } //Try-Catch ends
+
+        return $objReturnValue;
+    } //Function ends
+
 } //Class ends

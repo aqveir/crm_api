@@ -14,7 +14,7 @@ trait AccountRelationship
 	{
 		return $this->hasOne(
 			config('crmomni-class.class_model.lookup_value'),
-			'id', 'entity_type_id'
+			'id', 'type_id'
 		);
 	} //Function ends
 

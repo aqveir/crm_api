@@ -29,7 +29,11 @@ class Account extends Model {
      * @var array
      */
     protected $fillable = [
-        'org_id', 'entity_type_id', 'reference_id', 'note', 'created_by'
+        'org_id', 'name', 'description', 'type_id', 'industry_id', 'timezone_id',
+        'address', 'locality', 'city', 'state_id', 'country_id', 'zipcode',
+        'google_place_id', 'longitude', 'latitude',
+        'website', 'email', 'phone',
+        'created_by'
     ];
 
 
@@ -49,7 +53,8 @@ class Account extends Model {
      * @var array
      */
     protected $hidden = [
-        'org_id', 'entity_type_id','reference_id',
+        'org_id', 'type_id', 'industry_id', 'timezone_id',
+        'state_id', 'country_id',
         'created_by', 'updated_by', 'deleted_by',
         'created_at', 'updated_at', 'deleted_at'
     ]; 

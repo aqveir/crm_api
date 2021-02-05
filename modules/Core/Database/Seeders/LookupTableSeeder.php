@@ -194,21 +194,29 @@ class LookupTableSeeder extends Seeder
                 'is_editable' => false,
                 'values' => [
                     [
+                        'key' => 'account_type_undefined',
+                        'display_value' => 'Undefined',
+                    ],
+                    [
                         'key' => 'account_type_internal',
-                        'display_value' => 'Internal Account',
+                        'display_value' => 'Internal',
                     ],
                     [
                         'key' => 'account_type_external',
-                        'display_value' => 'External Account',
+                        'display_value' => 'External',
                     ],
                     [
-                        'key' => 'account_type_service_request',
-                        'display_value' => 'Service Request',
+                        'key' => 'account_type_customer',
+                        'display_value' => 'Customer',
                     ],
                     [
-                        'key' => 'account_type_event',
-                        'display_value' => 'Event',
-                    ]
+                        'key' => 'account_type_partner',
+                        'display_value' => 'Partner',
+                    ],
+                    [
+                        'key' => 'account_type_reseller',
+                        'display_value' => 'Reseller',
+                    ],
                 ]
             ],
             [ //Customer Type

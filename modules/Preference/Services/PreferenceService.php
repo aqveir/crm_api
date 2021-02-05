@@ -100,9 +100,35 @@ class PreferenceService extends BaseService
             //Load preferences by industry type
             $preferences = $this->preferenceMetaRepository->getDataByIndustryType($industryKey);
             if (!empty($preferences)) {
+                $data = [];
                 foreach ($preferences as $key => $preference) {
-                    Log::info($preference);
+                    //Preference lookup type
+                    $preferencetType = $preference['type_key'];
+                    $type = $this->lookupRepository->getLookUpByKey($organization['id'], $preferencetType);
+                    if (empty($type))
+                    {
+                        throw new Exception('Unable to resolve the entity type');   
+                    } //End if
+
+                    $record = [
+                        'org_id' => $organization['id'],
+                        'key' => $preference['key'],
+                        'display_value' => $preference['display_value'],
+                        'description' => $preference['description'],
+                        'is_minimum' => $preference['is_minimum'],
+                        'is_maximum' => $preference['is_maximum'],
+                        'is_multiple' => $preference['is_multiple'],
+                        'keywords' => $preference['keywords'],
+                        'order' => $preference['order'],
+                        'type_id' => $type['id'],
+                        'created_by' => 0
+                    ];
+
+                    array_push($data, $record);
                 } //Loop ends
+
+                //Create preferences data
+                $objReturnValue = $this->create($organization['hash'], collect($data), true);
             } //End if
 
         } catch(AccessDeniedHttpException $e) {
@@ -133,40 +159,38 @@ class PreferenceService extends BaseService
     {
         $objReturnValue=null;
         try {
-            //Authenticated User
-            $user = $this->getCurrentUser('backend');
 
-            if ($user->hasRoles(config('crmomni.settings.default.role.key_super_admin'))) {
-                //Get organization data
-                $organization = $this->getOrganizationByHash($orgHash);
-                $orgId = $organization['id'];
+            if ($isAutoCreated) {
+                //Build data
+                $data = $payload->toArray();
             } else {
-                $orgId = $user['org_id'];
+                //Authenticated User
+                $user = $this->getCurrentUser('backend');
+
+                //Get organization details
+                if ($user->hasRoles(config('crmomni.settings.default.role.key_super_admin'))) {
+                    //Get organization data
+                    $organization = $this->getOrganizationByHash($orgHash);
+                    $orgId = $organization['id'];
+                } else {
+                    $orgId = $user['org_id'];
+                } //End if
+
+                //Build data
+                $data = $payload->only([
+                    'name', 'description', 
+                    'email', 'phone',
+                ])->toArray();
+                $data = array_merge($data, [
+                    'org_id' => $orgId, 
+                    'created_by' => $user['id'] 
+                ]);
             } //End if
 
-            //Build user data
-            $data = $payload->only([
-                'username', 'password', 'email', 'phone', 
-                'first_name', 'last_name', 'is_remote_access_only'
-            ])->toArray();
-
-            // Duplicate check
-            $isDuplicate=$this->userRepository->exists($data['username'], 'username');
-            if (!$isDuplicate) {
-                //Add Organisation data
-                $data = array_merge($data, [ 'org_id' => $orgId, 'created_by' => $user['id'] ]);
-
-                //Create User
-                $user = $this->userRepository->create($data);
-
-                //Raise event: User Added
-                event(new UserCreatedEvent($user, $isAutoCreated));
-            } else {
-                throw new BadRequestHttpException();
-            } //End if
+            Log::info($payload);
 
             //Assign to the return value
-            $objReturnValue = $user;
+            $objReturnValue = $this->preferenceRepository->savePreferences($data);
 
         } catch(AccessDeniedHttpException $e) {
             throw new AccessDeniedHttpException($e->getMessage());

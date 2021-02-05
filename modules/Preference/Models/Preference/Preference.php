@@ -29,8 +29,10 @@ class Preference extends Model {
      * @var array
      */
     protected $fillable = [
-        'name', 'column_name', 'display_name', 'description',
-        'type', 'lookup_id', 'is_multiple', 'is_rent', 'is_sale'
+        'org_id', 'key', 'display_name', 'description', 'column_name',
+        'is_minimum', 'is_maximum', 'is_multiple', 
+        'keywords', 'order', 'type_id', 'data_id', 
+        'created_by', 
     ];
 
 
@@ -50,7 +52,7 @@ class Preference extends Model {
      * @var array
      */
     protected $hidden = [
-        'org_id', 'lookup_id', 'description',
+        'org_id', 'type_id', 'data_id', 'description',
         'created_by', 'updated_by', 'deleted_by',
         'created_at', 'updated_at', 'deleted_at'
     ]; 
