@@ -10,5 +10,5 @@
     "Preference": true,
     "CloudTelephony": true,
     "ServiceRequest": true,
-    "Agency": true
+    "Account": true
 }

@@ -1,0 +1,15 @@
+{
+    "name": "Account",
+    "alias": "account",
+    "description": "",
+    "keywords": [],
+    "order": 0,
+    "providers": [
+        "Modules\\Account\\Providers\\AccountServiceProvider",
+        "Modules\\Account\\Providers\\AuthServiceProvider",
+        "Modules\\Account\\Providers\\EventServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

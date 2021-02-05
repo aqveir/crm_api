@@ -52,6 +52,10 @@ return [
             'role' => [
                 'key_super_admin' => ['super_admin'],
                 'key_organization_owner' => ['organization_owner']
+            ],
+            'account' => [
+                'name' => 'Default',
+
             ]
         ],  
 
