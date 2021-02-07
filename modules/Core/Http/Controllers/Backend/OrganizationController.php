@@ -64,7 +64,7 @@ class OrganizationController extends ApiBaseController
     {
         try {
             //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request);
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
 
             //Get IP Address
             $ipAddress = $this->getIpAddressInRequest($request);
@@ -110,7 +110,7 @@ class OrganizationController extends ApiBaseController
     {
         try {
             //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request);
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
 
             //Get IP Address
             $ipAddress = $this->getIpAddressInRequest($request);
@@ -154,11 +154,11 @@ class OrganizationController extends ApiBaseController
      * 
      * @return \Illuminate\Http\JsonResponse
      */
-    public function create(CreateOrganizationRequest $request, OrganizationService $organizationService)
+    public function create(CreateOrganizationRequest $request, OrganizationService $organizationService, string $subdomain)
     {
         try {
             //Get IP Address
-            $ipAddress = $this->getIpAddressInRequest($request);
+            $ipAddress = $this->getIpAddressInRequest($request, $subdomain);
 
             //Create payload
             $payload = collect($request);
