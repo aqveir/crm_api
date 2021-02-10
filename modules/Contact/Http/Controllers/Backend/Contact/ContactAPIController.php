@@ -22,7 +22,7 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 /**
  * Controller to Manage Contact Data on Backend
  */
-class GetContactController extends ApiBaseController
+class ContactAPIController extends ApiBaseController
 {
     
     /**
@@ -54,11 +54,11 @@ class GetContactController extends ApiBaseController
      *      @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function index(GetContactRequest $request, ContactService $service)
+    public function index(GetContactRequest $request, ContactService $service, string $subdomain)
     {   
         try {
             //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request);
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
 
             //Create payload
             $payload = collect($request);
@@ -100,11 +100,11 @@ class GetContactController extends ApiBaseController
      *      @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function show(Request $request, ContactService $service, string $hash)
+    public function show(Request $request, ContactService $service, string $subdomain, string $hash)
     {   
         try {
             //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request);
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
 
             //Create payload
             $payload = collect($request);

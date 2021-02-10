@@ -14,7 +14,12 @@ use Modules\Boilerplate\Routing\Router;
 */
 $api = app(Router::class);
 
-$api->version('v1', function (Router $api) {
+$api->version('v1', [
+        'prefix' => 'api',
+        'middleware' => ['api'],
+        'namespace' => 'Modules\Contact\Http\Controllers',
+        'domain' => config('crmomni.settings.domain')
+    ], function (Router $api) {
 
     // Unauthenticated OR Guest endpoints
     $api->group(['middleware' => ['guest']], function(Router $api) {
@@ -22,21 +27,21 @@ $api->version('v1', function (Router $api) {
         // Contact Endpoint
         $api->group(['prefix' => 'contact'], function(Router $api) {
             // Validate Contact's username
-            $api->get('exists', 'Modules\\Contact\\Http\\Controllers\\Frontend\\Contact\\ContactAuthController@exists');
+            $api->get('exists', 'Frontend\\Contact\\ContactAuthController@exists');
 
             // Register Contact
-            $api->post('register', 'Modules\\Contact\\Http\\Controllers\\Frontend\\Contact\\ContactAuthController@register');
+            $api->post('register', 'Frontend\\Contact\\ContactAuthController@register');
 
             // Authentication
-            $api->post('login', 'Modules\\Contact\\Http\\Controllers\\Frontend\\Contact\\ContactAuthController@login');
+            $api->post('login', 'Frontend\\Contact\\ContactAuthController@login');
 
             //Social Login
-            $api->get('login/{social}', 'Modules\\Contact\\Http\\Controllers\\Frontend\\Contact\\ContactSocialAuthController@redirectToProvider');
-            $api->any('login/{social}/callback', 'Modules\\Contact\\Http\\Controllers\\Frontend\\Contact\\ContactSocialAuthController@handleProviderCallback');
+            $api->get('login/{social}', 'Frontend\\Contact\\ContactSocialAuthController@redirectToProvider');
+            $api->any('login/{social}/callback', 'Frontend\\Contact\\ContactSocialAuthController@handleProviderCallback');
 
             // Password Management
-            $api->post('forgot', 'Modules\\Contact\\Http\\Controllers\\Frontend\\Contact\\ContactAuthController@forgotPassword');
-            $api->post('reset', 'Modules\\Contact\\Http\\Controllers\\Frontend\\Contact\\ContactAuthController@resetPassword');
+            $api->post('forgot', 'Frontend\\Contact\\ContactAuthController@forgotPassword');
+            $api->post('reset', 'Frontend\\Contact\\ContactAuthController@resetPassword');
         });
     });
 
@@ -46,13 +51,13 @@ $api->version('v1', function (Router $api) {
         // Contact Endpoints
         $api->group(['prefix' => 'contact'], function(Router $api) {
             // Logout
-            $api->put('logout', 'Modules\\Contact\\Http\\Controllers\\Frontend\\Contact\\ContactAuthController@logout');
+            $api->put('logout', 'Frontend\\Contact\\ContactAuthController@logout');
 
             // Password Management
-            //$api->put('changepass', 'Modules\\Contact\\Http\\Controllers\\Frontend\\Auth\\ChangePasswordController@changePassword');
+            //$api->put('changepass', 'Frontend\\Auth\\ChangePasswordController@changePassword');
 
             // Contact Management
-            //$api->get('profile', 'Modules\\Contact\\Http\\Controllers\\Frontend\\Contact\\ContactController@show');
+            //$api->get('profile', 'Frontend\\Contact\\ContactController@show');
             //$api->put('/', 'Modules\\Contacts\\Http\\Controllers\\Frontend\\Contact\\ContactController@update');
         });
     });
@@ -63,14 +68,14 @@ $api->version('v1', function (Router $api) {
         // Contact Endpoints
         $api->group(['prefix' => 'contact'], function(Router $api) {
             // Contact Management
-            $api->post('fetch', 'Modules\\Contact\\Http\\Controllers\\Backend\\Contact\\GetContactController@index');
-            $api->get('{hash}', 'Modules\\Contact\\Http\\Controllers\\Backend\\Contact\\GetContactController@show');
+            $api->post('fetch', 'Backend\\Contact\\ContactAPIController@index');
+            $api->get('{hash}', 'Backend\\Contact\\ContactAPIController@show');
             //$api->post('/', 'Modules\\Contacts\\Http\\Controllers\\Frontend\\Contact\\ContactController@create');
             //$api->put('{hash}', 'Modules\\Contacts\\Http\\Controllers\\Frontend\\Contact\\ContactController@update');
 
             //Telephony
-            $api->post('{hash}/call', 'Modules\\Contact\\Http\\Controllers\\Backend\\Contact\\TelephonyController@call');
-            $api->post('{hash}/call/{proxy}', 'Modules\\Contact\\Http\\Controllers\\Backend\\Contact\\TelephonyController@callToProxy');
+            $api->post('{hash}/call', 'Backend\\Contact\\TelephonyController@call');
+            $api->post('{hash}/call/{proxy}', 'Backend\\Contact\\TelephonyController@callToProxy');
         });
     });
 });

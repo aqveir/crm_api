@@ -25,7 +25,7 @@ return [
                 // Lookup data fetch-show
                 'fetch' => [
                     'validation_rules' => [
-                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
                     ]
                 ],
 
@@ -72,14 +72,14 @@ return [
                 // Role fetch-show
                 'fetch' => [
                     'validation_rules' => [
-                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
                     ]
                 ],
 
                 // Role Create Request
                 'create' => [
                     'validation_rules' => [
-                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
 
                         'display_value' => 'required|max:255',
                         'description' => 'max:255',
@@ -90,7 +90,7 @@ return [
                 // Role Update Request
                 'update' => [
                     'validation_rules' => [
-                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
 
                         'display_value' => 'required|max:255',
                         'description' => 'max:255',
@@ -165,7 +165,7 @@ return [
                     'release_token' => env('SIGN_UP_RELEASE_TOKEN', false),
 
                     'validation_rules' => [
-                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
                         'username' => 'required|max:36|unique:users,username',
                         'password' => 'required|string|min:6',
                         'first_name' => 'nullable|max:40',
@@ -179,7 +179,7 @@ return [
 
                 'update' => [
                     'validation_rules' => [
-                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
 
                         'first_name' => 'string|max:40',
                         'last_name' => 'string|max:40',
@@ -213,14 +213,14 @@ return [
                 //Get User data
                 'fetch' => [
                     'validation_rules' => [
-                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
                     ]
                 ],
 
                 //User Status Request: Intended for telecallers
                 'status' => [
                     'validation_rules' => [
-                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
                         'role' => 'required|string',
                     ]
                 ],
@@ -287,14 +287,14 @@ return [
             'contact' => [
                 'index' => [
                     'validation_rules' => [
-                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
                     ]
                 ],
 
                 // Telephony
                 'telephony' => [
                     'validation_rules' => [
-                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
                     ]
                 ],
             ],
@@ -306,13 +306,13 @@ return [
                 //Get the contact data
                 'show' => [
                     'validation_rules' => [
-                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
                     ]
                 ],
 
                 'exists' => [
                     'validation_rules' => [
-                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
                         'email' => 'required_without:phone|email|max:36',
                         'phone' => 'required_without:email|max:15',
                     ]
@@ -320,7 +320,7 @@ return [
 
                 'register' => [
                     'validation_rules' => [
-                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
                         'password' => 'required|confirmed|string|min:8|max:64',
                         'first_name' => 'string|max:64',
                         'last_name' => 'string|max:64',
@@ -333,7 +333,7 @@ return [
                 // Authenticate the contact
                 'login' => [
                     'validation_rules' => [
-                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
                         'username' => 'required|max:36',
                         'password' => 'required|string|min:8|max:64',
                         'country_idd' => 'required|min:1|max:5',
@@ -344,14 +344,14 @@ return [
                 // Logout the contact
                 'logout' => [
                     'validation_rules' => [
-                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
                     ]
                 ],
 
                 // Forgot Password Request for User
                 'forgot_password' => [
                     'validation_rules' => [
-                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
                         'email' => 'required|email'
                     ]
                 ],
@@ -382,12 +382,12 @@ return [
                 //Social authentication
                 'social_login' => [
                     'validation_rules' => [
-                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
                     ]
                 ],
                 'social_login_callback' => [
                     'validation_rules' => [
-                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
                     ]
                 ],
 
@@ -401,19 +401,19 @@ return [
                 'voice' => [
                     'callback' => [
                         'validation_rules' => [
-                            'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                            'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
                         ]
                     ],
 
                     'details' => [
                         'validation_rules' => [
-                            'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                            'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
                         ]
                     ],
 
                     'passthru' => [
                         'validation_rules' => [
-                            'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:36',
+                            'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
                         ]
                     ],
                 ],
