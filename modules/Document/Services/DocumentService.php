@@ -109,20 +109,28 @@ class DocumentService extends BaseService
             //Create
             $folderName=null;
             switch ($entityType) {
-                case 'entity_type_customer':
-                    $folderName = 'customer';
+                case 'entity_type_contact':
+                    $folderName = 'contact';
                     break;
 
-                case 'entity_type_catalogue_product':
+                case 'entity_type_inventory':
                     $folderName = 'catalogue/product';
                     break;
 
                 case 'entity_type_order':
                     $folderName = 'order';
                     break;
+
+                case 'entity_type_service_request':
+                    $folderName = 'lead';
+                    break;
+
+                case 'entity_type_event':
+                    $folderName = 'event';
+                    break;
                 
                 default:
-                    # code...
+                    $folderName = 'extra';
                     break;
             } //Switch ends
             $folderName=(empty($folderName))?:($folderName . '/' . (string) $request['reference_id']);

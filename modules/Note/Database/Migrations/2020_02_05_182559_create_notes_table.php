@@ -20,7 +20,7 @@ class CreateNotesTable extends Migration
             $table->integer('org_id');
             $table->integer('entity_type_id');
             $table->integer('reference_id');
-            $table->string('note')->nullable();
+            $table->text('note')->nullable();
 
             //Audit Log Fields
             $table->integer('created_by')->default(0);

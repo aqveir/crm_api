@@ -62,12 +62,12 @@ class LookupTableSeeder extends Seeder
                 'is_editable' => false,
                 'values' => [
                     [
-                        'key' => 'entity_type_customer',
-                        'display_value' => 'Customer Entity',
+                        'key' => 'entity_type_contact',
+                        'display_value' => 'Contact Entity',
                     ],
                     [
                         'key' => 'entity_type_inventory',
-                        'display_value' => 'Product Entity',
+                        'display_value' => 'Inventory Entity',
                     ],
                     [
                         'key' => 'entity_type_service_request',
