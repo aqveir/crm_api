@@ -60,7 +60,8 @@ class Note extends Model {
      * @var array
      */
     protected $dates = [
-        'created_at', 'updated_at', 'deleted_at'
+        'created_at', 'updated_at', 'deleted_at',
+        'last_updated_at'
     ];
 
 
@@ -69,7 +70,7 @@ class Note extends Model {
      *
      * @var array
      */
-    protected $appends = [];
+    protected $appends = ['last_updated_at'];
 
 
     /**
