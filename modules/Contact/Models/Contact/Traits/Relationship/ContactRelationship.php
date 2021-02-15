@@ -82,7 +82,7 @@ trait ContactRelationship
 			->with(['type', 'owner'])
 			->whereHas('type', function($inner_query){$inner_query->where('key', 'entity_type_contact');})
 			->orderBy('created_at', 'desc')
-			->take(5);
+			->take(10);
 		} else {
 			return [];
 		} //End if

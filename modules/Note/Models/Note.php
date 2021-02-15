@@ -49,7 +49,7 @@ class Note extends Model {
      * @var array
      */
     protected $hidden = [
-        'org_id', 'entity_type_id','reference_id',
+        'org_id', 'entity_type_id',
         'created_by', 'updated_by', 'deleted_by',
         'created_at', 'updated_at', 'deleted_at'
     ]; 
