@@ -1,0 +1,1 @@
+sudo php artisan down
