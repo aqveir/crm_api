@@ -1,3 +1,5 @@
+#!/bin/bash
+
 echo "Clearing code dump & swagger..."
 sudo php composer.phar dump-autoload
 sudo php artisan l5-swagger:generate
