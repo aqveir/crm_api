@@ -1,31 +1,31 @@
 version: 0.0
 os: linux
 files:
-  - source: /
+  - source: /CHANGELOG.md
     destination: /ellaisys/solutions/crmomni/dev
 hooks:
-  BeforeInstall:
-    - location: devops/scripts/install_dependencies.sh
-      timeout: 3000
-      runas: root
-    - location: devops/scripts/install_code.sh
-      timeout: 300
-      runas: root
-  AfterInstall:
-    - location: devops/scripts/change_permissions.sh
-      timeout: 300
-      runas: root
-    - location: devops/scripts/clear_logs.sh
-      timeout: 300
-      runas: root
-    - location: devops/scripts/crmomni_reload.sh
-      timeout: 300
-      runas: root
+  # BeforeInstall:
+  #   - location: devops/scripts/install_dependencies.sh
+  #     timeout: 3000
+  #     runas: root
+  #   - location: devops/scripts/install_code.sh
+  #     timeout: 300
+  #     runas: root
+  # AfterInstall:
+  #   - location: devops/scripts/change_permissions.sh
+  #     timeout: 300
+  #     runas: root
+  #   - location: devops/scripts/clear_logs.sh
+  #     timeout: 300
+  #     runas: root
+  #   - location: devops/scripts/crmomni_reload.sh
+  #     timeout: 300
+  #     runas: root
   ApplicationStart:
     - location: devops/scripts/clear_logs.sh
       timeout: 300
       runas: root
-  ApplicationStop:
-    - location: devops/scripts/stop_application.sh
-      timeout: 300
-      runas: root
+  # ApplicationStop:
+  #   - location: devops/scripts/stop_application.sh
+  #     timeout: 300
+  #     runas: root
