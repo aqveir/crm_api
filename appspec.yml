@@ -1,8 +1,20 @@
 version: 0.0
 os: linux
+
+#
+# Copy the CHANGELOG and other file for CodeDeploy
+#
 files:
   - source: /CHANGELOG.md
     destination: /ellaisys/solutions/crmomni/dev
+    
+permissions:
+  - object: /ellaisys/solutions/crmomni/dev
+    pattern: "**"
+    owner: ec2-user
+    mode: 775
+    type:
+      - file
 hooks:
   # BeforeInstall:
   #   - location: devops/scripts/install_dependencies.sh
