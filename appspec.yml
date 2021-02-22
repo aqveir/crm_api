@@ -7,7 +7,6 @@ os: linux
 files:
   - source: /CHANGELOG.md
     destination: /ellaisys/solutions/crmomni/dev
-    overwrite: true
 
 permissions:
   - object: /ellaisys/solutions/crmomni/dev
