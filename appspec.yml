@@ -17,7 +17,10 @@ permissions:
     type:
       - file
 hooks:
-  # BeforeInstall:
+  BeforeInstall:
+    - location: devops/scripts/before_install.sh
+      timeout: 300
+      runas: root
   #   - location: devops/scripts/install_dependencies.sh
   #     timeout: 3000
   #     runas: root
