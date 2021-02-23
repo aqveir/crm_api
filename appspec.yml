@@ -6,10 +6,10 @@ os: linux
 #
 files:
   - source: /LICENSE.md
-    destination: /ellaisys/solutions/crmomni/dev
+    destination: /ellaisys/solutions/crmomni/$DEPLOYMENT_GROUP_NAME
 
 permissions:
-  - object: /ellaisys/solutions/crmomni/dev
+  - object: /ellaisys/solutions/crmomni/$DEPLOYMENT_GROUP_NAME
     pattern: "**"
     owner: ec2-user
     mode: 775
