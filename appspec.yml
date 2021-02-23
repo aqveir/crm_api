@@ -4,17 +4,17 @@ os: linux
 #
 # Copy the LICENSE and other file for CodeDeploy
 #
-files:
-  - source: /LICENSE.md
-    destination: /ellaisys/solutions/crmomni/$DEPLOYMENT_GROUP_NAME
+# files:
+#   - source: LICENSE.md
+#     destination: /ellaisys/solutions/crmomni/$DEPLOYMENT_GROUP_NAME
 
-permissions:
-  - object: /ellaisys/solutions/crmomni/$DEPLOYMENT_GROUP_NAME
-    pattern: "**"
-    owner: ec2-user
-    mode: 775
-    type:
-      - file
+# permissions:
+#   - object: /ellaisys/solutions/crmomni/$DEPLOYMENT_GROUP_NAME
+#     pattern: "**"
+#     owner: ec2-user
+#     mode: 775
+#     type:
+#       - file
 hooks:
   BeforeInstall:
     - location: devops/scripts/before_install.sh
