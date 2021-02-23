@@ -3,26 +3,30 @@
 cd /ellaisys/solutions/crmomni/$DEPLOYMENT_GROUP_NAME
 
 echo "Clearing code dump & swagger..."
-sudo php composer.phar dump-autoload
-sudo php artisan l5-swagger:generate
+php composer.phar dump-autoload
+php artisan l5-swagger:generate
 
 echo "Cache cleaning..."
-sudo php artisan cache:clear
-sudo php artisan config:clear
-sudo php artisan route:clear
+php artisan cache:clear
+php artisan config:clear
+php artisan route:clear
 echo "Cache cleared."
 
+echo "Generating Laravel App Key..."
+php artisan key:generate --force --quiet
+echo "Generated Laravel App Key"
+
 echo "Generating JWT Secret..."
-sudo php artisan jwt:secret
+php artisan jwt:secret --force --quiet
 echo "Generated JWT Secret Key"
 
 echo "Creating DB..."
-sudo php artisan migrate:refresh
+php artisan migrate:refresh
 echo "DB created."
 
 echo "Creating meta and dummy data ..."
-sudo php artisan module:seed Core
-sudo php artisan module:seed Contact
-sudo php artisan module:seed User
-sudo php artisan module:seed Preference
+php artisan module:seed Core
+php artisan module:seed Contact
+php artisan module:seed User
+php artisan module:seed Preference
 echo "Data created..."

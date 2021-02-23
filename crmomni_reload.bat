@@ -8,8 +8,12 @@ z:\xampp\php\php artisan config:clear
 z:\xampp\php\php artisan route:clear
 echo "Cache cleared."
 
+echo "Generating Laravel App Key..."
+z:\xampp\php\php artisan key:generate --force --quiet
+echo "Generated Laravel App Key"
+
 echo "Generating JWT Secret..."
-rem z:\xampp\php\php artisan jwt:secret
+z:\xampp\php\php artisan jwt:secret --force --quiet
 echo "Generated JWT Secret Key"
 
 echo "Creating DB..."
