@@ -1,4 +1,4 @@
 #!/bin/bash
 
 echo "Pull code from repo ..."
-sudo git pull origin master
+git pull origin master
