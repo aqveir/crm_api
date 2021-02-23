@@ -5,7 +5,7 @@ os: linux
 # Copy the CHANGELOG and other file for CodeDeploy
 #
 files:
-  - source: /CHANGELOG.md
+  - source: /LICENSE.md
     destination: /ellaisys/solutions/crmomni/dev
 
 permissions:
