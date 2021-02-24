@@ -19,6 +19,7 @@ use Modules\Document\Events\DocumentDeletedEvent;
 use Illuminate\Http\UploadedFile as File;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 use Exception;
 use Modules\Core\Exceptions\DuplicateDataException;
@@ -199,7 +200,7 @@ class DocumentService extends BaseService
             //Build data
             $data = $payload->only(['title', 'description'])->toArray();
 
-            //SoftDelete Document
+            //Update Document Metadata
             $document = $this->documentRepository->update($documentId, 'id', $data, $user['id']);
 
             //Raise event: Document Deleted
@@ -256,6 +257,46 @@ class DocumentService extends BaseService
             throw new BadRequestHttpException($e->getMessage());
         } catch(Exception $e) {
             log::error('DocumentService:delete:Exception:' . $e->getMessage());
+            throw new HttpException(500);
+        } //Try-catch ends
+		
+		return $objReturnValue;
+    } //Function ends
+
+
+    /**
+     * Show/Download Document
+     * 
+     * @param \string $orgHash
+     * @param \Illuminate\Support\Collection $payload
+     * @param \int $documentId
+     * 
+     * @return mixed
+     */
+    public function download(string $orgHash, Collection $payload, int $documentId)
+    {
+		$objReturnValue=null;
+		try {
+            //Authenticated User
+            $user = $this->getCurrentUser('backend');
+
+            //Get Document
+            $document = $this->documentRepository->getById($documentId);
+
+            if(empty($document)) {
+                throw new BadRequestHttpException();
+            } //End if
+
+            $objReturnValue = Storage::response($document['file_path']);
+
+        } catch(AccessDeniedHttpException $e) {
+            log::error('DocumentService:update:AccessDeniedHttpException:' . $e->getMessage());
+            throw new AccessDeniedHttpException($e->getMessage());
+        } catch(BadRequestHttpException $e) {
+            log::error('DocumentService:update:BadRequestHttpException:' . $e->getMessage());
+            throw new BadRequestHttpException($e->getMessage());
+        } catch(Exception $e) {
+            log::error('DocumentService:update:Exception:' . $e->getMessage());
             throw new HttpException(500);
         } //Try-catch ends
 		

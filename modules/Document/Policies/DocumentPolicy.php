@@ -39,6 +39,23 @@ class DocumentPolicy
 
 
     /**
+     * Determine if the given action (view) can be executed by the user.
+     *
+     * @param  \Modules\User\Models\User\User  $user
+     * @param  \Modules\Document\Models\Document  $document
+     * 
+     * @return bool
+     */
+    public function view(User $user, Document $document)
+    {
+        return true;
+        if ($user->hasPrivileges(['add_document'])) {
+            return true;
+        } //End if
+    } //Function ends
+
+
+    /**
      * Determine if the given action (create) can be executed by the user.
      *
      * @param  \Modules\User\Models\User\User  $user

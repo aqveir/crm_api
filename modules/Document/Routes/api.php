@@ -26,7 +26,7 @@ $api->version('v1', [
 
         // Document Endpoints
         $api->group(['prefix' => 'document'], function(Router $api) {
-            $api->get('/', 'Backend\\DocumentController@index');
+            $api->get('{document}', 'Backend\\DocumentController@show');
             
             $api->post('/', 'Backend\\DocumentController@create');
             $api->put('{document}', 'Backend\\DocumentController@update');

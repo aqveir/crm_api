@@ -6,6 +6,8 @@ use Config;
 use Illuminate\Support\Facades\Log;
 
 use Modules\Core\Http\Controllers\ApiBaseController;
+
+use Illuminate\Http\Request;
 use Modules\Document\Http\Requests\Backend\CreateDocumentRequest;
 use Modules\Document\Http\Requests\Backend\UpdateDocumentRequest;
 use Modules\Document\Http\Requests\Backend\DeleteDocumentRequest;
@@ -46,7 +48,46 @@ class DocumentController extends ApiBaseController
 
 
     /**
-     * Create Document
+     * Show/Download Document
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \Modules\Document\Services\DocumentService $service
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @OA\Get(
+     *     path="/document/{id}",
+     *     tags={"Document"},
+     *     operationId="api.backend.document.show",
+     *     security={{"omni_token":{}}},
+     *     @OA\Parameter(ref="#/components/parameters/identifier"),
+     *     @OA\Response(response=200, description="Request was successfully executed."),
+     *     @OA\Response(response=422, description="Model Validation Error"),
+     *     @OA\Response(response=500, description="Internal Server Error")
+     * )
+     */
+    public function show(Request $request, DocumentService $service, string $subdomain, Document $document)
+    {
+        try {
+            //Get Org Hash 
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
+
+            //Create payload
+            $payload = collect($request);
+
+            //Update document
+            return $service->download($orgHash, $payload, $document['id']);
+            
+        } catch(AccessDeniedHttpException $e) {
+            return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
+        } catch(Exception $e) {
+            return $this->response->fail([], Response::HTTP_BAD_REQUEST);
+        }
+    }
+
+
+    /**
+     * Create/Upload Document
      *
      * @param \Modules\Document\Http\Requests\Backend\CreateDocumentRequest $request
      * @param \Modules\Document\Services\DocumentService $service
@@ -92,7 +133,7 @@ class DocumentController extends ApiBaseController
 
 
     /**
-     * Update Document
+     * Update Document Metadata
      *
      * @param \Modules\Document\Http\Requests\Backend\UpdateDocumentRequest $request
      * @param \Modules\Document\Services\DocumentService $service
