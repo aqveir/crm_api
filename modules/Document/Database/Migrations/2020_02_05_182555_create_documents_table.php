@@ -24,6 +24,7 @@ class CreateDocumentsTable extends Migration
             $table->string('title')->nullable();
             $table->text('description')->nullable();
             $table->string('file_path');
+            $table->string('file_extn')->nullable();
             $table->decimal('file_size_in_kb', 10, 2)->default(0); // In Kilo Bytes
             $table->boolean('is_full_path')->default(false);
             $table->boolean('is_active')->default(true);

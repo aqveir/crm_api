@@ -16,7 +16,7 @@ use Modules\Document\Events\DocumentCreatedEvent;
 use Modules\Document\Events\DocumentUpdatedEvent;
 use Modules\Document\Events\DocumentDeletedEvent;
 
-use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile as File;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
@@ -85,12 +85,14 @@ class DocumentService extends BaseService
     /**
      * Create Document
      * 
-     * @param \Illuminate\Http\Request $payload
+     * @param \string $orgHash
+     * @param \Illuminate\Support\Collection $payload
+     * @param \File $file
      * @param \bool $isAutoCreated (optional)
      *
      * @return mixed
      */
-    public function create(Request $request, bool $isAutoCreated=false)
+    public function create(string $orgHash, Collection $payload, File $file, bool $isAutoCreated=false)
 	{
 		$objReturnValue=null;
 		try {
@@ -98,7 +100,7 @@ class DocumentService extends BaseService
             $user = $this->getCurrentUser('backend');
 
             //Lookup data
-            $entityType = $request['entity_type'];
+            $entityType = $payload['entity_type'];
             $lookupEntity = $this->lookupRepository->getLookUpByKey($user['org_id'], $entityType);
             if (empty($lookupEntity))
             {
@@ -107,49 +109,49 @@ class DocumentService extends BaseService
             } //End if
 
             //Create
-            $folderName=null;
+            $folderName=$orgHash . '/';
             switch ($entityType) {
                 case 'entity_type_contact':
-                    $folderName = 'contact';
+                    $folderName .= 'contact';
                     break;
 
                 case 'entity_type_inventory':
-                    $folderName = 'catalogue/product';
+                    $folderName .= 'catalogue/product';
                     break;
 
                 case 'entity_type_order':
-                    $folderName = 'order';
+                    $folderName .= 'order';
                     break;
 
                 case 'entity_type_service_request':
-                    $folderName = 'lead';
+                    $folderName .= 'lead';
                     break;
 
                 case 'entity_type_event':
-                    $folderName = 'event';
+                    $folderName .= 'event';
                     break;
                 
                 default:
-                    $folderName = 'extra';
+                    $folderName .= 'extra';
                     break;
             } //Switch ends
-            $folderName=(empty($folderName))?:($folderName . '/' . (string) $request['reference_id']);
+            $folderName=(empty($folderName))?:($folderName . '/' . (string) $payload['reference_id']);
 
             //Save the file to the storage
-            $orgHash = $user->organization['hash'];
-            $data=$this->filesystemRepository->upload($request, $orgHash, $folderName);
-            if (empty($data)) {
+            $objFileStore=$this->filesystemRepository->upload($file, $folderName);
+            if (empty($objFileStore)) {
                 throw new BadRequestHttpException();
             } //End if
 
             //Generate the data payload
-            $payload = $request->only('reference_id', 'title', 'description');
-            $payload = array_merge(
-                $payload,
+            $data = $payload->only('reference_id', 'title', 'description')->toArray();
+            $data = array_merge(
+                $data,
                 [
                     'entity_type_id'    => $lookupEntity['id'],
-                    'file_path'         => $data['file_path'],
-                    'file_size_in_kb'   => ($data['file_size']>0)?($data['file_size']/1024):0,
+                    'file_path'         => $objFileStore['file_path'],
+                    'file_extn'         => $file->extension(),
+                    'file_size_in_kb'   => ($objFileStore['file_size']>0)?($objFileStore['file_size']/1024):0,
                     'is_full_path'      => 0,
                     'org_id'            => $user['org_id'],
                     'created_by'        => $user['id']
@@ -157,7 +159,7 @@ class DocumentService extends BaseService
             );
 
             //Create Document
-            $document = $this->documentRepository->create($payload);
+            $document = $this->documentRepository->create($data);
 
             //Raise event: Document Created
             event(new DocumentCreatedEvent($document, $isAutoCreated));
@@ -181,12 +183,13 @@ class DocumentService extends BaseService
     /**
      * Update Document
      * 
+     * @param \string $orgHash
      * @param \Illuminate\Support\Collection $payload
      * @param \int $documentId
      * 
      * @return mixed
      */
-    public function update(Collection $payload, int $documentId)
+    public function update(string $orgHash, Collection $payload, int $documentId)
     {
 		$objReturnValue=null;
 		try {
@@ -221,12 +224,13 @@ class DocumentService extends BaseService
     /**
      * Delete Document
      * 
+     * @param \string $orgHash
      * @param \Illuminate\Support\Collection $payload
      * @param \int $documentId
      * 
      * @return mixed
      */
-    public function delete(Collection $payload, int $documentId)
+    public function delete(string $orgHash, Collection $payload, int $documentId)
     {
 		$objReturnValue=null;
 		try {

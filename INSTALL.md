@@ -42,3 +42,39 @@ Listen 8181
 ```sh
 $ crmomni_reload
 ```
+
+
+# CICD Pipeline - AWS CodePipeline and CodeDeploy
+
+## User Data Script for EC2 Instance
+The script below needs to be copied into the User Data section of the EC2 Instance. In case you have already provisioned the instance, you will need to STOP it and then update the User Data. The scipt will need modification based on the type of linux flavor, this is intended for the AWS Linux AMI
+
+Also, you will need to modify the endpoint and region for wget call based on your AWS data centers.
+
+```sh
+    #!/bin/bash
+
+    yum update -y
+
+    yum install ruby -y
+
+    yum install wget -y
+
+    # Delete the old code deploy agent
+    CODEDEPLOY_BIN="/opt/codedeploy-agent/bin/codedeploy-agent"
+    $CODEDEPLOY_BIN stop
+    yum erase codedeploy-agent -y
+
+    cd /home/ec2-user
+
+    # Downlaod and install new codedeploy agent
+    wget https://aws-codedeploy-ap-south-1.s3.ap-south-1.amazonaws.com/latest/install
+    chmod +x ./install
+    ./install auto
+
+    # Start the codedeploy agent service
+    service codedeploy-agent start
+```
+
+## Refernce Material
+1. Refer to this video link for step-by-step reference https://youtu.be/K8J6ngMekx4

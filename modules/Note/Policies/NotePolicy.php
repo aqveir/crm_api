@@ -36,7 +36,7 @@ class NotePolicy
         if ($user->hasRoles(['organization_admin'])) {
             return true;
         } //End if
-    }
+    } //Function ends
 
 
     /**
@@ -64,7 +64,15 @@ class NotePolicy
      */
     public function update(User $user, Note $note)
     {
-        return ($user->id === $note->created_by);
+        if ($user->hasPrivileges(['edit_note'])) {
+            if ($user->hasRoles(['organization_admin'])) {
+                return ($user->organization['id'] == $note->owner->organization['id']);
+            } else {
+                return ($user['id'] == $note->owner['id']);
+            } //End if            
+        } else {
+            return false;
+        } //End if
     } //Function ends
 
 

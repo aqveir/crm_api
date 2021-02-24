@@ -66,6 +66,9 @@ class NoteController extends ApiBaseController
     public function create(CreateNoteRequest $request, NoteService $service, string $subdomain)
     {
         try {
+            //Get Org Hash 
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
+
             //Create payload
             $payload = collect($request);
 
@@ -107,6 +110,9 @@ class NoteController extends ApiBaseController
     public function update(UpdateNoteRequest $request, NoteService $service, string $subdomain, Note $note)
     {
         try {
+            //Get Org Hash 
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
+
             //Create payload
             $payload = collect($request);
 
@@ -146,6 +152,9 @@ class NoteController extends ApiBaseController
     public function destroy(DeleteNoteRequest $request, NoteService $service, string $subdomain, Note $note)
     {
         try {
+            //Get Org Hash 
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
+
             //Create payload
             $payload = collect($request);
 

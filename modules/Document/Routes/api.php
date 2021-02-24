@@ -14,18 +14,23 @@ use Modules\Boilerplate\Routing\Router;
 */
 $api = app(Router::class);
 
-$api->version('v1', function (Router $api) {
+$api->version('v1', [
+        'prefix' => 'api',
+        'middleware' => ['api'],
+        'namespace' => 'Modules\Document\Http\Controllers',
+        'domain' => config('crmomni.settings.domain')
+    ], function (Router $api) {
 
     // Authenticated Endpoints for Backend
     $api->group(['middleware' => ['auth:backend']], function(Router $api) {
 
         // Document Endpoints
         $api->group(['prefix' => 'document'], function(Router $api) {
-            $api->get('/', 'Modules\\Document\\Http\\Controllers\\Backend\\DocumentController@index');
+            $api->get('/', 'Backend\\DocumentController@index');
             
-            $api->post('/', 'Modules\\Document\\Http\\Controllers\\Backend\\DocumentController@create');
-            $api->put('{id}', 'Modules\\Document\\Http\\Controllers\\Backend\\DocumentController@update');
-            $api->delete('{id}', 'Modules\\Document\\Http\\Controllers\\Backend\\DocumentController@destroy');
+            $api->post('/', 'Backend\\DocumentController@create');
+            $api->put('{document}', 'Backend\\DocumentController@update');
+            $api->delete('{document}', 'Backend\\DocumentController@destroy');
         });
     });
 });

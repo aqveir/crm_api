@@ -10,6 +10,7 @@ use Modules\Document\Http\Requests\Backend\CreateDocumentRequest;
 use Modules\Document\Http\Requests\Backend\UpdateDocumentRequest;
 use Modules\Document\Http\Requests\Backend\DeleteDocumentRequest;
 
+use Modules\Document\Models\Document;
 use Modules\Document\Services\DocumentService;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -30,6 +31,7 @@ class DocumentController extends ApiBaseController
     public function __construct()
     {
         parent::__construct();
+        $this->authorizeResource(Document::class, 'document');
     }
 
 
@@ -61,11 +63,22 @@ class DocumentController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function create(CreateDocumentRequest $request, DocumentService $service)
+    public function create(CreateDocumentRequest $request, DocumentService $service, string $subdomain)
     {
         try {
+            //Get Org Hash 
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
+
+            //Create payload
+            $payload = collect($request);
+
+            //Check for file upload
+            if (!$request->hasFile('document')) {
+                throw new Exception(400);
+            } //End if
+
             //Create document
-            $data = $service->create($request);
+            $data = $service->create($orgHash, $payload, $request->file('document'));
 
             //Send http status out
             return $this->response->success(compact('data'));
@@ -75,17 +88,6 @@ class DocumentController extends ApiBaseController
         } catch(Exception $e) {
             return $this->response->fail([], Response::HTTP_BAD_REQUEST);
         }
-    } //Function ends
-
-
-    /**
-     * Show the specified resource.
-     * @param int $id
-     * @return Response
-     */
-    public function show($id)
-    {
-        return view('note::show');
     } //Function ends
 
 
@@ -108,14 +110,17 @@ class DocumentController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function update(UpdateDocumentRequest $request, DocumentService $service, $id)
+    public function update(UpdateDocumentRequest $request, DocumentService $service, string $subdomain, Document $document)
     {
         try {
+            //Get Org Hash 
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
+
             //Create payload
             $payload = collect($request);
 
             //Update document
-            $data = $service->update($payload, $id);
+            $data = $service->update($orgHash, $payload, $document['id']);
 
             //Send http status out
             return $this->response->success(compact('data'));
@@ -147,14 +152,17 @@ class DocumentController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function destroy(DeleteDocumentRequest $request, DocumentService $service, $id)
+    public function destroy(DeleteDocumentRequest $request, DocumentService $service, string $subdomain, Document $document)
     {
         try {
+            //Get Org Hash 
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
+
             //Create payload
             $payload = collect($request);
 
             //Delete document
-            $data = $service->delete($payload, $id);
+            $data = $service->delete($orgHash, $payload, $document['id']);
 
             //Send http status out
             return $this->response->success(compact('data'));

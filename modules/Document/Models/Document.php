@@ -30,7 +30,8 @@ class Document extends Model {
      */
     protected $fillable = [
         'org_id', 'entity_type_id', 'reference_id',
-        'title', 'description', 'file_path', 'file_size_in_kb', 'is_full_path',
+        'title', 'description', 'file_path', 'file_extn', 
+        'file_size_in_kb', 'is_full_path',
         'created_by'
     ];
 
