@@ -286,7 +286,7 @@ class ContactService extends BaseService
                     $payload,
                     [
                         'org_id' => $organization['id'],
-                        'last_otp' => null,
+                        '2fa_secret' => null,
                         'group_id' => 0,
                         'created_by' => $createdBy,
                         'ip_address' => $ipAddress

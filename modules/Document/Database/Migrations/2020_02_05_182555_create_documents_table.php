@@ -21,10 +21,10 @@ class CreateDocumentsTable extends Migration
             $table->integer('entity_type_id');
             $table->integer('reference_id');
 
-            $table->string('title')->nullable();
+            $table->string('title', 255)->nullable();
             $table->text('description')->nullable();
-            $table->string('file_path');
-            $table->string('file_extn')->nullable();
+            $table->string('file_path', 1000);
+            $table->string('file_extn', 20)->nullable();
             $table->decimal('file_size_in_kb', 10, 2)->default(0); // In Kilo Bytes
             $table->boolean('is_full_path')->default(false);
             $table->boolean('is_active')->default(true);

@@ -20,7 +20,7 @@ class CreateContactsTable extends Migration
             $table->integer('org_id');
             //$table->string('username')->unique();
             $table->string('password');
-            $table->string('last_otp')->nullable();
+            $table->string('2fa_secret')->nullable();
 
             //Social login - Socialite
             $table->string('provider')->nullable();

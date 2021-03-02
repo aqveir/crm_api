@@ -18,15 +18,15 @@ class CreateUsersTable extends Migration
             $table->string('hash')->nullable();
 
             $table->integer('org_id');
-            $table->string('username')->unique();
-            $table->string('password');
+            $table->string('username', 255)->unique();
+            $table->string('password', 255);
             //$table->string('remember_token')->nullable();
-            $table->string('first_name')->nullable();
-            $table->string('middle_name')->nullable();
-            $table->string('last_name')->nullable();
+            $table->string('first_name', 100)->nullable();
+            $table->string('middle_name', 100)->nullable();
+            $table->string('last_name', 100)->nullable();
 
-            //To be used for OTP based authentication
-            $table->string('last_otp')->nullable();
+            //To be used for 2FA/TOTP based authentication
+            $table->string('2fa_secret')->nullable();
 
             $table->integer('country_id')->nullable();
             $table->integer('timezone_id')->nullable();
