@@ -29,6 +29,12 @@ return [
         'privileges' => env('TABLE_NAME_PREFIX', '') . 'privileges',
         'role_privileges' => env('TABLE_NAME_PREFIX', '') . 'role_privileges',
 
+        //Subscription Entities
+        'subscription' => [
+            'main' => env('TABLE_NAME_PREFIX', '') . 'subscriptions',
+            'organizations' => env('TABLE_NAME_PREFIX', '') . 'organization_subscriptions',
+        ],
+
         //Account Entities
         'account' => [
             'main' => env('TABLE_NAME_PREFIX', '') . 'accounts',

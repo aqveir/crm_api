@@ -19,8 +19,8 @@ class CreateLookupValueTable extends Migration
             $table->integer('org_id')->default(0);
             $table->integer('lookup_id');
             $table->string('key')->unique();
-            $table->string('display_value')->nullable();
-            $table->string('description')->nullable();
+            $table->string('display_value', 255)->nullable();
+            $table->string('description', 1000)->nullable();
             $table->integer('order')->default(1);
             $table->boolean('is_editable')->default(true);
             $table->boolean('is_active')->default(true);

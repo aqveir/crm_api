@@ -13,15 +13,16 @@ class CreateOrganizationSubscriptionsTable extends Migration
      */
     public function up()
     {
-        Schema::create('organization_subscriptions', function (Blueprint $table) {
+        Schema::create(config('crmomni-migration.table_name.subscription.organizations'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
             $table->integer('org_id');
             $table->integer('subsciption_id');
 
-            //TODO: Add other fields
-
-
+            //Subscription and Transaction details
+            $table->timestamp('start_at')->nullable();
+            $table->timestamp('expiry_at')->nullable();
+            $table->text('data_json')->nullable();
             $table->boolean('is_active')->default(false);
 
             //Audit Log Fields
@@ -39,6 +40,6 @@ class CreateOrganizationSubscriptionsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('organization_subscriptions');
+        Schema::dropIfExists(config('crmomni-migration.table_name.subscription.organizations'));
     }
 }

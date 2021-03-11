@@ -298,6 +298,39 @@ return [
                     ]
                 ],
             ],
+
+            // Subscription Controller Requests
+            'subscription' => [
+                // Create Subscription validations
+                'create' => [
+                    'validation_rules' => [
+                        'key' => 'required|string|max:255|unique:'. config('crmomni-migration.table_name.subscription.main') .',key',
+                        'display_value' => 'required|string|max:255',
+                        'description' => 'sometimes|string|max:1000',
+                        'data_json' => 'sometimes|json',
+                        'order' => 'sometimes|number',
+                        'is_displayed' => 'required|boolean'
+                    ]
+                ],
+
+                // Update Subscription validations
+                'update' => [
+                    'validation_rules' => [
+                        'key' => 'required|string|max:255|unique:'. config('crmomni-migration.table_name.subscription.main') .',key',
+                        'display_value' => 'required|string|max:255',
+                        'description' => 'sometimes|string|max:1000',
+                        'data_json' => 'sometimes|json',
+                        'order' => 'sometimes|number',
+                        'is_displayed' => 'required|boolean'
+                    ]
+                ],
+
+                // Delete Subscription validations
+                'delete' => [
+                    'validation_rules' => [
+                    ]
+                ]
+            ], // Subscription Controller end
         ],
 
         'frontend' => [

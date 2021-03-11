@@ -26,7 +26,7 @@ class CreateUsersTable extends Migration
             $table->string('last_name', 100)->nullable();
 
             //To be used for 2FA/TOTP based authentication
-            $table->string('2fa_secret')->nullable();
+            $table->string('2fa_secret', 1000)->nullable();
 
             $table->integer('country_id')->nullable();
             $table->integer('timezone_id')->nullable();

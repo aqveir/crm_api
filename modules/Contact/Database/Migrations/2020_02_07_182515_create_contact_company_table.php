@@ -17,7 +17,7 @@ class CreateContactCompanyTable extends Migration
             $table->bigIncrements('id');
 
             $table->string('name')->unique();
-            $table->string('description')->nullable();
+            $table->string('description', 1000)->nullable();
         });
     }
 

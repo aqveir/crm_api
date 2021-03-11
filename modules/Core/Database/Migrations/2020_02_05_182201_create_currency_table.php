@@ -19,7 +19,7 @@ class CreateCurrencyTable extends Migration
             //Currency details
             $table->string('iso_code')->nullable();
             $table->string('iso_digit')->nullable();
-            $table->string('display_value')->nullable();
+            $table->string('display_value', 255)->nullable();
             $table->string('symbol')->nullable();
             $table->boolean('is_symbol_left_pos')->default(true);
             $table->integer('decimal_places')->default(2);

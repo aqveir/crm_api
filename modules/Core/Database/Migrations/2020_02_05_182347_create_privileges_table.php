@@ -16,9 +16,9 @@ class CreatePrivilegesTable extends Migration
         Schema::create(config('crmomni-migration.table_name.privileges'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->string('key')->unique();
-            $table->string('display_value')->nullable();
-            $table->string('description')->nullable();
+            $table->string('key', 255)->unique();
+            $table->string('display_value', 255)->nullable();
+            $table->string('description', 1000)->nullable();
             $table->boolean('is_active')->default(true);
             $table->boolean('is_secure')->default(false);
 

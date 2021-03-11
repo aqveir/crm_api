@@ -72,7 +72,7 @@ class NoteService extends BaseService
 
 
     /**
-     * Create User
+     * Create Note
      * 
      * @param \Illuminate\Support\Collection $payload
      * @param \bool $isAutoCreated (optional)

@@ -17,9 +17,9 @@ class CreatePreferenceTable extends Migration
             $table->bigIncrements('id');
 
             $table->integer('org_id');
-            $table->string('key');
-            $table->string('display_value')->nullable();
-            $table->string('description')->nullable();
+            $table->string('key', 255);
+            $table->string('display_value', 255)->nullable();
+            $table->string('description', 1000)->nullable();
             $table->string('column_name')->nullable();
             $table->integer('type_id')->nullable();             //From Global Lookup Value Table
             $table->integer('data_id')->nullable();             //From Preference Data Table

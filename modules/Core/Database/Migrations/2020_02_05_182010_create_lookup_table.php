@@ -17,8 +17,8 @@ class CreateLookupTable extends Migration
             $table->bigIncrements('id');
 
             $table->string('key')->unique();
-            $table->string('display_value')->nullable();
-            $table->string('description')->nullable();
+            $table->string('display_value', 255)->nullable();
+            $table->string('description', 1000)->nullable();
             $table->boolean('is_editable')->default(true);
 
             $table->timestamps();

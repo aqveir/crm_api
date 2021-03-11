@@ -17,8 +17,8 @@ class CreateConfigurationsTable extends Migration
             $table->bigIncrements('id');
 
             $table->integer('type_id');
-            $table->string('key')->unique();
-            $table->string('display_value')->nullable();
+            $table->string('key', 255)->unique();
+            $table->string('display_value', 255)->nullable();
             $table->text('filter')->nullable();
             $table->text('schema')->nullable();
             $table->boolean('is_active')->default(true);

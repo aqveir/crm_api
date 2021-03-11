@@ -151,23 +151,25 @@ class ConfigurationTableSeeder extends Seeder
                 'type_id' => '12',
                 'key' => 'configuration_organiation_dbconn',
                 'display_value' => 'Database Connection',
-                'schema' => [
-                    'driver' => 'mysql',
-                    'url' => '',
-                    'host' => 'localhost',
-                    'port' => '3306',
-                    'database' => '',
-                    'username' => 'root',
-                    'password' => 'root',
-                    'unix_socket' => '',
-                    'charset' => 'utf8mb4',
-                    'collation' => 'utf8mb4_unicode_ci',
-                    'prefix' => '',
-                    'prefix_indexes' => true,
-                    'strict' => true,
-                    'engine' => null,
-                    'options' => []
-                ]
+                'schema' => json_encode(
+                    [
+                        'driver' => 'mysql',
+                        'url' => '',
+                        'host' => 'localhost',
+                        'port' => '3306',
+                        'database' => '',
+                        'username' => 'root',
+                        'password' => 'root',
+                        'unix_socket' => '',
+                        'charset' => 'utf8mb4',
+                        'collation' => 'utf8mb4_unicode_ci',
+                        'prefix' => '',
+                        'prefix_indexes' => true,
+                        'strict' => true,
+                        'engine' => null,
+                        'options' => []
+                    ]
+                )
             ]
         ];
     }

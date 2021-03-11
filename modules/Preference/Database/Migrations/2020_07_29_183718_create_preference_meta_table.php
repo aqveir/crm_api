@@ -16,11 +16,11 @@ class CreatePreferenceMetaTable extends Migration
         Schema::create(config('crmomni-migration.table_name.preference.meta'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->string('key')->unique();
+            $table->string('key', 255)->unique();
             $table->string('industry_key')->nullable();         //From Global Lookup Value - Key (Industry Types)
             $table->string('type_key')->nullable();             //From Global Lookup Value - Key  (Data Types)          
-            $table->string('display_value')->nullable();
-            $table->string('description')->nullable();
+            $table->string('display_value', 255)->nullable();
+            $table->string('description', 1000)->nullable();
 
             $table->boolean('is_minimum')->default(false);      //Minimum data type
             $table->boolean('is_maximum')->default(false);      //Maximum data type

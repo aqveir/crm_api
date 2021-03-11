@@ -21,7 +21,7 @@ class CreateCountryTable extends Migration
             $table->string('numeric_code')->nullable();
             $table->string('iso3166_2_code')->nullable();
 
-            $table->string('display_value')->nullable();
+            $table->string('display_value', 255)->nullable();
             $table->string('display_official_name')->nullable();
 
             //Official domain extention

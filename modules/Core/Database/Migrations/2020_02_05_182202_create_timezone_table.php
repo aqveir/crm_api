@@ -19,7 +19,7 @@ class CreateTimezoneTable extends Migration
             //Time zone details
             $table->integer('country_id');
             $table->string('iso3_code')->unique();
-            $table->string('display_value')->nullable();
+            $table->string('display_value', 255)->nullable();
 
             //GMT Offset
             $table->integer('gmt_offset')->default(0);

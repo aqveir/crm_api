@@ -18,7 +18,7 @@ class CreateUserRolesTable extends Migration
 
             $table->integer('user_id');
             $table->integer('role_id');
-            $table->string('description')->nullable();
+            $table->string('description', 1000)->nullable();
             $table->boolean('is_active')->default(true);
 
             //Audit Log Fields

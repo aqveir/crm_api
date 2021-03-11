@@ -5,7 +5,8 @@
     "keywords": [],
     "order": 0,
     "providers": [
-        "Modules\\Subscription\\Providers\\SubscriptionServiceProvider"
+        "Modules\\Subscription\\Providers\\SubscriptionServiceProvider",
+        "Modules\\Subscription\\Providers\\AuthServiceProvider"
     ],
     "aliases": {},
     "files": [],
