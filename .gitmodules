@@ -5,3 +5,8 @@
 [submodule "aws-cognito"]
 	path = packages/ellaisys/aws-cognito
 	url = https://github.com/ellaisys/aws-cognito.git
+
+[submodule "cashier-razorpay"]
+	path = packages/ellaisys/cashier-razorpay
+	url = https://github.com/ellaisys/cashier-razorpay.git
+	
