@@ -30,8 +30,8 @@ class CreateOrganizationsTable extends Migration
             $table->string('address')->nullable();
             $table->string('locality')->nullable();
             $table->string('city')->nullable();
-            $table->integer('state_id')->nullable();
-            $table->integer('country_id')->nullable();
+            $table->unsignedBigInteger('state_id')->nullable();
+            $table->unsignedBigInteger('country_id')->nullable();
             $table->string('zipcode')->nullable();
 
             //Location Details
@@ -46,8 +46,8 @@ class CreateOrganizationsTable extends Migration
             $table->boolean('is_active')->default(true);
 
             //Audit Log Fields
-            $table->integer('created_by')->default(0);
-            $table->integer('updated_by')->nullable();
+            $table->unsignedBigInteger('created_by')->default(0);
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->integer('deleted_by')->nullable();
 
             $table->timestamps();

@@ -16,12 +16,12 @@ class CreatePreferenceTable extends Migration
         Schema::create(config('crmomni-migration.table_name.preference.main'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->integer('org_id');
+            $table->unsignedBigInteger('org_id');
             $table->string('key', 255);
             $table->string('display_value', 255)->nullable();
             $table->string('description', 1000)->nullable();
             $table->string('column_name')->nullable();
-            $table->integer('type_id')->nullable();             //From Global Lookup Value Table
+            $table->unsignedBigInteger('type_id')->nullable();             //From Global Lookup Value Table
             $table->integer('data_id')->nullable();             //From Preference Data Table
             $table->boolean('is_minimum')->default(false);      //Minimum data type
             $table->boolean('is_maximum')->default(false);      //Maximum data type
@@ -31,8 +31,8 @@ class CreatePreferenceTable extends Migration
             $table->boolean('is_active')->default(true);
 
             //Audit Log Fields
-            $table->integer('created_by')->default(0);
-            $table->integer('updated_by')->nullable();
+            $table->unsignedBigInteger('created_by')->default(0);
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->integer('deleted_by')->nullable();
 
             $table->timestamps();

@@ -17,7 +17,7 @@ class CreateContactsTable extends Migration
             $table->bigIncrements('id');
             $table->string('hash')->nullable();
 
-            $table->integer('org_id');
+            $table->unsignedBigInteger('org_id');
             //$table->string('username')->unique();
             $table->string('password');
             $table->string('2fa_secret')->nullable();
@@ -37,7 +37,7 @@ class CreateContactsTable extends Migration
             $table->integer('company_id')->nullable();
             $table->integer('gender_id')->nullable();
             $table->integer('group_id')->nullable();
-            $table->integer('type_id')->nullable();
+            $table->unsignedBigInteger('type_id')->nullable();
             $table->integer('status_id')->nullable();
 
             $table->rememberToken();
@@ -52,8 +52,8 @@ class CreateContactsTable extends Migration
             $table->integer('referred_by')->nullable();
             
             //Audit Log Fields
-            $table->integer('created_by')->default(0);
-            $table->integer('updated_by')->nullable();
+            $table->unsignedBigInteger('created_by')->default(0);
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->integer('deleted_by')->nullable();
             
             $table->timestamps();

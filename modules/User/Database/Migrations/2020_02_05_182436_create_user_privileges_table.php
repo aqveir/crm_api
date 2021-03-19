@@ -16,13 +16,13 @@ class CreateUserPrivilegesTable extends Migration
         Schema::create(config('crmomni-migration.table_name.user.privileges'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->integer('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->integer('privilege_id');
             $table->boolean('is_active')->default(true);
 
             //Audit Log Fields
-            $table->integer('created_by')->default(0);
-            $table->integer('updated_by')->nullable();
+            $table->unsignedBigInteger('created_by')->default(0);
+            $table->unsignedBigInteger('updated_by')->nullable();
 
             $table->timestamps();
         });

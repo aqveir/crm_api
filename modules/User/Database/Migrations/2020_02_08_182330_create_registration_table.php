@@ -21,7 +21,7 @@ class CreateRegistrationTable extends Migration
 
             $table->string('email')->unique();
             $table->string('phone')->nullable();
-            $table->integer('country_id')->nullable();
+            $table->unsignedBigInteger('country_id')->nullable();
             $table->string('password');
 
             //Verification
@@ -30,7 +30,7 @@ class CreateRegistrationTable extends Migration
             $table->timestamp('verified_at')->nullable();
             
             //Audit Log Fields
-            $table->integer('created_by')->default(0);
+            $table->unsignedBigInteger('created_by')->default(0);
 
             $table->timestamps();
             $table->ipAddress('ip_address')->nullable();

@@ -17,7 +17,7 @@ class CreateTimezoneTable extends Migration
             $table->bigIncrements('id');
 
             //Time zone details
-            $table->integer('country_id');
+            $table->unsignedBigInteger('country_id');
             $table->string('iso3_code')->unique();
             $table->string('display_value', 255)->nullable();
 
@@ -30,8 +30,8 @@ class CreateTimezoneTable extends Migration
             $table->boolean('is_active')->default(true);
 
             //Audit Log Fields
-            $table->integer('created_by')->default(0);
-            $table->integer('updated_by')->nullable();
+            $table->unsignedBigInteger('created_by')->default(0);
+            $table->unsignedBigInteger('updated_by')->nullable();
 
             $table->timestamps();
         });

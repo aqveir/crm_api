@@ -16,17 +16,17 @@ class CreateAccountTable extends Migration
         Schema::create(config('crmomni-migration.table_name.account.main'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->integer('org_id');
+            $table->unsignedBigInteger('org_id');
             $table->string('name');
             $table->text('description')->nullable();
-            $table->integer('type_id'); //e.g. Internal/External/etc
+            $table->unsignedBigInteger('type_id'); //e.g. Internal/External/etc
 
             //Account Address
             $table->string('address')->nullable();
             $table->string('locality')->nullable();
             $table->string('city')->nullable();
-            $table->integer('state_id')->nullable();
-            $table->integer('country_id')->nullable();
+            $table->unsignedBigInteger('state_id')->nullable();
+            $table->unsignedBigInteger('country_id')->nullable();
             $table->string('zipcode')->nullable();
 
             //Location Details
@@ -41,8 +41,8 @@ class CreateAccountTable extends Migration
             $table->boolean('is_default')->default(false);  //Default user created for an organization
 
             //Audit Log Fields
-            $table->integer('created_by')->default(0);
-            $table->integer('updated_by')->nullable();
+            $table->unsignedBigInteger('created_by')->default(0);
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->integer('deleted_by')->nullable();
 
             $table->timestamps();

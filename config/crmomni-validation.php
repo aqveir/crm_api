@@ -286,16 +286,12 @@ return [
             // Contact Controller Requests
             'contact' => [
                 'index' => [
-                    'validation_rules' => [
-                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
-                    ]
+                    'validation_rules' => []
                 ],
 
                 // Telephony
                 'telephony' => [
-                    'validation_rules' => [
-                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
-                    ]
+                    'validation_rules' => []
                 ],
             ],
 

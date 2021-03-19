@@ -16,14 +16,14 @@ class CreateUserRolesTable extends Migration
         Schema::create(config('crmomni-migration.table_name.user.roles'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->integer('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->integer('role_id');
             $table->string('description', 1000)->nullable();
             $table->boolean('is_active')->default(true);
 
             //Audit Log Fields
-            $table->integer('created_by')->default(0);
-            $table->integer('updated_by')->nullable();
+            $table->unsignedBigInteger('created_by')->default(0);
+            $table->unsignedBigInteger('updated_by')->nullable();
 
             $table->timestamps();
         });

@@ -16,7 +16,7 @@ class CreatePreferenceDataTable extends Migration
         Schema::create(config('crmomni-migration.table_name.preference.data'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->integer('org_id');
+            $table->unsignedBigInteger('org_id');
             $table->string('key', 255);
             $table->string('display_value', 255)->nullable();
             $table->string('description', 1000)->nullable();

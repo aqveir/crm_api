@@ -17,14 +17,14 @@ class CreateNotesTable extends Migration
             $table->bigIncrements('id');
 
             // FK Relationships
-            $table->integer('org_id');
+            $table->unsignedBigInteger('org_id');
             $table->integer('entity_type_id');
             $table->integer('reference_id');
             $table->text('note')->nullable();
 
             //Audit Log Fields
-            $table->integer('created_by')->default(0);
-            $table->integer('updated_by')->nullable();
+            $table->unsignedBigInteger('created_by')->default(0);
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->integer('deleted_by')->nullable();
 
             $table->timestamps();

@@ -16,13 +16,13 @@ class CreateOrganizationConfigurationsTable extends Migration
         Schema::create(config('crmomni-migration.table_name.organization_configurations'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->integer('org_id');
+            $table->unsignedBigInteger('org_id');
             $table->integer('configuration_id');
             $table->text('value')->nullable();
 
             //Audit Log Fields
-            $table->integer('created_by')->default(0);
-            $table->integer('updated_by')->nullable();
+            $table->unsignedBigInteger('created_by')->default(0);
+            $table->unsignedBigInteger('updated_by')->nullable();
 
             $table->timestamps();
         });

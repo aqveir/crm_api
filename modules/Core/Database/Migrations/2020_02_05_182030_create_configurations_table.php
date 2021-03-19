@@ -16,7 +16,7 @@ class CreateConfigurationsTable extends Migration
         Schema::create(config('crmomni-migration.table_name.configuration.main'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->integer('type_id');
+            $table->unsignedBigInteger('type_id');
             $table->string('key', 255)->unique();
             $table->string('display_value', 255)->nullable();
             $table->text('filter')->nullable();

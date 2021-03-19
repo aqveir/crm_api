@@ -16,9 +16,9 @@ class CreateContactAddressesTable extends Migration
         Schema::create(config('crmomni-migration.table_name.contact.addresses'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->integer('org_id');
+            $table->unsignedBigInteger('org_id');
             $table->integer('contact_id');
-            $table->integer('type_id')->nullable();
+            $table->unsignedBigInteger('type_id')->nullable();
 
             $table->string('name')->nullable();
             $table->string('address1')->nullable();
@@ -27,8 +27,8 @@ class CreateContactAddressesTable extends Migration
             $table->integer('society_id')->nullable();            
             $table->string('locality')->nullable();
             $table->string('city')->nullable();
-            $table->integer('state_id')->nullable();
-            $table->integer('country_id')->nullable();
+            $table->unsignedBigInteger('state_id')->nullable();
+            $table->unsignedBigInteger('country_id')->nullable();
             $table->string('zipcode')->nullable();
 
             //Delivery relevant data
@@ -45,8 +45,8 @@ class CreateContactAddressesTable extends Migration
             $table->boolean('is_active')->default(true);
 
             //Audit Log Fields
-            $table->integer('created_by')->default(0);
-            $table->integer('updated_by')->nullable();
+            $table->unsignedBigInteger('created_by')->default(0);
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->integer('deleted_by')->nullable();
             
             $table->timestamps();
