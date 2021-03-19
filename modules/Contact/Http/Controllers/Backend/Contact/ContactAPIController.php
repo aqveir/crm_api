@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Modules\Core\Http\Controllers\ApiBaseController;
 use Modules\Contact\Http\Requests\Backend\Contact\GetContactRequest;
 
+use Modules\Contact\Models\Contact\Contact;
 use Modules\Contact\Services\Contact\ContactService;
 
 use Exception;
@@ -32,6 +33,7 @@ class ContactAPIController extends ApiBaseController
     public function __construct()
     {
         parent::__construct();
+        $this->authorizeResource(Contact::class, 'contact');
     }
 
 
@@ -100,7 +102,7 @@ class ContactAPIController extends ApiBaseController
      *      @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function show(Request $request, ContactService $service, string $subdomain, string $hash)
+    public function show(Request $request, ContactService $service, string $subdomain, Contact $contact)
     {   
         try {
             //Get Org Hash 
@@ -110,7 +112,7 @@ class ContactAPIController extends ApiBaseController
             $payload = collect($request);
 
             //Get data of the Contact
-            $data=$service->getFullDataByHash($orgHash, $payload, $hash);
+            $data=$service->getFullDataByHash($orgHash, $payload, $contact['hash']);
 
             //Send http status out
             return $this->response->success(compact('data'));

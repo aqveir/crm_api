@@ -76,25 +76,37 @@ class PrivilegesTableSeeder extends Seeder
                 'display_value' => 'Delete Account Data',
             ],
 
-            [ //list_all_organization_customers
-                'key' => 'list_all_organization_customers',
-                'display_value' => 'Show Customers in the Organization',
+            [ //list_all_contacts
+                'key' => 'list_all_contacts',
+                'display_value' => 'Show All Contacts',
             ],
-            [ //add_customer
-                'key' => 'add_customer',
-                'display_value' => 'Add Customer Record',
+            [ //list_account_contacts_only
+                'key' => 'list_account_contacts_only',
+                'display_value' => 'Show All Contacts for an Account Only',
             ],
-            [ //edit_customer
-                'key' => 'edit_customer',
-                'display_value' => 'Edit/Amend Customer Record',
+            [ //list_user_contacts_only
+                'key' => 'list_user_contacts_only',
+                'display_value' => 'Show All Contacts for the User/Owner Only',
             ],
-            [ //delete_customer
-                'key' => 'delete_customer',
-                'display_value' => 'Delete Customer Record',
+            [ //view_contact
+                'key' => 'view_contact',
+                'display_value' => 'Show/View Contact Record',
+            ],  
+            [ //add_contact
+                'key' => 'add_contact',
+                'display_value' => 'Add Contact Record',
             ],
-            [ //show_customer_unmasked_data
-                'key' => 'show_customer_unmasked_data',
-                'display_value' => 'Show Customer Record (Unmasked)',
+            [ //edit_contact
+                'key' => 'edit_contact',
+                'display_value' => 'Edit/Amend Contact Record',
+            ],
+            [ //delete_contact
+                'key' => 'delete_contact',
+                'display_value' => 'Delete Contact Record',
+            ],
+            [ //show_contact_unmasked_data
+                'key' => 'show_contact_unmasked_data',
+                'display_value' => 'Show Contact Record (Unmasked)',
             ],
 
             //Note Privileges

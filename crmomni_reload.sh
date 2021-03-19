@@ -18,8 +18,12 @@ echo "Clearing logs..."
 sudo cat /dev/null > storage/logs/laravel.log
 echo "Logs cleared."
 
+echo "Generating Laravel App Key..."
+sudo php artisan key:generate --force --quiet
+echo "Generated Laravel App Key"
+
 echo "Generating JWT Secret..."
-sudo php artisan jwt:secret
+sudo php artisan jwt:secret --force --quiet
 echo "Generated JWT Secret Key"
 
 echo "Creating DB..."
@@ -31,4 +35,5 @@ sudo php artisan module:seed Core
 sudo php artisan module:seed Contact
 sudo php artisan module:seed User
 sudo php artisan module:seed Preference
+sudo php artisan module:seed Subscription
 echo "Data created..."

@@ -43,10 +43,10 @@ class RolesTableSeeder extends Seeder
                     'list_all_organization_catalogue',
                     'add_new_catalogue_data', 'edit_catalogue_data',
 
-                    //Manage Customer
-                    'list_all_organization_customers', 'add_customer',
-                    'edit_customer', 'delete_customer', 
-                    'show_customer_unmasked_data',
+                    //Manage Contact
+                    'list_all_contacts', 'view_contact',
+                    'add_contact', 'edit_contact', 'delete_contact', 
+                    'show_contact_unmasked_data',
 
                     //Manage Notes
                     'add_note', 'delete_note',
@@ -57,15 +57,14 @@ class RolesTableSeeder extends Seeder
             ],
             [
                 'org_id' => 1,
-                'key' => 'store_manager',
-                'display_value' => 'Store Manager',
+                'key' => 'account_admin',
+                'display_value' => 'Account Admin',
                 'privileges' => [
                     //Manage Store
                     'edit_stores_data',
 
-                    //Manage Customer
-                    'list_all_organization_customers',
-                    'show_customer_masked_data',
+                    //Manage Contact
+                    'list_account_contacts_only',
 
                     //Manage Notes
                     'add_note', 'delete_note',
@@ -79,9 +78,8 @@ class RolesTableSeeder extends Seeder
                 'key' => 'telecaller_support',
                 'display_value' => 'Support Telecallers',
                 'privileges' => [
-                    //Manage Customer
-                    'list_all_organization_customers',
-                    'show_customer_masked_data',
+                    //Manage Contact
+                    'list_user_contacts_only',
 
                     //Manage Notes
                     'add_note',
