@@ -25,13 +25,15 @@ return [
                 // Lookup data fetch-show
                 'fetch' => [
                     'validation_rules' => [
-                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
                     ]
                 ],
 
                 // LookUp Create Request
                 'create' => [
                     'validation_rules' => [
+                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        
                         'name' => 'required|max:25',
                         'description' => 'max:40'
                     ]
@@ -40,6 +42,8 @@ return [
                 // LookUp Update Request
                 'update' => [
                     'validation_rules' => [
+                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        
                         'id' => 'required|numeric',
                         'name' => 'required|max:25',
                         'description' => 'nullable|max:250'
@@ -72,14 +76,14 @@ return [
                 // Role fetch-show
                 'fetch' => [
                     'validation_rules' => [
-                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
                     ]
                 ],
 
                 // Role Create Request
                 'create' => [
                     'validation_rules' => [
-                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
 
                         'display_value' => 'required|max:255',
                         'description' => 'max:255',
@@ -90,7 +94,7 @@ return [
                 // Role Update Request
                 'update' => [
                     'validation_rules' => [
-                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
 
                         'display_value' => 'required|max:255',
                         'description' => 'max:255',
@@ -165,7 +169,8 @@ return [
                     'release_token' => env('SIGN_UP_RELEASE_TOKEN', false),
 
                     'validation_rules' => [
-                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        
                         'username' => 'required|max:36|unique:users,username',
                         'password' => 'required|string|min:6',
                         'first_name' => 'nullable|max:40',
@@ -179,7 +184,7 @@ return [
 
                 'update' => [
                     'validation_rules' => [
-                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
 
                         'first_name' => 'string|max:40',
                         'last_name' => 'string|max:40',
@@ -213,14 +218,15 @@ return [
                 //Get User data
                 'fetch' => [
                     'validation_rules' => [
-                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
                     ]
                 ],
 
                 //User Status Request: Intended for telecallers
                 'status' => [
                     'validation_rules' => [
-                        'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        
                         'role' => 'required|string',
                     ]
                 ],
@@ -300,7 +306,8 @@ return [
                 // Create Subscription validations
                 'create' => [
                     'validation_rules' => [
-                        'key' => 'required|string|max:255|unique:'. config('crmomni-migration.table_name.subscription.main') .',key',
+                        'key' => 'sometimes|string|max:255|unique:'. config('crmomni-migration.table_name.subscription.main') .',key',
+                        
                         'display_value' => 'required|string|max:255',
                         'description' => 'sometimes|string|max:1000',
                         'data_json' => 'sometimes|json',
@@ -312,7 +319,8 @@ return [
                 // Update Subscription validations
                 'update' => [
                     'validation_rules' => [
-                        'key' => 'required|string|max:255|unique:'. config('crmomni-migration.table_name.subscription.main') .',key',
+                        'key' => 'sometimes|string|max:255|unique:'. config('crmomni-migration.table_name.subscription.main') .',key',
+                        
                         'display_value' => 'required|string|max:255',
                         'description' => 'sometimes|string|max:1000',
                         'data_json' => 'sometimes|json',
@@ -342,6 +350,7 @@ return [
                 'exists' => [
                     'validation_rules' => [
                         'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        
                         'email' => 'required_without:phone|email|max:36',
                         'phone' => 'required_without:email|max:15',
                     ]
