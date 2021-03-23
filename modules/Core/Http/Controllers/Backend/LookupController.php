@@ -59,11 +59,11 @@ class LookupController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function index(FetchLookupRequest $request, LookupService $service)
+    public function index(FetchLookupRequest $request, LookupService $service, string $subdomain)
     {
         try {
             //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request);
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
 
             //Create payload
             $payload = collect($request);
@@ -103,11 +103,11 @@ class LookupController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function show(FetchLookupRequest $request, LookupService $service, string $key)
+    public function show(FetchLookupRequest $request, LookupService $service, string $subdomain, string $key)
     {
         try {
             //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request);
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
 
             //Create payload
             $payload = collect($request);
@@ -146,11 +146,11 @@ class LookupController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function create(CreateLookupRequest $request, LookupService $service)
+    public function create(CreateLookupRequest $request, LookupService $service, string $subdomain)
     {
         try {
             //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request);
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
 
             //Create payload
             $payload = collect($request);
@@ -190,11 +190,11 @@ class LookupController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function update(UpdateLookupRequest $request, LookupService $service, string $key)
+    public function update(UpdateLookupRequest $request, LookupService $service, string $subdomain, string $key)
     {
         try {
             //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request);
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
 
             //Create payload
             $payload = collect($request);
@@ -234,11 +234,11 @@ class LookupController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function delete(FetchLookupRequest $request, LookupService $service, string $key)
+    public function delete(FetchLookupRequest $request, LookupService $service, string $subdomain, string $key)
     {
         try {
             //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request);
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
 
             //Create payload
             $payload = collect($request);
