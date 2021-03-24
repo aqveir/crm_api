@@ -12,6 +12,7 @@ use Modules\Core\Http\Requests\Backend\Lookup\FetchLookupRequest;
 use Modules\Core\Http\Requests\Backend\Lookup\CreateLookupRequest;
 use Modules\Core\Http\Requests\Backend\Lookup\UpdateLookupRequest;
 
+use Modules\Core\Models\Lookup\Lookup;
 use Modules\Core\Services\Lookup\LookupService;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -37,11 +38,12 @@ class LookupController extends ApiBaseController
     public function __construct()
     {
         parent::__construct();
+        $this->authorizeResource(Lookup::class, 'lookup');
     }
 
 
     /**
-     * Get All Organizations
+     * Get All Lookup
      * 
      * @param \Modules\Core\Http\Requests\Backend\Lookup\FetchLookupRequest $request
      * @param \Modules\Core\Services\Lookup\LookupService $service
@@ -96,14 +98,13 @@ class LookupController extends ApiBaseController
      *     tags={"Lookup"},
      *     operationId="api.lookup.show",
      *     security={{"omni_token":{}}},
-     *     @OA\Parameter(ref="#/components/parameters/organization_key"),
      *     @OA\Parameter(name="key", in="path", description="Key", required=true, @OA\Schema(type="string")),
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function show(FetchLookupRequest $request, LookupService $service, string $subdomain, string $key)
+    public function show(FetchLookupRequest $request, LookupService $service, string $subdomain, Lookup $lookup)
     {
         try {
             //Get Org Hash 
@@ -113,7 +114,7 @@ class LookupController extends ApiBaseController
             $payload = collect($request);
 
             //Fetch all lookup data
-            $data = $service->show($orgHash, $payload, $key);
+            $data = $service->show($orgHash, $payload, $lookup['key']);
 
             //Send http status out
             return $this->response->success(compact('data'));
@@ -190,7 +191,7 @@ class LookupController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function update(UpdateLookupRequest $request, LookupService $service, string $subdomain, string $key)
+    public function update(UpdateLookupRequest $request, LookupService $service, string $subdomain, Lookup $lookup)
     {
         try {
             //Get Org Hash 
@@ -234,7 +235,7 @@ class LookupController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function delete(FetchLookupRequest $request, LookupService $service, string $subdomain, string $key)
+    public function delete(FetchLookupRequest $request, LookupService $service, string $subdomain, Lookup $lookup)
     {
         try {
             //Get Org Hash 

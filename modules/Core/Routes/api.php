@@ -42,11 +42,11 @@ $api->version('v1', [
         // Lookup Endpoint
         $api->group(['prefix' => 'lookup'], function(Router $api) {
             $api->get('/', 'Backend\\LookupController@index');
-            $api->get('{key}', 'Backend\\LookupController@show');
+            $api->get('{lookup}', 'Backend\\LookupController@show');
 
             $api->post('/', 'Backend\\LookupController@create');
-            $api->put('{key}', 'Backend\\LookupController@update');
-            $api->delete('{key}', 'Backend\\LookupController@destroy');
+            $api->put('{lookup}', 'Backend\\LookupController@update');
+            $api->delete('{lookup}', 'Backend\\LookupController@destroy');
         });
 
         // Role Endpoint

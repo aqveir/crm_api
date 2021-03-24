@@ -33,7 +33,6 @@ return [
                 'create' => [
                     'validation_rules' => [
                         'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
-                        
                         'name' => 'required|max:25',
                         'description' => 'max:40'
                     ]

@@ -62,7 +62,7 @@ class GetUserController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function index(GetUserRequest $request, UserService $userService, string $ohash)
+    public function index(GetUserRequest $request, UserService $userService, string $subdomain, string $ohash)
     {
         try {
             //Get Org Hash 
@@ -110,7 +110,7 @@ class GetUserController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function show(GetUserRequest $request, UserService $userService, string $ohash, string $hash)
+    public function show(GetUserRequest $request, UserService $userService, string $subdomain, string $ohash, string $hash)
     {   
         try {
             //Get Org Hash 
@@ -151,7 +151,7 @@ class GetUserController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function profile(GetUserRequest $request, UserService $userService)
+    public function profile(GetUserRequest $request, UserService $userService, string $subdomain)
     {
         try {
             //Create payload
@@ -200,11 +200,11 @@ class GetUserController extends ApiBaseController
      *      @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function exists(UserExistsRequest $request, UserService $userService)
+    public function exists(UserExistsRequest $request, UserService $userService, string $subdomain)
     {
         try {
             //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request);
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
 
             //Create payload
             $payload = collect($request);
@@ -247,11 +247,11 @@ class GetUserController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function detail(UserStatusRequest $request, UserService $service, string $status)
+    public function detail(UserStatusRequest $request, UserService $service, string $subdomain, string $status)
     {   
         try {
             //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request);
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
 
             //Create payload
             $payload = collect($request);

@@ -132,9 +132,7 @@ class LookupService extends BaseService
             $organization = $this->getOrganizationByHash($orgHash);
 
             //Get request data
-            $data = $payload->toArray();
-
-            $response = $this->lookupvalueRepository->getLookUpByKey($organization['id'], $lookupKey);
+            $response = $this->lookupRepository->getLookUpByKey($organization['id'], $lookupKey);
 
             //Return the response data
             $objReturnValue = $response;            

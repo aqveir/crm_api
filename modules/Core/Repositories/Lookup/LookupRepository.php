@@ -34,7 +34,7 @@ class LookupRepository extends EloquentRepository
 	 */
 	public function getLookUpByKey(int $orgId, string $key)
 	{
-		$objReturnValue=null;
+        $objReturnValue=null;
 		
 		try {
 	        $query = $this->getAllLookUpData($orgId);
@@ -62,7 +62,6 @@ class LookupRepository extends EloquentRepository
 	        $query = $this->getAllLookUpData($orgId);
 	        $query = $query->where('id', $lookupId);
 	        $query = $query->first();
-	        //Log::debug($query);
 
 	        $objReturnValue = $query;		
 		} catch(Exception $e) {
@@ -111,8 +110,6 @@ class LookupRepository extends EloquentRepository
         $objReturnValue=null;
         try {
             $query = $this->model;
-            // $query = $query->where('org_id', $orgId);
-            // $query = $query->orWhere('org_id', 0);
             $query = $query->orderBy('id', 'asc');
             $query = $query->get();
 
