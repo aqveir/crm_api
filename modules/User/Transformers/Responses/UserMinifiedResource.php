@@ -26,26 +26,25 @@ class UserMinifiedResource extends ResourceCollection
     public function toArray($request)
     {
         $objReturnValue=null;
-
-        // $user=[];
-        // $user['hash'] = $this['user']['hash'];
-        // $user['username'] = $this['user']['username'];
-        // $user['full_name'] = $this['user']['full_name'];
-
-        // $status=[];
-        // $status['id'] = $this['status']['id'];
-        // $status['key'] = $this['status']['key'];
-        // $status['display_value'] = $this['status']['display_value'];
+        $status = null;
 
         try {
             $objReturnValue = [];
             foreach ($this->collection as $data) {
+                $data->load('availability', 'availability.status');
+                $availability = collect($data['availability']);
+                if (!empty($availability)) {
+                    $status = collect($availability['status'])->only('key', 'display_value');
+                } //End if
+
                 $response = $data->only([
                     'hash', 'name_initials', 'full_name', 'email', 'phone',
                     'country',
                     'is_active', 'last_login_at', 'last_updated_at'
                 ]);
                 $response['avatar'] = 'assets/media/svg/avatars/001-boy.svg';
+                $response['availability'] = $availability?$availability->only('last_updated_at'):null;
+                $response['availability']['status'] = $status;
 
                 array_push($objReturnValue, $response);
             } //Loop ends

@@ -87,7 +87,7 @@ trait UserRelationship
 
 
 	/**
-	* Show userAvailablity status
+	* Show user availablity status
 	*/
 	public function availability()
 	{
@@ -100,7 +100,7 @@ trait UserRelationship
 
 
 	/**
-	* Show userAvailablity status
+	* Show User Reportees
 	*/
 	public function user_reportess()
 	{

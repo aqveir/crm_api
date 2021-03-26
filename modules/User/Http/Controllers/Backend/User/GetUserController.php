@@ -11,6 +11,7 @@ use Modules\User\Http\Requests\Backend\User\CreateUserRequest;
 use Modules\User\Http\Requests\Backend\User\UpdateUserRequest;
 use Modules\User\Http\Requests\Backend\User\UserStatusRequest;
 
+use Modules\User\Transformers\Responses\UserResource;
 use Modules\User\Transformers\Responses\UserMinifiedResource;
 use Modules\User\Transformers\Responses\UserStatusJsonResponseResource;
 use Modules\User\Transformers\Responses\UserStatusTextResponseResource;
@@ -74,6 +75,7 @@ class GetUserController extends ApiBaseController
             //Fetch Users data for Organization
             $response = $userService->getUsersByOrganization($orgHash, $payload);
 
+            //Transform data
             $data = new UserMinifiedResource(collect($response));
 
             //Send http status out
@@ -120,7 +122,10 @@ class GetUserController extends ApiBaseController
             $payload = collect($request);
 
             //Fetch User record
-            $data = $userService->getUserDataByOrganization($payload, $orgHash, $hash);
+            $result = $userService->getUserDataByOrganization($payload, $orgHash, $hash);
+
+            //Transform data
+            $data = new UserResource($result);
 
             //Send http status out
             return $this->response->success(compact('data'));
@@ -260,7 +265,8 @@ class GetUserController extends ApiBaseController
             $response = $service->getUserByStatus($orgHash, $payload, $status);
 
             //Output formats
-            $outputFormat = ($request->has('output'))?$request['output']:'hash,full_name,phone';
+            $outputFormat = ($request->has('output'))?$request['output']:'hash,first_name,full_name,phone';
+            dd($outputFormat);
             $phoneFormat = ($request->has('phoneformat'))?$request['phoneformat']:'0[number]';
 
             //Send http status out
