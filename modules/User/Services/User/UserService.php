@@ -14,6 +14,8 @@ use Modules\User\Traits\UserAvailabilityAction;
 use Modules\Core\Services\BaseService;
 
 use Modules\User\Events\UserCreatedEvent;
+use Modules\User\Events\UserUpdatedEvent;
+use Modules\User\Events\UserDeletedEvent;
 
 use Modules\User\Notifications\UserEmailVerification;
 use Modules\User\Notifications\UserAccountActivation;
