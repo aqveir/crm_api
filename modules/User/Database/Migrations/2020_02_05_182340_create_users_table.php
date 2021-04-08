@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->unsignedBigInteger('org_id');
             $table->string('username', 255)->unique();
             $table->string('password', 255);
-            //$table->string('remember_token')->nullable();
+            $table->string('avatar', 4000)->nullable();
             $table->string('first_name', 100)->nullable();
             $table->string('middle_name', 100)->nullable();
             $table->string('last_name', 100)->nullable();
@@ -44,6 +44,9 @@ class CreateUsersTable extends Migration
             $table->boolean('is_verified')->default(false);
             $table->string('verification_token')->nullable();
             $table->timestamp('verified_at')->nullable();
+
+            //Preferences
+            $table->string('language')->default('en');
 
             //Fields for Tele calling & Activity allocation
             $table->string('virtual_phone_number')->nullable(); //Tele caller virtual number      

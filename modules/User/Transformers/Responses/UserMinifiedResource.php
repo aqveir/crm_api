@@ -38,11 +38,15 @@ class UserMinifiedResource extends ResourceCollection
                 } //End if
 
                 $response = $data->only([
-                    'hash', 'name_initials', 'full_name', 'email', 'phone',
-                    'country',
+                    'hash', 'avatar', 'name_initials', 'full_name', 
+                    'email', 'phone', 'country',
                     'is_active', 'last_login_at', 'last_updated_at'
                 ]);
+                $response['is_verified'] = empty($this['verified_at'])?false:true;
+                
                 $response['avatar'] = 'assets/media/svg/avatars/001-boy.svg';
+
+                //Manage User Availability/Online Status
                 $response['availability'] = $availability?$availability->only('last_updated_at'):null;
                 $response['availability']['status'] = $status;
 
