@@ -20,12 +20,16 @@ class RolesTableSeeder extends Seeder
                 'display_value' => 'Super Administrator',
                 'privileges' => [
                     //Manage Organization
-                    'list_all_organizations', 'read_organization_data',
+                    'list_all_organizations', 'view_organization',
                     'add_organization', 'edit_organization',
                     'delete_organization',
 
+                    //Manage Privileges
+                    'list_all_privileges',
+
                     //Manage Roles
-                    'list_all_roles'
+                    'list_all_roles', 'view_role', 
+                    'add_role', 'edit_role', 'delete_role'
                 ]
             ],
             [
@@ -34,14 +38,18 @@ class RolesTableSeeder extends Seeder
                 'display_value' => 'Organization Administrator',
                 'privileges' => [
                     //Manage Organization
-                    'list_all_organization_stores', 
-                    
-                    //Manage Store
-                    'add_new_stores_data', 'edit_stores_data', 
-                    
-                    //Manage Catalogue
-                    'list_all_organization_catalogue',
-                    'add_new_catalogue_data', 'edit_catalogue_data',
+                    'view_organization', 'edit_organization',
+
+                    //Manage Privileges
+                    'list_all_privileges',
+
+                    //Manage Roles
+                    'list_all_roles', 'view_role', 
+                    'add_role', 'edit_role', 'delete_role',
+
+                    //Manage Accounts
+                    'list_all_organization_accounts', 'view_account',
+                    'add_account', 'edit_account', 'delete_account',
 
                     //Manage Contact
                     'list_all_contacts', 'view_contact',
@@ -52,7 +60,11 @@ class RolesTableSeeder extends Seeder
                     'add_note', 'delete_note',
 
                     //Manage Documents
-                    'add_new_document', 'delete_document'
+                    'add_new_document', 'delete_document',
+                    
+                    //Manage Catalogue
+                    'list_all_organization_catalogue',
+                    'add_new_catalogue_data', 'edit_catalogue_data',
                 ]
             ],
             [
@@ -60,8 +72,8 @@ class RolesTableSeeder extends Seeder
                 'key' => 'account_admin',
                 'display_value' => 'Account Admin',
                 'privileges' => [
-                    //Manage Store
-                    'edit_stores_data',
+                    //Manage Accounts
+                    'view_account', 'edit_account',
 
                     //Manage Contact
                     'list_account_contacts_only',

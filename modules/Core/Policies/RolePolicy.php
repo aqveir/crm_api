@@ -48,7 +48,7 @@ class RolePolicy
      */
     public function viewAny(User $user)
     {
-        if ($user->hasPrivileges(['list_all_organizations'])) {
+        if ($user->hasPrivileges(['list_all_roles'])) {
             return true;
         } //End if
     } //Function ends
@@ -64,12 +64,8 @@ class RolePolicy
      */
     public function view(User $user, Role $role)
     {       
-        if ($user->hasRoles(['super_admin'])) {
+        if ($user->hasPrivileges(['view_role'])) {
             return true;
-        } elseif ($user->hasRoles(['organization_admin']) || $user->hasPrivileges(['read_organization_data'])) {
-            return $user->organization['id'] == $role['id'];
-        } else {
-            return false;
         } //End if
     } //Function ends
 
@@ -83,7 +79,7 @@ class RolePolicy
      */
     public function create(User $user)
     {
-        if ($user->hasPrivileges(['add_organization'])) {
+        if ($user->hasPrivileges(['add_role'])) {
             return true;
         } //End if
     } //Function ends
@@ -99,12 +95,8 @@ class RolePolicy
      */
     public function update(User $user, Role $role)
     {
-        if ($user->hasRoles(['super_admin'])) {
+        if ($user->hasRoles(['edit_role'])) {
             return true;
-        } elseif ($user->hasRoles(['organization_admin']) || $user->hasPrivileges(['edit_organization'])) {
-            return $user->organization['id'] == $role['id'];
-        } else {
-            return false;
         } //End if
     } //Function ends
 
@@ -119,7 +111,7 @@ class RolePolicy
      */
     public function delete(User $user, Role $role)
     {
-        if ($user->hasRoles(['delete_organization'])) {
+        if ($user->hasRoles(['delete_role'])) {
             return true;
         } //End if
     } //Function ends

@@ -91,7 +91,9 @@ class Organization extends Model
      *
      * @var array
      */
-    protected $casts = [];
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
 
 
     /**

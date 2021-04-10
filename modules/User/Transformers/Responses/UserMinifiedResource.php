@@ -43,8 +43,6 @@ class UserMinifiedResource extends ResourceCollection
                     'is_active', 'last_login_at', 'last_updated_at'
                 ]);
                 $response['is_verified'] = empty($this['verified_at'])?false:true;
-                
-                $response['avatar'] = 'assets/media/svg/avatars/001-boy.svg';
 
                 //Manage User Availability/Online Status
                 $response['availability'] = $availability?$availability->only('last_updated_at'):null;

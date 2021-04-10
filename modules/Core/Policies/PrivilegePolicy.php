@@ -3,12 +3,12 @@
 namespace Modules\Core\Policies;
 
 use Modules\User\Models\User\User;
-use Modules\Core\Models\Organization\Organization;
+use Modules\Core\Models\Privilege\Privilege;
 
 use Illuminate\Auth\Access\Response;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class OrganizationPolicy
+class PrivilegePolicy
 {
     use HandlesAuthorization;
 
@@ -27,13 +27,12 @@ class OrganizationPolicy
      * Determine if the given action can be created by the user.
      *
      * @param  \Modules\User\Models\User\User  $user
-     * @param  \Modules\Core\Models\Organization\Organization  $organization
      * 
      * @return bool
      */
     public function before(User $user, $ability)
     {
-        if ($user->hasRoles(['organization_admin'])) {
+        if ($user->hasRoles(['super_admin'])) {
             return true;
         } //End if
     }
@@ -48,7 +47,7 @@ class OrganizationPolicy
      */
     public function viewAny(User $user)
     {
-        if ($user->hasPrivileges(['list_all_organizations'])) {
+        if ($user->hasPrivileges(['list_all_privileges'])) {
             return true;
         } //End if
     } //Function ends
@@ -58,19 +57,13 @@ class OrganizationPolicy
      * Determine if the given action (show) can be executed by the user.
      *
      * @param  \Modules\User\Models\User\User  $user
-     * @param  \Modules\Core\Models\Organization\Organization  $organization
+     * @param  \Modules\Core\Models\Privilege\Privilege  $privilege
      * 
      * @return bool
      */
-    public function view(User $user, Organization $organization)
+    public function view(User $user, Privilege $privilege)
     {       
-        if ($user->hasRoles(['super_admin'])) {
-            return true;
-        } elseif ($user->hasRoles(['organization_admin']) || $user->hasPrivileges(['view_organization'])) {
-            return $user->organization['id'] == $organization['id'];
-        } else {
-            return false;
-        } //End if
+        return false;
     } //Function ends
 
 
@@ -83,8 +76,10 @@ class OrganizationPolicy
      */
     public function create(User $user)
     {
-        if ($user->hasPrivileges(['add_organization'])) {
+        if ($user->hasRoles(['super_admin'])) {
             return true;
+        } else {
+            return false;
         } //End if
     } //Function ends
 
@@ -93,16 +88,14 @@ class OrganizationPolicy
      * Determine if the given action (update) can be executed by the user.
      *
      * @param  \Modules\User\Models\User\User  $user
-     * @param  \Modules\Core\Models\Organization\Organization  $organization
+     * @param  \Modules\Core\Models\Privilege\Privilege  $privilege
      * 
      * @return bool
      */
-    public function update(User $user, Organization $organization)
+    public function update(User $user, Privilege $privilege)
     {
         if ($user->hasRoles(['super_admin'])) {
             return true;
-        } elseif ($user->hasRoles(['organization_admin']) || $user->hasPrivileges(['edit_organization'])) {
-            return $user->organization['id'] == $organization['id'];
         } else {
             return false;
         } //End if
@@ -113,14 +106,16 @@ class OrganizationPolicy
      * Determine if the given action (delete) can be executed by the user.
      *
      * @param  \Modules\User\Models\User\User  $user
-     * @param  \Modules\Core\Models\Organization\Organization  $organization
+     * @param  \Modules\Core\Models\Privilege\Privilege  $privilege
      * 
      * @return bool
      */
-    public function delete(User $user, Organization $organization)
+    public function delete(User $user, Privilege $privilege)
     {
-        if ($user->hasRoles(['delete_organization'])) {
+        if ($user->hasRoles(['super_admin'])) {
             return true;
+        } else {
+            return false;
         } //End if
     } //Function ends
 

@@ -150,7 +150,7 @@ class OrganizationService extends BaseService
 
             if ($organization) {
                 //Create default role
-                $roles = $this->roleService->createDefaultRole($organization['id']);
+                $roles = $this->roleService->createDefaultRole($organization['hash']);
 
                 //TODO: Create configuration data
 

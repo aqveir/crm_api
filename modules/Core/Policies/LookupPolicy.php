@@ -66,7 +66,7 @@ class LookupPolicy
     {       
         return true;
 
-        if ($user->hasPrivileges(['read_organization_data'])) {
+        if ($user->hasPrivileges(['view_organization'])) {
             return true;
         } else {
             return false;

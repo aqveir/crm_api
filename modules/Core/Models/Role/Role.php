@@ -76,6 +76,17 @@ class Role extends Model
         'is_active' => 'boolean',
     ];
 
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'key';
+    }
+
     
     /**
      * Default constructor

@@ -6,6 +6,8 @@ use Config;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
+use Modules\Core\Models\Privilege\Privilege;
+
 use Modules\Core\Http\Controllers\ApiBaseController;
 
 use Modules\Core\Http\Requests\Backend\Privilege\FetchPrivilegeRequest;
@@ -37,6 +39,7 @@ class PrivilegeController extends ApiBaseController
     public function __construct()
     {
         parent::__construct();
+        $this->authorizeResource(Privilege::class, 'privilege');
     }
 
 
@@ -45,6 +48,7 @@ class PrivilegeController extends ApiBaseController
      * 
      * @param \Modules\Core\Http\Requests\Backend\Privilege\FetchPrivilegeRequest $request
      * @param \Modules\Core\Services\Privilege\PrivilegeService $service
+     * @param \string $subdomain
      *
      * @return \Illuminate\Http\JsonResponse
      *
@@ -59,11 +63,11 @@ class PrivilegeController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function index(FetchPrivilegeRequest $request, PrivilegeService $service)
+    public function index(FetchPrivilegeRequest $request, PrivilegeService $service, string $subdomain)
     {
         try {
             //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request);
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
 
             //Create payload
             $payload = collect($request);
@@ -87,7 +91,8 @@ class PrivilegeController extends ApiBaseController
      * 
      * @param \Modules\Core\Http\Requests\Backend\Privilege\FetchPrivilegeRequest $request
      * @param \Modules\Core\Services\Privilege\PrivilegeService $service
-     * @param \string $key
+     * @param \string $subdomain
+     * @param \Modules\Core\Models\Privilege\Privilege $privilege
      * 
      * @return \Illuminate\Http\JsonResponse
      *
@@ -103,17 +108,17 @@ class PrivilegeController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function show(FetchPrivilegeRequest $request, PrivilegeService $service, string $key)
+    public function show(FetchPrivilegeRequest $request, PrivilegeService $service, string $subdomain, Privilege $privilege)
     {
         try {
             //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request);
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
 
             //Create payload
             $payload = collect($request);
 
             //Fetch all privilege data
-            $data = $service->show($orgHash, $payload, $key);
+            $data = $service->show($orgHash, $payload, $privilege['key']);
 
             //Send http status out
             return $this->response->success(compact('data'));
@@ -131,7 +136,7 @@ class PrivilegeController extends ApiBaseController
      * 
      * @param \Modules\Core\Http\Requests\Backend\Privilege\CreatePrivilegeRequest $request
      * @param \Modules\Core\Services\Privilege\PrivilegeService $service
-     * @param \string $key
+     * @param \string $subdomain
      * 
      * @return \Illuminate\Http\JsonResponse
      *
@@ -146,17 +151,17 @@ class PrivilegeController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function create(CreatePrivilegeRequest $request, PrivilegeService $service)
+    public function create(CreatePrivilegeRequest $request, PrivilegeService $service, string $subdomain)
     {
         try {
             //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request);
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
 
             //Create payload
             $payload = collect($request);
 
-            //Fetch all privilege data
-            $data = $service->show($orgHash, $payload, $key);
+            //Create privilege data
+            $data = $service->create($orgHash, $payload);
 
             //Send http status out
             return $this->response->success(compact('data'));
@@ -174,7 +179,8 @@ class PrivilegeController extends ApiBaseController
      * 
      * @param \Modules\Core\Http\Requests\Backend\Privilege\UpdatePrivilegeRequest $request
      * @param \Modules\Core\Services\Privilege\PrivilegeService $service
-     * @param \string $key
+     * @param \string $subdomain
+     * @param \Modules\Core\Models\Privilege\Privilege $privilege
      * 
      * @return \Illuminate\Http\JsonResponse
      *
@@ -190,17 +196,17 @@ class PrivilegeController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function update(UpdatePrivilegeRequest $request, PrivilegeService $service, string $key)
+    public function update(UpdatePrivilegeRequest $request, PrivilegeService $service, string $subdomain, Privilege $privilege)
     {
         try {
             //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request);
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
 
             //Create payload
             $payload = collect($request);
 
-            //Fetch all privilege data
-            $data = $service->show($orgHash, $payload, $key);
+            //Update privilege data
+            $data = $service->update($orgHash, $payload, $privilege['key']);
 
             //Send http status out
             return $this->response->success(compact('data'));
@@ -216,16 +222,17 @@ class PrivilegeController extends ApiBaseController
     /**
      * Delete Privilege Data by Key
      * 
-     * @param \Modules\Core\Http\Requests\Backend\Privilege\FetchPrivilegeRequest $request
+     * @param \Illuminate\Http\Request $request
      * @param \Modules\Core\Services\Privilege\PrivilegeService $service
-     * @param \string $key
+     * @param \string $subdomain
+     * @param \Modules\Core\Models\Privilege\Privilege $privilege
      * 
      * @return \Illuminate\Http\JsonResponse
      *
      * @OA\Delete(
      *     path="/privilege/{key}",
      *     tags={"Privilege"},
-     *     operationId="api.privilege.delete",
+     *     operationId="api.privilege.destroy",
      *     security={{"omni_token":{}}},
      *     @OA\Parameter(ref="#/components/parameters/organization_key"),
      *     @OA\Parameter(name="key", in="path", description="Key", required=true, @OA\Schema(type="string")),
@@ -234,17 +241,17 @@ class PrivilegeController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function delete(FetchPrivilegeRequest $request, PrivilegeService $service, string $key)
+    public function destroy(Request $request, PrivilegeService $service, string $subdomain, Privilege $privilege)
     {
         try {
             //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request);
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
 
             //Create payload
             $payload = collect($request);
 
-            //Fetch all privilege data
-            $data = $service->show($orgHash, $payload, $key);
+            //Delete privilege data by key
+            $data = $service->delete($orgHash, $payload, $privilege['key']);
 
             //Send http status out
             return $this->response->success(compact('data'));

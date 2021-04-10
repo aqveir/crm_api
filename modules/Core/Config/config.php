@@ -41,7 +41,7 @@ return [
                     'display_value' => 'Organization Administrator', 
                     'description' => 'Default role created by the system.',
                     'privileges' => [
-                        'read_organization_data', 'edit_organization',
+                        'view_organization', 'edit_organization',
 
                         'list_all_organization_accounts',
                         'add_account', 'edit_account', 'delete_account',

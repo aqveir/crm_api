@@ -226,7 +226,7 @@ class LookupController extends ApiBaseController
      * @OA\Delete(
      *     path="/lookup/{key}",
      *     tags={"Lookup"},
-     *     operationId="api.lookup.delete",
+     *     operationId="api.lookup.destroy",
      *     security={{"omni_token":{}}},
      *     @OA\Parameter(ref="#/components/parameters/organization_key"),
      *     @OA\Parameter(name="key", in="path", description="Key", required=true, @OA\Schema(type="string")),
@@ -235,7 +235,7 @@ class LookupController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function delete(FetchLookupRequest $request, LookupService $service, string $subdomain, Lookup $lookup)
+    public function destroy(FetchLookupRequest $request, LookupService $service, string $subdomain, Lookup $lookup)
     {
         try {
             //Get Org Hash 
@@ -256,4 +256,5 @@ class LookupController extends ApiBaseController
             return $this->response->fail([], Response::HTTP_BAD_REQUEST);
         }
     } //Function ends
+    
 } //Class ends

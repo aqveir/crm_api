@@ -20,7 +20,7 @@ class UserResource extends JsonResource
         $objReturnValue=null;
 
         try {
-            $this->load('organization', 'availability', 'availability.status', 'country', 'timezone');
+            $this->load('organization', 'availability', 'availability.status', 'country', 'timezone', 'roles', 'privileges');
             $availability = collect($this['availability']);
             if (!empty($availability)) {
                 $status = collect($availability['status'])->only('key', 'display_value');
@@ -32,12 +32,11 @@ class UserResource extends JsonResource
                 'email', 'phone', 'virtual_phone_number',
                 'last_login_at', 'last_updated_at',
                 'organization', 'country', 'timezone',
+                'roles', 'privileges',
                 'is_active', 'is_remote_access_only',
                 'is_pool', 'is_default'
             ]);
             $response['is_verified'] = empty($this['verified_at'])?false:true;
-
-            $response['avatar'] = 'assets/media/svg/avatars/001-boy.svg';
 
             //Manage User Availability/Online Status
             $response['availability'] = $availability?$availability->only('last_updated_at'):null;

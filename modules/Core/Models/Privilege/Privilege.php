@@ -37,7 +37,7 @@ class Privilege extends Model
      * @var array
      */
     protected $hidden = [
-        'id', 'description', 'is_active', 'is_superadmin',
+        'id', 'description', 'is_active', 'is_secure',
         'created_at', 'updated_at', 'pivot',
     ];
 
@@ -49,6 +49,44 @@ class Privilege extends Model
     protected $dates = [
         'created_at', 'updated_at',
     ];
+
+
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['last_updated_at'];
+
+
+    /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = [];
+
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_active' => 'boolean',
+        'is_secure' => 'boolean'
+    ];
+
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'key';
+    }
 
 
     /**

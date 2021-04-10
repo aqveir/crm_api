@@ -19,8 +19,8 @@ class PrivilegesTableSeeder extends Seeder
                 'display_value' => 'Show All Organizations',
                 'is_secure' => true
             ],
-            [ //read_organization_data
-                'key' => 'read_organization_data',
+            [ //view_organization
+                'key' => 'view_organization',
                 'display_value' => 'Read/View Organization Data',
             ],
             [ //add_organization
@@ -38,12 +38,17 @@ class PrivilegesTableSeeder extends Seeder
                 'is_secure' => true
             ],
 
+            [ //list_all_privileges
+                'key' => 'list_all_privileges',
+                'display_value' => 'Show All Privileges',
+            ],
+
             [ //list_all_roles
                 'key' => 'list_all_roles',
                 'display_value' => 'Show All Organization Roles',
             ],
-            [ //read_role_data
-                'key' => 'read_role_data',
+            [ //view_role
+                'key' => 'view_role',
                 'display_value' => 'Read/View Role Data',
             ],
             [ //add_role
@@ -62,6 +67,10 @@ class PrivilegesTableSeeder extends Seeder
             [ //list_all_organization_accounts
                 'key' => 'list_all_organization_accounts',
                 'display_value' => 'Show All Accounts in the Organization',
+            ],
+            [ //view_account
+                'key' => 'view_account',
+                'display_value' => 'Read/View Account Data',
             ],
             [ //add_account
                 'key' => 'add_account',

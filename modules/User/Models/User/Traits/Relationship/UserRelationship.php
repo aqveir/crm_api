@@ -66,7 +66,7 @@ trait UserRelationship
 	{
 		return $this->belongsToMany(
 			config('crmomni-class.class_model.privilege'),
-			config('crmomni-migration.table_name.user_privileges'),
+			config('crmomni-migration.table_name.user.privileges'),
 			'user_id', 'privilege_id'
 		);
 	} //Function ends
@@ -75,7 +75,7 @@ trait UserRelationship
 	/**
 	 * Show Granted Privileges
 	 */
-	public function grant_privileges()
+	public function active_privileges()
 	{
 		return $this->belongsToMany(
 			config('crmomni-class.class_model.privilege'),

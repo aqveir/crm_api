@@ -52,6 +52,11 @@ return [
 
             // Privilege Controller Requests
             'privilege' => [
+                //Fetch all privileges
+                'fetch' => [
+                    'validation_rules' => [ ]
+                ],
+
                 // Privilege Create Request
                 'create' => [
                     'validation_rules' => [

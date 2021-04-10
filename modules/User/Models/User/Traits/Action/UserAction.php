@@ -103,7 +103,7 @@ trait UserAction
             } //End if
             
             //Check for extra granted privileges
-            $extraPrivileges = $this->grant_privileges()->get();
+            $extraPrivileges = $this->active_privileges()->get();
             if (!empty($extraPrivileges)) {
                 foreach($extraPrivileges as $privilege) {
                     //Duplicate check to add the privileges

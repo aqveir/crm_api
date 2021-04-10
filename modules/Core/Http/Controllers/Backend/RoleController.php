@@ -62,11 +62,11 @@ class RoleController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function index(FetchRoleRequest $request, RoleService $service)
+    public function index(FetchRoleRequest $request, RoleService $service, string $subdomain)
     {
         try {
             //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request);
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
 
             //Create payload
             $payload = collect($request);
@@ -108,11 +108,11 @@ class RoleController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function show(FetchRoleRequest $request, RoleService $service, string $key)
+    public function show(FetchRoleRequest $request, RoleService $service, string $subdomain, Role $role)
     {
         try {
             //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request);
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
 
             //Create payload
             $payload = collect($request);
@@ -151,17 +151,17 @@ class RoleController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function create(CreateRoleRequest $request, RoleService $service)
+    public function create(CreateRoleRequest $request, RoleService $service, string $subdomain)
     {
         try {
             //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request);
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
 
             //Create payload
             $payload = collect($request);
 
             //Fetch all role data
-            $data = $service->create($payload, 0, $orgHash);
+            $data = $service->create($orgHash, $payload);
 
             //Send http status out
             return $this->response->success(compact('data'));
@@ -195,7 +195,7 @@ class RoleController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function update(UpdateRoleRequest $request, RoleService $service, string $key)
+    public function update(UpdateRoleRequest $request, RoleService $service, string $subdomain, Role $role)
     {
         try {
             //Get Org Hash 
@@ -205,7 +205,7 @@ class RoleController extends ApiBaseController
             $payload = collect($request);
 
             //Fetch all role data
-            $data = $service->update($orgHash, $payload, $key);
+            $data = $service->update($orgHash, $payload, $role['key']);
 
             //Send http status out
             return $this->response->success(compact('data'));
@@ -230,7 +230,7 @@ class RoleController extends ApiBaseController
      * @OA\Delete(
      *     path="/role/{key}",
      *     tags={"Role"},
-     *     operationId="api.role.delete",
+     *     operationId="api.role.destroy",
      *     security={{"omni_token":{}}},
      *     @OA\Parameter(ref="#/components/parameters/organization_key"),
      *     @OA\Parameter(name="key", in="path", description="Key", required=true, @OA\Schema(type="string")),
@@ -239,17 +239,17 @@ class RoleController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function delete(FetchRoleRequest $request, RoleService $service, string $key)
+    public function destroy(FetchRoleRequest $request, RoleService $service, string $subdomain, Role $role)
     {
         try {
             //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request);
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
 
             //Create payload
             $payload = collect($request);
 
             //Fetch all role data
-            $data = $service->show($orgHash, $payload, $key);
+            $data = $service->delete($orgHash, $payload, $role['key']);
 
             //Send http status out
             return $this->response->success(compact('data'));

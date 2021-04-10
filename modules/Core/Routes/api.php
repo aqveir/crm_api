@@ -39,6 +39,16 @@ $api->version('v1', [
             $api->get('{organization}', 'Backend\\OrganizationController@show');
         });
 
+        // Role Endpoint
+        $api->group(['prefix' => 'privilege'], function(Router $api) {
+            $api->get('/', 'Backend\\PrivilegeController@index');
+            $api->get('{privilege}', 'Backend\\PrivilegeController@show');
+
+            $api->post('/', 'Backend\\PrivilegeController@create');
+            $api->put('{privilege}', 'Backend\\PrivilegeController@update');
+            $api->delete('{privilege}', 'Backend\\PrivilegeController@destroy');
+        });
+
         // Lookup Endpoint
         $api->group(['prefix' => 'lookup'], function(Router $api) {
             $api->get('/', 'Backend\\LookupController@index');
@@ -52,11 +62,11 @@ $api->version('v1', [
         // Role Endpoint
         $api->group(['prefix' => 'role'], function(Router $api) {
             $api->get('/', 'Backend\\RoleController@index');
-            $api->get('{key}', 'Backend\\RoleController@show');
+            $api->get('{role}', 'Backend\\RoleController@show');
 
             $api->post('/', 'Backend\\RoleController@create');
-            $api->put('{key}', 'Backend\\RoleController@update');
-            $api->delete('{key}', 'Backend\\RoleController@destroy');
+            $api->put('{role}', 'Backend\\RoleController@update');
+            $api->delete('{role}', 'Backend\\RoleController@destroy');
         });
     });
 });

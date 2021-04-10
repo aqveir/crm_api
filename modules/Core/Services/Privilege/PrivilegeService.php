@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Core\Services\Role;
+namespace Modules\Core\Services\Privilege;
 
 use Config;
 use Carbon\Carbon;
@@ -26,11 +26,11 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 /**
- * Class RoleService
+ * Class PrivilegeService
  * 
  * @package Modules\Core\Services\Role
  */
-class RoleService extends BaseService
+class PrivilegeService extends BaseService
 {
     /**
      * @var Modules\Core\Repositories\Organization\OrganizationRepository
@@ -45,12 +45,6 @@ class RoleService extends BaseService
 
 
     /**
-     * @var \Modules\Core\Repositories\Role\RoleRepository
-     */
-    protected $roleRepository;
-
-
-    /**
      * @var \Modules\Core\Repositories\Privilege\PrivilegeRepository
      */
     protected $privilegeRepository;
@@ -61,18 +55,15 @@ class RoleService extends BaseService
      *
      * @param \Modules\Core\Repositories\Organization\OrganizationRepository    $organizationRepository
      * @param \Modules\Core\Repositories\Lookup\LookupValueRepository           $lookupvalueRepository
-     * @param \Modules\Core\Repositories\Role\RoleRepository                    $roleRepository
      * @param \Modules\Core\Repositories\Privilege\PrivilegeRepository          $privilegeRepository
      */
     public function __construct(
         OrganizationRepository          $organizationRepository,
         LookupValueRepository           $lookupvalueRepository,
-        RoleRepository                  $roleRepository,
         PrivilegeRepository             $privilegeRepository
     ) {
         $this->organizationRepository   = $organizationRepository;
         $this->lookupvalueRepository    = $lookupvalueRepository;
-        $this->roleRepository           = $roleRepository;
         $this->privilegeRepository      = $privilegeRepository;
     } //Function ends
 
@@ -100,22 +91,21 @@ class RoleService extends BaseService
             //Get request data
             $data = $payload->toArray();
 
-            $response = $this->roleRepository
-                ->with('privileges')
-                ->where('org_id', $organization['id'])
+            $response = $this->privilegeRepository
+                ->where('is_secure', false)
                 ->get();
 
             //Return the response data
             $objReturnValue = $response;            
 
         } catch(AccessDeniedHttpException $e) {
-            log::error('RoleService:index:AccessDeniedHttpException:' . $e->getMessage());
+            log::error('PrivilegeService:index:AccessDeniedHttpException:' . $e->getMessage());
             throw new AccessDeniedHttpException($e->getMessage());
         } catch(BadRequestHttpException $e) {
-            log::error('RoleService:index:BadRequestHttpException:' . $e->getMessage());
+            log::error('PrivilegeService:index:BadRequestHttpException:' . $e->getMessage());
             throw new BadRequestHttpException($e->getMessage());
         } catch(Exception $e) {
-            log::error('RoleService:index:Exception:' . $e->getMessage());
+            log::error('PrivilegeService:index:Exception:' . $e->getMessage());
             throw new HttpException(500);
         } //Try-catch ends
 
@@ -124,15 +114,15 @@ class RoleService extends BaseService
 
 
     /**
-     * Get Data by Lookup Key
+     * Get Data by Privilege Key
      *
      * @param \string $orgHash
      * @param \Illuminate\Support\Collection $payload
-     * @param \bool $isAutoCreated (optional)
+     * @param \string $key
      *
      * @return mixed
      */
-    public function show(string $orgHash, Collection $payload, string $roleKey) {
+    public function show(string $orgHash, Collection $payload, string $key) {
         $objReturnValue=null;
         try {
             //Authenticated User
@@ -147,10 +137,8 @@ class RoleService extends BaseService
             //Get request data
             $data = $payload->toArray();
 
-            $response = $this->roleRepository
-                ->with('privileges')
-                ->where('org_id', $organization['id'])
-                ->where('key', $roleKey)
+            $response = $this->privilegeRepository
+                ->where('key', $key)
                 ->first();
 
             if (empty($response)) {
@@ -161,16 +149,16 @@ class RoleService extends BaseService
             $objReturnValue = $response;            
 
         } catch(AccessDeniedHttpException $e) {
-            log::error('RoleService:show:AccessDeniedHttpException:' . $e->getMessage());
+            log::error('PrivilegeService:show:AccessDeniedHttpException:' . $e->getMessage());
             throw new AccessDeniedHttpException($e->getMessage());
         } catch(NotFoundHttpException $e) {
-            log::error('RoleService:show:NotFoundHttpException:' . $e->getMessage());
+            log::error('PrivilegeService:show:NotFoundHttpException:' . $e->getMessage());
             throw new NotFoundHttpException();
         } catch(BadRequestHttpException $e) {
-            log::error('RoleService:show:BadRequestHttpException:' . $e->getMessage());
+            log::error('PrivilegeService:show:BadRequestHttpException:' . $e->getMessage());
             throw new BadRequestHttpException($e->getMessage());
         } catch(Exception $e) {
-            log::error('RoleService:show:Exception:' . $e->getMessage());
+            log::error('PrivilegeService:show:Exception:' . $e->getMessage());
             throw new HttpException(500);
         } //Try-catch ends
 
@@ -179,42 +167,7 @@ class RoleService extends BaseService
 
 
     /**
-     * Create New Default Role for the New Organization
-     * 
-     * @param \string $orgHash
-     *
-     * @return mixed
-     */
-    public function createDefaultRole(string $orgHash) {
-        $objReturnValue=null;
-        try {
-            //Create New Elevated Role for this Organization
-            $roles = config('core.settings.new_organization.default_roles');
-            foreach ($roles as $role) {
-                $response = $this->create($orgHash, collect($role));
-
-                //Add response to array
-                if (!empty($response)) {
-                    $objReturnValue = (empty($objReturnValue))?[]:$objReturnValue;
-                    array_push($objReturnValue, $response);
-                } //End if
-
-            } //Loop ends
-        } catch(AccessDeniedHttpException $e) {
-            throw new AccessDeniedHttpException($e->getMessage());
-        } catch(BadRequestHttpException $e) {
-            throw new BadRequestHttpException($e->getMessage());
-        } catch(Exception $e) {
-            Log::error($e);
-            throw new HttpException(500);
-        } //Try-catch ends
-
-        return $objReturnValue;
-    } //Function ends
-
-
-    /**
-     * Create Role for the Organization
+     * Create Privileges for the Application
      *
      * @param \string $orgHash
      * @param \Illuminate\Support\Collection $payload
@@ -237,42 +190,23 @@ class RoleService extends BaseService
             } //End if
 
             //Create Role for this Organization
-            $data = $payload->only('key', 'display_value', 'description')->toArray();
-            $data['org_id'] = $orgId;
-            $role = $this->roleRepository->create($data);
-            if (empty($role)) {
+            $data = $payload->only('key', 'display_value', 'description', 'is_secure')->toArray();
+            $privilege = $this->privilegeRepository->create($data);
+            if (empty($privilege)) {
                 throw new BadRequestHttpException();
             } //End if
             
-            //Assign Privileges to the Role
-            $data = $payload->only('privileges')->toArray();
-
-            //Get all active privileges
-            $privileges = $this->privilegeRepository->getPrivilegesByNames($data['privileges'], 'key', true);
-
-            //Get all privileges id into an array
-            $privilegesId = null;
-            if (!empty($privileges)) {
-                $privilegesId=[];
-                foreach ($privileges as $privilege) {
-                    array_push($privilegesId, $privilege['id']);
-                } //Loop ends
-
-                //Attach the privileges to the role
-                $role->privileges()->attach($privilegesId);                
-            } //End if
-
-            //Return the Newly Created Role
-            $objReturnValue = $role;            
+            //Return the Newly Created Privilege
+            $objReturnValue = $privilege;            
 
         } catch(AccessDeniedHttpException $e) {
-            log::error('RoleService:create:AccessDeniedHttpException:' . $e->getMessage());
+            log::error('PrivilegeService:create:AccessDeniedHttpException:' . $e->getMessage());
             throw new AccessDeniedHttpException($e->getMessage());
         } catch(BadRequestHttpException $e) {
-            log::error('RoleService:create:BadRequestHttpException:' . $e->getMessage());
+            log::error('PrivilegeService:create:BadRequestHttpException:' . $e->getMessage());
             throw new BadRequestHttpException($e->getMessage());
         } catch(Exception $e) {
-            log::error('RoleService:create:Exception:' . $e->getMessage());
+            log::error('PrivilegeService:create:Exception:' . $e->getMessage());
             throw new HttpException(500);
         } //Try-catch ends
 
@@ -281,15 +215,15 @@ class RoleService extends BaseService
 
 
     /**
-     * Update Role for the Organization
+     * Update Privileges for the Application
      *
      * @param \string $orgHash
      * @param \Illuminate\Support\Collection $payload
-     * @param \string $roleKey
+     * @param \string $key
      * 
      * @return mixed
      */
-    public function update(string $orgHash, Collection $payload, string $roleKey) {
+    public function update(string $orgHash, Collection $payload, string $key) {
         $objReturnValue=null;
         try {
             //Authenticated User
@@ -302,41 +236,23 @@ class RoleService extends BaseService
             $organization = $this->getOrganizationByHash($orgHash);
 
             //Create Role for this Organization
-            $data = $payload->only('display_value', 'description', 'is_active')->toArray();
-            $role = $this->roleRepository->update($roleKey, 'key', $data);
-            if (empty($role)) {
+            $data = $payload->only('display_value', 'description', 'is_active', 'is_secure')->toArray();
+            $privilege = $this->privilegeRepository->update($key, 'key', $data);
+            if (empty($privilege)) {
                 throw new BadRequestHttpException();
             } //End if
             
-            //Assign Privileges to the Role
-            $data = $payload->only('privileges')->toArray();
-
-            //Get all active privileges
-            $privileges = $this->privilegeRepository->getPrivilegesByNames($data['privileges'], 'key', true);
-
-            //Get all privileges id into an array
-            $privilegesId = null;
-            if (!empty($privileges)) {
-                $privilegesId=[];
-                foreach ($privileges as $privilege) {
-                    array_push($privilegesId, $privilege['id']);
-                } //Loop ends
-
-                //Attach the privileges to the role
-                $role->privileges()->sync($privilegesId);                
-            } //End if
-
             //Return the Newly Created Role
-            $objReturnValue = $role;            
+            $objReturnValue = $privilege;            
 
         } catch(AccessDeniedHttpException $e) {
-            log::error('RoleService:update:AccessDeniedHttpException:' . $e->getMessage());
+            log::error('PrivilegeService:update:AccessDeniedHttpException:' . $e->getMessage());
             throw new AccessDeniedHttpException($e->getMessage());
         } catch(BadRequestHttpException $e) {
-            log::error('RoleService:update:BadRequestHttpException:' . $e->getMessage());
+            log::error('PrivilegeService:update:BadRequestHttpException:' . $e->getMessage());
             throw new BadRequestHttpException($e->getMessage());
         } catch(Exception $e) {
-            log::error('RoleService:update:Exception:' . $e->getMessage());
+            log::error('PrivilegeService:update:Exception:' . $e->getMessage());
             throw new HttpException(500);
         } //Try-catch ends
 
@@ -345,15 +261,15 @@ class RoleService extends BaseService
 
 
     /**
-     * Delete Role for the Organization
+     * Delete Privileges for the Application
      *
      * @param \string $orgHash
      * @param \Illuminate\Support\Collection $payload
-     * @param \string $roleKey
+     * @param \string $key
      * 
      * @return mixed
      */
-    public function delete(string $orgHash, Collection $payload, string $roleKey) {
+    public function delete(string $orgHash, Collection $payload, string $key) {
         $objReturnValue=null;
         try {
             //Authenticated User
@@ -367,25 +283,22 @@ class RoleService extends BaseService
 
             //Mark Role as in-active
             $data = ['is_active' => false];
-            $role = $this->roleRepository->update($roleKey, 'key', $data);
-            if (empty($role)) {
+            $privilege = $this->privilegeRepository->update($key, 'key', $data);
+            if (empty($privilege)) {
                 throw new BadRequestHttpException();
             } //End if
-
-            //Detach the privileges from the role
-            //$role->privileges()->detach(); 
             
             //Return the Newly Created Role
-            $objReturnValue = $role;            
+            $objReturnValue = $privilege;            
 
         } catch(AccessDeniedHttpException $e) {
-            log::error('RoleService:update:AccessDeniedHttpException:' . $e->getMessage());
+            log::error('PrivilegeService:update:AccessDeniedHttpException:' . $e->getMessage());
             throw new AccessDeniedHttpException($e->getMessage());
         } catch(BadRequestHttpException $e) {
-            log::error('RoleService:update:BadRequestHttpException:' . $e->getMessage());
+            log::error('PrivilegeService:update:BadRequestHttpException:' . $e->getMessage());
             throw new BadRequestHttpException($e->getMessage());
         } catch(Exception $e) {
-            log::error('RoleService:update:Exception:' . $e->getMessage());
+            log::error('PrivilegeService:update:Exception:' . $e->getMessage());
             throw new HttpException(500);
         } //Try-catch ends
 
