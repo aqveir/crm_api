@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Validation\Rule;
+
 return [
     'request_handler' => [
         'backend' => [
@@ -339,6 +341,67 @@ return [
                     ]
                 ]
             ], // Subscription Controller end
+
+            // Preferences Controller Requests
+            'preference' => [
+                //Fetch all privileges
+                'fetch' => [
+                    'validation_rules' => [ 
+                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                    ]
+                ],
+
+                // Preferences Create Request
+                'create' => [
+                    'validation_rules' => [
+                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+
+                        'name' => [
+                            'required',
+                            'string',
+                            'max:100',
+                            Rule::unique('preferences', 'name')
+                        ],
+                        'display_value' => 'required|string|max:100',
+                        'description' => 'sometimes|string|max:1000', 
+                        'column_name' => 'sometimes|string|max:100',
+                        'is_minimum' => 'sometimes|boolean', 
+                        'is_maximum' => 'sometimes|boolean', 
+                        'is_multiple' => 'sometimes|boolean', 
+                        'keywords' => 'sometimes|string', 
+                        'order' => 'sometimes|number', 
+                        'type_key' => 'required|string|exists:' . config('crmomni-migration.table_name.lookup_value') . ',key',
+                        'data' => 'sometimes',
+                        'data.values' => 'required_with:data|array'
+                    ]
+                ],
+
+                // Preferences Update Request
+                'update' => [
+                    'validation_rules' => [
+                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+
+                        'display_value' => 'required|string|max:100',
+                        'description' => 'sometimes|string|max:1000', 
+                        'column_name' => 'sometimes|string|max:100',
+                        'is_minimum' => 'sometimes|boolean', 
+                        'is_maximum' => 'sometimes|boolean', 
+                        'is_multiple' => 'sometimes|boolean', 
+                        'keywords' => 'sometimes|string', 
+                        'order' => 'sometimes|number', 
+                        'type_key' => 'required|string|exists:' . config('crmomni-migration.table_name.lookup_value') . ',key',
+                        'data' => 'sometimes',
+                        'data.values' => 'required_with:data|array'
+                    ]
+                ],
+
+                // Preferences Delete Request
+                'delete' => [
+                    'validation_rules' => [
+                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45'
+                    ]
+                ]
+            ], // Preferences Controller ends
         ],
 
         'frontend' => [

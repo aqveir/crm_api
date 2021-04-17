@@ -29,7 +29,15 @@ class RolesTableSeeder extends Seeder
 
                     //Manage Roles
                     'list_all_roles', 'view_role', 
-                    'add_role', 'edit_role', 'delete_role'
+                    'add_role', 'edit_role', 'delete_role',
+
+                    //Manage Preferences
+                    'list_all_organization_preferences', 'view_preference',
+                    'add_preference', 'edit_preference', 'delete_preference',
+
+                    //Manage Subscriptions
+                    'manage_subscriptions', 
+                    'add_subscription', 'edit_subscription', 'delete_subscription'
                 ]
             ],
             [
@@ -46,6 +54,10 @@ class RolesTableSeeder extends Seeder
                     //Manage Roles
                     'list_all_roles', 'view_role', 
                     'add_role', 'edit_role', 'delete_role',
+
+                    //Manage Preferences
+                    'list_all_organization_preferences', 'view_preference',
+                    'add_preference', 'edit_preference', 'delete_preference',
 
                     //Manage Accounts
                     'list_all_organization_accounts', 'view_account',

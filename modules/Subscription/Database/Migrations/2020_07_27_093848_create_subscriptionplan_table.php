@@ -25,6 +25,9 @@ class CreateSubscriptionplanTable extends Migration
             $table->boolean('is_displayed')->default(true);
             $table->boolean('is_active')->default(true);
 
+            //Suggested Preferences
+            $table->unsignedBigInteger('upgrade_id')->nullable();
+
             //Audit Log Fields
             $table->unsignedBigInteger('created_by')->default(0);
             $table->unsignedBigInteger('updated_by')->nullable();

@@ -8,6 +8,6 @@ use Faker\Generator as Faker;
 
 $factory->define(PreferenceMeta::class, function (Faker $faker) {
     return [
-        'key' => $faker->unique()->name(),
+        'name' => $faker->unique()->name(),
     ];
 });

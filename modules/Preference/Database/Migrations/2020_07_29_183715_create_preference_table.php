@@ -17,12 +17,12 @@ class CreatePreferenceTable extends Migration
             $table->bigIncrements('id');
 
             $table->unsignedBigInteger('org_id');
-            $table->string('key', 255);
+            $table->string('name', 255);
             $table->string('display_value', 255)->nullable();
             $table->string('description', 1000)->nullable();
-            $table->string('column_name')->nullable();
-            $table->unsignedBigInteger('type_id')->nullable();             //From Global Lookup Value Table
-            $table->integer('data_id')->nullable();             //From Preference Data Table
+            $table->string('column_name', 255)->nullable();
+            $table->unsignedBigInteger('type_id')->nullable();  //From Global Lookup Value Table
+            $table->unsignedBigInteger('data_id')->nullable();  //From Preference Data Table
             $table->boolean('is_minimum')->default(false);      //Minimum data type
             $table->boolean('is_maximum')->default(false);      //Maximum data type
             $table->boolean('is_multiple')->default(false);     //Allows multiple selection

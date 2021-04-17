@@ -17,11 +17,12 @@ class CreatePreferenceDataTable extends Migration
             $table->bigIncrements('id');
 
             $table->unsignedBigInteger('org_id');
-            $table->string('key', 255);
+            $table->string('name', 255);
             $table->string('display_value', 255)->nullable();
             $table->string('description', 1000)->nullable();
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

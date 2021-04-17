@@ -14,8 +14,9 @@ use Modules\Preference\Repositories\Preference\PreferenceRepository;
 
 use Modules\Core\Services\BaseService;
 
-// use Modules\Preference\Events\PreferenceCreatedEvent;
-// use Modules\Preference\Events\PreferenceUpdatedEvent;
+use Modules\Preference\Events\PreferenceCreatedEvent;
+use Modules\Preference\Events\PreferenceUpdatedEvent;
+use Modules\Preference\Events\PreferenceDeletedEvent;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -83,6 +84,92 @@ class PreferenceService extends BaseService
 
 
     /**
+     * Get All Preferences
+     * 
+     * @param \string $orgHash
+     * @param \Illuminate\Support\Collection $payload
+     *
+     * @return mixed
+     */
+    public function getAll(string $orgHash, Collection $payload)
+    {
+        $objReturnValue=null;
+        try {
+            //Authenticated User
+            $user = $this->getCurrentUser('backend');
+
+            //Get organization details
+            if ($user->hasRoles(config('crmomni.settings.default.role.key_super_admin'))) {
+                //Get organization data
+                $organization = $this->getOrganizationByHash($orgHash);
+                $orgId = $organization['id'];
+            } else {
+                $orgId = $user['org_id'];
+            } //End if
+
+            //Assign to the return value
+            $objReturnValue = $this->preferenceRepository
+                ->where('org_id', $orgId)
+                ->get();
+
+        } catch(AccessDeniedHttpException $e) {
+            throw new AccessDeniedHttpException($e->getMessage());
+        } catch(BadRequestHttpException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        } catch(Exception $e) {
+            Log::error($e);
+            throw new HttpException(500);
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends
+
+
+    /**
+     * Show Preference by Identifier
+     * 
+     * @param \string $orgHash
+     * @param \Illuminate\Support\Collection $payload
+     * @param \bool $isAutoCreated (optional)
+     *
+     * @return mixed
+     */
+    public function show(string $orgHash, Collection $payload, int $preferenceId)
+    {
+        $objReturnValue=null;
+        try {
+            //Authenticated User
+            $user = $this->getCurrentUser('backend');
+
+            //Get organization details
+            if ($user->hasRoles(config('crmomni.settings.default.role.key_super_admin'))) {
+                //Get organization data
+                $organization = $this->getOrganizationByHash($orgHash);
+                $orgId = $organization['id'];
+            } else {
+                $orgId = $user['org_id'];
+            } //End if
+
+            //Assign to the return value
+            $objReturnValue = $this->preferenceRepository
+                ->where('id', $preferenceId)
+                ->where('org_id', $orgId)
+                ->first();
+
+        } catch(AccessDeniedHttpException $e) {
+            throw new AccessDeniedHttpException($e->getMessage());
+        } catch(BadRequestHttpException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        } catch(Exception $e) {
+            Log::error($e);
+            throw new HttpException(500);
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends
+
+
+    /**
      * Create Default Preferences
      * 
      * @param \Illuminate\Support\Collection $payload
@@ -110,9 +197,16 @@ class PreferenceService extends BaseService
                         throw new Exception('Unable to resolve the entity type');   
                     } //End if
 
+                    //Preference data values (for lookup)
+                    $data_value = [];
+                    if ($preference['data_json']!=null) {
+                        $data_value = (array) (json_decode($preference['data_json']));
+                        $data_value['org_id'] = $organization['id'];
+                    } //End if
+
                     $record = [
                         'org_id' => $organization['id'],
-                        'key' => $preference['key'],
+                        'name' => $preference['name'],
                         'display_value' => $preference['display_value'],
                         'description' => $preference['description'],
                         'is_minimum' => $preference['is_minimum'],
@@ -121,7 +215,8 @@ class PreferenceService extends BaseService
                         'keywords' => $preference['keywords'],
                         'order' => $preference['order'],
                         'type_id' => $type['id'],
-                        'created_by' => 0
+                        'created_by' => 0,
+                        'data' => $data_value
                     ];
 
                     array_push($data, $record);
@@ -176,22 +271,190 @@ class PreferenceService extends BaseService
                     $orgId = $user['org_id'];
                 } //End if
 
+                $preferencetType = $payload['type_key'];
+                $type = $this->lookupRepository->getLookUpByKey($organization['id'], $preferencetType);
+                if (empty($type))
+                {
+                    throw new Exception('Unable to resolve the entity type');   
+                } //End if
+
                 //Build data
-                $data = $payload->only([
-                    'name', 'description', 
-                    'email', 'phone',
+                $data = [];
+                $request = $payload->only([
+                    'name', 'display_value', 'description', 'column_name',
+                    'is_minimum', 'is_maximum', 'is_multiple',
+                    'keywords', 'order', 'data'
                 ])->toArray();
-                $data = array_merge($data, [
+                $request = array_merge($request, [
+                    'type_id' => $type['id'],
                     'org_id' => $orgId, 
                     'created_by' => $user['id'] 
                 ]);
+
+                array_push($data, $request);
             } //End if
 
-            Log::info($payload);
+            //Assign to the return value
+            $preferences = $this->preferenceRepository->createPreferences($data);
+
+            //Raise event: Preference Created
+            foreach ($preferences as $preference) {
+                event(new PreferenceCreatedEvent($preference, $isAutoCreated));
+            } //Loop ends
+
+            //Set return value
+            $objReturnValue = $preferences;
+
+        } catch(AccessDeniedHttpException $e) {
+            throw new AccessDeniedHttpException($e->getMessage());
+        } catch(BadRequestHttpException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        } catch(Exception $e) {
+            Log::error($e);
+            throw new HttpException(500);
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends
+
+
+    /**
+     * Update Preference
+     * 
+     * @param \string $orgHash
+     * @param \Illuminate\Support\Collection $payload
+     * @param \int $preferenceId
+     *
+     * @return mixed
+     */
+    public function update(string $orgHash, Collection $payload, int $preferenceId)
+    {
+        $objReturnValue=null;
+        try {
+            //Authenticated User
+            $user = $this->getCurrentUser('backend');
+
+            //Get organization details
+            if ($user->hasRoles(config('crmomni.settings.default.role.key_super_admin'))) {
+                //Get organization data
+                $organization = $this->getOrganizationByHash($orgHash);
+                $orgId = $organization['id'];
+            } else {
+                $orgId = $user['org_id'];
+            } //End if
+
+            $preferencetType = $payload['type_key'];
+            $type = $this->lookupRepository->getLookUpByKey($organization['id'], $preferencetType);
+            if (empty($type))
+            {
+                throw new Exception('Unable to resolve the entity type');   
+            } //End if
+
+            //Build data
+            $data = $payload->only([
+                'display_value', 'description', 'column_name',
+                'is_minimum', 'is_maximum', 'is_multiple',
+                'keywords', 'order', 'data'
+            ])->toArray();
+            $data = array_merge($data, [
+                'type_id' => $type['id'],
+                'org_id' => $orgId
+            ]);
 
             //Assign to the return value
-            $objReturnValue = $this->preferenceRepository->savePreferences($data);
+            $preference = $this->preferenceRepository->updatePreferences($preferenceId, $data, $user);
 
+            //Raise event: Preference Updated
+            event(new PreferenceUpdatedEvent($preference));
+
+            //Set return value
+            $objReturnValue = $preference;
+
+        } catch(AccessDeniedHttpException $e) {
+            throw new AccessDeniedHttpException($e->getMessage());
+        } catch(BadRequestHttpException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        } catch(Exception $e) {
+            Log::error($e);
+            throw new HttpException(500);
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends
+
+
+    /**
+     * Delete Preference
+     * 
+     * @param \string $orgHash
+     * @param \Illuminate\Support\Collection $payload
+     * @param \int $preferenceId
+     *
+     * @return mixed
+     */
+    public function delete(string $orgHash, Collection $payload, int $preferenceId)
+    {
+        $objReturnValue=null;
+        try {
+            //Authenticated User
+            $user = $this->getCurrentUser('backend');
+
+            //Get organization details
+            if ($user->hasRoles(config('crmomni.settings.default.role.key_super_admin'))) {
+                //Get organization data
+                $organization = $this->getOrganizationByHash($orgHash);
+                $orgId = $organization['id'];
+            } else {
+                $orgId = $user['org_id'];
+            } //End if
+
+            //Assign to the return value
+            $preference = $this->preferenceRepository->deleteById($preferenceId, $user['id']);
+
+            //Raise event: Preference Deleted
+            event(new PreferenceDeletedEvent($preference));
+
+            //Set return value
+            $objReturnValue = $preference;
+
+        } catch(AccessDeniedHttpException $e) {
+            throw new AccessDeniedHttpException($e->getMessage());
+        } catch(BadRequestHttpException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        } catch(Exception $e) {
+            Log::error($e);
+            throw new HttpException(500);
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends
+
+
+    /**
+     * Refresh Organization Preferences
+     * 
+     * @param \string $orgHash
+     * @param \Illuminate\Support\Collection $payload
+     *
+     * @return mixed
+     */
+    public function refresh(string $orgHash, Collection $payload)
+    {
+        $objReturnValue=null;
+        try {
+            //Authenticated User
+            $user = $this->getCurrentUser('backend');
+
+            //Get organization details
+            if ($user->hasRoles(config('crmomni.settings.default.role.key_super_admin'))) {
+                //Get organization data
+                $organization = $this->organizationRepository->where('hash', $orgHash)->first();
+
+                //Assign to the return value
+                $objReturnValue = $this->createDefault($payload, $organization);                
+            } else {
+                throw new AccessDeniedHttpException();
+            } //End if
         } catch(AccessDeniedHttpException $e) {
             throw new AccessDeniedHttpException($e->getMessage());
         } catch(BadRequestHttpException $e) {

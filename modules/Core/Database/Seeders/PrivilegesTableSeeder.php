@@ -14,6 +14,9 @@ class PrivilegesTableSeeder extends Seeder
     public function run()
     {
         $privileges = [
+            /**
+             * ORGANIZATION PRIVILEGES
+             */
             [ //list_all_organizations
                 'key' => 'list_all_organizations',
                 'display_value' => 'Show All Organizations',
@@ -38,18 +41,26 @@ class PrivilegesTableSeeder extends Seeder
                 'is_secure' => true
             ],
 
+            /**
+             * PRIVILEGE PERMISSIONS
+             */
             [ //list_all_privileges
                 'key' => 'list_all_privileges',
                 'display_value' => 'Show All Privileges',
+                'is_secure' => true
             ],
 
+
+            /**
+             * ROLE PRIVILEGES
+             */
             [ //list_all_roles
                 'key' => 'list_all_roles',
                 'display_value' => 'Show All Organization Roles',
             ],
             [ //view_role
                 'key' => 'view_role',
-                'display_value' => 'Read/View Role Data',
+                'display_value' => 'Read/View Role',
             ],
             [ //add_role
                 'key' => 'add_role',
@@ -57,34 +68,92 @@ class PrivilegesTableSeeder extends Seeder
             ],
             [ //edit_role
                 'key' => 'edit_role',
-                'display_value' => 'Edit/Amend Role Data',
+                'display_value' => 'Edit/Amend Role',
             ],
             [ //delete_role
                 'key' => 'delete_role',
                 'display_value' => 'Delete Role',
             ],
+
+
+            /**
+             * SUBSCRIPTION PRIVILEGES
+             */
+            [ //view_account
+                'key' => 'manage_subscriptions',
+                'display_value' => 'Manage Subscription',
+                'is_secure' => true
+            ],
+            [ //add_subscription
+                'key' => 'add_subscription',
+                'display_value' => 'Add Subscription',
+                'is_secure' => true
+            ],
+            [ //edit_subscription
+                'key' => 'edit_subscription',
+                'display_value' => 'Edit/Amend Subscription',
+                'is_secure' => true
+            ],
+            [ //delete_subscription
+                'key' => 'delete_subscription',
+                'display_value' => 'Delete Subscription',
+                'is_secure' => true
+            ],
             
+
+            /**
+             * ORGANIZATION-ACCOUNT PRIVILEGES
+             */
             [ //list_all_organization_accounts
                 'key' => 'list_all_organization_accounts',
                 'display_value' => 'Show All Accounts in the Organization',
             ],
             [ //view_account
                 'key' => 'view_account',
-                'display_value' => 'Read/View Account Data',
+                'display_value' => 'Read/View Account',
             ],
             [ //add_account
                 'key' => 'add_account',
-                'display_value' => 'Add Account Data',
+                'display_value' => 'Add Account',
             ],
             [ //edit_account
                 'key' => 'edit_account',
-                'display_value' => 'Edit/Manage Account Data',
+                'display_value' => 'Edit/Manage Account',
             ],
             [ //delete_account
                 'key' => 'delete_account',
-                'display_value' => 'Delete Account Data',
+                'display_value' => 'Delete Account',
             ],
 
+
+            /**
+             * ORAGANIZARION-PREFERENCES PRIVILEGES
+             */
+            [ //list_all_organization_preferences
+                'key' => 'list_all_organization_preferences',
+                'display_value' => 'Show All Preferences in the Organization',
+            ],
+            [ //view_preference
+                'key' => 'view_preference',
+                'display_value' => 'Read/View Preference',
+            ],
+            [ //add_preference
+                'key' => 'add_preference',
+                'display_value' => 'Add Preference',
+            ],
+            [ //edit_preference
+                'key' => 'edit_preference',
+                'display_value' => 'Edit/Amend Preference',
+            ],
+            [ //delete_preference
+                'key' => 'delete_preference',
+                'display_value' => 'Delete Preference Data',
+            ],
+
+
+            /**
+             * CONTACT PRIVILEGES
+             */
             [ //list_all_contacts
                 'key' => 'list_all_contacts',
                 'display_value' => 'Show All Contacts',
@@ -118,7 +187,10 @@ class PrivilegesTableSeeder extends Seeder
                 'display_value' => 'Show Contact Record (Unmasked)',
             ],
 
-            //Note Privileges
+            
+            /**
+             * NOTE PRIVILEGES
+             */
             [ //add_note
                 'key' => 'add_note',
                 'display_value' => 'Add Note',
@@ -132,7 +204,10 @@ class PrivilegesTableSeeder extends Seeder
                 'display_value' => 'Delete Note',
             ],
 
-            //Document Privileges
+            
+            /**
+             * DOCUMENT PRIVILEGES
+             */
             [ //add_document
                 'key' => 'add_document',
                 'display_value' => 'Add Document',
@@ -150,7 +225,10 @@ class PrivilegesTableSeeder extends Seeder
                 'display_value' => 'View/Download Document',
             ],          
 
-            //Tele-Communication Privileges
+            
+            /**
+             * TELE-COMMUNICATION PRIVILEGES
+             */
             [ //allow_call_outgoing
                 'key' => 'allow_call_outgoing',
                 'display_value' => 'Outgoing Call',

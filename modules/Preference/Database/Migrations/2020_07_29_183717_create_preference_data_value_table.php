@@ -17,12 +17,13 @@ class CreatePreferenceDataValueTable extends Migration
             $table->bigIncrements('id');
 
             $table->integer('data_id');             //From Preference Data Table
-            $table->string('key', 255);
+            $table->string('value', 255);
             $table->string('display_value', 255)->nullable();
             $table->string('description', 1000)->nullable();
             $table->boolean('is_active')->default(true);
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

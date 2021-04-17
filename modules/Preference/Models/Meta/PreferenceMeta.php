@@ -29,7 +29,7 @@ class PreferenceMeta extends Model {
      * @var array
      */
     protected $fillable = [
-        'key', 'industry_key', 'display_value', 'description', 'type_key',
+        'name', 'industry_key', 'display_value', 'description', 'type_key',
         'is_minimum', 'is_maximum', 'filter_json',
         'data_json', 'is_multiple', 'keywords', 'order'
     ];

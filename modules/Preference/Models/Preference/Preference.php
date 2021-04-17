@@ -29,7 +29,7 @@ class Preference extends Model {
      * @var array
      */
     protected $fillable = [
-        'org_id', 'key', 'display_name', 'description', 'column_name',
+        'org_id', 'name', 'display_value', 'description', 'column_name',
         'is_minimum', 'is_maximum', 'is_multiple', 
         'keywords', 'order', 'type_id', 'data_id', 
         'created_by', 
@@ -72,7 +72,7 @@ class Preference extends Model {
      *
      * @var array
      */
-    protected $appends = [];
+    protected $appends = ['last_updated_at'];
 
 
     /**
@@ -80,7 +80,20 @@ class Preference extends Model {
      *
      * @var array
      */
-    protected $with = [];
+    protected $with = ['type', 'data'];
+
+    
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_minimum' => 'boolean', 
+        'is_maximum' => 'boolean', 
+        'is_multiple' => 'boolean',
+        'is_active' => 'boolean',
+    ];
 
 
     /**

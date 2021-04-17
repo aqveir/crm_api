@@ -5,14 +5,14 @@ namespace Modules\Preference\Models\Preference;
 use Modules\Core\Models\BaseModel as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-use Modules\Preference\Models\Preference\Traits\Relationship\PreferenceDataRelationship;
+use Modules\Preference\Models\Preference\Traits\Relationship\PreferenceDataValueRelationship;
 
 /**
  * Eloquent Model for Preference Lookup Value
  */
 class PreferenceDataValue extends Model {
 
-    use PreferenceLookupRelationship;
+    use PreferenceDataValueRelationship;
     use SoftDeletes;
 
     /**
@@ -29,8 +29,7 @@ class PreferenceDataValue extends Model {
      * @var array
      */
     protected $fillable = [
-        'name', 'column_name', 'display_name', 'description',
-        'type', 'lookup_id', 'is_multiple', 'is_rent', 'is_sale'
+        'value', 'display_name', 'description'
     ];
 
 
@@ -50,7 +49,7 @@ class PreferenceDataValue extends Model {
      * @var array
      */
     protected $hidden = [
-        'org_id', 'lookup_id', 'description',
+        'data_id',
         'created_by', 'updated_by', 'deleted_by',
         'created_at', 'updated_at', 'deleted_at'
     ]; 
@@ -79,6 +78,16 @@ class PreferenceDataValue extends Model {
      * @var array
      */
     protected $with = [];
+
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
 
 
     /**

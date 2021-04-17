@@ -29,7 +29,7 @@ class PreferenceData extends Model {
      * @var array
      */
     protected $fillable = [
-        'org_id', 'key', 'display_value', 'description'
+        'org_id', 'name', 'display_value', 'description'
     ];
 
 
@@ -50,8 +50,8 @@ class PreferenceData extends Model {
      */
     protected $hidden = [
         'org_id',
-        'created_by', 'updated_by',
-        'created_at', 'updated_at'
+        'created_by', 'updated_by', 'deleted_by',
+        'created_at', 'updated_at', 'deleted_at'
     ]; 
 
 
@@ -60,7 +60,7 @@ class PreferenceData extends Model {
      * @var array
      */
     protected $dates = [
-        'created_at', 'updated_at'
+        'created_at', 'updated_at', 'deleted_at'
     ];
 
 
@@ -77,7 +77,17 @@ class PreferenceData extends Model {
      *
      * @var array
      */
-    protected $with = [];
+    protected $with = ['values'];
+
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
 
 
     /**

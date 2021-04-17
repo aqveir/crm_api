@@ -25,7 +25,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 foreach ($preferences as $preference) {
                     //Create Meta Data
                     $response = factory(\Modules\Preference\Models\Meta\PreferenceMeta::class)->create([
-                        'key'               => $preference['key'],
+                        'name'              => $preference['name'],
                         'industry_key'      => $industryType,
                         'display_value'     => array_key_exists('display_value', $preference)?$preference['display_value']:null,
                         'description'       => array_key_exists('description', $preference)?$preference['description']:null,
@@ -40,13 +40,7 @@ class PreferenceMetaTableSeeder extends Seeder
                     ]);
                 } //Loop
             } //End if
-
-
-            //Save configurations
-            // if (!empty($organization['configurations'])) 
-            // {
-            //     $response->configurations()->attach($organization['configurations']);
-            // } //End if            
+           
         } //Loop ends
     }
 
@@ -70,7 +64,7 @@ class PreferenceMetaTableSeeder extends Seeder
         $data['industry_key'] = 'industry_type_vanilla';
         $data['data'] = [
             [ //Estimated Price (max)
-                'key' => 'max_estimated_price',
+                'name' => 'max_estimated_price',
                 'display_value' => 'Estimated Price (max)',
                 'type' => ['value' => 'data_type_number'],
                 'is_maximum' => 1,
@@ -80,7 +74,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 6,
             ],
             [ //Estimated Price (min)
-                'key' => 'min_estimated_price',
+                'name' => 'min_estimated_price',
                 'display_value' => 'Estimated Price (min)',
                 'type' => ['value' => 'data_type_number'],
                 'is_minimum' => 1,
@@ -90,7 +84,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 5,
             ],
             [ //Location
-                'key' => 'lead_location',
+                'name' => 'lead_location',
                 'display_value' => 'Location',
                 'type' => ['value' => 'data_type_location'],
                 'is_multiple' => 1,
@@ -111,7 +105,7 @@ class PreferenceMetaTableSeeder extends Seeder
         $data['industry_key'] = 'industry_type_real_estate';
         $data['data'] = [
             [ //Age of Property (Max)
-                'key' => 'max_age_of_property',
+                'name' => 'max_age_of_property',
                 'display_value' => 'Age of Property (Max)',
                 'type' => ['value' => 'data_type_number'],
                 'is_maximum' => 1,
@@ -120,7 +114,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Age of Property (Min)
-                'key' => 'min_age_of_property',
+                'name' => 'min_age_of_property',
                 'display_value' => 'Age of Property (Min)',
                 'type' => ['value' => 'data_type_number'],
                 'is_minimum' => 1,
@@ -129,7 +123,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Air Conditioners (max)
-                'key' => 'max_air_conditioners',
+                'name' => 'max_air_conditioners',
                 'display_value' => 'Air Conditioners (max)',
                 'type' => ['value' => 'data_type_number'],
                 'is_maximum' => 1,
@@ -138,7 +132,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Air Conditioners (min)
-                'key' => 'min_air_conditioners',
+                'name' => 'min_air_conditioners',
                 'display_value' => 'Air Conditioners (min)',
                 'type' => ['value' => 'data_type_number'],
                 'is_minimum' => 1,
@@ -147,7 +141,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0
             ], 
             [ //Bachelor or Family
-                'key' => 'bachelor_or_family',
+                'name' => 'bachelor_or_family',
                 'display_value' => 'Bachelor or Family',
                 'type' => ['value' => 'data_type_lookup'],
                 'is_multiple' => 0,
@@ -155,7 +149,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'keywords' => 'family',
                 'order' => 0,
                 'data_json' => [
-                    'key' => 'bachelor_or_family',
+                    'name' => 'bachelor_or_family',
                     'display_value' => 'Bachelor_or_Family',
                     'values' => [
                         ['value' => 'Bachelors OK', 'display_value' => 'Bachelor'],
@@ -164,7 +158,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 ]
             ],
             [ //Badminton Court
-                'key' => 'badminton_court',
+                'name' => 'badminton_court',
                 'display_value' => 'Badminton Court',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -172,7 +166,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Balconies (max)
-                'key' => 'max_balconies',
+                'name' => 'max_balconies',
                 'display_value' => 'Balconies (max)',
                 'type' => ['value' => 'data_type_number'],
                 'is_maximum' => 1,
@@ -181,7 +175,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Balconies (min)
-                'key' => 'min_balconies',
+                'name' => 'min_balconies',
                 'display_value' => 'Balconies (min)',
                 'type' => ['value' => 'data_type_number'],
                 'is_minimum' => 1,
@@ -190,7 +184,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Basketball Court
-                'key' => 'basketball_court',
+                'name' => 'basketball_court',
                 'display_value' => 'Basketball Court',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -198,7 +192,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Bathrooms (max)
-                'key' => 'max_bathrooms',
+                'name' => 'max_bathrooms',
                 'display_value' => 'Bathrooms (max)',
                 'type' => ['value' => 'data_type_number'],
                 'is_maximum' => 1,
@@ -207,7 +201,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Bathrooms (min)
-                'key' => 'min_bathrooms',
+                'name' => 'min_bathrooms',
                 'display_value' => 'Bathrooms (min)',
                 'type' => ['value' => 'data_type_number'],
                 'is_minimum' => 1,
@@ -216,7 +210,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Beds (max)
-                'key' => 'max_beds',
+                'name' => 'max_beds',
                 'display_value' => 'Beds (max)',
                 'type' => ['value' => 'data_type_number'],
                 'is_maximum' => 1,
@@ -225,7 +219,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Beds (min)
-                'key' => 'min_beds',
+                'name' => 'min_beds',
                 'display_value' => 'Beds (min)',
                 'type' => ['value' => 'data_type_number'],
                 'is_minimum' => 1,
@@ -234,7 +228,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Building View
-                'key' => 'building_view',
+                'name' => 'building_view',
                 'display_value' => 'Building View',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -242,7 +236,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Cable TV
-                'key' => 'cable_tv',
+                'name' => 'cable_tv',
                 'display_value' => 'Cable TV',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -250,7 +244,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Carpet Area (Max Sq Ft)
-                'key' => 'max_carpet_area_sft',
+                'name' => 'max_carpet_area_sft',
                 'display_value' => 'Carpet Area (Max Sq Ft)',
                 'type' => ['value' => 'data_type_number'],
                 'is_maximum' => 1,
@@ -259,7 +253,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Carpet Area (Min Sq Ft)
-                'key' => 'min_carpet_area_sft',
+                'name' => 'min_carpet_area_sft',
                 'display_value' => 'Carpet Area (Min Sq Ft)',
                 'type' => ['value' => 'data_type_number'],
                 'is_minimum' => 1,
@@ -268,7 +262,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Chimney
-                'key' => 'chimney',
+                'name' => 'chimney',
                 'display_value' => 'Chimney',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -276,7 +270,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //City View
-                'key' => 'city_view',
+                'name' => 'city_view',
                 'display_value' => 'City View',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -284,7 +278,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Club House
-                'key' => 'club_house',
+                'name' => 'club_house',
                 'display_value' => 'Club House',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -292,7 +286,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Coffee Table
-                'key' => 'coffee_table',
+                'name' => 'coffee_table',
                 'display_value' => 'Coffee Table',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -300,14 +294,14 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Configuration
-                'key' => 'configuration',
+                'name' => 'configuration',
                 'display_value' => 'Configuration',
                 'type' => ['value' => 'data_type_lookup'],
                 'is_multiple' => 1,
                 'keywords' => 'configuration,bhk,bedrooms',
                 'order' => 2,
                 'data_json' => [
-                    'key' => 'configuration',
+                    'name' => 'configuration',
                     'display_value' => 'Configuration',
                     'values' => [
                         ['value' => '1BHK', 'display_value' => '1BHK', 'order' => 1],
@@ -319,7 +313,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 ]
             ],
             [ //Construction Status
-                'key' => 'construction_status',
+                'name' => 'construction_status',
                 'display_value' => 'Construction Status',
                 'type' => ['value' => 'data_type_lookup'],
                 'is_multiple' => 1,
@@ -327,7 +321,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'keywords' => 'construction,status',
                 'order' => 0,
                 'data_json' => [
-                    'key' => 'construction_status',
+                    'name' => 'construction_status',
                     'display_value' => 'Construction_Status',
                     'values' => [
                         ['value' => 'ready_to_move', 'display_value' => 'Ready To Move'],
@@ -336,7 +330,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 ]
             ],
             [ //Corporate or Individual
-                'key' => 'corporate_or_individual',
+                'name' => 'corporate_or_individual',
                 'display_value' => 'Corporate or Individual',
                 'type' => ['value' => 'data_type_lookup'],
                 'is_multiple' => 0,
@@ -344,7 +338,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'keywords' => 'corporate,individual',
                 'order' => 0,
                 'data_json' => [
-                    'key' => 'corporate_or_individual',
+                    'name' => 'corporate_or_individual',
                     'display_value' => 'Corporate_Or_Individual',
                     'values' => [
                         ['value' => 'Corporate Lease Only', 'display_value' => 'Corporate Only'],
@@ -353,7 +347,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 ]
             ],
             [ //Covered Car Parks (max)
-                'key' => 'max_covered_car_parks',
+                'name' => 'max_covered_car_parks',
                 'display_value' => 'Covered Car Parks (max)',
                 'type' => ['value' => 'data_type_number'],
                 'is_maximum' => 1,
@@ -362,7 +356,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Covered Car Parks (min)
-                'key' => 'min_covered_car_parks',
+                'name' => 'min_covered_car_parks',
                 'display_value' => 'Covered Car Parks (min)',
                 'type' => ['value' => 'data_type_number'],
                 'is_minimum' => 1,
@@ -371,7 +365,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Dining Area
-                'key' => 'dining_area',
+                'name' => 'dining_area',
                 'display_value' => 'Dining Area',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -379,7 +373,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Dining Table
-                'key' => 'dining_table',
+                'name' => 'dining_table',
                 'display_value' => 'Dining Table',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -387,14 +381,14 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Facing Direction
-                'key' => 'facing_direction',
+                'name' => 'facing_direction',
                 'display_value' => 'Facing Direction',
                 'type' => ['value' => 'data_type_lookup'],
                 'is_multiple' => 1,
                 'keywords' => 'facing,direction',
                 'order' => 3,
                 'data_json' => [
-                    'key' => 'facing_direction',
+                    'name' => 'facing_direction',
                     'display_value' => 'Facing_Direction',
                     'values' => [
                         ['value' => 'NORTH', 'display_value' => 'North'],
@@ -405,7 +399,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 ]
             ],
             [ //Fans
-                'key' => 'fans',
+                'name' => 'fans',
                 'display_value' => 'Fans',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -413,7 +407,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 11,
             ],
             [ //Floor Number (max)
-                'key' => 'max_floor_number',
+                'name' => 'max_floor_number',
                 'display_value' => 'Floor Number (max)',
                 'type' => ['value' => 'data_type_number'],
                 'is_maximum' => 1,
@@ -422,7 +416,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Floor Number (min)
-                'key' => 'min_floor_number',
+                'name' => 'min_floor_number',
                 'display_value' => 'Floor Number (min)',
                 'type' => ['value' => 'data_type_number'],
                 'is_minimum' => 1,
@@ -431,7 +425,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Football Court
-                'key' => 'football_court',
+                'name' => 'football_court',
                 'display_value' => 'Football Court',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -439,7 +433,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Fridge
-                'key' => 'fridge',
+                'name' => 'fridge',
                 'display_value' => 'Fridge',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -447,14 +441,14 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Furnishing State
-                'key' => 'furnishing_state',
+                'name' => 'furnishing_state',
                 'display_value' => 'Furnishing State',
                 'type' => ['value' => 'data_type_lookup'],
                 'is_multiple' => 1,
                 'keywords' => 'furnishing,state',
                 'order' => 0,
                 'data_json' => [
-                    'key' => 'furnishing_state',
+                    'name' => 'furnishing_state',
                     'display_value' => 'Furnishing_State',
                     'values' => [
                         ['value' => 'NONE', 'display_value' => 'Not Furnished'],
@@ -464,7 +458,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 ]
             ],
             [ //Garden
-                'key' => 'garden',
+                'name' => 'garden',
                 'display_value' => 'Garden',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -472,7 +466,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Garden View
-                'key' => 'garden_view',
+                'name' => 'garden_view',
                 'display_value' => 'Garden View',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -480,7 +474,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ], 
             [ //Geysers (max)
-                'key' => 'max_geysers',
+                'name' => 'max_geysers',
                 'display_value' => 'Geysers (max)',
                 'type' => ['value' => 'data_type_number'],
                 'is_maximum' => 1,
@@ -489,7 +483,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Geysers (min)
-                'key' => 'min_geysers',
+                'name' => 'min_geysers',
                 'display_value' => 'Geysers (min)',
                 'type' => ['value' => 'data_type_number'],
                 'is_minimum' => 1,
@@ -498,7 +492,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Gym
-                'key' => 'gym',
+                'name' => 'gym',
                 'display_value' => 'Gym',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -506,7 +500,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 7,
             ],
             [ //'Have Pets?
-                'key' => 'have_pets',
+                'name' => 'have_pets',
                 'display_value' => 'Have Pets?',
                 'type' => ['value' => 'data_type_lookup'],
                 'is_multiple' => 0,
@@ -514,7 +508,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'keywords' => 'have,pets',
                 'order' => 0,
                 'data_json' => [
-                    'key' => 'have_pets',
+                    'name' => 'have_pets',
                     'display_value' => 'Have_Pets',
                     'values' => [
                         ['value' => 'Pets OK', 'display_value' => 'Pets Allowed'],
@@ -523,7 +517,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 ]
             ],
             [ //Indoor Games
-                'key' => 'indoor_games',
+                'name' => 'indoor_games',
                 'display_value' => 'Indoor Games',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -531,7 +525,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Internet
-                'key' => 'internet',
+                'name' => 'internet',
                 'display_value' => 'Internet',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -539,7 +533,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Jogging Track
-                'key' => 'jogging_track',
+                'name' => 'jogging_track',
                 'display_value' => 'Jogging Track',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -547,7 +541,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 8,
             ],
             [ //Kids Play Area
-                'key' => 'kids_play_area',
+                'name' => 'kids_play_area',
                 'display_value' => 'Kids Play Area',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -555,7 +549,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Lake View
-                'key' => 'lake_view',
+                'name' => 'lake_view',
                 'display_value' => 'Lake View',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -563,7 +557,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ], 
             [ //Lift
-                'key' => 'lift',
+                'name' => 'lift',
                 'display_value' => 'Lift',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -571,7 +565,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ], 
             [ //Lights
-                'key' => 'lights',
+                'name' => 'lights',
                 'display_value' => 'Lights',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -579,7 +573,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 12,
             ],
             [ //Maintenance (max)
-                'key' => 'max_maintenance',
+                'name' => 'max_maintenance',
                 'display_value' => 'Maintenance (max)',
                 'type' => ['value' => 'data_type_number'],
                 'is_maximum' => 1,
@@ -588,7 +582,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Maintenance (min)
-                'key' => 'min_maintenance',
+                'name' => 'min_maintenance',
                 'display_value' => 'Maintenance (min)',
                 'type' => ['value' => 'data_type_number'],
                 'is_minimum' => 1,
@@ -597,7 +591,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Microwave
-                'key' => 'microwave',
+                'name' => 'microwave',
                 'display_value' => 'Microwave',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -605,7 +599,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Modular Kitchen
-                'key' => 'modular_kitchen',
+                'name' => 'modular_kitchen',
                 'display_value' => 'Modular Kitchen',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -613,7 +607,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Monthly Rent (max)
-                'key' => 'max_monthly_rent',
+                'name' => 'max_monthly_rent',
                 'display_value' => 'Monthly Rent (max)',
                 'type' => ['value' => 'data_type_number'],
                 'is_maximum' => 1,
@@ -623,7 +617,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Monthly Rent (min)
-                'key' => 'min_monthly_rent',
+                'name' => 'min_monthly_rent',
                 'display_value' => 'Monthly Rent (min)',
                 'type' => ['value' => 'data_type_number'],
                 'is_minimum' => 1,
@@ -633,7 +627,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Mountain View
-                'key' => 'mountain_view',
+                'name' => 'mountain_view',
                 'display_value' => 'Mountain View',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -641,7 +635,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Ocean View
-                'key' => 'ocean_view',
+                'name' => 'ocean_view',
                 'display_value' => 'Ocean View',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -649,7 +643,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Open Car Parks (max)
-                'key' => 'max_open_car_parks',
+                'name' => 'max_open_car_parks',
                 'display_value' => 'Open Car Parks (max)',
                 'type' => ['value' => 'data_type_number'],
                 'is_maximum' => 1,
@@ -658,7 +652,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Open Car Parks (min)
-                'key' => 'min_open_car_parks',
+                'name' => 'min_open_car_parks',
                 'display_value' => 'Open Car Parks (min)',
                 'type' => ['value' => 'data_type_number'],
                 'is_minimum' => 1,
@@ -667,7 +661,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Other Charges (max)
-                'key' => 'max_other_charges',
+                'name' => 'max_other_charges',
                 'display_value' => 'Other Charges (max)',
                 'type' => ['value' => 'data_type_number'],
                 'is_maximum' => 1,
@@ -677,7 +671,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Other Charges (min)
-                'key' => 'min_other_charges',
+                'name' => 'min_other_charges',
                 'display_value' => 'Other Charges (min)',
                 'type' => ['value' => 'data_type_number'],
                 'is_minimum' => 1,
@@ -687,7 +681,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Oven
-                'key' => 'oven',
+                'name' => 'oven',
                 'display_value' => 'Oven',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -695,7 +689,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Park View
-                'key' => 'park_view',
+                'name' => 'park_view',
                 'display_value' => 'Park View',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -703,7 +697,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Piped Gas
-                'key' => 'piped_gas',
+                'name' => 'piped_gas',
                 'display_value' => 'Piped Gas',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -711,7 +705,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 13,
             ],
             [ //Pooja Spcace
-                'key' => 'pooja_spcace',
+                'name' => 'pooja_spcace',
                 'display_value' => 'Pooja Spcace',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -719,7 +713,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Pool View
-                'key' => 'pool_view',
+                'name' => 'pool_view',
                 'display_value' => 'Pool View',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -727,7 +721,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Power Backup
-                'key' => 'power_backup',
+                'name' => 'power_backup',
                 'display_value' => 'Power Backup',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -735,14 +729,14 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 10,
             ],
             [ //Property Category
-                'key' => 'property_category',
+                'name' => 'property_category',
                 'display_value' => 'Property Category',
                 'type' => ['value' => 'data_type_lookup'],
                 'is_multiple' => 0,
                 'keywords' => 'property,category',
                 'order' => 0,
                 'data_json' => [
-                    'key' => 'property_category',
+                    'name' => 'property_category',
                     'display_value' => 'Property_Category',
                     'values' => [
                         ['value' => 'commercial', 'display_value' => 'Commercial'],
@@ -751,14 +745,14 @@ class PreferenceMetaTableSeeder extends Seeder
                 ]
             ],
             [ //Property Type
-                'key' => 'property_type',
+                'name' => 'property_type',
                 'display_value' => 'Property Type',
                 'type' => ['value' => 'data_type_lookup'],
                 'is_multiple' => 1,
                 'keywords' => 'property,type',
                 'order' => 0,
                 'data_json' => [
-                    'key' => 'property_type',
+                    'name' => 'property_type',
                     'display_value' => 'Property_Type',
                     'values' => [
                         ['value' => 'Apartment', 'display_value' => 'Apartment'],
@@ -770,7 +764,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 ]
             ],
             [ //Sale Price (max)
-                'key' => 'max_sale_price',
+                'name' => 'max_sale_price',
                 'display_value' => 'Sale Price (max)',
                 'type' => ['value' => 'data_type_number'],
                 'is_maximum' => 1,
@@ -780,7 +774,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 6,
             ],
             [ //Sale Price (min)
-                'key' => 'min_sale_price',
+                'name' => 'min_sale_price',
                 'display_value' => 'Sale Price (min)',
                 'type' => ['value' => 'data_type_number'],
                 'is_minimum' => 1,
@@ -790,7 +784,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 5,
             ],
             [ //Sale Source
-                'key' => 'sale_source',
+                'name' => 'sale_source',
                 'display_value' => 'Sale Source',
                 'type' => ['value' => 'data_type_lookup'],
                 'is_multiple' => 0,
@@ -798,7 +792,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'keywords' => 'sale,source',
                 'order' => 0,
                 'data_json' => [
-                    'key' => 'sale_source',
+                    'name' => 'sale_source',
                     'display_value' => 'Sale_Source',
                     'values' => [
                         ['value' => 'new', 'display_value' => 'New'],
@@ -807,7 +801,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 ]
             ],
             [ //SB Area (Max Sq Ft)
-                'key' => 'max_sb_area_sft',
+                'name' => 'max_sb_area_sft',
                 'display_value' => 'SB Area (Max Sq Ft)',
                 'type' => ['value' => 'data_type_number'],
                 'is_maximum' => 1,
@@ -816,7 +810,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //SB Area (Min Sq Ft)
-                'key' => 'min_sb_area_sft',
+                'name' => 'min_sb_area_sft',
                 'display_value' => 'SB Area (Min Sq Ft)',
                 'type' => ['value' => 'data_type_number'],
                 'is_minimum' => 1,
@@ -825,7 +819,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Security
-                'key' => 'security',
+                'name' => 'security',
                 'display_value' => 'Security',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -833,7 +827,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 9,
             ],
             [ //Security Deposit (max)
-                'key' => 'max_security_deposit',
+                'name' => 'max_security_deposit',
                 'display_value' => 'Security Deposit (max)',
                 'type' => ['value' => 'data_type_number'],
                 'is_maximum' => 1,
@@ -843,7 +837,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Security System
-                'key' => 'security_system',
+                'name' => 'security_system',
                 'display_value' => 'Security System',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -851,7 +845,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Servant Room
-                'key' => 'servant_room',
+                'name' => 'servant_room',
                 'display_value' => 'Servant Room',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -859,7 +853,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Sewage Treatment
-                'key' => 'sewage_treatment',
+                'name' => 'sewage_treatment',
                 'display_value' => 'Sewage Treatment',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -867,7 +861,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Sofa
-                'key' => 'sofa',
+                'name' => 'sofa',
                 'display_value' => 'Sofa',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -875,7 +869,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Stove
-                'key' => 'stove',
+                'name' => 'stove',
                 'display_value' => 'Stove',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -883,7 +877,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Street View
-                'key' => 'street_view',
+                'name' => 'street_view',
                 'display_value' => 'Street View',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -891,7 +885,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Swimming Pool
-                'key' => 'swimming_pool',
+                'name' => 'swimming_pool',
                 'display_value' => 'Swimming Pool',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -899,7 +893,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Tennis Court
-                'key' => 'tennis_court',
+                'name' => 'tennis_court',
                 'display_value' => 'Tennis Court',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -907,7 +901,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Total Car Parks (max)
-                'key' => 'max_total_car_parks',
+                'name' => 'max_total_car_parks',
                 'display_value' => 'Total Car Parks (max)',
                 'type' => ['value' => 'data_type_number'],
                 'is_maximum' => 1,
@@ -916,7 +910,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Total Car Parks (min)
-                'key' => 'min_total_car_parks',
+                'name' => 'min_total_car_parks',
                 'display_value' => 'Total Car Parks (min)',
                 'type' => ['value' => 'data_type_number'],
                 'is_minimum' => 1,
@@ -925,7 +919,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Total Price x Registration (max)
-                'key' => 'max_total_price_x_registration',
+                'name' => 'max_total_price_x_registration',
                 'display_value' => 'Total Price x Registration (max)',
                 'type' => ['value' => 'data_type_number'],
                 'is_maximum' => 1,
@@ -935,7 +929,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Total Price Registration (min)
-                'key' => 'min_total_price_registration',
+                'name' => 'min_total_price_registration',
                 'display_value' => 'Total Price Registration (min)',
                 'type' => ['value' => 'data_type_number'],
                 'is_minimum' => 1,
@@ -945,7 +939,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Total Rent Maint (max)
-                'key' => 'max_total_rent_maint',
+                'name' => 'max_total_rent_maint',
                 'display_value' => 'Total Rent Maint (max)',
                 'type' => ['value' => 'data_type_number'],
                 'is_maximum' => 1,
@@ -955,7 +949,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Total Rent Maint (min)
-                'key' => 'min_total_rent_maint',
+                'name' => 'min_total_rent_maint',
                 'display_value' => 'Total Rent Maint (min)',
                 'type' => ['value' => 'data_type_number'],
                 'is_minimum' => 1,
@@ -965,7 +959,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //TV
-                'key' => 'tv',
+                'name' => 'tv',
                 'display_value' => 'TV',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -973,7 +967,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //TV Unit
-                'key' => 'tv_unit',
+                'name' => 'tv_unit',
                 'display_value' => 'TV Unit',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -981,7 +975,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 0,
             ],
             [ //Veg or Non-Veg
-                'key' => 'veg_or_non-veg',
+                'name' => 'veg_or_non-veg',
                 'display_value' => 'Veg or Non-Veg',
                 'type' => ['value' => 'data_type_lookup'],
                 'is_multiple' => 0,
@@ -989,7 +983,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'keywords' => 'veg,non-veg,nonveg',
                 'order' => 0,
                 'data_json' => [
-                    'key' => 'veg_or_non-veg',
+                    'name' => 'veg_or_non-veg',
                     'display_value' => 'Veg_Or_Non-Veg',
                     'values' => [
                         ['value' => 'Vegetarians Only', 'display_value' => 'Only Veg'],
@@ -998,7 +992,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 ]
             ],
             [ //Washing Machine
-                'key' => 'washing_machine',
+                'name' => 'washing_machine',
                 'display_value' => 'Washing Machine',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -1006,7 +1000,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 14,
             ],
             [ //Water Purifier
-                'key' => 'water_purifier',
+                'name' => 'water_purifier',
                 'display_value' => 'Water Purifier',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
@@ -1014,7 +1008,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 15,
             ],
             [ //Location
-                'key' => 'location',
+                'name' => 'location',
                 'display_value' => 'Location',
                 'type' => ['value' => 'data_type_location'],
                 'is_multiple' => 1,
@@ -1022,7 +1016,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 1,
             ],
             [ //Project
-                'key' => 'project_data',
+                'name' => 'project_data',
                 'display_value' => 'Project',
                 'type' => ['value' => 'data_type_external'],
                 'is_multiple' => 1,
@@ -1030,14 +1024,14 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 4,
             ],
             [ //Flooring
-                'key' => 'flooring',
+                'name' => 'flooring',
                 'display_value' => 'Flooring',
                 'type' => ['value' => 'data_type_lookup'],
                 'is_multiple' => 1,
                 'keywords' => 'flooring,tiles',
                 'order' => 0,
                 'data_json' => [
-                    'key' => 'flooring',
+                    'name' => 'flooring',
                     'display_value' => 'Flooring',
                     'values' => [
                         ['value' => 'flooring_tile', 'display_value' => 'Tile'],
@@ -1054,14 +1048,14 @@ class PreferenceMetaTableSeeder extends Seeder
                 ]
             ], 
             [ //Tags
-                'key' => 'tags',
+                'name' => 'tags',
                 'display_value' => 'Tags',
                 'type' => ['value' => 'data_type_lookup'],
                 'is_multiple' => 1,
                 'keywords' => '',
                 'order' => 0,
                 'data_json' => [
-                    'key' => 'tags',
+                    'name' => 'tags',
                     'display_value' => 'Tags',
                     'values' => [
                         ['value' => 'tags_investment', 'display_value' => 'Investment'],
@@ -1083,7 +1077,7 @@ class PreferenceMetaTableSeeder extends Seeder
         $data['industry_key'] = 'industry_type_travel';
         $data['data'] = [
             [ //Travel Price (max)
-                'key' => 'max_travel_price',
+                'name' => 'max_travel_price',
                 'display_value' => 'Travel Price (max)',
                 'type' => ['value' => 'data_type_number'],
                 'is_maximum' => 1,
@@ -1093,7 +1087,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 6,
             ],
             [ //Travel Price (min)
-                'key' => 'min_travel_price',
+                'name' => 'min_travel_price',
                 'display_value' => 'Travel Price (min)',
                 'type' => ['value' => 'data_type_number'],
                 'is_minimum' => 1,
@@ -1103,7 +1097,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 5,
             ],
             [ //Location
-                'key' => 'travel_location',
+                'name' => 'travel_location',
                 'display_value' => 'Location',
                 'type' => ['value' => 'data_type_location'],
                 'is_multiple' => 1,
@@ -1111,7 +1105,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 1,
             ],
             [ //Group Size (max)
-                'key' => 'maxgroup_size',
+                'name' => 'maxgroup_size',
                 'display_value' => 'Group Size (max)',
                 'type' => ['value' => 'data_type_number'],
                 'is_maximum' => 1,
@@ -1121,7 +1115,7 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 6,
             ],
             [ //Group Size (min)
-                'key' => 'min_group_size',
+                'name' => 'min_group_size',
                 'display_value' => 'Group Size (min)',
                 'type' => ['value' => 'data_type_number'],
                 'is_minimum' => 1,
@@ -1131,26 +1125,27 @@ class PreferenceMetaTableSeeder extends Seeder
                 'order' => 5,
             ],
             [ //Tour Manager
-                'key' => 'tour_manager',
+                'name' => 'tour_manager',
                 'display_value' => 'Tour Manager',
                 'type' => ['value' => 'data_type_boolean'],
                 'is_multiple' => 0,
                 'keywords' => 'manager,tour-manager',
                 'order' => 0,
             ],
-            [ //Tags
-                'key' => 'travel_tags',
-                'display_value' => 'Tags',
+            [ //Types
+                'name' => 'travel_type',
+                'display_value' => 'Type',
                 'type' => ['value' => 'data_type_lookup'],
                 'is_multiple' => 1,
                 'keywords' => '',
                 'order' => 0,
                 'data_json' => [
-                    'key' => 'tags',
-                    'display_value' => 'Tags',
+                    'name' => 'travel_types',
+                    'display_value' => 'Types',
                     'values' => [
-                        ['value' => 'tags_investment', 'display_value' => 'Investment'],
-                        ['value' => 'tags_own_use', 'display_value' => 'Own Use']
+                        ['value' => 'travel_type_adventure', 'display_value' => 'Adventure'],
+                        ['value' => 'travel_type_business', 'display_value' => 'Business'],
+                        ['value' => 'travel_type_weekend', 'display_value' => 'Weekend']
                     ]
                 ]
             ]

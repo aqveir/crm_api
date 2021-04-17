@@ -32,10 +32,10 @@ class PrivilegePolicy
      */
     public function before(User $user, $ability)
     {
-        if ($user->hasRoles(['super_admin'])) {
+        if ($user->hasRoles(['organization_admin'])) {
             return true;
         } //End if
-    }
+    } //Function ends
 
 
     /**

@@ -69,6 +69,17 @@ class Lookup extends Model
 
 
     /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_editable' => 'boolean',
+        'is_active' => 'boolean',
+    ];
+
+
+    /**
      * Prepare a date for array / JSON serialization.
      *
      * @param  \DateTimeInterface  $date

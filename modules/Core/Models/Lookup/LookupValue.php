@@ -56,6 +56,17 @@ class LookupValue extends Model
      */
     protected $appends = [];
 
+
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_editable' => 'boolean',
+        'is_active' => 'boolean',
+    ];
+
     
     /**
      * Prepare a date for array / JSON serialization.

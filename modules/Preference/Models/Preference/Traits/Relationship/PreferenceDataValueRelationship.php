@@ -2,26 +2,15 @@
 
 namespace Modules\Preference\Models\Preference\Traits\Relationship;
 
+use Modules\Preference\Models\Preference\Preference;
 use Modules\Preference\Models\Preference\PreferenceData;
 
 /**
- * Class Preference Relationship
+ * Class Preference Data Values Relationship
  */
-trait PreferenceRelationship
-{
-	/**
-	 * Preference Type
-	 */
-	public function type()
-	{
-		return $this->hasOne(
-			config('crmomni-class.class_model.lookup_value'),
-			'id', 'type_id'
-		);
-	}
-
-
-	/**
+trait PreferenceDataValueRelationship
+{  
+    /**
 	 * Preference Lookup Values for JSON Data Type
 	 */
 	public function data()
@@ -32,4 +21,4 @@ trait PreferenceRelationship
 		);
 	}
 
-} //Traits ends
+} //Trait ends
