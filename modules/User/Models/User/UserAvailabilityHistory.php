@@ -7,10 +7,7 @@ use Modules\Core\Models\BaseModel as Model;
 /**
  * User Availability History Model
  */
-class UserAvailabilityHistory extends Model {
-
-    const UPDATED_AT = null;
-    
+class UserAvailabilityHistory extends Model {   
     
     /**
      * The database table used by the model.

@@ -59,6 +59,16 @@ class User extends Model implements
 
     
     /**
+     * Protected attributes that CANNOT be mass assigned.
+     *
+     * @var array
+     */
+    protected $guarded = [ 
+        'id'
+    ];
+
+    
+    /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
@@ -100,6 +110,19 @@ class User extends Model implements
      * @var array
      */
     protected $with = ['country', 'timezone', 'organization'];
+    
+    
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_remote_access_only' => 'boolean', 
+        'is_default' => 'boolean', 
+        'is_pool' => 'boolean',
+        'is_active' => 'boolean',
+    ];
 
 
     /**
