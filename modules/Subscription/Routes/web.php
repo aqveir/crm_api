@@ -11,6 +11,6 @@
 |
 */
 
-Route::prefix('subscription')->group(function() {
-    Route::get('/', 'SubscriptionController@index');
-});
+// Route::prefix('subscription')->group(function() {
+//     Route::get('/', 'SubscriptionController@index');
+// });

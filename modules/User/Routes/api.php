@@ -34,7 +34,7 @@ $api->version('v1', [
             $api->post('reset', 'Backend\\Auth\\UserAuthController@reset');
 
             // User Exists Validation
-            $api->get('exists', 'Backend\\User\\GetUserController@exists');
+            $api->get('exists', 'Backend\\User\\UserController@exists');
 
             // User Activation
             $api->get('activate/{token}', 'Backend\\User\\SetUserController@activate');
@@ -43,7 +43,7 @@ $api->version('v1', [
             $api->post('register', 'Backend\\User\\SetUserController@register');
 
             // User Availability Status
-            $api->get('status/{key}', 'Backend\\User\\GetUserController@detail');
+            $api->get('status/{key}', 'Backend\\User\\UserController@detail');
         });
     });
 
@@ -67,17 +67,14 @@ $api->version('v1', [
             $api->put('changepass', 'Backend\\Auth\\UserAuthController@changePassword');
 
             // Get User Profile
-            $api->get('profile', 'Backend\\User\\GetUserController@profile');
-        });
+            $api->get('profile', 'Backend\\User\\UserController@profile');
 
-        // Organization Endpoints
-        $api->group(['prefix' => 'organization/{ohash}/user'], function(Router $api) {
             // User Management
-            $api->get('/', 'Backend\\User\\GetUserController@index');
-            $api->get('{hash}', 'Backend\\User\\GetUserController@show');
-            $api->post('/', 'Backend\\User\\SetUserController@create');
-            $api->put('{hash}', 'Backend\\User\\SetUserController@update');
-            $api->put('{hash}/roles', 'Backend\\User\\SetUserController@assignRoles');
+            $api->get('/', 'Backend\\User\\UserController@index');
+            $api->get('{user}', 'Backend\\User\\UserController@show');
+            $api->post('/', 'Backend\\User\\UserController@create');
+            $api->put('{user}', 'Backend\\User\\UserController@update');
+            $api->delete('{user}', 'Backend\\User\\UserController@destroy');
         });
     });
 });

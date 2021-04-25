@@ -100,10 +100,8 @@ class RoleService extends BaseService
             //Get request data
             $data = $payload->toArray();
 
-            $response = $this->roleRepository
-                ->with('privileges')
-                ->where('org_id', $organization['id'])
-                ->get();
+            //Get roles for the organization
+            $response = $this->roleRepository->getRolesForOrganization($organization['id']);
 
             //Return the response data
             $objReturnValue = $response;            
@@ -147,11 +145,7 @@ class RoleService extends BaseService
             //Get request data
             $data = $payload->toArray();
 
-            $response = $this->roleRepository
-                ->with('privileges')
-                ->where('org_id', $organization['id'])
-                ->where('key', $roleKey)
-                ->first();
+            $response = $this->roleRepository->getRoleByIdForOrganization($organization['id'], $roleKey);
 
             if (empty($response)) {
                 throw new NotFoundHttpException();

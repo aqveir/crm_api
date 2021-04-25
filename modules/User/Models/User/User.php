@@ -138,6 +138,17 @@ class User extends Model implements
 
 
     /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'hash';
+    }
+
+
+    /**
      * Default constructor
      * @param array $attributes
      */

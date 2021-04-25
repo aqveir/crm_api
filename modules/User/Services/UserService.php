@@ -1,14 +1,19 @@
 <?php
 
-namespace Modules\User\Services\User;
+namespace Modules\User\Services;
 
 use Config;
 use Carbon\Carbon;
 
 use Modules\Core\Models\Organization\Organization;
+use Modules\User\Models\User\User;
 
 use Modules\Core\Repositories\Organization\OrganizationRepository;
 use Modules\User\Repositories\User\UserRepository;
+use Modules\Core\Repositories\Lookup\LookupValueRepository;
+use Modules\Core\Repositories\Role\RoleRepository;
+use Modules\Core\Repositories\Privilege\PrivilegeRepository;
+
 use Modules\User\Traits\UserAvailabilityAction;
 
 use Modules\Core\Services\BaseService;
@@ -55,17 +60,45 @@ class UserService extends BaseService
 
 
     /**
+     * @var \Modules\Core\Repositories\Lookup\LookupValueRepository
+     */
+    protected $lookupvalueRepository;
+
+
+    /**
+     * @var \Modules\Core\Repositories\Role\RoleRepository
+     */
+    protected $roleRepository;
+
+
+    /**
+     * @var \Modules\Core\Repositories\Privilege\PrivilegeRepository
+     */
+    protected $privilegeRepository;
+
+
+
+    /**
      * Service constructor.
      * 
      * @param \Modules\Core\Repositories\Organization\OrganizationRepository    $organizationRepository
      * @param \Modules\User\Repositories\User\UserRepository                    $userRepository
+     * @param \Modules\Core\Repositories\Lookup\LookupValueRepository           $lookupvalueRepository
+     * @param \Modules\Core\Repositories\Role\RoleRepository                    $roleRepository
+     * @param \Modules\Core\Repositories\Privilege\PrivilegeRepository          $privilegeRepository
      */
     public function __construct(
         OrganizationRepository          $organizationRepository,
-        UserRepository                  $userRepository
+        UserRepository                  $userRepository,
+        LookupValueRepository           $lookupvalueRepository,
+        RoleRepository                  $roleRepository,
+        PrivilegeRepository             $privilegeRepository
     ) {
         $this->organizationRepository   = $organizationRepository;
         $this->userRepository           = $userRepository;
+        $this->lookupvalueRepository    = $lookupvalueRepository;
+        $this->roleRepository           = $roleRepository;
+        $this->privilegeRepository      = $privilegeRepository;
     } //Function ends
 
 
@@ -136,16 +169,16 @@ class UserService extends BaseService
 
         try {
             //Authenticated User
-            $user = $this->getCurrentUser('backend');
-            if (!empty($user)) {
-                if ($user->hasRoles(config('crmomni.settings.default.role.key_super_admin'))) {
+            $userCurr = $this->getCurrentUser('backend');
+            if (!empty($userCurr)) {
+                if ($userCurr->hasRoles(config('crmomni.settings.default.role.key_super_admin'))) {
                     //Get organization data
                     $organization = $this->getOrganizationByHash($orgHash);
                     $orgId = $organization['id'];
                 } else {
-                    $orgId = $user['org_id'];
+                    $orgId = $userCurr['org_id'];
                 } //End if
-                $userId = $user['id'];
+                $userId = $userCurr['id'];
             } elseif ($isAutoCreated) { //Default creation
                 //Get organization data
                 $organization = $this->getOrganizationByHash($orgHash);
@@ -168,6 +201,9 @@ class UserService extends BaseService
 
                 //Create User
                 $user = $this->userRepository->create($data);
+
+                //Update roles
+                $this->saveRoles($orgId, $payload, $user, $userCurr);
 
                 //Send Verification for regular user
                 if (!$isAutoCreated) {
@@ -199,49 +235,61 @@ class UserService extends BaseService
 
 
     /**
-     * Verify User Email
+     * Update User
      * 
      * @param \string $orgHash
      * @param \Illuminate\Support\Collection $payload
-     * @param \string $token
      *
      * @return mixed
      */
-    public function verify(string $orgHash, Collection $payload, string $token) {
+    public function update(string $orgHash, Collection $payload, string $userHash, string $ipAddress=null)
+    {
         $objReturnValue = null;
 
         try {
+            //Authenticated User
+            $userCurr = $this->getCurrentUser('backend');
+            if (empty($userCurr)) {
+                throw new AccessDeniedHttpException();
+            } //End if
+
             //Get organization data
-            $organization = $this->getOrganizationByHash($orgHash);
+            $organization = $this->getOrganizationByHash($orgHash);            
 
-            $data = $payload->toArray();
+            //Build user data
+            $data = $payload->only([
+                'email', 'phone', 
+                'first_name', 'last_name', 
+                'is_remote_access_only', 'is_active'
+            ])->toArray();
 
-            //Get User data
-            $user = $this->userRepository
-                ->where('org_id', $organization['id'])
-                ->where('email', $data['email'])
-                ->where('verification_token', $token)
-                ->where('is_verified', false)
-                ->where('is_active', true)
-                ->firstOrFail();
-
-            //Check if the request is valid
-            if (!empty($user)) {
-                $user['is_verified'] = true;
-                $user['verified_at'] = Carbon::now();
-                $user->save();
-            } else {
+            //Create User
+            $user = $this->userRepository->update($userHash, 'hash', $data, $userCurr['id']);
+            if (empty($user)) {
                 throw new BadRequestHttpException();
             } //End if
+
+            //TODO: Update pool status
+
+            //Update roles
+            $this->saveRoles($organization['id'], $payload, $user, $userCurr);
+
+            //TODO: Update Privileges
+
+            //Raise event: User Updated
+            event(new UserUpdatedEvent($user));
 
             //Assign to the return value
             $objReturnValue = $user;
 
+        } catch(AccessDeniedHttpException $e) {
+            log::error('UserService:update:AccessDeniedHttpException:' . $e->getMessage());
+            throw new AccessDeniedHttpException($e->getMessage());
         } catch(BadRequestHttpException $e) {
-            log::error('UserService:register:BadRequestHttpException:' . $e->getMessage());
+            log::error('UserService:update:BadRequestHttpException:' . $e->getMessage());
             throw new BadRequestHttpException($e->getMessage());
         } catch(Exception $e) {
-            log::error('UserService:register:Exception:' . $e->getMessage());
+            log::error('UserService:update:Exception:' . $e->getMessage());
             throw new HttpException(500);
         } //Try-catch ends
 
@@ -250,87 +298,54 @@ class UserService extends BaseService
 
 
     /**
-     * Activate User Account
+     * Delete User
      * 
+     * @param \string $orgHash
      * @param \Illuminate\Support\Collection $payload
-     * @param \string $token
      *
      * @return mixed
      */
-    public function activate(Collection $payload, string $token) {
+    public function delete(string $orgHash, Collection $payload, string $userHash, string $ipAddress=null)
+    {
         $objReturnValue = null;
-        $orgId = 0; $userId = 0;
 
         try {
+            //Authenticated User
+            $userCurr = $this->getCurrentUser('backend');
+            if (empty($userCurr)) {
+                throw new AccessDeniedHttpException();
+            } //End if
+
+            //Get organization data
+            $organization = $this->getOrganizationByHash($orgHash);            
+
             //Build user data
-            $data = $payload->only([
-                'first_name', 'last_name',
-                'email', 'phone',
-            ])->toArray();
+            $data = $payload->toArray();
 
-            // Duplicate check
-            $isDuplicate=$this->userRepository->exists($data['email'], 'email');
-            if (!$isDuplicate) {
-                //Create User
-                $user = $this->userRepository->create($data);
-
-                //Send Verification for regular user
-                if (!$isAutoCreated) {
-                    $user->notify(new UserAccountActivation());
-                } //End if
-            } else {
+            //Create User
+            $user = $this->userRepository->delete($userHash, 'hash', $userCurr['id']);
+            if (empty($user)) {
                 throw new BadRequestHttpException();
             } //End if
+
+            //TODO: Update roles
+
+            //TODO: Update Privileges
+
+            //Raise event: User Updated
+            event(new UserDeletedEvent($user, $ipAddress));
 
             //Assign to the return value
             $objReturnValue = $user;
 
+        } catch(AccessDeniedHttpException $e) {
+            log::error('UserService:update:AccessDeniedHttpException:' . $e->getMessage());
+            throw new AccessDeniedHttpException($e->getMessage());
         } catch(BadRequestHttpException $e) {
-            log::error('UserService:register:BadRequestHttpException:' . $e->getMessage());
+            log::error('UserService:update:BadRequestHttpException:' . $e->getMessage());
             throw new BadRequestHttpException($e->getMessage());
         } catch(Exception $e) {
-            log::error('UserService:register:Exception:' . $e->getMessage());
-            throw new HttpException(500);
-        } //Try-catch ends
-
-        return $objReturnValue;
-    } //Function ends
-
-
-
-    public function register(Collection $payload, string $ipAddress=null) {
-        $objReturnValue = null;
-        $orgId = 0; $userId = 0;
-
-        try {
-            //Build user data
-            $data = $payload->only([
-                'first_name', 'last_name',
-                'email', 'phone',
-            ])->toArray();
-
-            // Duplicate check
-            $isDuplicate=$this->userRepository->exists($data['email'], 'email');
-            if (!$isDuplicate) {
-                //Create User
-                $user = $this->userRepository->create($data);
-
-                //Send Verification for regular user
-                if (!$isAutoCreated) {
-                    $user->notify(new UserAccountActivation());
-                } //End if
-            } else {
-                throw new BadRequestHttpException();
-            } //End if
-
-            //Assign to the return value
-            $objReturnValue = $user;
-
-        } catch(BadRequestHttpException $e) {
-            log::error('UserService:register:BadRequestHttpException:' . $e->getMessage());
-            throw new BadRequestHttpException($e->getMessage());
-        } catch(Exception $e) {
-            log::error('UserService:register:Exception:' . $e->getMessage());
+            log::error('UserService:update:Exception:' . $e->getMessage());
             throw new HttpException(500);
         } //Try-catch ends
 
@@ -388,7 +403,7 @@ class UserService extends BaseService
      * 
      * @return mixed
      */
-    public function getUsersByOrganization(string $orgHash, Collection $payload) {
+    public function getAll(string $orgHash, Collection $payload) {
         $objReturnValue = null;
         $orgId = 0; $userId = 0;
 
@@ -418,13 +433,13 @@ class UserService extends BaseService
 
             $objReturnValue = $response;
         } catch(NotFoundHttpException $e) {
-            log::error('UserService:getUsersByOrganization:NotFoundHttpException:' . $e->getMessage());
+            log::error('UserService:getAll:NotFoundHttpException:' . $e->getMessage());
             throw new NotFoundHttpException();
         } catch(BadRequestHttpException $e) {
-            log::error('UserService:getUsersByOrganization:BadRequestHttpException:' . $e->getMessage());
+            log::error('UserService:getAll:BadRequestHttpException:' . $e->getMessage());
             throw new BadRequestHttpException($e->getMessage());
         } catch(Exception $e) {
-            log::error('UserService:getUsersByOrganization:Exception:' . $e->getMessage());
+            log::error('UserService:getAll:Exception:' . $e->getMessage());
             throw new HttpException(500);
         } //Try-catch ends
 
@@ -435,14 +450,14 @@ class UserService extends BaseService
     /**
      * Fetch Single User Data for an Oraganization OR Current User Profile
      * 
-     * @param  \Illuminate\Support\Collection $payload
      * @param  \string $orgHash
+     * @param  \Illuminate\Support\Collection $payload
      * @param  \string $userHash
      * @param  \boolean $isCurrentUser (default false)
      * 
      * @return mixed
      */
-    public function getUserDataByOrganization(Collection $payload, string $orgHash=null, string $userHash=null, bool $isCurrentUser=false) {
+    public function show(string $orgHash, Collection $payload, string $userHash=null, bool $isCurrentUser=false) {
         $objReturnValue = null;
         $orgId = 0; $userId = 0;
 
@@ -478,13 +493,179 @@ class UserService extends BaseService
 
             $objReturnValue = $response;
         } catch(NotFoundHttpException $e) {
-            log::error('UserService:getUserDataByOrganization:NotFoundHttpException:' . $e->getMessage());
+            log::error('UserService:show:NotFoundHttpException:' . $e->getMessage());
             throw new NotFoundHttpException();
         } catch(BadRequestHttpException $e) {
-            log::error('UserService:getUserDataByOrganization:BadRequestHttpException:' . $e->getMessage());
+            log::error('UserService:show:BadRequestHttpException:' . $e->getMessage());
             throw new BadRequestHttpException($e->getMessage());
         } catch(Exception $e) {
-            log::error('UserService:getUserDataByOrganization:Exception:' . $e->getMessage());
+            log::error('UserService:show:Exception:' . $e->getMessage());
+            throw new HttpException(500);
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends
+
+
+    /**
+     * Validate User Exists
+     * 
+     * @param  \string $orgHash
+     * @param  \Illuminate\Support\Collection $payload
+     * 
+     * @return boolean
+     */
+    public function exists(string $orgHash, Collection $payload) {
+        $objReturnValue = null;
+        $orgId = 0; $userId = 0;
+        $key = null;
+
+        try {
+            //Get organization data
+            $organization = $this->getOrganizationByHash($orgHash);
+            $orgId = $organization['id'];            
+
+            //Build user data
+            $data = $payload->toArray();
+
+            if ($payload->has('username')) {
+                $key='username';
+            } elseif ($payload->has('email')) {
+                $key='email';
+            } elseif ($payload->has('phone')) {
+                $key='phone';
+            } else {
+                $key=null;
+            }
+
+            // Duplicate check
+            $isDuplicate=$this->userRepository->exists($data[$key], $key);
+
+            //Assign to the return value
+            $objReturnValue = $isDuplicate;
+
+        } catch(AccessDeniedHttpException $e) {
+            log::error('UserService:create:AccessDeniedHttpException:' . $e->getMessage());
+            throw new AccessDeniedHttpException($e->getMessage());
+        } catch(BadRequestHttpException $e) {
+            log::error('UserService:create:BadRequestHttpException:' . $e->getMessage());
+            throw new BadRequestHttpException($e->getMessage());
+        } catch(Exception $e) {
+            log::error('UserService:create:Exception:' . $e->getMessage());
+            throw new HttpException(500);
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends
+
+
+    /**
+     * Save User Roles
+     * 
+     * @param  \string $orgHash
+     * @param  \Illuminate\Support\Collection $payload
+     * 
+     * @return boolean
+     */
+    private function saveRoles(int $orgId, Collection $payload, User $user, User $currUser=null) {
+        $objReturnValue = null;
+        $key = null;
+        $actionRoles = [
+            'new' => [],
+            'update' => [],
+            'delete' => []
+        ];
+
+        try {
+            //Build user data
+            $data = $payload->toArray();
+
+            //Get roles in current request
+            $requestRoles = $data['roles'];
+
+            //Get Existing Roles
+            $existingRoles = $user->roles;
+
+            //Iterate and segragate
+            foreach ($requestRoles as $requestRole) {
+                $roleKey = $requestRole['key'];
+
+                if (empty($existingRoles)) {
+                    array_push($actionRoles['new'], $requestRole);
+                } else {
+                    $index = array_search($roleKey, array_column($existingRoles->toArray(), 'key'));
+                    if ($index===FALSE) {
+                        array_push($actionRoles['new'], $requestRole);
+                    } else {
+                        array_push($actionRoles['update'], $requestRole);
+                    } //End if
+                } //End if
+            } //Loop ends
+
+            //Check any deleted roles
+            if (!empty($existingRoles)) {
+                $existingRolesKeys = array_column($existingRoles->toArray(), 'key');
+                foreach ($existingRolesKeys as $existingRolesKey) {
+                    $index = array_search($existingRolesKey, array_column($requestRoles, 'key'));
+                    if ($index===FALSE) {
+                        $elemRole = [
+                            'key' => $existingRolesKey
+                        ];
+                        array_push($actionRoles['delete'], $elemRole);
+                    } //End if
+                } //Loop ends
+            } //End if
+
+            //Iterate action array
+            foreach ($actionRoles as $key => $actionRequestRoles) {
+                $action=$key;
+
+                //Iterate each action type
+                foreach ($actionRequestRoles as $actionRequestRole) {
+                    $accountId=null;
+
+                    $role = $this->roleRepository
+                        ->getRoleByIdForOrganization($orgId, $actionRequestRole['key']);
+
+                    if (!empty($role)) {
+
+                        //Get Account Id and OperatorId, if exists
+                        $accountId=array_key_exists("account_id",$actionRequestRole)?$actionRequestRole['account_id']:null;
+                        $operatorId=(!empty($currUser))?$currUser['id']:0;
+
+                        //Action based on type
+                        switch ($action) {
+                            case 'new':
+                                $user->roles()->attach($role['id'], ['account_id' => $accountId, 'created_by' => $operatorId]);
+                                break;
+
+                            case 'update':
+                                $user->roles()->updateExistingPivot($role['id'], ['account_id' => $accountId, 'updated_by' => $operatorId]);
+                                break;
+
+                            case 'delete':
+                                $user->roles()->detach($role['id']);
+                                break;
+
+                            default:
+                                # code...
+                                break;
+                        } //End  switch
+                    } //End if
+                } //Loop ends
+            } //Loop ends
+
+            //Assign to the return value
+            $objReturnValue = true;
+
+        } catch(AccessDeniedHttpException $e) {
+            log::error('UserService:saveRoles:AccessDeniedHttpException:' . $e->getMessage());
+            throw new AccessDeniedHttpException($e->getMessage());
+        } catch(BadRequestHttpException $e) {
+            log::error('UserService:saveRoles:BadRequestHttpException:' . $e->getMessage());
+            throw new BadRequestHttpException($e->getMessage());
+        } catch(Exception $e) {
+            log::error('UserService:saveRoles:Exception:' . $e->getMessage());
             throw new HttpException(500);
         } //Try-catch ends
 

@@ -204,4 +204,99 @@ class UserAuthController extends ApiBaseController
         }
     } //Function ends
 
+
+
+
+    /**
+     * Verify User Account & Email
+     *
+     * @param \Modules\User\Http\Requests\Backend\User\UserVerifyRequest $request
+     * @param \Modules\User\Services\UserService $userService
+     * @param \string $token
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @OA\Get(
+     *     path="/user/verify/{token}",
+     *     tags={"User"},
+     *     operationId="api.backend.user.verify",
+     *     @OA\Parameter(
+     *          in="path", name="token", description="Email verification token", required=true,
+     *          @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(ref="#/components/parameters/organization_key"),
+     *     @OA\Parameter(
+     *          in="query", name="email", description="Enter valid email address.", required=true,
+     *          @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(response=200, description="Request was successfully executed."),
+     *     @OA\Response(response=422, description="Model Validation Error"),
+     *     @OA\Response(response=500, description="Internal Server Error")
+     * )
+     */
+    public function verify(UserVerifyRequest $request, UserService $userService, string $token)
+    {
+        try {
+            //Get Org Hash 
+            $orgHash = $this->getOrgHashInRequest($request);
+
+            //Create payload
+            $payload = collect($request);
+
+            //Verify User Email
+            $data = $userService->verify($orgHash, $payload, $token);
+
+            //Send http status out
+            return $this->response->success(compact('data'));
+        } catch(AccessDeniedHttpException $e) {
+            return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
+        } catch(Exception $e) {
+            return $this->response->fail([], Response::HTTP_BAD_REQUEST);
+        }
+    } //Function ends
+
+
+    /**
+     * Activate User Account & Email
+     *
+     * @param \Modules\User\Http\Requests\Backend\User\UserActivateRequest $request
+     * @param \Modules\User\Services\UserService $userService
+     * @param \string $token
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @OA\Get(
+     *     path="/user/activate/{token}",
+     *     tags={"User"},
+     *     operationId="api.backend.user.activate",
+     *     @OA\Parameter(
+     *          in="path", name="token", description="Email activation token", required=true,
+     *          @OA\Schema(type="string")
+     *     ),
+     *     @OA\Parameter(
+     *          in="query", name="email", description="Enter valid email address.", required=true,
+     *          @OA\Schema(type="string")
+     *     ),
+     *     @OA\Response(response=200, description="Request was successfully executed."),
+     *     @OA\Response(response=422, description="Model Validation Error"),
+     *     @OA\Response(response=500, description="Internal Server Error")
+     * )
+     */
+    public function activate(UserActivateRequest $request, UserService $userService, string $token)
+    {
+        try {
+            //Create payload
+            $payload = collect($request);
+
+            $data = $userService->activate($payload, $token);
+
+            //Send http status out
+            return $this->response->success(compact('data'));
+        } catch(AccessDeniedHttpException $e) {
+            return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
+        } catch(Exception $e) {
+            return $this->response->fail([], Response::HTTP_BAD_REQUEST);
+        }
+    } //Function ends
+
 } //Class ends

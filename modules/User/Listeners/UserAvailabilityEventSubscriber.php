@@ -77,6 +77,11 @@ class UserAvailabilityEventSubscriber
             'Modules\User\Events\UserLogoutEvent',
             'Modules\User\Listeners\UserAvailabilityEventSubscriber@handleUserLogout'
         );
+
+        $events->listen(
+            'Modules\User\Events\UserDeletedEvent',
+            'Modules\User\Listeners\UserAvailabilityEventSubscriber@handleUserLogout'
+        );
     } //Function ends
 
 } //Class ends

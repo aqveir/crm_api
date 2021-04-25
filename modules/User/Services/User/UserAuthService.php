@@ -278,4 +278,105 @@ class UserAuthService extends BaseService
         return $objReturnValue;
     } //Function ends
 
+
+
+
+    /**
+     * Verify User Email
+     * 
+     * @param \string $orgHash
+     * @param \Illuminate\Support\Collection $payload
+     * @param \string $token
+     *
+     * @return mixed
+     */
+    public function verify(string $orgHash, Collection $payload, string $token) {
+        $objReturnValue = null;
+
+        try {
+            //Get organization data
+            $organization = $this->getOrganizationByHash($orgHash);
+
+            $data = $payload->toArray();
+
+            //Get User data
+            $user = $this->userRepository
+                ->where('org_id', $organization['id'])
+                ->where('email', $data['email'])
+                ->where('verification_token', $token)
+                ->where('is_verified', false)
+                ->where('is_active', true)
+                ->firstOrFail();
+
+            //Check if the request is valid
+            if (!empty($user)) {
+                $user['is_verified'] = true;
+                $user['verified_at'] = Carbon::now();
+                $user->save();
+            } else {
+                throw new BadRequestHttpException();
+            } //End if
+
+            //Assign to the return value
+            $objReturnValue = $user;
+
+        } catch(BadRequestHttpException $e) {
+            log::error('UserService:register:BadRequestHttpException:' . $e->getMessage());
+            throw new BadRequestHttpException($e->getMessage());
+        } catch(Exception $e) {
+            log::error('UserService:register:Exception:' . $e->getMessage());
+            throw new HttpException(500);
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends
+
+
+    /**
+     * Activate User Account
+     * 
+     * @param \Illuminate\Support\Collection $payload
+     * @param \string $token
+     *
+     * @return mixed
+     */
+    public function activate(Collection $payload, string $token) {
+        $objReturnValue = null;
+        $orgId = 0; $userId = 0;
+
+        try {
+            //Build user data
+            $data = $payload->only([
+                'first_name', 'last_name',
+                'email', 'phone',
+            ])->toArray();
+
+            // Duplicate check
+            $isDuplicate=$this->userRepository->exists($data['email'], 'email');
+            if (!$isDuplicate) {
+                //Create User
+                $user = $this->userRepository->create($data);
+
+                //Send Verification for regular user
+                if (!$isAutoCreated) {
+                    $user->notify(new UserAccountActivation());
+                } //End if
+            } else {
+                throw new BadRequestHttpException();
+            } //End if
+
+            //Assign to the return value
+            $objReturnValue = $user;
+
+        } catch(BadRequestHttpException $e) {
+            log::error('UserService:register:BadRequestHttpException:' . $e->getMessage());
+            throw new BadRequestHttpException($e->getMessage());
+        } catch(Exception $e) {
+            log::error('UserService:register:Exception:' . $e->getMessage());
+            throw new HttpException(500);
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends
+
 } //Class ends

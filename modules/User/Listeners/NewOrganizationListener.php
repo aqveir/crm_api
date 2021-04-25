@@ -3,7 +3,7 @@
 namespace Modules\User\Listeners;
 
 use Modules\Core\Events\OrganizationCreatedEvent;
-use Modules\User\Services\User\UserService;
+use Modules\User\Services\UserService;
 
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;

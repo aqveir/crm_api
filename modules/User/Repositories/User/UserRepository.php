@@ -8,6 +8,8 @@ use Modules\Core\Traits\LookupAction;
 use Modules\User\Models\User\User;
 use Modules\Core\Repositories\EloquentRepository;
 
+use Illuminate\Support\Facades\Log;
+
 use Exception;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 

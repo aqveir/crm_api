@@ -11,6 +11,6 @@
 |
 */
 
-Route::prefix('preference')->group(function() {
-    Route::get('/', 'PreferenceController@index');
-});
+// Route::prefix('preference')->group(function() {
+//     Route::get('/', 'PreferenceController@index');
+// });

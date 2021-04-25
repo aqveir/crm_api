@@ -130,7 +130,7 @@ class PreferenceService extends BaseService
      * 
      * @param \string $orgHash
      * @param \Illuminate\Support\Collection $payload
-     * @param \bool $isAutoCreated (optional)
+     * @param \int $preferenceId
      *
      * @return mixed
      */
@@ -173,7 +173,7 @@ class PreferenceService extends BaseService
      * Create Default Preferences
      * 
      * @param \Illuminate\Support\Collection $payload
-     * @param \int $orgId
+     * @param \Modules\Core\Models\Organization\Organization $organization
      * 
      * @return mixed
      */

@@ -5,18 +5,22 @@ namespace Modules\User\Http\Controllers\Backend\User;
 use Config;
 use Illuminate\Support\Facades\Log;
 
+use Modules\User\Models\User\User;
+
 use Modules\Core\Http\Controllers\ApiBaseController;
+
 use Modules\User\Http\Requests\Backend\User\GetUserRequest;
 use Modules\User\Http\Requests\Backend\User\CreateUserRequest;
 use Modules\User\Http\Requests\Backend\User\UpdateUserRequest;
-use Modules\User\Http\Requests\Backend\User\UserStatusRequest;
+use Modules\User\Http\Requests\Backend\User\DeleteUserRequest;
+use Modules\User\Http\Requests\Backend\User\UserExistsRequest;
 
 use Modules\User\Transformers\Responses\UserResource;
 use Modules\User\Transformers\Responses\UserMinifiedResource;
 use Modules\User\Transformers\Responses\UserStatusJsonResponseResource;
 use Modules\User\Transformers\Responses\UserStatusTextResponseResource;
 
-use Modules\User\Services\User\UserService;
+use Modules\User\Services\UserService;
 
 use Symfony\Component\HttpFoundation\Response;
 
@@ -28,7 +32,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
-class GetUserController extends ApiBaseController
+class UserController extends ApiBaseController
 {
 
     /**
@@ -45,35 +49,31 @@ class GetUserController extends ApiBaseController
      * Get All Users for an Organization
      *
      * @param \Modules\User\Http\Requests\Backend\User\GetUserRequest $request
-     * @param \Modules\User\Services\User\UserService $userService
+     * @param \Modules\User\Services\UserService $userService
      * 
      * @return \Illuminate\Http\JsonResponse
      *
      * @OA\Get(
-     *     path="/organization/{ohash}/user",
+     *     path="/user",
      *     tags={"User"},
      *     operationId="api.backend.user.index",
      *     security={{"omni_token":{}}},
-     *     @OA\Parameter(
-     *          in="path", name="ohash", description="Enter roganization code or key", required=true,
-     *          @OA\Schema(type="string")
-     *     ),
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function index(GetUserRequest $request, UserService $userService, string $subdomain, string $ohash)
+    public function index(GetUserRequest $request, UserService $userService, string $subdomain)
     {
         try {
             //Get Org Hash 
-            $orgHash = $ohash;
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
 
             //Create payload
             $payload = collect($request);
 
             //Fetch Users data for Organization
-            $response = $userService->getUsersByOrganization($orgHash, $payload);
+            $response = $userService->getAll($orgHash, $payload);
 
             //Transform data
             $data = new UserMinifiedResource(collect($response));
@@ -93,7 +93,7 @@ class GetUserController extends ApiBaseController
      * Show User By Identifier
      *
      * @param \Modules\User\Http\Requests\Backend\User\GetUserRequest $request
-     * @param \Modules\User\Services\User\UserService $userService
+     * @param \Modules\User\Services\UserService $userService
      * 
      * @return \Illuminate\Http\JsonResponse
      *
@@ -112,17 +112,17 @@ class GetUserController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function show(GetUserRequest $request, UserService $userService, string $subdomain, string $ohash, string $hash)
+    public function show(GetUserRequest $request, UserService $service, string $subdomain, User $user)
     {   
         try {
             //Get Org Hash 
-            $orgHash = $ohash;
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
 
             //Create payload
             $payload = collect($request);
 
             //Fetch User record
-            $result = $userService->getUserDataByOrganization($payload, $orgHash, $hash);
+            $result = $service->show($orgHash, $payload, $user['hash']);
 
             //Transform data
             $data = new UserResource($result);
@@ -142,7 +142,7 @@ class GetUserController extends ApiBaseController
      * Show User Profile Data By User Token
      *
      * @param \Modules\User\Http\Requests\Backend\User\GetUserRequest $request
-     * @param \Modules\User\Services\User\UserService $userService
+     * @param \Modules\User\Services\UserService $userService
      * 
      * @return \Illuminate\Http\JsonResponse
      *
@@ -156,14 +156,17 @@ class GetUserController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function profile(GetUserRequest $request, UserService $userService, string $subdomain)
+    public function profile(GetUserRequest $request, UserService $service, string $subdomain)
     {
         try {
+            //Get Org Hash 
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
+
             //Create payload
             $payload = collect($request);
 
             //Fetch User record
-            $data = $userService->getUserDataByOrganization($payload, null, null, true);
+            $data = $service->show($orgHash, $payload, null, true);
 
             //Send http status out
             return $this->response->success(compact('data'));
@@ -180,7 +183,7 @@ class GetUserController extends ApiBaseController
      * Check if the user exists
      *
      * @param \Modules\User\Http\Requests\Backend\User\UserExistsRequest $request
-     * @param \Modules\User\Services\User\UserService $userService
+     * @param \Modules\User\Services\UserService $userService
      * 
      * @return \Illuminate\Http\JsonResponse
      *
@@ -214,7 +217,7 @@ class GetUserController extends ApiBaseController
             //Create payload
             $payload = collect($request);
 
-            $data = $userService->validateUserExists($orgHash, $payload);
+            $data = $userService->exists($orgHash, $payload);
 
             //Send http status out
             return $this->response->success(compact('data'));
@@ -227,69 +230,131 @@ class GetUserController extends ApiBaseController
 
 
     /**
-     * Get Users By Availability Status
+     * Create User
      *
-     * @param \Modules\User\Http\Requests\Backend\User\UserStatusRequest $request
-     * @param \Modules\User\Services\User\UserService $userService
+     * @param \Modules\User\Http\Requests\Backend\User\CreateUserRequest $request
+     * @param \Modules\User\Services\UserService $userService
      * 
      * @return \Illuminate\Http\JsonResponse
      *
-     * @OA\Get(
-     *     path="/user/status/{status}",
+     * @OA\Post(
+     *     path="/user",
      *     tags={"User"},
-     *     operationId="api.backend.user.availability.status.detail",
+     *     operationId="api.backend.user.create",
      *     security={{"omni_token":{}}},
-     *     @OA\Parameter(
-     *          in="path", name="status", description="Enter user availability status (i.e. online, away)", required=true,
-     *          @OA\Schema(type="string")
-     *     ),
-     *     @OA\Parameter(ref="#/components/parameters/organization_key"),
-     *     @OA\Parameter(
-     *          in="query", name="role_key", description="Enter role key", required=true,
-     *          @OA\Schema(type="string")
-     *     ),
      *     @OA\Response(response=200, description="Request was successfully executed."),
+     *     @OA\Response(response=422, description="Model Validation Error"),
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function detail(UserStatusRequest $request, UserService $service, string $subdomain, string $status)
+    public function create(CreateUserRequest $request, UserService $userService, string $subdomain)
     {   
         try {
             //Get Org Hash 
             $orgHash = $this->getOrgHashInRequest($request, $subdomain);
 
+            //Get IP Address
+            $ipAddress = $this->getIpAddressInRequest($request);
+
             //Create payload
             $payload = collect($request);
 
-            //Set Status
-            $response = $service->getUserByStatus($orgHash, $payload, $status);
-
-            //Output formats
-            $outputFormat = ($request->has('output'))?$request['output']:'hash,first_name,full_name,phone';
-            dd($outputFormat);
-            $phoneFormat = ($request->has('phoneformat'))?$request['phoneformat']:'0[number]';
+            //Create customer
+            $data = $userService->create($orgHash, $payload, $ipAddress);
 
             //Send http status out
-            switch ($request->headers->get('CONTENT-TYPE')) {
-                case 'application/json':
-                    $data = new UserStatusJsonResponseResource(collect($response), $outputFormat, $phoneFormat);
-                    return $this->response->success(compact('data'));
-                    break;
-
-                case 'application/xml':
-                    $data = $response;
-                    return $data;
-                    break;
-
-                default:
-                    $data = new UserStatusTextResponseResource(collect($response), $outputFormat, $phoneFormat);
-                    $data = (!empty($data))?implode(",", json_decode(json_encode($data))):null;
-                    return $data;
-                    break;
-            } //Switch ends
+            return $this->response->success(compact('data'));
             
-        } catch(NotFoundHttpException $e) {
+        } catch(AccessDeniedHttpException $e) {
+            return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
+        } catch(Exception $e) {
             return $this->response->fail([], Response::HTTP_BAD_REQUEST);
+        }
+    } //Function ends
+
+
+    /**
+     * Update User
+     *
+     * @param \Modules\User\Http\Requests\Backend\User\UpdateUserRequest $request
+     * @param \Modules\User\Services\UserService $userService
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @OA\Put(
+     *     path="/user/{hash}",
+     *     tags={"User"},
+     *     operationId="api.backend.user.update",
+     *     security={{"omni_token":{}}},
+     *     @OA\Parameter(ref="#/components/parameters/hash_identifier"),
+     *     @OA\Response(response=200, description="Request was successfully executed."),
+     *     @OA\Response(response=422, description="Model Validation Error"),
+     *     @OA\Response(response=500, description="Internal Server Error")
+     * )
+     */
+    public function update(UpdateUserRequest $request, UserService $service, string $subdomain, User $user)
+    {   
+        try {
+            //Get Org Hash 
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
+
+            //Get IP Address
+            $ipAddress = $this->getIpAddressInRequest($request);
+
+            //Create payload
+            $payload = collect($request);
+
+            //Logout customer
+            $data = $service->update($orgHash, $payload, $user['hash'], $ipAddress);
+
+            //Send http status out
+            return $this->response->success(compact('data'));
+            
+        } catch(AccessDeniedHttpException $e) {
+            return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
+        } catch(Exception $e) {
+            return $this->response->fail([], Response::HTTP_BAD_REQUEST);
+        }
+    } //Function ends
+
+
+    /**
+     * Delete User
+     *
+     * @param \Modules\User\Http\Requests\Backend\User\DeleteUserRequest $request
+     * @param \Modules\User\Services\UserService $userService
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @OA\Delete(
+     *     path="/user/{hash}",
+     *     tags={"User"},
+     *     operationId="api.backend.user.delete",
+     *     security={{"omni_token":{}}},
+     *     @OA\Parameter(ref="#/components/parameters/hash_identifier"),
+     *     @OA\Response(response=200, description="Request was successfully executed."),
+     *     @OA\Response(response=422, description="Model Validation Error"),
+     *     @OA\Response(response=500, description="Internal Server Error")
+     * )
+     */
+    public function destroy(DeleteUserRequest $request, UserService $service, string $subdomain, User $user)
+    {   
+        try {
+            //Get Org Hash 
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
+
+            //Get IP Address
+            $ipAddress = $this->getIpAddressInRequest($request);
+
+            //Create payload
+            $payload = collect($request);
+
+            //Logout customer
+            $data = $service->delete($orgHash, $payload, $user['hash'], $ipAddress);
+
+            //Send http status out
+            return $this->response->success(compact('data'));
+            
         } catch(AccessDeniedHttpException $e) {
             return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
         } catch(Exception $e) {

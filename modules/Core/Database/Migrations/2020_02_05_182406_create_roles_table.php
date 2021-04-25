@@ -20,6 +20,8 @@ class CreateRolesTable extends Migration
             $table->string('key', 255);
             $table->string('display_value', 255)->nullable();
             $table->string('description', 1000)->nullable();
+            $table->unsignedBigInteger('account_id')->nullable();
+            $table->boolean('is_secure')->default(false);
             $table->boolean('is_active')->default(true);
 
             //Audit Log Fields

@@ -185,25 +185,40 @@ return [
                         'phone' => 'nullable|string|max:15',
                         'country_idd' => 'required_with:phone|string|max:5',
                         'roles' => 'required|array',
+                        'roles.*.key' => 'required|string|max:100',
+                        'roles.*.account_id' => 'sometimes|integer',
                     ]
                 ],
 
+                //User Update Request
                 'update' => [
                     'validation_rules' => [
                         'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
 
                         'first_name' => 'string|max:40',
                         'last_name' => 'string|max:40',
-                        'email' => 'email|max:40|unique:users,email',
+                        'email' => 'email|max:40',
                         'phone' => 'string|max:15',
                         'country_idd' => 'required_with:phone|string|max:5',
+                        'roles' => 'required|array',
+                        'roles.*.key' => 'required|string|max:100',
+                        'roles.*.account_id' => 'sometimes|integer',
+                    ]
+                ],
+
+                //User Delete Request
+                'delete' => [
+                    'validation_rules' => [
+                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
                     ]
                 ],
 
                 // Check Existing User Request
                 'exists' => [
                     'validation_rules' => [
-                        'user_name' => 'required|email|max:40'
+                        'username' => 'required_without_all:email,phone|max:40',
+                        'email' => 'required_without_all:username,phone|email|max:40',
+                        'phone' => 'required_without_all:username,email|number|max:40'
                     ]
                 ],
 
