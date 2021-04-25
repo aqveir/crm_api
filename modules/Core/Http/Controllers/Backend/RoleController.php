@@ -118,7 +118,7 @@ class RoleController extends ApiBaseController
             $payload = collect($request);
 
             //Fetch all role data
-            $data = $service->show($orgHash, $payload, $key);
+            $data = $service->show($orgHash, $payload, $role['key']);
 
             //Send http status out
             return $this->response->success(compact('data'));
