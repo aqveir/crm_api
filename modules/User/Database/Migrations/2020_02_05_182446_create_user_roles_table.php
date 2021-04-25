@@ -19,6 +19,7 @@ class CreateUserRolesTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->integer('role_id');
             $table->string('description', 1000)->nullable();
+            $table->unsignedBigInteger('account_id')->nullable();
             $table->boolean('is_active')->default(true);
 
             //Audit Log Fields
