@@ -178,7 +178,7 @@ return [
                         'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
                         
                         'username' => 'required|max:36|unique:users,username',
-                        'password' => 'required|string|min:6',
+                        'password' => 'required|string|confirmed|min:8|max:99',
                         'first_name' => 'nullable|max:40',
                         'last_name' => 'nullable|max:40',
                         'email' => 'required|email|max:40|unique:users,email',

@@ -39,7 +39,7 @@ class Country extends Model {
      * @var array
      */
     protected $hidden = [
-        'id', 'alpha2_code', 'numeric_code', 'display_official_name', 
+        'id', 'numeric_code', 'display_official_name', 
         'official_domain_extn', 'iso3166_2_code', 'currency_code',
         'is_active',
         'created_by', 'updated_by',
