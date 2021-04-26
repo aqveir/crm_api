@@ -179,14 +179,15 @@ return [
                         
                         'username' => 'required|max:36|unique:users,username',
                         'password' => 'required|string|confirmed|min:8|max:99',
-                        'first_name' => 'nullable|max:40',
+                        'first_name' => 'required|max:40',
                         'last_name' => 'nullable|max:40',
                         'email' => 'required|email|max:40|unique:users,email',
-                        'phone' => 'nullable|string|max:15',
+                        'phone' => 'string|max:15',
                         'country_idd' => 'required_with:phone|string|max:5',
                         'roles' => 'required|array',
                         'roles.*.key' => 'required|string|max:100',
-                        'roles.*.account_id' => 'sometimes|integer',
+                        'roles.*.account_id' => 'nullable|integer',
+                        'roles.*.description' => 'nullable|string'
                     ]
                 ],
 
@@ -195,14 +196,15 @@ return [
                     'validation_rules' => [
                         'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
 
-                        'first_name' => 'string|max:40',
+                        'first_name' => 'required|string|max:40',
                         'last_name' => 'string|max:40',
                         'email' => 'email|max:40',
                         'phone' => 'string|max:15',
                         'country_idd' => 'required_with:phone|string|max:5',
                         'roles' => 'required|array',
                         'roles.*.key' => 'required|string|max:100',
-                        'roles.*.account_id' => 'sometimes|integer',
+                        'roles.*.account_id' => 'nullable|integer',
+                        'roles.*.description' => 'nullable|string'
                     ]
                 ],
 
