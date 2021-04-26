@@ -30,7 +30,7 @@ class Preference extends Model {
      */
     protected $fillable = [
         'org_id', 'name', 'display_value', 'description', 'column_name',
-        'is_minimum', 'is_maximum', 'is_multiple', 
+        'is_minimum', 'is_maximum', 'is_multiple', 'external_url',
         'keywords', 'order', 'type_id', 'data_id', 
         'created_by', 
     ];

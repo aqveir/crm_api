@@ -26,7 +26,8 @@ class CreatePreferenceTable extends Migration
             $table->boolean('is_minimum')->default(false);      //Minimum data type
             $table->boolean('is_maximum')->default(false);      //Maximum data type
             $table->boolean('is_multiple')->default(false);     //Allows multiple selection
-            $table->string('keywords')->nullable();
+            $table->string('external_url', 4000)->nullable();   //External URL for TypeId=External Data
+            $table->string('keywords', 4000)->nullable();
             $table->integer('order')->default(1);
             $table->boolean('is_active')->default(true);
 
