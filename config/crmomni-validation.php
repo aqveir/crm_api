@@ -197,7 +197,7 @@ return [
                     'validation_rules' => [
                         'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
 
-                        'avatar' => 'image|mimes:jpg,bmp,png|dimensions:ratio=1/1|max:512', //Max size in KB
+                        'avatar' => 'nullable|image|mimes:jpg,bmp,png|dimensions:ratio=1/1|max:512', //Max size in KB
                         'first_name' => 'required|string|max:40',
                         'last_name' => 'string|max:40',
                         'email' => 'email|max:40',
