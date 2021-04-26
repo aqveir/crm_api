@@ -189,8 +189,10 @@ class UserService extends BaseService
 
             //Build user data
             $data = $payload->only([
-                'username', 'password', 'email', 'phone', 'phone_idd',
-                'first_name', 'last_name', 'is_remote_access_only'
+                'username', 'password', 
+                'email', 'phone', 'phone_idd',
+                'first_name', 'last_name', 
+                'is_remote_access_only', 'language'
             ])->toArray();
 
             // Duplicate check
@@ -258,9 +260,9 @@ class UserService extends BaseService
 
             //Build user data
             $data = $payload->only([
-                'email', 'phone', 'phone_idd',
                 'first_name', 'last_name', 
-                'is_remote_access_only', 'is_active'
+                'email', 'phone', 'phone_idd',
+                'is_remote_access_only', 'language', 'is_active'
             ])->toArray();
 
             //Update User & refresh data

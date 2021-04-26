@@ -184,6 +184,7 @@ return [
                         'email' => 'required|email|max:40|unique:users,email',
                         'phone' => 'string|max:15',
                         'phone_idd' => 'required_with:phone|string|max:5',
+                        'language' => 'required|string',
                         'roles' => 'required|array',
                         'roles.*.key' => 'required|string|max:100',
                         'roles.*.account_id' => 'nullable|integer',
@@ -196,11 +197,13 @@ return [
                     'validation_rules' => [
                         'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
 
+                        'avatar' => 'image|mimes:jpg,bmp,png|dimensions:ratio=1/1|max:512', //Max size in KB
                         'first_name' => 'required|string|max:40',
                         'last_name' => 'string|max:40',
                         'email' => 'email|max:40',
                         'phone' => 'string|max:15',
                         'phone_idd' => 'required_with:phone|string|max:5',
+                        'language' => 'required|string',
                         'roles' => 'required|array',
                         'roles.*.key' => 'required|string|max:100',
                         'roles.*.account_id' => 'nullable|integer',
