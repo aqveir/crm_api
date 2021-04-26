@@ -36,6 +36,7 @@ class UserResource extends JsonResource
                 'is_active', 'is_remote_access_only',
                 'is_pool', 'is_default'
             ]);
+            $response['phone'] = $this['phone'];
             $response['is_verified'] = empty($this['verified_at'])?false:true;
 
             //Manage User Availability/Online Status

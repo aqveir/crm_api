@@ -50,8 +50,8 @@ class User extends Model implements
     protected $fillable = [
         'org_id', 'username', 'password',
         'first_name', 'middle_name', 'last_name',
-        'country_id', 'timezone_id',
-        'email', 'phone', 'virtual_phone_number',
+        'email', 'phone', 'phone_idd', 
+        'virtual_phone_number', 'timezone_id',
         'is_remote_access_only', 'failed_attempts',
         'verification_token', 'is_verified',
         'last_login_at', 'created_by'
@@ -74,10 +74,10 @@ class User extends Model implements
      * @var array
      */
     protected $hidden = [
-        'id', 'org_id', 'country_id', 'timezone_id',
+        'id', 'org_id', 'timezone_id',
         'first_name', 'middle_name', 'last_name',
         'password', 'remember_token', 'is_remote_access_only',
-        'email', 'phone', 'virtual_phone_number',
+        'email', 'phone','phone_idd', 'virtual_phone_number',
         'is_active', 'is_pool', 'is_default',
         'failed_attempts', 'max_failed_attempts', '2fa_secret',
         'verification_token', 'is_verified', 

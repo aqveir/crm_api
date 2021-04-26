@@ -189,7 +189,7 @@ class UserService extends BaseService
 
             //Build user data
             $data = $payload->only([
-                'username', 'password', 'email', 'phone', 
+                'username', 'password', 'email', 'phone', 'phone_idd',
                 'first_name', 'last_name', 'is_remote_access_only'
             ])->toArray();
 
@@ -197,7 +197,7 @@ class UserService extends BaseService
             $isDuplicate=$this->userRepository->exists($data['username'], 'username');
             if (!$isDuplicate) {
                 //Add Organisation data
-                $data = array_merge($data, [ 'org_id' => $orgId, 'created_by' => $userId, 'verification_token' => 'null' ]);
+                $data = array_merge($data, [ 'org_id' => $orgId, 'created_by' => $userId ]);
 
                 //Create User
                 $user = $this->userRepository->create($data);
@@ -258,16 +258,17 @@ class UserService extends BaseService
 
             //Build user data
             $data = $payload->only([
-                'email', 'phone', 
+                'email', 'phone', 'phone_idd',
                 'first_name', 'last_name', 
                 'is_remote_access_only', 'is_active'
             ])->toArray();
 
-            //Create User
+            //Update User & refresh data
             $user = $this->userRepository->update($userHash, 'hash', $data, $userCurr['id']);
             if (empty($user)) {
                 throw new BadRequestHttpException();
             } //End if
+            $user->refresh();
 
             //TODO: Update pool status
 

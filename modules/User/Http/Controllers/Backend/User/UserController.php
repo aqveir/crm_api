@@ -166,7 +166,10 @@ class UserController extends ApiBaseController
             $payload = collect($request);
 
             //Fetch User record
-            $data = $service->show($orgHash, $payload, null, true);
+            $result = $service->show($orgHash, $payload, null, true);
+
+            //Transform data
+            $data = new UserResource($result);
 
             //Send http status out
             return $this->response->success(compact('data'));

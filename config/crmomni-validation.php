@@ -16,7 +16,7 @@ return [
                         'last_name' => 'nullable|string|max:40',
                         'email' => 'required|email|max:40|unique:users,email',
                         'phone' => 'nullable|string|max:15',
-                        'country_idd' => 'required_with:phone|string|max:5',
+                        'phone_idd' => 'required_with:phone|string|max:5',
                         'industry_type' => 'string'
                     ]
                 ],
@@ -165,7 +165,7 @@ return [
                         'last_name' => 'nullable|max:40',
                         'email' => 'required|email|max:40|unique:users,email',
                         'phone' => 'required|string|max:15',
-                        'country_idd' => 'required_with:phone|string|max:5',
+                        'phone_idd' => 'required_with:phone|string|max:5',
                     ]
                 ],
 
@@ -183,7 +183,7 @@ return [
                         'last_name' => 'nullable|max:40',
                         'email' => 'required|email|max:40|unique:users,email',
                         'phone' => 'string|max:15',
-                        'country_idd' => 'required_with:phone|string|max:5',
+                        'phone_idd' => 'required_with:phone|string|max:5',
                         'roles' => 'required|array',
                         'roles.*.key' => 'required|string|max:100',
                         'roles.*.account_id' => 'nullable|integer',
@@ -200,7 +200,7 @@ return [
                         'last_name' => 'string|max:40',
                         'email' => 'email|max:40',
                         'phone' => 'string|max:15',
-                        'country_idd' => 'required_with:phone|string|max:5',
+                        'phone_idd' => 'required_with:phone|string|max:5',
                         'roles' => 'required|array',
                         'roles.*.key' => 'required|string|max:100',
                         'roles.*.account_id' => 'nullable|integer',
@@ -448,7 +448,7 @@ return [
                         'last_name' => 'string|max:64',
                         'email' => 'required|email|max:64',
                         'phone' => 'required|min:8|max:16',
-                        'country_idd' => 'required_with:phone|min:1|max:5'
+                        'phone_idd' => 'required_with:phone|min:1|max:5'
                     ]
                 ],
 
@@ -458,7 +458,7 @@ return [
                         'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
                         'username' => 'required|max:36',
                         'password' => 'required|string|min:8|max:64',
-                        'country_idd' => 'required|min:1|max:5',
+                        'phone_idd' => 'required|min:1|max:5',
                         'device_id' => 'required|string'
                     ]
                 ],

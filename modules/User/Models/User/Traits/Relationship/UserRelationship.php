@@ -29,7 +29,7 @@ trait UserRelationship
 	{
 		return $this->hasOne(
 			config('crmomni-class.class_model.country'), 
-			'id', 'country_id'
+			'phone_idd_code', 'phone_idd'
 		);
 	} //Function ends
 
