@@ -32,8 +32,9 @@ class UserMinifiedResource extends ResourceCollection
             $objReturnValue = [];
             foreach ($this->collection as $data) {
                 $data->load('availability', 'availability.status');
-                $availability = collect($data['availability']);
-                if (!empty($availability)) {
+                  
+                $availability = collect($data['availability']);                
+                if ((!empty($availability)) && (is_array($availability)) && (count($availability)>0)) {
                     $status = collect($availability['status'])->only('key', 'display_value');
                 } //End if
 
