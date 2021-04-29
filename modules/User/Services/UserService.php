@@ -204,11 +204,12 @@ class UserService extends BaseService
                 //Create User
                 $user = $this->userRepository->create($data);
 
-                //Update roles
-                $this->saveRoles($orgId, $payload, $user, $userCurr);
-
-                //Send Verification for regular user
+                //Action for non-auto users
                 if (!$isAutoCreated) {
+                    //Update roles
+                    $this->saveRoles($orgId, $payload, $user, $userCurr);
+
+                    //Send Verification for regular user
                     $user->notify(new UserEmailVerification());
                 } //End if
                 

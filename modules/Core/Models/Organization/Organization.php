@@ -3,8 +3,12 @@
 namespace Modules\Core\Models\Organization;
 
 use Modules\Core\Models\BaseModel as Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 use Modules\Core\Models\Organization\Traits\Relationship\OrganizationRelationship;
 use Modules\Core\Models\Organization\Traits\Action\OrganizationAction;
+
+use Illuminate\Notifications\Notifiable;
 
 /**
  * Organization Model
@@ -13,6 +17,8 @@ class Organization extends Model
 {
     use OrganizationRelationship;
     use OrganizationAction;
+    use Notifiable;
+    use SoftDeletes;
 
 	/**
      * The database table used by the model.
@@ -28,10 +34,10 @@ class Organization extends Model
      * @var array
      */
     protected $fillable = [
-        'name', 'subdomain', 'industry_id', 'timezone_id',
+        'logo', 'name', 'subdomain', 'industry_id', 'timezone_id',
         'address', 'locality', 'city', 'state_id', 'country_id', 'zipcode',
         'google_place_id', 'longitude', 'latitude',
-        'website', 'email', 'phone'
+        'website', 'contact_person_name','email', 'phone', 'phone_idd', 'search_tags'
     ];
 
 
@@ -53,8 +59,8 @@ class Organization extends Model
     protected $hidden = [
         'id', 'subdomain', 'is_active', 'industry_id', 'timezone_id',
         'address', 'locality', 'city', 'state_id', 'country_id', 'zipcode',
-        'google_place_id', 'longitude', 'latitude',
-        'website', 'email', 'phone', 'logo',
+        'google_place_id', 'longitude', 'latitude', 'logo',
+        'website', 'contact_person_name', 'email', 'phone', 'phone_idd', 'search_tags',
         'created_by', 'updated_by', 'deleted_by',
         'created_at', 'updated_at', 'deleted_at', 'last_updated_at'
     ]; 

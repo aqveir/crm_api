@@ -25,6 +25,7 @@ class CreateOrganizationsTable extends Migration
             $table->string('logo')->nullable();
             $table->integer('industry_id'); //e.g. Retail/Travel/ etc
             $table->integer('timezone_id')->nullable();
+            $table->string('search_tags')->nullable();
 
             //Organization Address
             $table->string('address')->nullable();
@@ -40,15 +41,17 @@ class CreateOrganizationsTable extends Migration
             $table->decimal('latitude', 12, 8)->nullable();            
             
             $table->string('website')->nullable();
+            $table->string('contact_person_name')->nullable();
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
+            $table->string('phone_idd')->nullable();
 
             $table->boolean('is_active')->default(true);
 
             //Audit Log Fields
             $table->unsignedBigInteger('created_by')->default(0);
             $table->unsignedBigInteger('updated_by')->nullable();
-            $table->integer('deleted_by')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
 
             $table->timestamps();
             $table->softDeletes();

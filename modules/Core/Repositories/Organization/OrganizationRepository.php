@@ -15,6 +15,9 @@ use Modules\Core\Transformers\Organization\OrganizationMiniResource;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
 
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 /**
  * Class OrganizationRepository
  * 
@@ -43,17 +46,21 @@ class OrganizationRepository extends EloquentRepository implements OrganizationC
 		
 		try {
             $query = $this->model;
-	        $query = $query->where('hash', $hash);
+            $query = $query->where('hash', $hash);
+            $query = $query->withCount('users');
             $query = $query->first();
 
             //lazy load relations
+            if (empty($query)) {
+                throw new ModelNotFoundException();
+            } //End if
             $query = $query->load(['users', 'configurations']);
 
             //Transform data
             $objReturnValue = new OrganizationResource($query);	
 		} catch(Exception $e) {
 			$objReturnValue=null;
-			throw new Exception($e);
+			throw $e;
 		} //Try-catch ends
 		
 		return $objReturnValue;
@@ -81,7 +88,7 @@ class OrganizationRepository extends EloquentRepository implements OrganizationC
             } //End if-else
         } catch(Exception $e) {
             $objReturnValue=null;
-            Log::error(json_encode($e));
+            throw $e;
         } //Try-catch ends
         
         return $objReturnValue;

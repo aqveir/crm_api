@@ -12,6 +12,7 @@ use Modules\Core\Http\Controllers\ApiBaseController;
 
 use Modules\Core\Http\Requests\Backend\Organization\CreateOrganizationRequest;
 use Modules\Core\Http\Requests\Backend\Organization\UpdateOrganizationRequest;
+use Modules\Core\Http\Requests\Backend\Organization\DeleteOrganizationRequest;
 
 use Modules\Core\Services\Organization\OrganizationService;
 
@@ -90,8 +91,10 @@ class OrganizationController extends ApiBaseController
      * Get Organization Data by Identifier
      * 
      * @param \Illuminate\Http\Request $request
-     * @param \string $hash
      * @param \Modules\Core\Services\Organization\OrganizationService $organizationService
+     * @param \string $subdomain
+     * @param \Organization $organization
+     * 
      *
      * @return \Illuminate\Http\JsonResponse
      *
@@ -133,10 +136,11 @@ class OrganizationController extends ApiBaseController
 
 
     /**
-     * Create Organizations
+     * Create Organization
      * 
      * @param \Modules\Core\Http\Requests\Backend\Organization\CreateOrganizationRequest $request
      * @param \Modules\Core\Services\Organization\OrganizationService $organizationService
+     * @param \string $subdomain
      *
      * @return \Illuminate\Http\JsonResponse
      * 
@@ -150,21 +154,21 @@ class OrganizationController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      * 
-     * Create New Organization
-     * 
-     * @return \Illuminate\Http\JsonResponse
      */
     public function create(CreateOrganizationRequest $request, OrganizationService $organizationService, string $subdomain)
     {
         try {
+            //Get Org Hash 
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
+
             //Get IP Address
-            $ipAddress = $this->getIpAddressInRequest($request, $subdomain);
+            $ipAddress = $this->getIpAddressInRequest($request);
 
             //Create payload
             $payload = collect($request);
 
             //Fetch all organizations data
-            $data = $organizationService->create($payload);
+            $data = $organizationService->create($payload, $ipAddress);
 
             //Send http status out
             return $this->response->success(compact('data'));
@@ -177,31 +181,105 @@ class OrganizationController extends ApiBaseController
     } //Function ends
 
 
-    public function update(UpdateOrganizationRequest $request, OrganizationService $organizationService, string $subdomain, Organization $organization)
+    /**
+     * Update Organization
+     * 
+     * @param \Modules\Core\Http\Requests\Backend\Organization\UpdateOrganizationRequest $request
+     * @param \Modules\Core\Services\Organization\OrganizationService $organizationService
+     * @param \string $subdomain
+     * @param \Modules\Core\Models\Organization\Organization $organization
+     * 
+     *
+     * @return \Illuminate\Http\JsonResponse
+     * 
+     * @OA\Put(
+     *     path="/organization/{hash}",
+     *     tags={"Organization"},
+     *     operationId="api.organization.update",
+     *     description="Creates a new organization. Duplicates are not allowed.",
+     *     @OA\Response(response=200, description="Request was successfully executed."),
+     *     @OA\Response(response=422, description="Model Validation Error"),
+     *     @OA\Response(response=500, description="Internal Server Error")
+     * )
+     * 
+     */
+    public function update(\Illuminate\Http\Request $request, OrganizationService $organizationService, string $subdomain, Organization $organization)
     {
         $objReturnValue=null;
         try {
-            // Get user object from the token
-            $authenticatedUser = Auth::guard()->user();
-            if(!$authenticatedUser) {
-                throw new HttpException(500);
+            //Get Org Hash 
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
+
+            //Get IP Address
+            $ipAddress = $this->getIpAddressInRequest($request);
+
+            //Create payload
+            $payload = collect($request);
+
+            $file=null;
+            if ($request->hasFile('logo')) {
+                $file = $request->file('logo');
             } //End if
 
-            if($id>0) {
-                $isUpdate = $this->updateOrganization($id, $authenticatedUser->id, $request);
-                //log::Debug('updated organiation ->' . json_encode($isUpdate));
-                if(!$isUpdate) { throw new BadRequestHttpException(); } //End if
+            //Update organizations data
+            $data = $organizationService->update($orgHash, $payload, $file, $ipAddress);
 
-                return response()->json([
-                    'status' => true,
-                ], config('portiqo-crm.http_status_code.success'));
-            } //End if
-        } catch (Exception $e) {
-            Log::error(json_encode($e));
-            $objReturnValue=null;
+            //Send http status out
+            return $this->response->success(compact('data'));
+            
+        } catch(AccessDeniedHttpException $e) {
+            return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
+        } catch(Exception $e) {
+            return $this->response->fail([], Response::HTTP_BAD_REQUEST);
         } //Try-catch ends
+    } //Function ends
 
-        return $objReturnValue;
+
+    /**
+     * Delete Organization
+     * 
+     * @param \Modules\Core\Http\Requests\Backend\Organization\CreateOrganizationRequest $request
+     * @param \Modules\Core\Services\Organization\OrganizationService $organizationService
+     * @param \string $subdomain
+     * @param \Modules\Core\Models\Organization\Organization $organization
+     *
+     * @return \Illuminate\Http\JsonResponse
+     * 
+     * @OA\Delete(
+     *     path="/organization/{hash}",
+     *     tags={"Organization"},
+     *     operationId="api.organization.delete",
+     *     description="Creates a new organization. Duplicates are not allowed.",
+     *     @OA\Response(response=200, description="Request was successfully executed."),
+     *     @OA\Response(response=422, description="Model Validation Error"),
+     *     @OA\Response(response=500, description="Internal Server Error")
+     * )
+     * 
+     */
+    public function destroy(DeleteOrganizationRequest $request, OrganizationService $organizationService, string $subdomain, Organization $organization)
+    {
+        $objReturnValue=null;
+        try {
+            //Get Org Hash 
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
+
+            //Get IP Address
+            $ipAddress = $this->getIpAddressInRequest($request);
+
+            //Create payload
+            $payload = collect($request);
+
+            //Update organizations data
+            $data = $organizationService->delete($orgHash, $payload, $ipAddress);
+
+            //Send http status out
+            return $this->response->success(compact('data'));
+            
+        } catch(AccessDeniedHttpException $e) {
+            return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
+        } catch(Exception $e) {
+            return $this->response->fail([], Response::HTTP_BAD_REQUEST);
+        } //Try-catch ends
     } //Function ends
 
 } //Class ends

@@ -496,6 +496,7 @@ abstract class EloquentRepository //implements RepositoryContract
 
 
     /**
+     * Delete Object
      * 
      * @param       $id
      * @param array $attributes
@@ -505,15 +506,19 @@ abstract class EloquentRepository //implements RepositoryContract
     public function delete($item, string $column='id', int $userId=null)
     {
         $model = $this->getByColumn($item, $column);
-        if (!empty($userId)) {
-            $model['deleted_by'] = $userId;
-            $model->save();
+
+        //Check if the model exists
+        if (!empty($model)) {
+            if (!empty($userId)) {
+                $model['deleted_by'] = $userId;
+                $model->save();
+            } //End if
+
+            //Delete
+            $model->delete();            
         } //End if
 
-        //Delete
-        $model->delete();
-        
         return $model;
-    }
+    } //Function ends
 
 } //Class ends

@@ -14,20 +14,25 @@ class OrganizationResource extends JsonResource
      */
     public function toArray($request)
     {
-        return [
+        //Build response
+        $response = [
             'hash'              => $this->hash,
             'name'              => $this->name,
-            'subdomain'        => $this->subdomain,
+            'subdomain'         => $this->subdomain,
             'logo'              => $this->logo,
             'website'           => $this->website,
             'email'             => $this->email,
             'phone'             => $this->phone,
+            'phone_idd'         => $this->phone_idd,
             'country'           => $this->country,
             'industry'          => $this->industry,
-            'users'             => $this->users,
             'configurations'    => $this->configurations,
-            'last_updated_at'   => $this->last_updated_at
+            'last_updated_at'   => $this->last_updated_at,
+            'users_count'       => $this->users_count,
         ];
+
+
+        return $response;
     } //Function ends
 
 } //Class ends

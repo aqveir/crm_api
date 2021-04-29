@@ -12,14 +12,49 @@ return [
                     'validation_rules' => [
                         'name' => 'nullable|string|max:40',
                         'subdomain' => 'required|max:36|unique:' . config('crmomni-migration.table_name.organizations') . ',subdomain',
-                        'first_name' => 'required|string|max:40',
-                        'last_name' => 'nullable|string|max:40',
+                        'first_name' => 'required|string|max:80',
+                        'last_name' => 'string|max:80',
+                        'contact_person_name' => 'required|string|max:80',
                         'email' => 'required|email|max:40|unique:users,email',
                         'phone' => 'nullable|string|max:15',
                         'phone_idd' => 'required_with:phone|string|max:5',
-                        'industry_type' => 'string'
+                        'industry_key' => 'string'
                     ]
                 ],
+
+                // Update Organization
+                'update' => [
+                    'validation_rules' => [
+                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+
+                        'logo' => 'nullable|image|mimes:jpg,png|dimensions:ratio=1/1|max:512',
+                        'name' => 'nullable|string|max:40',
+                        'contact_person_name' => 'required|string|max:80',
+                        'email' => 'required|email|max:40|unique:users,email',
+                        'phone' => 'nullable|string|max:15',
+                        'phone_idd' => 'required_with:phone|string|max:5',
+                        'industry_key' => 'string',
+
+                        'address' => 'nullable|string',
+                        'locality' => 'nullable|string',
+                        'city' => 'nullable|string',
+                        'state_id' => 'nullable|numeric',
+                        'country_id' => 'nullable|numeric',
+                        'zipcode' => 'nullable|string',
+                        'google_place_id' => 'nullable|string',
+                        'latitude' => 'nullable|numeric',
+                        'latitude' => 'nullable|numeric',
+
+                        'is_active' => 'nullable|boolean',
+                    ]
+                ],
+
+                //Delete Organization
+                'delete' => [
+                    'validation_rules' => [
+                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                    ]
+                ]
             ], //Organization Controller ends
 
             // LookUp Controller Requests
