@@ -18,11 +18,12 @@ class UserResource extends JsonResource
     public function toArray($request)
     {
         $objReturnValue=null;
+        $status = null;
 
         try {
             $this->load('organization', 'availability', 'availability.status', 'country', 'timezone', 'roles', 'privileges');
             $availability = collect($this['availability']);
-            if (!empty($availability)) {
+            if ((!empty($availability)) && (is_array($availability)) && (count($availability)>0)) {
                 $status = collect($availability['status'])->only('key', 'display_value');
             } //End if
 
