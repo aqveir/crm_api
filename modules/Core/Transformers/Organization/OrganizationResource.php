@@ -15,22 +15,12 @@ class OrganizationResource extends JsonResource
     public function toArray($request)
     {
         //Build response
-        $response = [
-            'hash'              => $this->hash,
-            'name'              => $this->name,
-            'subdomain'         => $this->subdomain,
-            'logo'              => $this->logo,
-            'website'           => $this->website,
-            'email'             => $this->email,
-            'phone'             => $this->phone,
-            'phone_idd'         => $this->phone_idd,
-            'country'           => $this->country,
-            'industry'          => $this->industry,
-            'configurations'    => $this->configurations,
-            'last_updated_at'   => $this->last_updated_at,
-            'users_count'       => $this->users_count,
-        ];
-
+        $response = $this->only([
+            'hash', 'name', 'subdomain', 'logo',
+            'website', 'contact_person_name', 'phone', 'phone_idd', 'email',
+            'last_updated_at', 'users_count',
+            'country', 'industry', 'configurations'
+        ]);
 
         return $response;
     } //Function ends
