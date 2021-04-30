@@ -58,9 +58,12 @@ class UserAvailabilityController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function view(Request $request, UserAvailabilityService $service)
+    public function view(Request $request, UserAvailabilityService $service, string $subdomain)
     {   
         try {
+            //Get Org Hash 
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
+
             //Create payload
             $payload = collect($request);
 
@@ -98,9 +101,12 @@ class UserAvailabilityController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function show(Request $request, UserAvailabilityService $service, string $hash)
+    public function show(Request $request, UserAvailabilityService $service, string $subdomain, string $hash)
     {   
         try {
+            //Get Org Hash 
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
+
             //Create payload
             $payload = collect($request);
 
@@ -142,9 +148,12 @@ class UserAvailabilityController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function update(SaveUserAvailabilityRequest $request, UserAvailabilityService $service, string $key)
+    public function update(SaveUserAvailabilityRequest $request, UserAvailabilityService $service, string $subdomain, string $key)
     {   
         try {
+            //Get Org Hash 
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
+
             //Get IP Address
             $ipAddress = $this->getIpAddressInRequest($request);
 
