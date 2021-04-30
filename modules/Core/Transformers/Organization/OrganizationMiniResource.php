@@ -16,7 +16,7 @@ class OrganizationMiniResource extends JsonResource
      */
     public function toArray($request)
     {
-        $logoPath = asset(Storage::url($this->logo));
+        $logoPath = base64_decode(Storage::url($this->logo));
         //$logo = Image::make($logoPath)->response();
 
         return [
