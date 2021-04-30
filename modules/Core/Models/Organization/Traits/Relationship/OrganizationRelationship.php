@@ -83,4 +83,16 @@ trait OrganizationRelationship
 		->withPivot('value');
 	} //Function End
 
+
+	/**
+	 * Roles
+	 */
+	public function roles()
+	{
+		return $this->hasMany(
+			config('crmomni-class.class_model.role'),
+			'org_id', 'id'
+		);
+	} //Function End
+
 } //Trait Ends

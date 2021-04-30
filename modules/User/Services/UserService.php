@@ -135,6 +135,19 @@ class UserService extends BaseService
                 throw new HttpException(500);
             } //End if
 
+            //Get Organization roles
+            $roles = $organization->roles;
+            if (!empty($roles)) {
+                $roleOrgAdmin = collect($roles)->where('key', 'organization_admin')->first();
+
+                //Assign the role to new user
+                $user->roles()->attach($roleOrgAdmin['id'], [
+                    'account_id' => null,
+                    'description' => 'System Generated',
+                    'created_by' => 0
+                ]);
+            } //End if
+
             //Assign to the return value
             $objReturnValue = $user;
 

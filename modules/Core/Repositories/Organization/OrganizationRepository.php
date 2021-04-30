@@ -64,7 +64,31 @@ class OrganizationRepository extends EloquentRepository implements OrganizationC
 		} //Try-catch ends
 		
 		return $objReturnValue;
-	} //Function ends
+    } //Function ends
+    
+
+    /**
+     * Clear Organization Cache
+     */
+    public function setOrganizationClearCache()
+    {
+        $objReturnValue=null;
+        try {
+            //Get cache configuration
+            $keyCache = config('core.settings.cache.organization.key');
+
+            //Clear the cache
+            if (Cache::has($keyCache)) {
+                Cache::forget($keyCache);
+                $objReturnValue=true;
+            } //End if-else
+        } catch(Exception $e) {
+            $objReturnValue=null;
+            throw $e;
+        } //Try-catch ends
+        
+        return $objReturnValue;
+    } //Function ends
 
 
     /**

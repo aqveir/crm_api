@@ -177,6 +177,9 @@ class OrganizationService extends BaseService
                 throw new BadRequestHttpException();
             } //End if
 
+            //Clear organization cache
+            $this->organizationRepository->setOrganizationClearCache();
+
             //Create default roles
             $roles = $this->roleService->createDefaultRole($organization['hash']);
             $organization['roles'] = $roles;
@@ -250,6 +253,9 @@ class OrganizationService extends BaseService
                 throw new BadRequestHttpException();
             } //End if
 
+            //Clear organization cache
+            $this->organizationRepository->setOrganizationClearCache();
+
             //Notify Organization Created
             $organization->notify(new NewOrganizationWelcomeEmail());
 
@@ -305,6 +311,9 @@ class OrganizationService extends BaseService
             if (empty($organization)) {
                 throw new BadRequestHttpException();
             } //End if
+
+            //Clear organization cache
+            $this->organizationRepository->setOrganizationClearCache();
 
             //Raise event: Delete Organization
             event(new OrganizationDeletedEvent($organization));
