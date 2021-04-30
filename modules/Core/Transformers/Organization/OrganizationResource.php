@@ -15,7 +15,7 @@ class OrganizationResource extends JsonResource
      */
     public function toArray($request)
     {
-        $logoPath = base64_decode(Storage::get($this->logo));
+        $logoPath = url(Storage::url($this->logo));
 
         //Build response
         $response = $this->only([
