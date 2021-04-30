@@ -3,6 +3,8 @@
 namespace Modules\Core\Transformers\Organization;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
+//use Intervention\Image\Facades\Image;
 
 class OrganizationMiniResource extends JsonResource
 {
@@ -14,11 +16,14 @@ class OrganizationMiniResource extends JsonResource
      */
     public function toArray($request)
     {
+        $logoPath = asset(Storage::url($this->logo));
+        //$logo = Image::make($logoPath)->response();
+
         return [
             'hash' => $this->hash,
             'name' => $this->name,
             'subdomain' => $this->subdomain,
-            'logo' => $this->logo,
+            'logo' => $logoPath,
             'users_count' => $this->users_count,
             'last_updated_at' => $this->last_updated_at
         ];
