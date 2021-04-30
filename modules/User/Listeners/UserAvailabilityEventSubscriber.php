@@ -2,7 +2,7 @@
 
 namespace Modules\User\Listeners;
 
-use Modules\User\Services\User\UserAvailabilityService;
+use Modules\User\Services\UserAvailabilityService;
 
 use Exception;
 

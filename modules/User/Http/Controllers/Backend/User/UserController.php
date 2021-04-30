@@ -17,8 +17,6 @@ use Modules\User\Http\Requests\Backend\User\UserExistsRequest;
 
 use Modules\User\Transformers\Responses\UserResource;
 use Modules\User\Transformers\Responses\UserMinifiedResource;
-use Modules\User\Transformers\Responses\UserStatusJsonResponseResource;
-use Modules\User\Transformers\Responses\UserStatusTextResponseResource;
 
 use Modules\User\Services\UserService;
 

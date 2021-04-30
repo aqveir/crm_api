@@ -43,7 +43,7 @@ $api->version('v1', [
             $api->post('register', 'Backend\\User\\SetUserController@register');
 
             // User Availability Status
-            $api->get('status/{key}', 'Backend\\User\\UserController@detail');
+            $api->get('status/{key}', 'Backend\\User\\UserAvailabilityController@detail');
         });
     });
 

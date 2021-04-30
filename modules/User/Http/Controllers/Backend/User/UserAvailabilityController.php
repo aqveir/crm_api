@@ -7,9 +7,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 use Modules\Core\Http\Controllers\ApiBaseController;
-use Modules\User\Services\User\UserAvailabilityService;
+
+use Modules\User\Services\UserService;
+use Modules\User\Services\UserAvailabilityService;
 
 use Modules\User\Http\Requests\Backend\User\UserStatusRequest;
+use Modules\User\Http\Requests\Backend\User\SaveUserAvailabilityRequest;
+
+use Modules\User\Transformers\Responses\UserStatusJsonResponseResource;
+use Modules\User\Transformers\Responses\UserStatusTextResponseResource;
 
 use Symfony\Component\HttpFoundation\Response;
 
@@ -39,7 +45,7 @@ class UserAvailabilityController extends ApiBaseController
      * Get Current User Availability Status
      *
      * @param \Illuminate\Http\Request $request
-     * @param \Modules\User\Services\User\UserAvailabilityService $service
+     * @param \Modules\User\Services\UserAvailabilityService $service
      * 
      * @return \Illuminate\Http\JsonResponse
      *
@@ -78,7 +84,7 @@ class UserAvailabilityController extends ApiBaseController
      * Get User Availability Status
      *
      * @param \Illuminate\Http\Request $request
-     * @param \Modules\User\Services\User\UserAvailabilityService $service
+     * @param \Modules\User\Services\UserAvailabilityService $service
      * 
      * @return \Illuminate\Http\JsonResponse
      *
@@ -118,7 +124,7 @@ class UserAvailabilityController extends ApiBaseController
      * Set User Availability Status
      *
      * @param \Modules\User\Http\Requests\Backend\User\SaveUserAvailabilityRequest $request
-     * @param \Modules\User\Services\User\UserAvailabilityService $service
+     * @param \Modules\User\Services\UserAvailabilityService $service
      * 
      * @return \Illuminate\Http\JsonResponse
      *
@@ -161,8 +167,6 @@ class UserAvailabilityController extends ApiBaseController
     } //Function ends
 
 
-    
-
     /**
      * Get Users By Availability Status
      *
@@ -203,7 +207,6 @@ class UserAvailabilityController extends ApiBaseController
 
             //Output formats
             $outputFormat = ($request->has('output'))?$request['output']:'hash,first_name,full_name,phone';
-            dd($outputFormat);
             $phoneFormat = ($request->has('phoneformat'))?$request['phoneformat']:'0[number]';
 
             //Send http status out

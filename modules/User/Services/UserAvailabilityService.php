@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\User\Services\User;
+namespace Modules\User\Services;
 
 use Config;
 use Carbon\Carbon;
