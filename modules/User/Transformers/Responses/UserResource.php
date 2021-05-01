@@ -28,18 +28,21 @@ class UserResource extends JsonResource
                 $status = collect($availability['status'])->only('key', 'display_value');
             } //End if
 
+            //Get image path if exists
+            $avatarPath = empty($this->avatar)?null:url(Storage::url($this->avatar));
+
             $response = $this->only([
-                'hash', 'username', 'avatar',
+                'hash', 'username',
                 'first_name', 'last_name', 'full_name', 'name_initials',
-                'email', 'phone', 'virtual_phone_number', 'language',
+                'email', 'phone', 'phone_idd', 'virtual_phone_number', 'language',
                 'last_login_at', 'last_updated_at',
                 'organization', 'country', 'timezone',
                 'roles', 'privileges',
                 'is_active', 'is_remote_access_only',
                 'is_pool', 'is_default'
             ]);
-            $response['phone'] = $this['phone'];
             $response['is_verified'] = empty($this['verified_at'])?false:true;
+            $response['avatar'] = $avatarPath;
 
             //Manage User Availability/Online Status
             $response['availability'] = $availability?$availability->only('last_updated_at'):null;

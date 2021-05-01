@@ -38,12 +38,16 @@ class UserMinifiedResource extends ResourceCollection
                     $status = collect($availability['status'])->only('key', 'display_value');
                 } //End if
 
+                //Get image path if exists
+                $avatarPath = empty($this->avatar)?null:url(Storage::url($this->avatar));
+
                 $response = $data->only([
-                    'hash', 'avatar', 'name_initials', 'full_name', 
-                    'email', 'phone', 'country',
+                    'hash', 'name_initials', 'full_name', 
+                    'email', 'phone', 'phone_idd', 'country',
                     'is_active', 'last_login_at', 'last_updated_at'
                 ]);
                 $response['is_verified'] = empty($this['verified_at'])?false:true;
+                $response['avatar'] = $avatarPath;
 
                 //Manage User Availability/Online Status
                 $response['availability'] = $availability?$availability->only('last_updated_at'):null;
