@@ -233,7 +233,7 @@ class ServiceRequestController extends ApiBaseController
      * @return \Illuminate\Http\JsonResponse
      *
      * @OA\Delete(
-     *     path="/servicerequest/{hash}",`
+     *     path="/servicerequest/{hash}",
      *     tags={"ServiceRequest"},
      *     operationId="api.backend.servicerequest.delete",
      *     security={{"omni_token":{}}},

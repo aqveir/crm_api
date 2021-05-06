@@ -5,6 +5,7 @@ namespace Modules\Account\Models;
 use Modules\Core\Models\BaseModel as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use Modules\Account\Models\Traits\Action\AccountAction;
 use Modules\Account\Models\Traits\Relationship\AccountRelationship;
 
 /**
@@ -12,6 +13,7 @@ use Modules\Account\Models\Traits\Relationship\AccountRelationship;
  */
 class Account extends Model {
 
+    use AccountAction;
     use AccountRelationship;
     use SoftDeletes;
 
@@ -29,11 +31,10 @@ class Account extends Model {
      * @var array
      */
     protected $fillable = [
-        'org_id', 'name', 'description', 'type_id', 'industry_id', 'timezone_id',
+        'org_id', 'name', 'description', 'type_id',
         'address', 'locality', 'city', 'state_id', 'country_id', 'zipcode',
         'google_place_id', 'longitude', 'latitude',
-        'website', 'email', 'phone',
-        'created_by'
+        'website', 'email', 'phone_idd', 'phone',
     ];
 
 
@@ -53,8 +54,10 @@ class Account extends Model {
      * @var array
      */
     protected $hidden = [
-        'org_id', 'type_id', 'industry_id', 'timezone_id',
-        'state_id', 'country_id',
+        'org_id', 'name', 'description', 'type_id',
+        'address', 'locality', 'city', 'state_id', 'country_id', 'zipcode',
+        'google_place_id', 'longitude', 'latitude',
+        'website', 'email', 'phone_idd', 'phone', 'is_default',
         'created_by', 'updated_by', 'deleted_by',
         'created_at', 'updated_at', 'deleted_at'
     ]; 

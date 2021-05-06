@@ -19,7 +19,7 @@ class CreateAccountTable extends Migration
             $table->unsignedBigInteger('org_id');
             $table->string('name');
             $table->text('description')->nullable();
-            $table->unsignedBigInteger('type_id'); //e.g. Internal/External/etc
+            $table->unsignedBigInteger('type_id'); //e.g. Internal/External/Etc
 
             //Account Address
             $table->string('address')->nullable();
@@ -30,12 +30,13 @@ class CreateAccountTable extends Migration
             $table->string('zipcode')->nullable();
 
             //Location Details
-            $table->integer('google_place_id')->nullable();
+            $table->string('google_place_id')->nullable();
             $table->decimal('longitude', 12, 8)->nullable();
             $table->decimal('latitude', 12, 8)->nullable();            
             
             $table->string('website')->nullable();
             $table->string('email')->nullable();
+            $table->string('phone_idd')->nullable();
             $table->string('phone')->nullable();
 
             $table->boolean('is_default')->default(false);  //Default user created for an organization
@@ -43,7 +44,7 @@ class CreateAccountTable extends Migration
             //Audit Log Fields
             $table->unsignedBigInteger('created_by')->default(0);
             $table->unsignedBigInteger('updated_by')->nullable();
-            $table->integer('deleted_by')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
