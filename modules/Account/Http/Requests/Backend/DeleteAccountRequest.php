@@ -2,9 +2,10 @@
 
 namespace Modules\Account\Http\Requests\Backend;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Config;
+use Modules\Boilerplate\Http\FormRequest;
 
-class AccountCreateRequest extends FormRequest
+class DeleteAccountRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -13,9 +14,7 @@ class AccountCreateRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
-        ];
+        return Config::get('crmomni-validation.request_handler.backend.account.delete.validation_rules');
     }
 
     /**

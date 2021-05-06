@@ -2,9 +2,10 @@
 
 namespace Modules\Account\Http\Requests\Backend;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Config;
+use Modules\Boilerplate\Http\FormRequest;
 
-class AccountUpdateRequest extends FormRequest
+class GetAccountRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -13,9 +14,7 @@ class AccountUpdateRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
-        ];
+        return Config::get('crmomni-validation.request_handler.backend.account.fetch.validation_rules');
     }
 
     /**

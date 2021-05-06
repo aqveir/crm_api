@@ -36,16 +36,6 @@ class NoteController extends ApiBaseController
 
 
     /**
-     * Display a listing of the resource.
-     * @return Response
-     */
-    public function index()
-    {
-        return view('note::index');
-    } //Function ends
-
-
-    /**
      * Create Note
      *
      * @param \Modules\Note\Http\Requests\Backend\CreateNoteRequest $request

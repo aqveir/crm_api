@@ -296,7 +296,7 @@ return [
                 'availbility' => [
                     'validation_rules' => []
                 ],
-            ], // User Controller ends
+            ], // User Controller end
 
             // Note Controller Requests
             'note' => [
@@ -348,7 +348,7 @@ return [
                 'delete' => [
                     'validation_rules' => []
                 ],
-            ], //Document Controller ends
+            ], //Document Controller end
 
             // Contact Controller Requests
             'contact' => [
@@ -360,7 +360,7 @@ return [
                 'telephony' => [
                     'validation_rules' => []
                 ],
-            ],
+            ], // Contact Controller end
 
             // Subscription Controller Requests
             'subscription' => [
@@ -456,7 +456,7 @@ return [
                         'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45'
                     ]
                 ]
-            ], // Preferences Controller ends
+            ], // Preferences Controller end
 
             // ServiceRequest Controller Requests
             'service_request' => [
@@ -502,7 +502,46 @@ return [
                 'delete' => [
                     'validation_rules' => []
                 ]
-            ]
+            ], // ServiceRequest Controller end
+
+            // Account Controller Requests
+            'account' => [
+                // Account fetch-show
+                'fetch' => [
+                    'validation_rules' => [
+                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                    ]
+                ],
+
+                // Account Create Request
+                'create' => [
+                    'validation_rules' => [
+                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+
+                        'display_value' => 'required|max:255',
+                        'description' => 'max:255',
+                        'privileges' => 'required|array',
+                    ]
+                ],
+
+                // Account Update Request
+                'update' => [
+                    'validation_rules' => [
+                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+
+                        'display_value' => 'required|max:255',
+                        'description' => 'max:255',
+                        'privileges' => 'required|array',
+                    ]
+                ],
+
+                // Account Delete Request
+                'delete' => [
+                    'validation_rules' => [
+                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                    ]
+                ]
+            ], // Account Controller end
         ],
 
         'frontend' => [
