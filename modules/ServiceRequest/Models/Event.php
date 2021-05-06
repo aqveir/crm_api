@@ -5,14 +5,14 @@ namespace Modules\ServiceRequest\Models;
 use Modules\Core\Models\BaseModel as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-use Modules\ServiceRequest\Models\Traits\Relationship\ServiceRequestEventRelationship;
+use Modules\ServiceRequest\Models\Traits\Relationship\EventRelationship;
 
 /**
- * Eloquent Model for ServiceRequestEvent
+ * Eloquent Model for Event
  */
-class ServiceRequestEvent extends Model {
+class Event extends Model {
 
-    use ServiceRequestEventRelationship;
+    use EventRelationship;
     use SoftDeletes;
 
     /**
@@ -29,13 +29,10 @@ class ServiceRequestEvent extends Model {
      * @var array
      */
     protected $fillable = [
-        'org_id', 
-        'type_id', 'subtype_id', 'servicerequest_id', 'subject', 'description',
-        'recomendation_id', 'shortlist_status', 'is_scheduled', 'is_completed',
-        'assigned_to', 'location', 'external_event_id', 'external_event_source',
-        'duration', 'priority_id', 'status_id',
-        'scheduled_time', 'start_time', 'end_time', 'completed_time',
-        'created_by' 
+        'org_id', 'servicerequest_id', 'type_id', 'subtype_id',
+        'subject', 'description', 'location',
+        'start_at', 'end_at',
+        'created_by', 'ip_address' 
     ];
 
 
@@ -55,8 +52,9 @@ class ServiceRequestEvent extends Model {
      * @var array
      */
     protected $hidden = [
-        'id', 'org_id',
-        'type_id', 'subtype_id', 'servicerequest_id',
+        'org_id', 'servicerequest_id', 'type_id', 'subtype_id',
+        'subject', 'description', 'location',
+        'start_at', 'end_at', 'ip_address',
         'created_by', 'updated_by', 'deleted_by',
         'created_at', 'updated_at', 'deleted_at'
     ]; 
@@ -67,6 +65,7 @@ class ServiceRequestEvent extends Model {
      * @var array
      */
     protected $dates = [
+        'start_at', 'end_at',
         'created_at', 'updated_at', 'deleted_at'
     ];
 
@@ -84,7 +83,16 @@ class ServiceRequestEvent extends Model {
      *
      * @var array
      */
-    protected $with = ['type'];
+    protected $with = ['participants'];
+    
+    
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+    ];
 
 
     /**
@@ -106,7 +114,7 @@ class ServiceRequestEvent extends Model {
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->table = config('crmomni-migration.table_name.service_request.event');
+        $this->table = config('crmomni-migration.table_name.service_request.activity');
     }
 
 } //Class ends

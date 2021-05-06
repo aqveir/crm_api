@@ -13,8 +13,12 @@ use Modules\Core\Models\Role\RolePrivilege;
 use Modules\Core\Models\Privilege\Privilege;
 
 use Modules\Core\Models\Organization\Organization;
+use Modules\Account\Models\Account;
 
 use Modules\User\Models\User\User;
+
+use Modules\ServiceRequest\Models\ServiceRequest;
+
 use Modules\Contact\Models\Contact\Contact;
 use Modules\Feedback\Models\Feedback\Feedback;
 use Modules\Note\Models\Note;
@@ -31,6 +35,9 @@ return [
 
         //Organization
         'organization' => Organization::class,
+
+        //Account
+        'account' => Account::class,
 
         //Role Classes
         'role' => Role::class,
@@ -49,6 +56,11 @@ return [
         //Contact Classes
         'contact' => [
             'main' => Contact::class
+        ],
+
+        //ServiceRequest Classes
+        'service_request' => [
+            'main' => ServiceRequest::class
         ],
 
         //Other Functional Classes

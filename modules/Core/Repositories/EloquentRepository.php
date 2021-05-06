@@ -464,53 +464,94 @@ abstract class EloquentRepository //implements RepositoryContract
 
 
     /**
+     * Create Object
+     * 
      * @param array $attributes
+     * @param int $userId (created_by)
+     * @param string $ipAddress
      *
      * @return mixed
      */
-    public function create(array $attributes)
+    public function create(array $attributes, int $userId=null, string $ipAddress=null)
     {
-        return $this->model->create($attributes);
-    }
+        $model = $this->model->create($attributes);
+
+        //Check if the model exists
+        if (!empty($model)) {
+
+            if ((!empty($userId)) || (!empty($ipAddress))) {
+                if (!empty($userId)) {
+                    $model['created_by'] = $userId;
+                } //End if
+                
+                if (!empty($ipAddress)) {
+                    $model['ip_address'] = $userId;
+                } //End if
+
+                $model->save();
+            } //End if
+        } //End if
+        
+        return $model;
+    } //Function ends
 
 
     /**
+     * Update Object
      * 
-     * @param       $id
+     * @param mixed $item
+     * @param string $column
      * @param array $attributes
+     * @param int $userId (updated_by)
+     * @param string $ipAddress
      *
      * @return mixed
      */
-    public function update($item, string $column='id', array $attributes, int $userId=null)
+    public function update($item, string $column='id', array $attributes, int $userId=null, string $ipAddress=null)
     {
         $model = $this->getByColumn($item, $column);
         $model->update($attributes);
 
-        if (!empty($userId)) {
-            $model['updated_by'] = $userId;
+        if ((!empty($userId)) || (!empty($ipAddress))) {
+            if (!empty($userId)) {
+                $model['updated_by'] = $userId;
+            } //End if
+            
+            if (!empty($ipAddress)) {
+                $model['ip_address'] = $userId;
+            } //End if
+
             $model->save();
         } //End if
         
         return $model;
-    }
+    } //Function ends
 
 
     /**
      * Delete Object
      * 
-     * @param       $id
-     * @param array $attributes
+     * @param mixed $item
+     * @param string $column
+     * @param int $userId (deleted_by)
      *
      * @return mixed
      */
-    public function delete($item, string $column='id', int $userId=null)
+    public function delete($item, string $column='id', int $userId=null, string $ipAddress=null)
     {
         $model = $this->getByColumn($item, $column);
 
         //Check if the model exists
         if (!empty($model)) {
-            if (!empty($userId)) {
-                $model['deleted_by'] = $userId;
+            if ((!empty($userId)) || (!empty($ipAddress))) {
+                if (!empty($userId)) {
+                    $model['deleted_by'] = $userId;
+                } //End if
+                
+                if (!empty($ipAddress)) {
+                    $model['ip_address'] = $userId;
+                } //End if
+
                 $model->save();
             } //End if
 

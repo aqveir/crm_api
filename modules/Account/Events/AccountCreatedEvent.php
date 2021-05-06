@@ -10,13 +10,13 @@ class AccountCreatedEvent
     use SerializesModels;
 
     /**
-     * Account Model variable
+     * Model variable
      */
-    public $account;
+    public $model;
 
 
     /**
-     * Is Account Model Auto Created variable
+     * Is Model Auto Created variable
      */
     public $isAutoCreated;
 
@@ -26,9 +26,9 @@ class AccountCreatedEvent
      *
      * @return void
      */
-    public function __construct(Account $account, bool $isAutoCreated=false)
+    public function __construct(Account $model, bool $isAutoCreated=false)
     {
-        $this->account = $account;
+        $this->model = $model;
         $this->isAutoCreated = $isAutoCreated;
     }
 

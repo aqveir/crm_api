@@ -14,18 +14,69 @@ use Modules\Boilerplate\Routing\Router;
 */
 $api = app(Router::class);
 
-$api->version('v1', function (Router $api) {
+$api->version('v1', [
+        'prefix' => 'api',
+        'middleware' => ['api'],
+        'namespace' => 'Modules\ServiceRequest\Http\Controllers',
+        'domain' => config('crmomni.settings.domain')
+    ], function (Router $api) {
 
-    // Authenticated Endpoints for Frontend
-    $api->group(['middleware' => ['auth:frontend']], function(Router $api) {
+    // Unauthenticated OR Guest endpoints
+    $api->group(['middleware' => ['guest']], function(Router $api) {
 
-        // ServiceRequest Endpoints
-        $api->group(['prefix' => 'servicerequest'], function(Router $api) {
-        });
     });
 
     // Authenticated Endpoints for Backend
     $api->group(['middleware' => ['auth:backend']], function(Router $api) {
+
+        // Servie Request Endpoints
+        $api->group(['prefix' => 'servicerequest'], function(Router $api) {
+            $api->post('fetch', 'Backend\\ServiceRequestController@index');
+            $api->get('{servicerequest}', 'Backend\\ServiceRequestController@show');
+            $api->post('/', 'Backend\\ServiceRequestController@create');
+            $api->put('{servicerequest}', 'Backend\\ServiceRequestController@update');
+            $api->delete('{servicerequest}', 'Backend\\ServiceRequestController@destroy');
+        });
+
+        // Task Endpoints
+        $api->group(['prefix' => 'task'], function(Router $api) {
+            $api->get('{id}', 'Backend\\TaskController@show');
+            $api->post('/', 'Backend\\TaskController@create');
+            $api->put('{id}', 'Backend\\TaskController@update');
+            $api->delete('{id}', 'Backend\\TaskController@destroy');
+        });
+
+        // Event Endpoints
+        $api->group(['prefix' => 'event'], function(Router $api) {
+            $api->get('{id}', 'Backend\\EventController@show');
+            $api->post('/', 'Backend\\EventController@create');
+            $api->put('{id}', 'Backend\\EventController@update');
+            $api->delete('{id}', 'Backend\\EventController@destroy');
+        });        
+
+        // Servie Request (Opportunity) Endpoints
+        $api->group(['prefix' => 'opportunity'], function(Router $api) {
+        });
+
+        // Servie Request (Opportunity) Endpoints
+        $api->group(['prefix' => 'support'], function(Router $api) {
+        });
+    });
+});
+
+
+// $api->version('v1', function (Router $api) {
+
+//     // Authenticated Endpoints for Frontend
+//     $api->group(['middleware' => ['auth:frontend']], function(Router $api) {
+
+//         // ServiceRequest Endpoints
+//         $api->group(['prefix' => 'servicerequest'], function(Router $api) {
+//         });
+//     });
+
+//     // Authenticated Endpoints for Backend
+//     $api->group(['middleware' => ['auth:backend']], function(Router $api) {
 
         // ServiceRequest Endpoints
         // $api->group(['prefix' => 'servicerequest'], function(Router $api) {
@@ -114,5 +165,5 @@ $api->version('v1', function (Router $api) {
         //     //Share Emails By SR
         //     $api->post('{hash}/share', 'App\\Api\\V4\\Controllers\\Share\\GroupEmailController@send');
         // });
-    });
-});
+//     });
+// });

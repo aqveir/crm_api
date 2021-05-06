@@ -79,7 +79,7 @@ class UserAvailabilityService extends BaseService
      *
      * @return mixed
      */
-    public function fetch(Collection $payload, string $hash=null) {
+    public function fetch(string $orgHash, Collection $payload, string $hash=null) {
         $objReturnValue = null;
 
         try {
@@ -87,7 +87,11 @@ class UserAvailabilityService extends BaseService
             if (empty($hash)) {
                 $user = $this->getCurrentUser('backend'); //Authenticated User
             } else {
-                $user = $this->userRepository->getUserByHash($hash);
+                //Get organization data
+                $organization = $this->getOrganizationByHash($orgHash);
+                if (empty($organization)) { throw new BadRequestHttpException(); } //End if
+
+                $user = $this->userRepository->getDataByHash($organization['id'], $hash);
             } //End if
 
             //Fetch record

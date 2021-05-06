@@ -67,6 +67,15 @@ return [
             'apartment_address' => env('TABLE_NAME_PREFIX', '') . 'apartment_address',
         ],
 
+        //Service Request Entities
+        'service_request' => [
+            'main' => env('TABLE_NAME_PREFIX', '') . 'service-requests',
+            'source' => env('TABLE_NAME_PREFIX', '') . 'service-request_sources',
+            'activity' => env('TABLE_NAME_PREFIX', '') . 'service-request_activities',
+            'activity_participants' => env('TABLE_NAME_PREFIX', '') . 'service-request_activity_participants',
+            'preference' => env('TABLE_NAME_PREFIX', '') . 'service-request_preferences',
+        ],
+
         //Preference Entities
         'preference' => [
             'main' => env('TABLE_NAME_PREFIX', '') . 'preferences',

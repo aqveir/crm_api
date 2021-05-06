@@ -101,7 +101,7 @@ class UserController extends ApiBaseController
      *     operationId="api.backend.user.show",
      *     security={{"omni_token":{}}},
      *     @OA\Parameter(
-     *          in="path", name="ohash", description="Enter roganization code or key", required=true,
+     *          in="path", name="ohash", description="Enter organization code or key", required=true,
      *          @OA\Schema(type="string")
      *     ),
      *     @OA\Parameter(ref="#/components/parameters/hash_identifier"),

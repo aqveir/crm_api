@@ -27,39 +27,12 @@ class ServiceRequestRepository extends EloquentRepository implements ServiceRequ
 
 
     /**
-     * Validate Contact Username
-     * 
-     * @param  int  $orgId
-     * @param  string  $username
-     *
-     * @return boolean
-     */
-    public function validate(int $orgId, string $username)
-    {
-        $objReturnValue = false;
-        try {
-            $data = $this->model
-                ->where('username', $username)
-                ->where('org_id', $orgId)
-                ->first();
-
-            //Record exists
-            $objReturnValue = !empty($data);            
-        } catch(Exception $e) {
-            throw new Exception($e);
-        } //Try-Catch ends
-
-        return $objReturnValue;
-    } //Function ends
-
-
-    /**
      * Get Full Customers Data for an Organization (Backend)
      * 
      * @param  int     $orgId
      * @param  string  $orgHash
      * 
-     * @return $contact
+     * @return $objReturnValue
      */
     public function getFullData(int $orgId, string $orgHash=null, bool $isForcedDB=false, int $page=1, int $size=10)
     {
@@ -82,21 +55,24 @@ class ServiceRequestRepository extends EloquentRepository implements ServiceRequ
 
 
     /**
-     * Get Full Customers Data from DB for an Organization (Backend)
+     * Get All ServiceRequest Data from DB for an Organization (Backend)
      * 
      * @param  int     $orgId
      * 
-     * @return $contact
+     * @return $data
      */
     private function getFullDataFromDB(int $orgId, int $page=1, int $size=10)
     {
         $objReturnValue=null;
         try {
-            $contact = $this->model
-                ->where('org_id', $orgId)
-                ->get();
+            $data = $this->model
+            ->where('org_id', $orgId)
+            ->orderBy('updated_at', 'desc')
+            ->skip(($page - 1) * $size)
+            ->take($size)
+            ->get();
 
-            $objReturnValue = $contact;
+            $objReturnValue = $data;
         } catch(Exception $e) {
             log::error($e);
         }
@@ -105,7 +81,7 @@ class ServiceRequestRepository extends EloquentRepository implements ServiceRequ
 
 
     /**
-     * Get Full Data for a Cutomer by Identifier
+     * Get Full Data for a ServiceRequest by Identifier
      * 
      * @param  int     $orgId
      * @param  string  $hash
@@ -132,24 +108,23 @@ class ServiceRequestRepository extends EloquentRepository implements ServiceRequ
 
 
     /**
-     * Get Full Data by DB for a Cutomer by Identifier
+     * Get Full Data by DB for a ServiceRequest by Identifier
      * 
      * @param  int     $orgId
      * @param  string  $hash
      * 
-     * @return $contact
+     * @return $data
      */
     private function getFullDataByIdentifierFromDB(int $orgId, string $hash)
     {
         $objReturnValue=null;
         try {
-            $contact = $this->model
-                ->with(['addresses', 'details', 'notes', 'documents'])
+            $data = $this->model
                 ->where('org_id', $orgId)
                 ->where('hash', $hash)
                 ->first();
 
-            $objReturnValue = $contact;
+            $objReturnValue = $data;
         } catch(Exception $e) {
             log::error($e);
         }

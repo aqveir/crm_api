@@ -34,7 +34,8 @@ class LookupValue extends Model
      * @var array
      */
     protected $hidden = [
-        'org_id', 'lookup_id', 'description', 'pivot', 'order',
+        'id', 'org_id', 'lookup_id', 'description', 'pivot', 
+        'order', 'is_active', 'is_editable',
         'created_by', 'updated_by',
         'created_at', 'updated_at',
     ];

@@ -11,6 +11,6 @@
 |
 */
 
-Route::prefix('servicerequest')->group(function() {
-    Route::get('/', 'ServiceRequestController@index');
-});
+// Route::prefix('servicerequest')->group(function() {
+//     Route::get('/', 'ServiceRequestController@index');
+// });

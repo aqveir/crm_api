@@ -67,7 +67,11 @@ class LookupPolicy
         return true;
 
         if ($user->hasPrivileges(['view_organization'])) {
-            return true;
+            if ($user->hasRoles(['super_admin'])) {
+                return true;
+            } else {
+                return ($lookup['is_editable'] == true);
+            } //End if
         } else {
             return false;
         } //End if
@@ -100,7 +104,11 @@ class LookupPolicy
     public function update(User $user, Lookup $lookup)
     {
         if ($user->hasPrivileges(['edit_organization'])) {
-            return true;
+            if ($user->hasRoles(['super_admin'])) {
+                return true;
+            } else {
+                return ($lookup['is_editable'] == true);
+            } //End if
         } else {
             return false;
         } //End if
@@ -118,7 +126,11 @@ class LookupPolicy
     public function delete(User $user, Lookup $lookup)
     {
         if ($user->hasPrivileges(['edit_organization'])) {
-            return true;
+            if ($user->hasRoles(['super_admin'])) {
+                return true;
+            } else {
+                return ($lookup['is_editable'] == true);
+            } //End if
         } //End if
     } //Function ends
 

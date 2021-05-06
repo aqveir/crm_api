@@ -14,6 +14,7 @@ use Modules\Account\Repositories\AccountRepository;
 use Modules\Core\Services\BaseService;
 
 use Modules\Account\Events\AccountCreatedEvent;
+use Modules\Account\Events\AccountUpdatedEvent;
 use Modules\Account\Events\AccountDeletedEvent;
 
 use Illuminate\Http\Request;
@@ -59,16 +60,16 @@ class AccountService extends BaseService
      * 
      * @param \Modules\Core\Repositories\Organization\OrganizationRepository    $organizationRepository
      * @param \Modules\Core\Repositories\Lookup\LookupValueRepository           $lookupRepository
-     * @param \Modules\Account\Repositories\AccountRepository                     $accountRepository
+     * @param \Modules\Account\Repositories\AccountRepository                   $accountRepository
      */
     public function __construct(
         OrganizationRepository          $organizationRepository,
         LookupValueRepository           $lookupRepository,
-        AccountRepository                $accountRepository
+        AccountRepository               $accountRepository
     ) {
         $this->organizationRepository   = $organizationRepository;
         $this->lookupRepository         = $lookupRepository;
-        $this->accountRepository         = $accountRepository;
+        $this->accountRepository        = $accountRepository;
     } //Function ends
 
 
@@ -186,12 +187,13 @@ class AccountService extends BaseService
     /**
      * Update Account
      * 
+     * @param \string $orgHash
      * @param \Illuminate\Support\Collection $payload
      * @param \int $accountId
      *
      * @return mixed
      */
-    public function update(Collection $payload, int $accountId)
+    public function update(string $orgHash, Collection $payload, int $accountId)
     {
         $objReturnValue=null;
         try {
@@ -199,13 +201,13 @@ class AccountService extends BaseService
             $user = $this->getCurrentUser('backend');
 
             //Build data
-            $data = $payload->only(['note'])->toArray();
+            $data = $payload->toArray();
 
             //Update Account
-            $note = $this->accountRepository->update($noteId, 'id', $data, $user['id']);
+            $account = $this->accountRepository->update($accountId, 'id', $data, $user['id']);
                 
             //Raise event: Account Updated
-            event(new NoteUpdatedEvent($note));                
+            event(new AccountUpdatedEvent($account));                
 
             //Assign to the return value
             $objReturnValue = $note;
@@ -228,30 +230,27 @@ class AccountService extends BaseService
     /**
      * Delete Account
      * 
+     * @param \string $orgHash
      * @param \Illuminate\Support\Collection $payload
      * @param \int $accountId
      *
      * @return mixed
      */
-    public function delete(Collection $payload, int $accountId)
+    public function delete(string $orgHash, Collection $payload, int $accountId)
     {
         $objReturnValue=null;
         try {
             //Authenticated User
             $user = $this->getCurrentUser('backend');
 
-            //Get Account
-            $note = $this->accountRepository->getById($noteId);
-
             //Delete Account
-            $response = $this->accountRepository->deleteById($noteId, $user['id']);
-            if ($response) {
-                //Raise event: Account Deleted
-                event(new NoteDeletedEvent($note));
-            } //End if
+            $account = $this->accountRepository->delete($accountId, 'id', $user['id']);
+
+            //Raise event: Account Deleted
+            event(new AccountDeletedEvent($account));            
             
             //Assign to the return value
-            $objReturnValue = $response;
+            $objReturnValue = $account;
 
         } catch(AccessDeniedHttpException $e) {
             log::error('AccountService:delete:AccessDeniedHttpException:' . $e->getMessage());

@@ -29,9 +29,9 @@ class ServiceRequest extends Model {
      * @var array
      */
     protected $fillable = [
-        'org_id', 'contact_id', 'type_id', 'stage_id', 'owner_id', 'status_id',
-        'star_rating', 'search_tags',
-        'created_by' 
+        'org_id', 'account_id', 'contact_id', 'owner_id', 
+        'category_id', 'type_id', 'status_id', 'stage_id',
+        'search_tags', 'star_rating',
     ];
 
 
@@ -51,10 +51,12 @@ class ServiceRequest extends Model {
      * @var array
      */
     protected $hidden = [
-        'org_id',
-        'contact_id', 'type_id', 'stage_id', 'owner_id', 'status_id',
+        'id', 'org_id', 'account_id', 'contact_id', 'owner_id', 
+        'category_id', 'type_id', 'status_id', 'stage_id',
+        'search_tags', 'star_rating',
         'created_by', 'updated_by', 'deleted_by',
-        'created_at', 'updated_at', 'deleted_at'
+        'created_at', 'updated_at', 'deleted_at',
+        'ip_address'
     ]; 
 
 
@@ -81,6 +83,15 @@ class ServiceRequest extends Model {
      * @var array
      */
     protected $with = ['contact', 'owner', 'stage', 'status', 'type'];
+    
+    
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+    ];
 
 
     /**
@@ -94,6 +105,17 @@ class ServiceRequest extends Model {
         return $date->format(config('crmomni.settings.date_format_response_generic'));
     }
 
+    
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'hash';
+    }
+
 
     /**
      * Default constructor
@@ -104,5 +126,32 @@ class ServiceRequest extends Model {
         parent::__construct($attributes);
         $this->table = config('crmomni-migration.table_name.service_request.main');
     }
+
+
+    /**
+     * Boot function for using with User Events
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model)
+        {
+            $model->generateHashKey();
+        });
+    } //Function ends
+
+
+    /**
+     * Generate the Model hash unique identifier that is called
+     * on the Model event while creating record.
+     * 
+     */
+    private function generateHashKey() {
+        $this->attributes['hash'] = $this->generateRandomHash('');
+        return !is_null($this->attributes['hash']);
+    } //Function ends
 
 } //Class ends

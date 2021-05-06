@@ -2,16 +2,79 @@
 
 namespace Modules\ServiceRequest\Models\Traits\Relationship;
 
-use App\Models\ServiceRequest\PropertySource;
+use Modules\ServiceRequest\Models\ServiceRequestSource;
+use Modules\ServiceRequest\Models\Task;
+use Modules\ServiceRequest\Models\Event as ServiceRequestEvent;
+
 use App\Models\ServiceRequest\ServiceRequestPropFilters;
-use App\Models\ServiceRequest\ServiceRequestEvent;
 use App\Models\ServiceRequest\ServiceRequestRecommendations;
 
 /**
- * Class Service Request Relationship
+ * Class ServiceRequest Relationship
  */
 trait ServiceRequestRelationship
 {
+    
+    /**
+	 * Organization
+	 */
+	public function organization()
+	{
+		return $this->belongsTo(
+			config('crmomni-class.class_model.organization'),
+			'org_id', 'id'
+		);
+	} //Function ends
+
+
+    /**
+	 * Account
+	 */
+	public function account()
+	{
+		return $this->belongsTo(
+			config('crmomni-class.class_model.account'),
+			'account_id', 'id'
+		);
+	} //Function ends
+	
+
+	/**
+	 * Show Contact
+	 */
+	public function contact()
+	{
+		return $this->belongsTo(
+			config('crmomni-class.class_model.contact.main'),
+			'contact_id', 'id'
+		);
+	} //Function ends
+
+
+	/**
+	 * Show Owner/User/Creator
+	 */
+	public function owner()
+	{
+		return $this->hasOne(
+			config('crmomni-class.class_model.user.main'),
+			'id', 'owner_id'
+		);
+	} //Function ends
+
+
+	/**
+	 * Show Category (Lead/Opportunity/Support/Custom)
+	 */
+	public function category()
+	{
+		return $this->belongsTo(
+			config('crmomni-class.class_model.lookup_value'),
+			'category_id', 'id'
+		);
+	} //Function ends
+
+
 	/**
 	 * Show Status
 	 */
@@ -37,7 +100,7 @@ trait ServiceRequestRelationship
 
 
 	/**
-	 * Show Type
+	 * Show Type (Default/Custom)
 	 */
 	public function type()
 	{
@@ -49,38 +112,14 @@ trait ServiceRequestRelationship
 
 
 	/**
-	 * Show Owner/User/Creator
-	 */
-	public function owner()
-	{
-		return $this->hasOne(
-			config('crmomni-class.class_model.user.main'),
-			'id', 'owner_id'
-		);
-	} //Function ends
-
-
-	/**
-	 * Show Contact
-	 */
-	public function contact()
-	{
-		return $this->hasOne(
-			config('crmomni-class.class_model.contact.main'),
-			'id', 'contact_id'
-		);
-	} //Function ends
-
-
-	/**
 	 * Show Sources
 	 */
 	public function sources()
 	{
 		return $this->belongsToMany(
-			PropertySource::class,
+			ServiceRequestSource::class,
 			config('portiqo-crm.table_name.servicerequest_sources'),
-			'sr_id', 'property_source_id'
+			'sr_id', 'source_id'
 		);
 	} //Function ends
 
@@ -115,14 +154,12 @@ trait ServiceRequestRelationship
 	public function tasks()
 	{
 		return $this->hasMany(
-			ServiceRequestEvent::class,
-			'sr_id', 'id'
+			Task::class,
+			'servicerequest_id', 'id'
 		)->with([
-			'type','subtype'
+			'type'
 		])->whereHas('type', function ($inner_query) { 
-			$inner_query->where('value', config('portiqo-crm.settings.lookup_value.service_request_event_tasks'));
-		})->whereHas('subtype', function ($inner_query) { 
-			$inner_query->whereIn('value', config('portiqo-crm.settings.lookup_value.service_request_event_tasks_modes'));
+			$inner_query->where('key', config('servicerequest.settings.lookup_value.task_key'));
 		});
 	} //Function ends
 
@@ -134,13 +171,11 @@ trait ServiceRequestRelationship
 	{
 		return $this->hasMany(
 			ServiceRequestEvent::class,
-			'sr_id', 'id'
+			'servicerequest_id', 'id'
 		)->with([
-			'type','subtype'
+			'type'
 		])->whereHas('type', function ($inner_query) { 
-			$inner_query->where('value', config('portiqo-crm.settings.lookup_value.service_request_event_calendar'));
-		})->whereHas('subtype', function ($inner_query) { 
-			$inner_query->whereIn('value', config('portiqo-crm.settings.lookup_value.service_request_event_calendar_modes'));
+			$inner_query->where('key', config('servicerequest.settings.lookup_value.event_key'));
 		});
 	} //Function ends
 
@@ -172,11 +207,11 @@ trait ServiceRequestRelationship
             config('crmomni-class.class_model.note'),
             'reference_id', 'id'
         )
-        ->with(['type', 'owner'])
-        ->whereHas('type', function($inner_query){$inner_query->where('key', '=', 'entity_type_servicerequest');})
+        ->with(['type'])
+        ->whereHas('type', function($inner_query){ $inner_query->where('key', '=', 'entity_type_service_request');} )
         ->orderBy('created_at', 'desc');
 	} //Function ends
-  
+ 
 
 	/**
 	 * Documents for the Service Request
@@ -187,22 +222,10 @@ trait ServiceRequestRelationship
 			config('crmomni-class.class_model.document'),
 			'reference_id', 'id'
         )
-        ->with(['type', 'owner'])
+        ->with(['type'])
         ->whereHas('type', function($inner_query){$inner_query->where('key', '=', 'entity_type_servicerequest');})
         ->where('is_active', 1)
 		->orderBy('created_at', 'desc');
-	} //Function ends
-    
-    
-    /**
-	 * Organization
-	 */
-	public function organization()
-	{
-		return $this->belongsTo(
-			config('crmomni-class.class_model.organization'),
-			'contact_id', 'id'
-		);
 	} //Function ends
 
 } //Trait ends

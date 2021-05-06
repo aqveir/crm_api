@@ -48,7 +48,7 @@ class ContactAPIController extends ApiBaseController
      * @OA\Post(
      *      path="/contact/fetch",
      *      tags={"Contact"},
-     *      operationId="api.backend.contact.all",
+     *      operationId="api.backend.contact.index",
      *      security={{"omni_token":{}}},
      *      @OA\Response(response=200, description="Request was successfully executed."),
      *      @OA\Response(response=400, description="Bad Request"),
@@ -93,7 +93,7 @@ class ContactAPIController extends ApiBaseController
      * @OA\Get(
      *      path="/contact/{hash}",
      *      tags={"Contact"},
-     *      operationId="api.backend.contact.data",
+     *      operationId="api.backend.contact.show",
      *      security={{"omni_token":{}}},
      *      @OA\Parameter(ref="#/components/parameters/hash_identifier"),
      *      @OA\Response(response=200, description="Request was successfully executed."),

@@ -33,12 +33,12 @@ class CreateContactsTable extends Migration
             $table->dateTime('date_of_birth_at')->nullable();
 
             //Contact Relationship Keys
-            $table->integer('occupation_id')->nullable();
-            $table->integer('company_id')->nullable();
-            $table->integer('gender_id')->nullable();
-            $table->integer('group_id')->nullable();
+            $table->unsignedBigInteger('occupation_id')->nullable();
+            $table->unsignedBigInteger('company_id')->nullable();
+            $table->unsignedBigInteger('gender_id')->nullable();
+            $table->unsignedBigInteger('group_id')->nullable();
             $table->unsignedBigInteger('type_id')->nullable();
-            $table->integer('status_id')->nullable();
+            $table->unsignedBigInteger('status_id')->nullable();
 
             $table->rememberToken();
             $table->dateTime('last_login_at')->nullable();
@@ -54,7 +54,7 @@ class CreateContactsTable extends Migration
             //Audit Log Fields
             $table->unsignedBigInteger('created_by')->default(0);
             $table->unsignedBigInteger('updated_by')->nullable();
-            $table->integer('deleted_by')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
             
             $table->timestamps();
             $table->softDeletes();

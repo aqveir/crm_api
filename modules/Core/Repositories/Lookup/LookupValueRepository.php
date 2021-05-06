@@ -46,7 +46,6 @@ class LookupValueRepository extends EloquentRepository
 	        $objReturnValue = $query;		
 		} catch(Exception $e) {
 			$objReturnValue=null;
-			log::error(json_encode($e));
 		}
 		
 		return $objReturnValue;

@@ -5,7 +5,8 @@
     "keywords": [],
     "order": 0,
     "providers": [
-        "Modules\\ServiceRequest\\Providers\\ServiceRequestServiceProvider"
+        "Modules\\ServiceRequest\\Providers\\ServiceRequestServiceProvider",
+        "Modules\\ServiceRequest\\Providers\\AuthServiceProvider"
     ],
     "aliases": {},
     "files": [],

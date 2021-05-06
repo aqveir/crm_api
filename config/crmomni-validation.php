@@ -457,6 +457,52 @@ return [
                     ]
                 ]
             ], // Preferences Controller ends
+
+            // ServiceRequest Controller Requests
+            'service_request' => [
+                // ServiceRequest Fetch request
+                'fetch' => [
+                    'validation_rules' => []
+                ],
+
+                // ServiceRequest Create Request
+                'create' => [
+                    'validation_rules' => [
+                        'contact_hash' => 'required|string',
+                        'account_hash' => 'nullable|string',
+                        'service_request' => 'nullable',
+                        'service_request.category_key' => 'nullable|string',
+                        'service_request.type_key' => 'nullable|string',
+                        'service_request.status_key' => 'nullable|string',
+                        'service_request.stage_key' => 'nullable|string',
+                        'service_request.search_tags' => 'nullable|string',
+                        'service_request.star_rating' => 'nullable|integer|min:0|max:5',
+                        'service_request.preferences' => 'nullable|array',
+                        'service_request.owner_hash' => 'nullable|string'
+                    ]
+                ],
+
+                // ServiceRequest Update request
+                'update' => [
+                    'validation_rules' => [
+                        'account_hash' => 'nullable|string',
+                        'service_request' => 'nullable',
+                        'service_request.category_key' => 'nullable|string',
+                        'service_request.type_key' => 'nullable|string',
+                        'service_request.status_key' => 'nullable|string',
+                        'service_request.stage_key' => 'nullable|string',
+                        'service_request.search_tags' => 'nullable|string',
+                        'service_request.star_rating' => 'nullable|integer|min:0|max:5',
+                        'service_request.preferences' => 'nullable|array',
+                        'service_request.owner_hash' => 'nullable|string'
+                    ]
+                ],
+
+                // ServiceRequest Delete request
+                'delete' => [
+                    'validation_rules' => []
+                ]
+            ]
         ],
 
         'frontend' => [

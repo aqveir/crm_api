@@ -359,6 +359,195 @@ class LookupTableSeeder extends Seeder
                     ],
                 ]
             ],
+            [ //Service Request Category
+                'key' => 'service_request_category',
+                'display_value' => 'Service Request Category',
+                'description' => 'Category of the Service Requests',
+                'values' => [
+                    [
+                        'key' => 'service_request_category_lead',
+                        'display_value' => 'Lead',
+                        'is_editable' => false,
+                    ],
+                    [
+                        'key' => 'service_request_category_opportunity',
+                        'display_value' => 'Opportunity',
+                        'is_editable' => false,
+                    ],
+                    [
+                        'key' => 'service_request_category_support',
+                        'display_value' => 'Support',
+                        'is_editable' => false,
+                    ]
+                ]
+            ],
+            [ //Service Request Type
+                'key' => 'service_request_type',
+                'display_value' => 'Service Request Types',
+                'description' => 'Types of Service Request',
+                'values' => [
+                    [
+                        'key' => 'service_request_type_default',
+                        'display_value' => 'Default',
+                        'is_editable' => false,
+                        'order' => 0
+                    ]
+                ]
+            ], 
+            [ //Service Request Status
+                'key' => 'service_request_status',
+                'display_value' => 'Service Request Status',
+                'description' => 'Status of Service Request',
+                'values' => [
+                    [
+                        'key' => 'service_request_status_new',
+                        'display_value' => 'New',
+                        'is_editable' => false,
+                        'order' => 0
+                    ],
+                    [
+                        'key' => 'service_request_status_active',
+                        'display_value' => 'Active',
+                        'is_editable' => false,
+                        'order' => 5
+                    ],
+                    [
+                        'key' => 'service_request_status_closed_won',
+                        'display_value' => 'Closed [Won]',
+                        'is_editable' => false,
+                        'order' => 10
+                    ],
+                    [
+                        'key' => 'service_request_status_closed_lost',
+                        'display_value' => 'Closed [Lost]',
+                        'is_editable' => false,
+                        'order' => 11
+                    ],
+                    [
+                        'key' => 'service_request_status_archived',
+                        'display_value' => 'Archived',
+                        'is_editable' => false,
+                        'order' => 15
+                    ]
+                ]
+            ],
+            [ //Service Request Stage
+                'key' => 'service_request_stage',
+                'display_value' => 'Service Request Stages',
+                'description' => 'Stages of Service Request',
+                'values' => [
+                    [
+                        'key' => 'service_request_stage_new',
+                        'display_value' => 'New',
+                        'is_editable' => false,
+                        'order' => 0
+                    ],
+                    [
+                        'key' => 'service_request_stage_closed',
+                        'display_value' => 'Closed',
+                        'is_editable' => false,
+                        'order' => 20
+                    ],
+                ]
+            ],             
+            [ //Service Request Activity Type
+                'key' => 'service_request_activity_type',
+                'display_value' => 'Service Request Activities',
+                'description' => 'List of Activities of Service Request',
+                'is_editable' => false,
+                'values' => [
+                    [
+                        'key' => 'service_request_activity_type_task',
+                        'display_value' => 'Task',
+                        'is_editable' => false,
+                    ],
+                    [
+                        'key' => 'service_request_activity_type_event',
+                        'display_value' => 'Event/Meeting',
+                        'is_editable' => false,
+                    ],
+                ]
+            ],
+            [ //Service Request Activity - Task SubTypes
+                'key' => 'service_request_activity_type_task_subtype',
+                'display_value' => 'Service Request Task Activity Sub-Types',
+                'description' => 'List of Sub Types for the Task Activity of Service Request',
+                'values' => [
+                    [
+                        'key' => 'service_request_activity_type_task_subtype_call',
+                        'display_value' => 'Call',
+                        'is_editable' => false,
+                    ],
+                    [
+                        'key' => 'service_request_activity_type_task_subtype_sms',
+                        'display_value' => 'SMS',
+                        'is_editable' => false,
+                    ],
+                    [
+                        'key' => 'service_request_activity_type_task_subtype_email',
+                        'display_value' => 'Email',
+                        'is_editable' => false,
+                    ],
+                    [
+                        'key' => 'service_request_activity_type_task_subtype_other',
+                        'display_value' => 'Other',
+                        'is_editable' => false,
+                    ],
+                ]
+            ],
+            [ //Service Request Activity - Task Priority
+                'key' => 'service_request_activity_type_task_priority',
+                'display_value' => 'Task Priority',
+                'description' => 'List of priorities for the Task Activity of Service Request',
+                'is_editable' => false,
+                'values' => [
+                    [
+                        'key' => 'service_request_activity_type_task_priority_low',
+                        'display_value' => 'Low',
+                        'is_editable' => false,
+                    ],
+                    [
+                        'key' => 'service_request_activity_type_task_priority_moderate',
+                        'display_value' => 'Moderate',
+                        'is_editable' => false,
+                    ],
+                    [
+                        'key' => 'service_request_activity_type_task_priority_high',
+                        'display_value' => 'High',
+                        'is_editable' => false,
+                    ]
+                ]
+            ],
+            [ //Service Request Activity - Event SubTypes
+                'key' => 'service_request_activity_type_event_subtype',
+                'display_value' => 'Service Request Event Activity Sub-Types',
+                'description' => 'List of Sub Types for the Event Activity of Service Request',
+                'values' => [
+                    [
+                        'key' => 'service_request_activity_type_event_subtype_meeting',
+                        'display_value' => 'Meeting',
+                        'is_editable' => false,
+                    ],
+                ]
+            ],
+            [ //Service Request Activity - Event Participants Type
+                'key' => 'service_request_activity_type_event_participant_type',
+                'display_value' => 'Service Request Event Activity - Participant Types',
+                'description' => 'List of Participant Types for the Event Activity of Service Request',
+                'is_editable' => false,
+                'values' => [
+                    [
+                        'key' => 'service_request_activity_type_event_participant_type_user',
+                        'display_value' => 'Internal User',
+                        'is_editable' => false,
+                    ],
+                    [
+                        'key' => 'service_request_activity_type_event_participant_type_contact',
+                        'display_value' => 'Contact',
+                        'is_editable' => false,
+                    ],
+                ]
+            ],
             [ //Store Type
                 'key' => 'store_type',
                 'display_value' => 'Store Type',

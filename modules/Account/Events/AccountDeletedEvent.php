@@ -2,6 +2,7 @@
 
 namespace Modules\Account\Events;
 
+use Modules\Account\Models\Account;
 use Illuminate\Queue\SerializesModels;
 
 class AccountDeletedEvent
@@ -9,13 +10,19 @@ class AccountDeletedEvent
     use SerializesModels;
 
     /**
+     * Model variable
+     */
+    public $model;
+
+
+    /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Account $model)
     {
-        //
+        $this->model = $model;
     }
 
     /**
