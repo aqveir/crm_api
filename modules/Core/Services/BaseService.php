@@ -163,4 +163,31 @@ abstract class BaseService
         return ($payload->has('forced'))?($payload['forced']==1):false;
     } //Function ends
 
+
+    /**
+     * Process Lookup Data
+     * 
+     * @return int
+     */
+    public function getLookupValueId(int $orgId, Collection $payload, string $key, string $defaultKey=null)
+    {
+        $objReturnValue=null;
+        try {
+
+            $lookupKey = ($payload->has($key) && (!empty($payload[$key])))?$payload[$key]:$defaultKey;
+
+            //Check if the lookup key exists
+            if (!empty($lookupKey)) {
+                //Get lookup data
+                $lookupData = $this->lookupRepository->getLookUpByKey($orgId, $lookupKey);
+                if (empty($lookupData)) { throw new BadRequestHttpException(); } //End if
+                $objReturnValue = $lookupData['id'];
+            } //End if
+        } catch(Exception $e) {
+            log::error('ServiceRequestService:processLookup:Exception:' . $e->getMessage());
+            throw $e;
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends
 } //Class ends

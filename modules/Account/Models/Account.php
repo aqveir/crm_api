@@ -35,6 +35,7 @@ class Account extends Model {
         'address', 'locality', 'city', 'state_id', 'country_id', 'zipcode',
         'google_place_id', 'longitude', 'latitude',
         'website', 'email', 'phone_idd', 'phone',
+        'is_default'
     ];
 
 
@@ -77,7 +78,7 @@ class Account extends Model {
      *
      * @var array
      */
-    protected $appends = [];
+    protected $appends = ['last_updated_at'];
 
 
     /**
@@ -86,6 +87,16 @@ class Account extends Model {
      * @var array
      */
     protected $with = ['type', 'owner'];
+    
+    
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_default' => 'boolean'
+    ];
 
 
     /**

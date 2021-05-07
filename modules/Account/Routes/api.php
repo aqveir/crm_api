@@ -26,12 +26,12 @@ $api->version('v1', [
 
         // Note Endpoints
         $api->group(['prefix' => 'account'], function(Router $api) {
+            $api->get('{accounts}', 'Backend\\AccountController@show');
             $api->get('/', 'Backend\\AccountController@index');
-            $api->get('{account}', 'Backend\\AccountController@show');
             
             $api->post('/', 'Backend\\AccountController@create');
-            $api->put('{account}', 'Backend\\AccountController@update');
-            $api->delete('{account}', 'Backend\\AccountController@destroy');
+            $api->put('{accounts}', 'Backend\\AccountController@update');
+            $api->delete('{accounts}', 'Backend\\AccountController@destroy');
         });
     });
 });

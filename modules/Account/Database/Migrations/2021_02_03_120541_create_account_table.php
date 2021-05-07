@@ -20,6 +20,7 @@ class CreateAccountTable extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->unsignedBigInteger('type_id'); //e.g. Internal/External/Etc
+            $table->unsignedBigInteger('owner_id')->nullable();
 
             //Account Address
             $table->string('address')->nullable();
@@ -28,6 +29,7 @@ class CreateAccountTable extends Migration
             $table->unsignedBigInteger('state_id')->nullable();
             $table->unsignedBigInteger('country_id')->nullable();
             $table->string('zipcode')->nullable();
+            $table->unsignedBigInteger('timezone_id')->nullable();
 
             //Location Details
             $table->string('google_place_id')->nullable();

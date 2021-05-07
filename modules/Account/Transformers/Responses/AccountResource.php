@@ -18,13 +18,18 @@ class AccountResource extends JsonResource
     public function toArray($request)
     {
         $objReturnValue=null;
-        $status = null;
 
         try {
-            //$this->load('organization', 'availability', 'availability.status', 'country', 'timezone', 'roles', 'privileges');
+            $this->load('type', 'owner', 'timezone', 'state', 'country');
             
             $response = $this->only([
-                'name', 'description',
+                'id', 'name', 'description', 
+                'type', 'owner',
+                'address', 'locality', 'city', 'zipcode',
+                'state', 'country', 'timezone', 
+                'google_place_id', 'longitude', 'latitude',
+                'website', 'email', 'phone_idd', 'phone',
+                'is_default', 'last_updated_at'
             ]);
 
             $objReturnValue = $response;

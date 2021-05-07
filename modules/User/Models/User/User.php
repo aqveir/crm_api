@@ -74,14 +74,15 @@ class User extends Model implements
      * @var array
      */
     protected $hidden = [
-        'id', 'org_id', 'timezone_id',
-        'first_name', 'middle_name', 'last_name',
-        'password', 'remember_token', 'is_remote_access_only',
+        'id', 'org_id', 'timezone_id', 'avatar',
+        'first_name', 'middle_name', 'last_name', 'name_initials',
+        'username', 'password', 'remember_token', 'is_remote_access_only',
         'email', 'phone','phone_idd', 'virtual_phone_number',
         'is_active', 'is_pool', 'is_default', 'language',
         'failed_attempts', 'max_failed_attempts', '2fa_secret',
-        'verification_token', 'is_verified', 
-        'created_by', 'updated_by', 'deleted_by',
+        'verification_token', 'is_verified',
+        'verified_at', 'last_login_at', 'last_updated_at',
+        'created_by', 'updated_by', 'deleted_by', 
         'created_at', 'updated_at', 'deleted_at'
     ];
 
@@ -109,7 +110,7 @@ class User extends Model implements
      *
      * @var array
      */
-    protected $with = ['country', 'timezone', 'organization'];
+    protected $with = [];
     
     
     /**

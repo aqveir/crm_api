@@ -31,10 +31,12 @@ class AccountMinifiedResource extends ResourceCollection
         try {
             $objReturnValue = [];
             foreach ($this->collection as $data) {
-                //$data->load('availability', 'availability.status');
+                $data->load('type', 'owner');
                   
                 $response = $data->only([
-                    'name', 'description',
+                    'id', 'name', 'description', 
+                    'type', 'owner',
+                    'is_default', 'last_updated_at'
                 ]);
 
                 array_push($objReturnValue, $response);

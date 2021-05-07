@@ -518,9 +518,26 @@ return [
                     'validation_rules' => [
                         'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
 
-                        'display_value' => 'required|max:255',
-                        'description' => 'max:255',
-                        'privileges' => 'required|array',
+                        'name' => 'required|string|max:255',
+                        'description' => 'nullable|string|max:255',
+                        'type_key' => 'required|string',
+
+                        'address' => 'nullable|string', 
+                        'locality' => 'nullable|string', 
+                        'city' => 'nullable|string', 
+                        'state_id'  => 'nullable|numeric', 
+                        'country_id'  => 'nullable|numeric', 
+                        'zipcode' => 'nullable|string',
+                        'google_place_id' => 'nullable|string', 
+                        'longitude' => 'nullable|numeric', 
+                        'latitude' => 'nullable|numeric',
+
+                        'website' => 'nullable|string', 
+                        'email' => 'nullable|email', 
+                        'phone_idd' => 'nullable|string', 
+                        'phone' => 'nullable|string',
+
+                        'is_default' => 'nullable|boolean'
                     ]
                 ],
 
@@ -529,9 +546,26 @@ return [
                     'validation_rules' => [
                         'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
 
-                        'display_value' => 'required|max:255',
-                        'description' => 'max:255',
-                        'privileges' => 'required|array',
+                        'name' => 'required|string|max:255',
+                        'description' => 'nullable|string|max:255',
+                        'type_key' => 'required|string',
+
+                        'address' => 'nullable|string', 
+                        'locality' => 'nullable|string', 
+                        'city' => 'nullable|string', 
+                        'state_id'  => 'nullable|numeric', 
+                        'country_id'  => 'nullable|numeric', 
+                        'zipcode' => 'nullable|string',
+                        'google_place_id' => 'nullable|string', 
+                        'longitude' => 'nullable|numeric', 
+                        'latitude' => 'nullable|numeric',
+
+                        'website' => 'nullable|string', 
+                        'email' => 'nullable|email', 
+                        'phone_idd' => 'nullable|string', 
+                        'phone' => 'nullable|string',
+
+                        'is_default' => 'nullable|boolean'
                     ]
                 ],
 

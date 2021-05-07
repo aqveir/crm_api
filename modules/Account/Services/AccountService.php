@@ -74,6 +74,82 @@ class AccountService extends BaseService
 
 
     /**
+     * Get All Account for an Organization
+     * 
+     * @param \string $orgHash
+     * @param \Illuminate\Support\Collection $payload
+     *
+     * @return mixed
+     */
+    public function getAll(string $orgHash, Collection $payload)
+    {
+        $objReturnValue=null;
+        try {
+            //Authenticated User
+            $user = $this->getCurrentUser('backend');
+
+            //Get organization details
+            if ($user->hasRoles(config('crmomni.settings.default.role.key_super_admin'))) {
+                //Get organization data
+                $organization = $this->getOrganizationByHash($orgHash);
+                $orgId = $organization['id'];
+            } else {
+                $orgId = $user['org_id'];
+            } //End if
+
+            //Assign to the return value
+            $objReturnValue = $this->accountRepository
+                ->where('org_id', $orgId)
+                ->get();
+
+        } catch(Exception $e) {
+            throw $e;
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends
+
+
+    /**
+     * Show Account by Identifier
+     * 
+     * @param \string $orgHash
+     * @param \Illuminate\Support\Collection $payload
+     * @param \int $accountId
+     *
+     * @return mixed
+     */
+    public function show(string $orgHash, Collection $payload, int $accountId)
+    {
+        $objReturnValue=null;
+        try {
+            //Authenticated User
+            $user = $this->getCurrentUser('backend');
+
+            //Get organization details
+            if ($user->hasRoles(config('crmomni.settings.default.role.key_super_admin'))) {
+                //Get organization data
+                $organization = $this->getOrganizationByHash($orgHash);
+                $orgId = $organization['id'];
+            } else {
+                $orgId = $user['org_id'];
+            } //End if
+
+            //Assign to the return value
+            $objReturnValue = $this->accountRepository
+                ->where('id', $accountId)
+                ->where('org_id', $orgId)
+                ->first();
+
+        } catch(Exception $e) {
+            throw $e;
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends
+
+
+    /**
      * Create Default Account
      * 
      * @param \Illuminate\Support\Collection $payload
@@ -92,9 +168,8 @@ class AccountService extends BaseService
                 'description' => config('account.settings.new_organization.account.default_text'),
                 'email' => $organization['email'],
                 'phone' => $organization['phone'],
-                'account_type' => config('account.settings.new_organization.account.account_type'),
-                'is_default' => true,
-                'created_by' => 0
+                'type_key' => config('account.settings.new_organization.account.account_type'),
+                'is_default' => true
             ];
 
             //Create default account
@@ -126,14 +201,16 @@ class AccountService extends BaseService
      */
     public function create(string $orgHash, Collection $payload, bool $isAutoCreated=false)
     {
-        $objReturnValue=null; $data=[];
+        $objReturnValue=null; $data=[]; $createdBy=0;
         try {
+
+            //Auto Created Check
             if ($isAutoCreated) {
                 //Build data
                 $data = $payload->only([
                     'org_id',
                     'name', 'description', 
-                    'email', 'phone', 'created_by'
+                    'email', 'phone'
                 ])->toArray();
             } else {
                 //Authenticated User
@@ -145,23 +222,23 @@ class AccountService extends BaseService
                     'email', 'phone',
                 ])->toArray();
                 $data = array_merge($data, [
-                    'org_id' => $user['org_id'], 
-                    'created_by' => $user['id'] 
+                    'org_id' => $user['org_id']
                 ]);
+
+                $createdBy = $user['id'];
             } //End if
 
-            //Lookup data
-            $accountType = $payload['account_type'];
-            $lookupEntity = $this->lookupRepository->getLookUpByKey($data['org_id'], $accountType);
-            if (empty($lookupEntity))
-            {
-                throw new Exception('Unable to resolve the entity type');   
-            } //End if
-            $data['type_id'] = $lookupEntity['id'];
+            //Lookup data for Account Type
+            $data['type_id'] = $this->getLookupValueId($data['org_id'], $payload, 'type_key', config('account.settings.new_organization.account.account_type'));
 
             //Create Account
-            $account = $this->accountRepository->create($data);
-            $account->load('type', 'owner');
+            $account = $this->accountRepository->create($data, $createdBy);
+
+            //Set Default status
+            if (($payload->has('is_default')) && ($payload['is_default']==true)) {
+                $this->accountRepository->setDefault($data['org_id'], $account['id']);
+            } //End if
+            $account->refresh();
                 
             //Raise event: Account Created
             event(new AccountCreatedEvent($account, $isAutoCreated));                
@@ -200,17 +277,29 @@ class AccountService extends BaseService
             //Authenticated User
             $user = $this->getCurrentUser('backend');
 
+            //Get organization data
+            $organization = $this->getOrganizationByHash($orgHash);
+
             //Build data
-            $data = $payload->toArray();
+            $data = $payload->except(['is_default'])->toArray();
+
+            //Lookup data for Account Type
+            $data['type_id'] = $this->getLookupValueId($organization['id'], $payload, 'type_key', config('account.settings.new_organization.account.account_type'));
 
             //Update Account
             $account = $this->accountRepository->update($accountId, 'id', $data, $user['id']);
+
+            //Set Default status
+            if (($payload->has('is_default')) && ($payload['is_default']==true)) {
+                $this->accountRepository->setDefault($organization['id'], $accountId);
+            } //End if
+            $account->refresh();
                 
             //Raise event: Account Updated
             event(new AccountUpdatedEvent($account));                
 
             //Assign to the return value
-            $objReturnValue = $note;
+            $objReturnValue = $account;
 
         } catch(AccessDeniedHttpException $e) {
             log::error('AccountService:update:AccessDeniedHttpException:' . $e->getMessage());
@@ -243,24 +332,39 @@ class AccountService extends BaseService
             //Authenticated User
             $user = $this->getCurrentUser('backend');
 
-            //Delete Account
-            $account = $this->accountRepository->delete($accountId, 'id', $user['id']);
+            //Get organization data
+            $organization = $this->getOrganizationByHash($orgHash);
 
-            //Raise event: Account Deleted
-            event(new AccountDeletedEvent($account));            
-            
+            //Get account data by account identifier
+            $account = $this->accountRepository
+                ->where('org_id', $organization['id'])
+                ->where('id', $accountId)
+                ->first();
+
+            if (!empty($account)) {
+                if ($account['is_default']) {
+                    throw new BadRequestHttpException('Cannot delete default account.');
+                } //End if
+
+                //Delete Account
+                $account = $this->accountRepository->delete($accountId, 'id', $user['id']);
+
+                //Raise event: Account Deleted
+                event(new AccountDeletedEvent($account));    
+            } //End if
+
             //Assign to the return value
             $objReturnValue = $account;
 
         } catch(AccessDeniedHttpException $e) {
             log::error('AccountService:delete:AccessDeniedHttpException:' . $e->getMessage());
-            throw new AccessDeniedHttpException($e->getMessage());
+            throw $e;
         } catch(BadRequestHttpException $e) {
             log::error('AccountService:delete:BadRequestHttpException:' . $e->getMessage());
-            throw new BadRequestHttpException($e->getMessage());
+            throw $e;
         } catch(Exception $e) {
             log::error('AccountService:delete:Exception:' . $e->getMessage());
-            throw new HttpException(500);
+            throw $e;
         } //Try-catch ends
 
         return $objReturnValue;

@@ -97,17 +97,13 @@ class AccountController extends ApiBaseController
      *     tags={"Account"},
      *     operationId="api.backend.account.show",
      *     security={{"omni_token":{}}},
-     *     @OA\Parameter(
-     *          in="path", name="ohash", description="Enter organization code or key", required=true,
-     *          @OA\Schema(type="string")
-     *     ),
-     *     @OA\Parameter(ref="#/components/parameters/hash_identifier"),
+     *     @OA\Parameter(ref="#/components/parameters/identifier"),
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function show(GetUserRequest $request, AccountService $service, string $subdomain, Account $account)
+    public function show(GetAccountRequest $request, AccountService $service, string $subdomain, Account $accounts)
     {   
         try {
             //Get Org Hash 
@@ -117,7 +113,7 @@ class AccountController extends ApiBaseController
             $payload = collect($request);
 
             //Fetch Account record
-            $result = $service->show($orgHash, $payload, $account['id']);
+            $result = $service->show($orgHash, $payload, $accounts['id']);
 
             //Transform data
             $data = new AccountResource($result);
@@ -161,7 +157,10 @@ class AccountController extends ApiBaseController
             $payload = collect($request);
 
             //Create customer
-            $data = $service->create($orgHash, $payload);
+            $result = $service->create($orgHash, $payload);
+
+            //Transform data
+            $data = new AccountResource($result);
 
             //Send http status out
             return $this->response->success(compact('data'));
@@ -195,7 +194,7 @@ class AccountController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function update(UpdateAccountRequest $request, AccountService $service, string $subdomain, Account $account)
+    public function update(UpdateAccountRequest $request, AccountService $service, string $subdomain, Account $accounts)
     {
         try {
             //Get Org Hash 
@@ -205,7 +204,10 @@ class AccountController extends ApiBaseController
             $payload = collect($request);
 
             //Update account
-            $data = $service->update($orgHash, $payload, $account['id']);
+            $result = $service->update($orgHash, $payload, $accounts['id']);
+
+            //Transform data
+            $data = new AccountResource($result);
 
             //Send http status out
             return $this->response->success(compact('data'));
@@ -237,7 +239,7 @@ class AccountController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function destroy(DeleteAccountRequest $request, AccountService $service, string $subdomain, Account $account)
+    public function destroy(DeleteAccountRequest $request, AccountService $service, string $subdomain, Account $accounts)
     {
         try {
             //Get Org Hash 
@@ -247,15 +249,15 @@ class AccountController extends ApiBaseController
             $payload = collect($request);
 
             //Delete account
-            $data = $service->delete($orgHash, $payload, $account['id']);
+            $data = $service->delete($orgHash, $payload, $accounts['id']);
 
             //Send http status out
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
-            return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
+            return $this->response->fail([$e->getMessage()], Response::HTTP_UNAUTHORIZED);
         } catch(Exception $e) {
-            return $this->response->fail([], Response::HTTP_BAD_REQUEST);
+            return $this->response->fail([$e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     } //Function ends
 
