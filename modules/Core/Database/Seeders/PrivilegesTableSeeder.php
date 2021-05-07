@@ -187,7 +187,106 @@ class PrivilegesTableSeeder extends Seeder
                 'display_value' => 'Show Contact Record (Unmasked)',
             ],
 
+
+            /**
+             * SERVICEREQUEST PRIVILEGES
+             */
+            [ //list_all_servicerequests
+                'key' => 'list_all_servicerequests',
+                'display_value' => 'Show All Service-Requests/Leads',
+            ],
+            [ //list_account_servicerequests_only
+                'key' => 'list_account_servicerequests_only',
+                'display_value' => 'Show All Service-Requests for an Account Only',
+            ],
+            [ //list_user_servicerequests_only
+                'key' => 'list_user_servicerequests_only',
+                'display_value' => 'Show All Service-Requests for the User/Owner Only',
+            ],
+            [ //view_servicerequest
+                'key' => 'view_servicerequest',
+                'display_value' => 'Show/View Service-Request Record',
+            ],  
+            [ //add_servicerequest
+                'key' => 'add_servicerequest',
+                'display_value' => 'Add Service-Request',
+            ],
+            [ //edit_servicerequest
+                'key' => 'edit_servicerequest',
+                'display_value' => 'Edit/Amend Service-Request',
+            ],
+            [ //delete_servicerequest
+                'key' => 'delete_servicerequest',
+                'display_value' => 'Delete Service-Request',
+            ],
             
+
+            /**
+             * TASK PRIVILEGES
+             */
+            [ //list_all_tasks
+                'key' => 'list_all_tasks',
+                'display_value' => 'Show All Tasks',
+            ],
+            [ //list_account_tasks_only
+                'key' => 'list_account_tasks_only',
+                'display_value' => 'Show All Tasks for an Account Only',
+            ],
+            [ //list_user_tasks_only
+                'key' => 'list_user_tasks_only',
+                'display_value' => 'Show All Tasks for the User/Owner Only',
+            ],
+            [ //view_task
+                'key' => 'view_task',
+                'display_value' => 'Show/View Task Record',
+            ],  
+            [ //add_task
+                'key' => 'add_task',
+                'display_value' => 'Add Task',
+            ],
+            [ //edit_task
+                'key' => 'edit_task',
+                'display_value' => 'Edit/Amend Task',
+            ],
+            [ //delete_task
+                'key' => 'delete_task',
+                'display_value' => 'Delete Task',
+            ],
+
+
+            /**
+             * EVENT PRIVILEGES
+             */
+            [ //list_all_events
+                'key' => 'list_all_events',
+                'display_value' => 'Show All Contacts',
+            ],
+            [ //list_account_events_only
+                'key' => 'list_account_events_only',
+                'display_value' => 'Show All Events for an Account Only',
+            ],
+            [ //list_user_events_only
+                'key' => 'list_user_events_only',
+                'display_value' => 'Show All Events for the User/Owner Only',
+            ],
+            [ //view_event
+                'key' => 'view_event',
+                'display_value' => 'Show/View Event Record',
+            ],  
+            [ //add_event
+                'key' => 'add_event',
+                'display_value' => 'Add Event',
+            ],
+            [ //edit_event
+                'key' => 'edit_event',
+                'display_value' => 'Edit/Amend Event',
+            ],
+            [ //delete_event
+                'key' => 'delete_event',
+                'display_value' => 'Delete Event',
+            ],
+
+
             /**
              * NOTE PRIVILEGES
              */

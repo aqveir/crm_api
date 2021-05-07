@@ -2,6 +2,7 @@
 
 namespace Modules\Core\Database\Seeders;
 
+use Log;
 use Illuminate\Database\Seeder;
 
 class RolesTableSeeder extends Seeder
@@ -18,6 +19,7 @@ class RolesTableSeeder extends Seeder
                 'org_id' => 0,
                 'key' => 'super_admin',
                 'display_value' => 'Super Administrator',
+                'is_secure' => true,
                 'privileges' => [
                     //Manage Organization
                     'list_all_organizations', 'view_organization',
@@ -37,81 +39,16 @@ class RolesTableSeeder extends Seeder
 
                     //Manage Subscriptions
                     'manage_subscriptions', 
-                    'add_subscription', 'edit_subscription', 'delete_subscription'
-                ]
-            ],
-            [
-                'org_id' => 1,
-                'key' => 'organization_admin',
-                'display_value' => 'Organization Administrator',
-                'privileges' => [
-                    //Manage Organization
-                    'view_organization', 'edit_organization',
-
-                    //Manage Privileges
-                    'list_all_privileges',
-
-                    //Manage Roles
-                    'list_all_roles', 'view_role', 
-                    'add_role', 'edit_role', 'delete_role',
-
-                    //Manage Preferences
-                    'list_all_organization_preferences', 'view_preference',
-                    'add_preference', 'edit_preference', 'delete_preference',
+                    'add_subscription', 'edit_subscription', 'delete_subscription',
 
                     //Manage Accounts
                     'list_all_organization_accounts', 'view_account',
-                    'add_account', 'edit_account', 'delete_account',
-
-                    //Manage Contact
-                    'list_all_contacts', 'view_contact',
-                    'add_contact', 'edit_contact', 'delete_contact', 
-                    'show_contact_unmasked_data',
-
-                    //Manage Notes
-                    'add_note', 'delete_note',
-
-                    //Manage Documents
-                    'add_new_document', 'delete_document',
-                    
-                    //Manage Catalogue
-                    'list_all_organization_catalogue',
-                    'add_new_catalogue_data', 'edit_catalogue_data',
+                    'add_account', 'edit_account', 'delete_account'
                 ]
             ],
-            [
-                'org_id' => 1,
-                'key' => 'account_admin',
-                'display_value' => 'Account Admin',
-                'privileges' => [
-                    //Manage Accounts
-                    'view_account', 'edit_account',
-
-                    //Manage Contact
-                    'list_account_contacts_only',
-
-                    //Manage Notes
-                    'add_note', 'delete_note',
-
-                    //Manage Documents
-                    'add_new_document', 'delete_document'
-                ]
-            ],
-            [
-                'org_id' => 1,
-                'key' => 'telecaller_support',
-                'display_value' => 'Support Telecallers',
-                'privileges' => [
-                    //Manage Contact
-                    'list_user_contacts_only',
-
-                    //Manage Notes
-                    'add_note',
-
-                    //Manage Documents
-                    'add_new_document',
-                ]
-            ],
+            array_merge(['org_id' => 1], config('core.settings.new_organization.default_roles')[0]),
+            array_merge(['org_id' => 1], config('core.settings.new_organization.default_roles')[1]),
+            array_merge(['org_id' => 1], config('core.settings.new_organization.default_roles')[2])
         ];
 
         foreach ($roles as $role) {
@@ -119,6 +56,7 @@ class RolesTableSeeder extends Seeder
                 'org_id' => $role['org_id'],
                 'key' => $role['key'],
                 'display_value' => $role['display_value'],
+                'is_secure' => $role['is_secure']
             ]);
 
             if($role['privileges'] && count($role['privileges'])>0) {
