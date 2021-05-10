@@ -36,4 +36,5 @@ sudo php artisan module:seed Contact
 sudo php artisan module:seed User
 sudo php artisan module:seed Preference
 sudo php artisan module:seed Subscription
+sudo php artisan module:seed Account
 echo "Data created..."
