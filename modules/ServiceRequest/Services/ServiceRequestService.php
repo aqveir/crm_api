@@ -179,8 +179,10 @@ class ServiceRequestService extends BaseService
     /**
      * Create ServiceRequest
      * 
-     * @param \Illuminate\Support\Collection $payload
-     * @param \bool $isAutoCreated (optional)
+     * @param  \string $orgHash
+     * @param  \Illuminate\Support\Collection $payload
+     * @param  \string $ipAddress (optional)
+     * @param  \bool $isAutoCreated (optional)
      *
      * @return mixed
      */
@@ -237,10 +239,10 @@ class ServiceRequestService extends BaseService
     /**
      * Update ServiceRequest
      * 
-     * @param \string $orgHash
-     * @param \Illuminate\Support\Collection $payload
-     * @param \string $srHash
-     * @param \string $ipAddress (optional)
+     * @param  \string $orgHash
+     * @param  \Illuminate\Support\Collection $payload
+     * @param  \string $srHash
+     * @param  \string $ipAddress (optional)
      *
      * @return mixed
      */

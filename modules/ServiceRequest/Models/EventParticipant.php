@@ -1,17 +1,14 @@
 <?php
 
-namespace Modules\Core\Models\Lookup;
+namespace Modules\ServiceRequest\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Modules\Core\Models\BaseModel as Model;
 
-use Modules\Core\Models\Lookup\Traits\Action\LookupValueAction;
 
 /**
- * Lookup Value Model
+ * Eloquent Model for EventParticipant
  */
-class LookupValue extends Model
-{
-    use LookupValueAction;
+class EventParticipant extends Model {
 
     /**
      * The database table used by the model.
@@ -22,12 +19,22 @@ class LookupValue extends Model
 
 
     /**
-     * The attributes that are mass assignable.
+     * Attributes that should be mass-assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'org_id', 'lookup_id', 'key', 'display_value'
+        'activity_id','participant_type_id','participant_id'
+    ];
+
+
+    /**
+     * Protected attributes that CANNOT be mass assigned.
+     *
+     * @var array
+     */
+    protected $guarded = [ 
+        'id'
     ];
 
 
@@ -37,11 +44,10 @@ class LookupValue extends Model
      * @var array
      */
     protected $hidden = [
-        'id', 'org_id', 'lookup_id', 'description', 'pivot', 
-        'order', 'is_active', 'is_editable',
-        'created_by', 'updated_by',
-        'created_at', 'updated_at',
-    ];
+        'id', 'activity_id','participant_type_id','participant_id',
+        'created_by', 'updated_by', 'deleted_by',
+        'created_at', 'updated_at', 'deleted_at'
+    ]; 
 
 
     /**
@@ -49,7 +55,7 @@ class LookupValue extends Model
      * @var array
      */
     protected $dates = [
-        'created_at', 'updated_at',
+        'created_at', 'updated_at', 'deleted_at'
     ];
 
 
@@ -58,20 +64,26 @@ class LookupValue extends Model
      *
      * @var array
      */
-    protected $appends = [];
+    protected $appends = ['last_updated_at'];
 
 
+    /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = [];
+    
+    
     /**
      * The attributes that should be cast.
      *
      * @var array
      */
     protected $casts = [
-        'is_editable' => 'boolean',
-        'is_active' => 'boolean',
     ];
 
-    
+
     /**
      * Prepare a date for array / JSON serialization.
      *
@@ -83,7 +95,7 @@ class LookupValue extends Model
         return $date->format(config('crmomni.settings.date_format_response_generic'));
     }
 
-    
+
     /**
      * Default constructor
      * @param array $attributes
@@ -91,7 +103,7 @@ class LookupValue extends Model
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->table = config('crmomni-migration.table_name.lookup_value');
+        $this->table = config('crmomni-migration.table_name.service_request.activity_participants');
     }
 
 } //Class ends

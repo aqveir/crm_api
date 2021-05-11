@@ -95,4 +95,20 @@ trait OrganizationRelationship
 		);
 	} //Function End
 
+
+	/**
+	 * Accounts
+	 */
+	public function accounts()
+	{
+		if (class_exists(config('crmomni-class.class_model.account'))) {
+			return $this->hasMany(
+				config('crmomni-class.class_model.account'),
+				'org_id', 'id'
+			);
+		} else {
+			return [];
+		} //End if
+	} //Function End
+
 } //Trait Ends

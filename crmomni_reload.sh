@@ -37,4 +37,5 @@ sudo php artisan module:seed User
 sudo php artisan module:seed Preference
 sudo php artisan module:seed Subscription
 sudo php artisan module:seed Account
+sudo php artisan module:seed ServiceRequest
 echo "Data created..."

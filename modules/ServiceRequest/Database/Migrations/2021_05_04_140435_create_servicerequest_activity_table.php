@@ -14,6 +14,9 @@ class CreateServicerequestActivityTable extends Migration
     public function up()
     {
         Schema::create(config('crmomni-migration.table_name.service_request.activity'), function (Blueprint $table) {
+            $table->charset = 'utf8mb4';
+            $table->collation = 'utf8mb4_unicode_ci';
+
             $table->bigIncrements('id');
 
             //SR Activity Relationship Core References
@@ -26,7 +29,7 @@ class CreateServicerequestActivityTable extends Migration
 
             //SR Activity Common Attributes
             $table->string('subject', 255);
-            $table->string('description')->nullable();
+            $table->string('description', 4000)->nullable();
 
             //Task Specific Attributes
             $table->boolean('is_scheduled')->default(true);

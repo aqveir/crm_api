@@ -2,9 +2,10 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use Modules\ServiceRequest\Models\ServiceRequest;
+use Modules\ServiceRequest\Models\EventParticipant as ServiceRequestEventParticipant;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -17,8 +18,7 @@ use Illuminate\Support\Str;
 |
 */
 
-$factory->define(ServiceRequest::class, function (Faker $faker) {
-    
+$factory->define(ServiceRequestEventParticipant::class, function (Faker $faker) {
     return [
     ];
 });

@@ -2,6 +2,8 @@
 
 namespace Modules\ServiceRequest\Models\Traits\Relationship;
 
+use Modules\ServiceRequest\Models\EventParticipant as ServiceRequestEventParticipant;
+
 
 /**
  * Class Event Relationship
@@ -70,13 +72,13 @@ trait EventRelationship
 
 
 	/**
-	 * Event Participant
+	 * Event Participants
 	 */
 	public function participants()
 	{
 		return $this->hasMany(
 			ServiceRequestEventParticipant::class, 
-			'event_id', 'id'
+			'activity_id', 'id'
 		);
 	}
 

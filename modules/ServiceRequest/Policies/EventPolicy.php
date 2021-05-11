@@ -3,7 +3,7 @@
 namespace Modules\ServiceRequest\Policies;
 
 use Modules\User\Models\User\User;
-use Modules\ServiceRequest\Models\ServiceRequest;
+use Modules\ServiceRequest\Models\Event as ServiceRequestEvent;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -26,7 +26,7 @@ class EventPolicy
      * Determine if the given action can be created by the user.
      *
      * @param  \Modules\User\Models\User\User  $user
-     * @param  \Modules\Contact\Models\Contact  $contact
+     * @param  \Modules\ServiceRequest\Models\Event as ServiceRequestEvent  $event
      * 
      * @return bool
      */
@@ -47,7 +47,7 @@ class EventPolicy
      */
     public function viewAny(User $user)
     {
-        if ($user->hasPrivileges(['list_all_contacts'])) {
+        if ($user->hasPrivileges(['list_all_events'])) {
             return true;
         } //End if
     } //Function ends
@@ -57,13 +57,13 @@ class EventPolicy
      * Determine if the given action (view) can be executed by the user.
      *
      * @param  \Modules\User\Models\User\User  $user
-     * @param  \Modules\Contact\Models\Contact  $contact
+     * @param  \Modules\ServiceRequest\Models\Event as ServiceRequestEvent  $event
      * 
      * @return bool
      */
-    public function view(User $user, Contact $contact)
+    public function view(User $user, ServiceRequestEvent $event)
     {
-        if ($user->hasPrivileges(['view_contact'])) {
+        if ($user->hasPrivileges(['view_event'])) {
             return true;
         } //End if
     } //Function ends
@@ -78,7 +78,7 @@ class EventPolicy
      */
     public function create(User $user)
     {
-        if ($user->hasPrivileges(['add_contact'])) {
+        if ($user->hasPrivileges(['add_event'])) {
             return true;
         } //End if
     } //Function ends
@@ -88,17 +88,17 @@ class EventPolicy
      * Determine if the given action (update) can be executed by the user.
      *
      * @param  \Modules\User\Models\User\User  $user
-     * @param  \Modules\Contact\Models\Contact  $contact
+     * @param  \Modules\ServiceRequest\Models\Event as ServiceRequestEvent  $event
      * 
      * @return \Illuminate\Auth\Access\Response
      */
-    public function update(User $user, Contact $contact)
+    public function update(User $user, ServiceRequestEvent $event)
     {
-        if ($user->hasPrivileges(['edit_contact'])) {
+        if ($user->hasPrivileges(['edit_event'])) {
             if ($user->hasRoles(['organization_admin'])) {
-                return ($user->organization['id'] == $contact->organization['id']);
+                return ($user->organization['id'] == $event->organization['id']);
             } else {
-                return ($user['id'] == $contact->owner['id']);
+                return ($user['id'] == $event->owner['id']);
             } //End if            
         } else {
             return false;
@@ -110,17 +110,17 @@ class EventPolicy
      * Determine if the given action (delete) can be executed by the user.
      *
      * @param  \Modules\User\Models\User\User  $user
-     * @param  \Modules\Contact\Models\Contact  $contact
+     * @param  \Modules\ServiceRequest\Models\Event as ServiceRequestEvent  $event
      * 
      * @return bool
      */
-    public function delete(User $user, Contact $contact)
+    public function delete(User $user, ServiceRequestEvent $event)
     {
-        if ($user->hasPrivileges(['delete_contact'])) {
+        if ($user->hasPrivileges(['delete_event'])) {
             if ($user->hasRoles(['organization_admin'])) {
-                return ($user->organization['id'] == $contact->organization['id']);
+                return ($user->organization['id'] == $event->organization['id']);
             } else {
-                return ($user['id'] == $contact->owner['id']);
+                return ($user['id'] == $event->owner['id']);
             } //End if            
         } else {
             return false;

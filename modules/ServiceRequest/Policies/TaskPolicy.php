@@ -3,7 +3,7 @@
 namespace Modules\ServiceRequest\Policies;
 
 use Modules\User\Models\User\User;
-use Modules\ServiceRequest\Models\ServiceRequest;
+use Modules\ServiceRequest\Models\Task;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -26,7 +26,7 @@ class TaskPolicy
      * Determine if the given action can be created by the user.
      *
      * @param  \Modules\User\Models\User\User  $user
-     * @param  \Modules\Contact\Models\Contact  $contact
+     * @param  \Modules\ServiceRequest\Models\Task  $task
      * 
      * @return bool
      */
@@ -47,7 +47,7 @@ class TaskPolicy
      */
     public function viewAny(User $user)
     {
-        if ($user->hasPrivileges(['list_all_contacts'])) {
+        if ($user->hasPrivileges(['list_all_tasks'])) {
             return true;
         } //End if
     } //Function ends
@@ -57,13 +57,13 @@ class TaskPolicy
      * Determine if the given action (view) can be executed by the user.
      *
      * @param  \Modules\User\Models\User\User  $user
-     * @param  \Modules\Contact\Models\Contact  $contact
+     * @param  \Modules\ServiceRequest\Models\Task  $task
      * 
      * @return bool
      */
-    public function view(User $user, Contact $contact)
+    public function view(User $user, Task $task)
     {
-        if ($user->hasPrivileges(['view_contact'])) {
+        if ($user->hasPrivileges(['view_task'])) {
             return true;
         } //End if
     } //Function ends
@@ -78,7 +78,7 @@ class TaskPolicy
      */
     public function create(User $user)
     {
-        if ($user->hasPrivileges(['add_contact'])) {
+        if ($user->hasPrivileges(['add_task'])) {
             return true;
         } //End if
     } //Function ends
@@ -88,17 +88,17 @@ class TaskPolicy
      * Determine if the given action (update) can be executed by the user.
      *
      * @param  \Modules\User\Models\User\User  $user
-     * @param  \Modules\Contact\Models\Contact  $contact
+     * @param  \Modules\ServiceRequest\Models\Task  $task
      * 
      * @return \Illuminate\Auth\Access\Response
      */
-    public function update(User $user, Contact $contact)
+    public function update(User $user, Task $task)
     {
-        if ($user->hasPrivileges(['edit_contact'])) {
+        if ($user->hasPrivileges(['edit_task'])) {
             if ($user->hasRoles(['organization_admin'])) {
-                return ($user->organization['id'] == $contact->organization['id']);
+                return ($user->organization['id'] == $task->organization['id']);
             } else {
-                return ($user['id'] == $contact->owner['id']);
+                return ($user['id'] == $task->owner['id']);
             } //End if            
         } else {
             return false;
@@ -110,17 +110,17 @@ class TaskPolicy
      * Determine if the given action (delete) can be executed by the user.
      *
      * @param  \Modules\User\Models\User\User  $user
-     * @param  \Modules\Contact\Models\Contact  $contact
+     * @param  \Modules\ServiceRequest\Models\Task  $task
      * 
      * @return bool
      */
-    public function delete(User $user, Contact $contact)
+    public function delete(User $user, Task $task)
     {
-        if ($user->hasPrivileges(['delete_contact'])) {
+        if ($user->hasPrivileges(['delete_task'])) {
             if ($user->hasRoles(['organization_admin'])) {
-                return ($user->organization['id'] == $contact->organization['id']);
+                return ($user->organization['id'] == $task->organization['id']);
             } else {
-                return ($user['id'] == $contact->owner['id']);
+                return ($user['id'] == $task->owner['id']);
             } //End if            
         } else {
             return false;

@@ -112,7 +112,7 @@ trait ContactRelationship
 	{
 		return $this->belongsTo(
 			config('crmomni-class.class_model.organization'),
-			'contact_id', 'id'
+			'org_id', 'id'
 		);
 	} //Function ends
 

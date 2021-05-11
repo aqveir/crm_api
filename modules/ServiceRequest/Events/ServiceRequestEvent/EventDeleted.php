@@ -1,10 +1,10 @@
 <?php
 
-namespace Modules\ServiceRequest\Events\Event;
+namespace Modules\ServiceRequest\Events\ServiceRequestEvent;
 
 use Illuminate\Queue\SerializesModels;
 
-class EventUpdated
+class EventDeleted
 {
     use SerializesModels;
 

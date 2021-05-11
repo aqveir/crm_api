@@ -27,5 +27,6 @@ z:\xampp\php\php artisan module:seed User
 z:\xampp\php\php artisan module:seed Preference
 z:\xampp\php\php artisan module:seed Subscription
 z:\xampp\php\php artisan module:seed Account
+z:\xampp\php\php artisan module:seed ServiceRequest
 rem z:\xampp\php\php artisan module:seed Wallet
 echo "Data created..."
