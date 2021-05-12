@@ -548,6 +548,28 @@ class LookupTableSeeder extends Seeder
                     ],
                 ]
             ],
+            [ //Service Request Source - Channel
+                'key' => 'service_request_source_channel',
+                'display_value' => 'Service Request - Source Channel',
+                'description' => 'List of channels that classify the Service Request sources.',
+                'values' => [
+                    [
+                        'key' => 'service_request_source_channel_contact',
+                        'display_value' => 'Contact',
+                        'is_editable' => false,
+                    ],
+                    [
+                        'key' => 'service_request_source_channel_user',
+                        'display_value' => 'User',
+                        'is_editable' => false,
+                    ],
+                    [
+                        'key' => 'service_request_source_channel_text',
+                        'display_value' => 'Text Data',
+                        'is_editable' => false,
+                    ],
+                ]
+            ],
             [ //Store Type
                 'key' => 'store_type',
                 'display_value' => 'Store Type',

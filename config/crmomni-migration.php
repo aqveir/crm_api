@@ -71,6 +71,7 @@ return [
         'service_request' => [
             'main' => env('TABLE_NAME_PREFIX', '') . 'service-requests',
             'source' => env('TABLE_NAME_PREFIX', '') . 'service-request_sources',
+            'source-data' => env('TABLE_NAME_PREFIX', '') . 'service-request_sources_data',
             'activity' => env('TABLE_NAME_PREFIX', '') . 'service-request_activities',
             'activity_participants' => env('TABLE_NAME_PREFIX', '') . 'service-request_activity_participants',
             'preference' => env('TABLE_NAME_PREFIX', '') . 'service-request_preferences',

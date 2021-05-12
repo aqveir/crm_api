@@ -462,7 +462,12 @@ return [
             'service_request' => [
                 // ServiceRequest Fetch request
                 'fetch' => [
-                    'validation_rules' => []
+                    'validation_rules' => [
+                        'category_key' => 'required|string',
+                        
+                        'page' => 'numeric',
+                        'size' => 'numeric'
+                    ]
                 ],
 
                 // ServiceRequest Create Request

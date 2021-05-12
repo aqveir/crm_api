@@ -118,8 +118,8 @@ trait ServiceRequestRelationship
 	{
 		return $this->belongsToMany(
 			ServiceRequestSource::class,
-			config('portiqo-crm.table_name.servicerequest_sources'),
-			'sr_id', 'source_id'
+			config('crmomni-migration.table_name.service_request.source-data'),
+			'servicerequest_id', 'source_id'
 		);
 	} //Function ends
 

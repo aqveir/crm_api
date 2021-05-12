@@ -34,7 +34,7 @@ class ServiceRequestRepository extends EloquentRepository implements ServiceRequ
      * 
      * @return $objReturnValue
      */
-    public function getFullData(int $orgId, string $orgHash=null, bool $isForcedDB=false, int $page=1, int $size=10)
+    public function getFullData(int $orgId, int $categoryId, bool $isForcedDB=false, int $page=1, int $size=10, int $accountId=0, int $ownerId=0)
     {
         $objReturnValue=null;
         try {
@@ -45,7 +45,19 @@ class ServiceRequestRepository extends EloquentRepository implements ServiceRequ
 
             // Get data from DB
             if (empty($objReturnValue)) {
-                $objReturnValue = $this->getFullDataFromDB($orgId, $page, $size);
+                $response = $this->getFullDataFromDB($orgId, $categoryId, $page, $size);
+
+                //Account Condition
+                if ($accountId>0) {
+                    $response->where('account_id', $accountId)->get();
+                } //End if
+
+                //Owner Condition
+                if ($ownerId>0) {
+                    $response->where('owner_id', $ownerId)->get();
+                } //End if
+
+                $objReturnValue = $response;
             } //End if
         } catch(Exception $e) {
             log::error($e);
@@ -61,12 +73,13 @@ class ServiceRequestRepository extends EloquentRepository implements ServiceRequ
      * 
      * @return $data
      */
-    private function getFullDataFromDB(int $orgId, int $page=1, int $size=10)
+    private function getFullDataFromDB(int $orgId, int $categoryId, int $page=1, int $size=10)
     {
         $objReturnValue=null;
         try {
             $data = $this->model
             ->where('org_id', $orgId)
+            ->where('category_id', $categoryId)
             ->orderBy('updated_at', 'desc')
             ->skip(($page - 1) * $size)
             ->take($size)

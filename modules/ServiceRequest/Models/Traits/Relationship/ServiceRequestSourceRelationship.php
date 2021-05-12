@@ -1,0 +1,23 @@
+<?php
+
+namespace Modules\ServiceRequest\Models\Traits\Relationship;
+
+
+/**
+ * Class ServiceRequestSource Relationship
+ */
+trait ServiceRequestSourceRelationship
+{
+    
+	/**
+	 * Show Channel
+	 */
+	public function channel()
+	{
+		return $this->hasOne(
+			config('crmomni-class.class_model.lookup_value'),
+			'id', 'channel_type_id'
+		);
+    } //Function ends
+    
+} //Trait ends

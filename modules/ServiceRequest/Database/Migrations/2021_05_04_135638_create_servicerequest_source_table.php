@@ -16,12 +16,23 @@ class CreateServicerequestSourceTable extends Migration
         Schema::create(config('crmomni-migration.table_name.service_request.source'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            //SR Preference Relationship Core References
+            //SR Source References
+            $table->unsignedBigInteger('org_id');
+            $table->unsignedBigInteger('channel_type_id');
+
+            $table->string('identifier');
+
+            $table->timestamps();
+        });
+
+
+        Schema::create(config('crmomni-migration.table_name.service_request.source-data'), function (Blueprint $table) {
+            $table->bigIncrements('id');
+
+            //SR Sources Mapper References
             $table->unsignedBigInteger('org_id');
             $table->unsignedBigInteger('servicerequest_id');
-
-            $table->string('source_key');
-            $table->string('display_value');
+            $table->unsignedBigInteger('source_id');
 
             $table->timestamps();
         });
@@ -35,5 +46,7 @@ class CreateServicerequestSourceTable extends Migration
     public function down()
     {
         Schema::dropIfExists(config('crmomni-migration.table_name.service_request.source'));
+
+        Schema::dropIfExists(config('crmomni-migration.table_name.service_request.source-data'));
     }
 }

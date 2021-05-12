@@ -115,6 +115,10 @@ class ServiceRequestService extends BaseService
             //Authenticated User
             $user = $this->getCurrentUser('backend');
 
+            //Get organization data
+            $organization = $this->getOrganizationByHash($orgHash);
+            if (empty($organization)) { throw new BadRequestHttpException(); } //End if
+
             //Forced params
             $isForcedFromDB = $this->isForced($payload);
 
@@ -122,9 +126,12 @@ class ServiceRequestService extends BaseService
             $page = ($payload->has('page'))?$payload['page']:1;
             $size = ($payload->has('size'))?$payload['size']:10;
 
+            //Get Category Lookup data
+            $typeCategoryId = $this->getLookupValueId($organization['id'], $payload, 'category_key');
+
             //Load Contact Data
             $objReturnValue = $this->servicerequestRepository
-                ->getFullData($user['org_id'], $orgHash, $isForcedFromDB, $page, $size);
+                ->getFullData($organization['id'], $typeCategoryId, $isForcedFromDB, $page, $size);
 
         } catch(Exception $e) {
             log::error($e);
