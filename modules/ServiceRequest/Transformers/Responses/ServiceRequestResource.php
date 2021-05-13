@@ -21,12 +21,13 @@ class ServiceRequestResource extends JsonResource
         $status = null;
 
         try {
-            $this->load('contact', 'account', 'type', 'status', 'stage', 'owner');
+            $this->load('contact', 'account', 'owner', 'type', 'status', 'stage', 'sources');
             $this->loadCount('tasks', 'events', 'notes', 'documents');
             
             $response = $this->only([
                 'hash', 'last_updated_at',
-                'contact', 'account', 'type', 'status', 'stage',
+                'contact', 'account', 'owner', 
+                'type', 'status', 'stage', 'sources',
                 'tasks_count', 'events_count', 'notes_count', 'documents_count'
             ]);
 

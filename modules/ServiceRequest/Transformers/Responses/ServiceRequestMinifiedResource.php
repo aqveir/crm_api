@@ -31,11 +31,14 @@ class ServiceRequestMinifiedResource extends ResourceCollection
         try {
             $objReturnValue = [];
             foreach ($this->collection as $data) {
-                $data->load('contact', 'category', 'type', 'status', 'stage', 'sources');
+                $data->load('contact', 'account', 'owner', 'category', 'type', 'status', 'stage', 'sources');
+                $this->loadCount('tasks', 'events', 'notes');
 
                 $response = $data->only([
                     'hash', 'last_updated_at', 'star_rating',
-                    'contact', 'category', 'type', 'status', 'stage', 'sources'
+                    'contact', 'account', 'owner', 
+                    'category', 'type', 'status', 'stage', 'sources',
+                    'tasks_count', 'events_count', 'notes_count',
                 ]);
 
                 array_push($objReturnValue, $response);
