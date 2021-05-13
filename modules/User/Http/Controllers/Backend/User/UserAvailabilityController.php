@@ -68,7 +68,7 @@ class UserAvailabilityController extends ApiBaseController
             $payload = collect($request);
 
             //Set Status
-            $data = $service->fetch($payload);
+            $data = $service->fetch($orgHash, $payload);
 
             //Send http status out
             return $this->response->success(compact('data'));
