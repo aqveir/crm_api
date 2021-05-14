@@ -27,7 +27,7 @@ class ServiceRequestRepository extends EloquentRepository implements ServiceRequ
 
 
     /**
-     * Get Full Customers Data for an Organization (Backend)
+     * Get Full Data for an Organization (Backend)
      * 
      * @param  int     $orgId
      * @param  string  $orgHash
@@ -67,7 +67,7 @@ class ServiceRequestRepository extends EloquentRepository implements ServiceRequ
 
 
     /**
-     * Get All ServiceRequest Data from DB for an Organization (Backend)
+     * Get All Data from DB for an Organization (Backend)
      * 
      * @param  int     $orgId
      * 

@@ -40,6 +40,7 @@ $api->version('v1', [
 
         // Task Endpoints
         $api->group(['prefix' => 'task'], function(Router $api) {
+            $api->post('fetch', 'Backend\\TaskController@index');
             $api->get('{id}', 'Backend\\TaskController@show');
             $api->post('/', 'Backend\\TaskController@create');
             $api->put('{id}', 'Backend\\TaskController@update');

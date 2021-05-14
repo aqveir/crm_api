@@ -83,7 +83,7 @@ class Task extends Model {
      *
      * @var array
      */
-    protected $with = ['priority', ];
+    protected $with = ['priority'];
     
     
     /**

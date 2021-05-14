@@ -82,7 +82,7 @@ class ServiceRequest extends Model {
      *
      * @var array
      */
-    protected $with = ['contact', 'owner', 'stage', 'status', 'type'];
+    protected $with = [];
     
     
     /**

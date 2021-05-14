@@ -92,6 +92,47 @@ class TaskService extends BaseService
 
 
     /**
+     * Get All Task Data for an Oraganization (Backend)
+     * 
+     * @para  \string $orgHash
+     * @param \Illuminate\Support\Collection $payload
+     * 
+     * @return object
+     */
+    public function getAll(string $orgHash, Collection $payload)
+    {
+        $objReturnValue=null;
+        try {
+            //Authenticated User
+            $user = $this->getCurrentUser('backend');
+
+            //Get organization data
+            $organization = $this->getOrganizationByHash($orgHash);
+            if (empty($organization)) { throw new BadRequestHttpException(); } //End if
+
+            //Forced params
+            $isForcedFromDB = $this->isForced($payload);
+
+            //Page number and size limit
+            $page = ($payload->has('page'))?$payload['page']:1;
+            $size = ($payload->has('size'))?$payload['size']:10;
+
+            //Get Activity Type: Task Lookup data
+            $typeTask = $this->lookupRepository->getLookUpByKey($organization['id'], 'service_request_activity_type_task');
+
+            //Load Contact Data
+            $objReturnValue = $this->taskRepository
+                ->getFullData($organization['id'], $typeTask['id'], $isForcedFromDB, $page, $size);
+
+        } catch(Exception $e) {
+            log::error($e);
+        }
+        return $objReturnValue;
+    } //Function ends
+
+
+
+    /**
      * Create Task
      * 
      * @param \Illuminate\Support\Collection $payload

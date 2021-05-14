@@ -581,6 +581,17 @@ return [
                     ]
                 ]
             ], // Account Controller end
+
+            // Task Controller Requests
+            'task' => [
+                // Task Fetch request
+                'fetch' => [
+                    'validation_rules' => [                       
+                        'page' => 'numeric',
+                        'size' => 'numeric'
+                    ]
+                ],
+            ]
         ],
 
         'frontend' => [

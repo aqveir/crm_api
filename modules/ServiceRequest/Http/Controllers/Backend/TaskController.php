@@ -9,6 +9,7 @@ use Modules\ServiceRequest\Models\Task;
 
 use Modules\Core\Http\Controllers\ApiBaseController;
 
+use Modules\ServiceRequest\Http\Requests\Backend\Task\FetchTaskRequest;
 use Modules\ServiceRequest\Http\Requests\Backend\Task\CreateTaskRequest;
 use Modules\ServiceRequest\Http\Requests\Backend\Task\UpdateTaskRequest;
 use Modules\ServiceRequest\Http\Requests\Backend\Task\DeleteTaskRequest;
@@ -44,7 +45,7 @@ class TaskController extends ApiBaseController
     /**
      * Get All Tasks for an Organization
      *
-     * @param \Modules\ServiceRequest\Http\Requests\Backend\ServiceRequest\GetServiceRequestRequest $request
+     * @param \Modules\ServiceRequest\Http\Requests\Backend\Task\FetchTaskRequest $request
      * @param \Modules\ServiceRequest\Services\TaskService $service
      * 
      * @return \Illuminate\Http\JsonResponse
@@ -59,7 +60,7 @@ class TaskController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function index(GetServiceRequestRequest $request, TaskService $service, string $subdomain)
+    public function index(FetchTaskRequest $request, TaskService $service, string $subdomain)
     {
         try {
             //Get Org Hash 
@@ -88,7 +89,7 @@ class TaskController extends ApiBaseController
     /**
      * Show Task By Identifier
      *
-     * @param \Modules\ServiceRequest\Http\Requests\Backend\ServiceRequest\GetServiceRequestRequest $request
+     * @param \Modules\ServiceRequest\Http\Requests\Backend\ServiceRequest\FetchTaskRequest $request
      * @param \Modules\ServiceRequest\Services\TaskService $service
      * 
      * @return \Illuminate\Http\JsonResponse
@@ -112,7 +113,7 @@ class TaskController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function show(GetServiceRequestRequest $request, TaskService $service, string $subdomain, ServiceRequest $servicerequest)
+    public function show(FetchTaskRequest $request, TaskService $service, string $subdomain, ServiceRequest $servicerequest)
     {   
         try {
             //Get Org Hash 

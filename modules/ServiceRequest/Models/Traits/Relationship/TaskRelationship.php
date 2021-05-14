@@ -76,7 +76,7 @@ trait TaskRelationship
 	{
 		return $this->hasOne(
 			config('crmomni-class.class_model.lookup_value'),
-			'id', 'status_id'
+			'id', 'subtype_id'
 		);
 	} //Function ends
 
