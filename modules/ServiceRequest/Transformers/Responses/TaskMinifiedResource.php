@@ -31,15 +31,15 @@ class TaskMinifiedResource extends ResourceCollection
         try {
             $objReturnValue = [];
             foreach ($this->collection as $data) {
-                $data->load('type', 'subtype', 'servicerequest', 'assignee', 'priority');
+                $data->load('type', 'subtype', 'servicerequest', 'assignee', 'priority', 'owner');
                 // $data->loadCount('tasks', 'events', 'notes');
 
                 $response = $data->only([
-                    'id', 'subject', 'description',
+                    'id', 'subject',
                     'scheduled_at', 'completed_at', 'last_updated_at',
                     'is_scheduled', 'is_completed',
 
-                    'type', 'subtype', 'servicerequest', 'assignee', 'priority'
+                    'type', 'subtype', 'servicerequest', 'assignee', 'priority', 'owner'
                 ]);
 
                 array_push($objReturnValue, $response);
