@@ -489,7 +489,7 @@ class LookupTableSeeder extends Seeder
                         'is_editable' => false,
                     ],
                     [
-                        'key' => 'service_request_activity_type_task_subtype_other',
+                        'key' => 'comm_type_other',
                         'display_value' => 'Other',
                         'is_editable' => false,
                     ],
