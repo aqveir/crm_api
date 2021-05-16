@@ -469,22 +469,22 @@ class LookupTableSeeder extends Seeder
                 ]
             ],
             [ //Service Request Activity - Task SubTypes
-                'key' => 'service_request_activity_type_task_subtype',
-                'display_value' => 'Service Request Task Activity Sub-Types',
-                'description' => 'List of Sub Types for the Task Activity of Service Request',
+                'key' => 'service_request_comm_type',
+                'display_value' => 'Service Request - Communication Types',
+                'description' => 'List of Sub Types for the Task Activity OR Communication Types of Service Request',
                 'values' => [
                     [
-                        'key' => 'service_request_activity_type_task_subtype_call',
+                        'key' => 'comm_type_call',
                         'display_value' => 'Call',
                         'is_editable' => false,
                     ],
                     [
-                        'key' => 'service_request_activity_type_task_subtype_sms',
+                        'key' => 'comm_type_sms',
                         'display_value' => 'SMS',
                         'is_editable' => false,
                     ],
                     [
-                        'key' => 'service_request_activity_type_task_subtype_email',
+                        'key' => 'comm_type_email',
                         'display_value' => 'Email',
                         'is_editable' => false,
                     ],
@@ -502,17 +502,17 @@ class LookupTableSeeder extends Seeder
                 'is_editable' => false,
                 'values' => [
                     [
-                        'key' => 'service_request_activity_type_task_priority_low',
+                        'key' => 'priority_low',
                         'display_value' => 'Low',
                         'is_editable' => false,
                     ],
                     [
-                        'key' => 'service_request_activity_type_task_priority_moderate',
+                        'key' => 'priority_moderate',
                         'display_value' => 'Moderate',
                         'is_editable' => false,
                     ],
                     [
-                        'key' => 'service_request_activity_type_task_priority_high',
+                        'key' => 'priority_high',
                         'display_value' => 'High',
                         'is_editable' => false,
                     ]
