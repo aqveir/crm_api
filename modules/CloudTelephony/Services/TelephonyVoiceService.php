@@ -77,7 +77,7 @@ class TelephonyVoiceService extends BaseService
 
 
     /**
-     * Make a Telephony Call
+     * Make a Telephony Call - Outgoing
      * 
      * @param \string $orgHash
      * @param \string $provider
@@ -85,7 +85,7 @@ class TelephonyVoiceService extends BaseService
      *
      * @return mixed
      */
-    public function makecall(string $orgHash, Collection $payload)
+    public function makeCall(string $orgHash, Collection $payload)
     {
         $objReturnValue=null; $data=[]; $response=null; $callbackUrl=null;
         try {
@@ -164,28 +164,20 @@ class TelephonyVoiceService extends BaseService
      * @param \string $orgHash
      * @param \string $provider
      * @param \Illuminate\Support\Collection $payload
+     * @param \string $ipAddress (optional)
      *
      * @return mixed
      */
-    public function callback(string $orgHash, string $provider, Collection $payload)
+    public function callback(string $orgHash, string $provider, Collection $payload, string $ipAddress=null)
     {
         $objReturnValue=null; $data=[];
         try {
             //Get organization data
             $organization = $this->getOrganizationByHash($orgHash);
-
-            // //Lookup data
-            // $entityType = $payload['entity_type'];
-            // $lookupEntity = $this->lookupRepository->getLookUpByKey($data['org_id'], $entityType);
-            // if (empty($lookupEntity))
-            // {
-            //     throw new Exception('Unable to resolve the entity type');
-            // } //End if
-            // $data['entity_type_id'] = $lookupEntity['id'];
                 
             //Raise events
-            event(new TelephonyCallCallbackReceivedEvent($organization, $payload));
-            $this->raiseEvent($organization, $payload);
+            //event(new TelephonyCallCallbackReceivedEvent($organization, $payload));
+            $this->raiseEvent($organization, $payload, $ipAddress);
 
             //Assign to the return value
             $objReturnValue = $payload;
@@ -211,10 +203,11 @@ class TelephonyVoiceService extends BaseService
      * @param \string $orgHash
      * @param \string $provider
      * @param \Illuminate\Support\Collection $payload
+     * @param \string $ipAddress (optional)
      *
      * @return mixed
      */
-    public function details(string $orgHash, string $provider, Collection $payload)
+    public function details(string $orgHash, string $provider, Collection $payload, string $ipAddress=null)
     {
         $objReturnValue=null;
         try {
@@ -222,7 +215,7 @@ class TelephonyVoiceService extends BaseService
             $organization = $this->getOrganizationByHash($orgHash);
 
             //Raise event
-            $this->raiseEvent($organization, $payload);               
+            $this->raiseEvent($organization, $payload, $ipAddress);               
 
             //Assign to the return value
             $objReturnValue = $payload;
@@ -250,26 +243,26 @@ class TelephonyVoiceService extends BaseService
      *
      * @return mixed
      */
-    private function raiseEvent(Organization $organization, Collection $payload)
+    private function raiseEvent(Organization $organization, Collection $payload, string $ipAddress=null)
     {
         $objReturnValue=null;
         try {
 
-            switch ($payload['status']) {
+            switch ($payload['call_status_key']) {
                 case 'telephony_call_status_type_queued':
                 case 'telephony_call_status_type_in_progress':
-                    event(new TelephonyCallInProgressEvent($organization, $payload));
+                    event(new TelephonyCallInProgressEvent($organization, $payload, $ipAddress));
                     break;
 
                 case 'telephony_call_status_type_completed':
-                    event(new TelephonyCallCompletedEvent($organization, $payload));
+                    event(new TelephonyCallCompletedEvent($organization, $payload, $ipAddress));
                     break;
 
                 case 'telephony_call_status_type_failed':
                 case 'telephony_call_status_type_busy':
                 case 'telephony_call_status_type_no_answer':
                 default:
-                    event(new TelephonyCallNotConnectedEvent($organization, $payload));
+                    event(new TelephonyCallNotConnectedEvent($organization, $payload, $ipAddress));
                     break;
             } //End switch
 

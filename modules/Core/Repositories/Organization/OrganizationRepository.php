@@ -56,8 +56,10 @@ class OrganizationRepository extends EloquentRepository implements OrganizationC
             } //End if
             $query = $query->load(['users', 'configurations']);
 
+            $objReturnValue = $query;
+
             //Transform data
-            $objReturnValue = new OrganizationResource($query);	
+            //$objReturnValue = new OrganizationResource($query);	
 		} catch(Exception $e) {
 			$objReturnValue=null;
 			throw $e;

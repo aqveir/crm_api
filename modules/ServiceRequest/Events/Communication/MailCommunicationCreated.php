@@ -1,11 +1,11 @@
 <?php
 
-namespace Modules\ServiceRequest\Events\Task;
+namespace Modules\ServiceRequest\Events\Communication;
 
 use Illuminate\Queue\SerializesModels;
-use Modules\ServiceRequest\Models\Task;
+use Modules\ServiceRequest\Models\Communication;
 
-class TaskDeletedEvent
+class MailCommunicationCreated
 {
     use SerializesModels;
 
@@ -14,18 +14,18 @@ class TaskDeletedEvent
      */
     public $model;
 
-    
+
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(Task $model)
+    public function __construct(Communication $model)
     {
         $this->model = $model;
     }
 
-
+    
     /**
      * Get the channels the event should be broadcast on.
      *

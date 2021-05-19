@@ -54,6 +54,7 @@ class CreateServicerequestActivityTable extends Migration
             $table->ipAddress('ip_address')->nullable();
         });
 
+        //Activity: Event Participants
         Schema::create(config('crmomni-migration.table_name.service_request.activity_participants'), function (Blueprint $table) {
             $table->bigIncrements('id');
 

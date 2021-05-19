@@ -139,18 +139,18 @@ class LookupTableSeeder extends Seeder
                     ],
                 ]
             ],
-            [ //Telephony Direction
-                'key' => 'telephony_direction',
-                'display_value' => 'Telephony Call Direction Type',
-                'description' => 'Status used to display Telephony Communication Direction',
+            [ //Communication Direction
+                'key' => 'communication_direction',
+                'display_value' => 'Communication Direction Type',
+                'description' => 'Status used to display Communication Direction',
                 'is_editable' => false,
                 'values' => [
                     [
-                        'key' => 'telephony_direction_incoming',
+                        'key' => 'communication_direction_incoming',
                         'display_value' => 'In-coming OR Inbound',
                     ],
                     [
-                        'key' => 'telephony_direction_outgoing',
+                        'key' => 'communication_direction_outgoing',
                         'display_value' => 'Out-going or Outbound',
                     ],
                 ]
@@ -207,7 +207,7 @@ class LookupTableSeeder extends Seeder
                     ],
                     [
                         'key' => 'account_type_customer',
-                        'display_value' => 'Customer',
+                        'display_value' => 'Contact',
                     ],
                     [
                         'key' => 'account_type_partner',
@@ -219,142 +219,142 @@ class LookupTableSeeder extends Seeder
                     ],
                 ]
             ],
-            [ //Customer Type
-                'key' => 'customer_type',
-                'display_value' => 'Customer Types',
-                'description' => 'Types of the Customer',
+            [ //Contact Type
+                'key' => 'contact_type',
+                'display_value' => 'Contact Types',
+                'description' => 'Types of the Contact',
                 'values' => [
                     [
-                        'key' => 'customer_type_default',
+                        'key' => 'contact_type_default',
                         'display_value' => 'Default OR Guest',
                         'is_editable' => false,
                     ],
                     [
-                        'key' => 'customer_type_retailer',
+                        'key' => 'contact_type_retailer',
                         'display_value' => 'Retailer',
                     ],
                     [
-                        'key' => 'customer_type_wholesaler',
+                        'key' => 'contact_type_wholesaler',
                         'display_value' => 'Wholesaler',
                     ],
                     [
-                        'key' => 'customer_type_distributor',
+                        'key' => 'contact_type_distributor',
                         'display_value' => 'Distributor',
                     ],
                     [
-                        'key' => 'customer_type_business',
+                        'key' => 'contact_type_business',
                         'display_value' => 'Business',
                     ]
                 ]
             ],
-            [ //Customer Gender
-                'key' => 'customer_gender',
+            [ //Contact Gender
+                'key' => 'contact_gender',
                 'display_value' => 'Gender',
-                'description' => 'Gender of the Customer',
+                'description' => 'Gender of the Contact',
                 'values' => [
                     [
-                        'key' => 'customer_gender_male',
+                        'key' => 'contact_gender_male',
                         'display_value' => 'Male',
                         'is_editable' => false,
                     ],
                     [
-                        'key' => 'customer_gender_female',
+                        'key' => 'contact_gender_female',
                         'display_value' => 'Female',
                         'is_editable' => false,
                     ],
                     [
-                        'key' => 'customer_gender_others',
+                        'key' => 'contact_gender_others',
                         'display_value' => 'Others',
                     ]
                 ]
             ],
-            [ //Customer Detail Type
-                'key' => 'customer_detail_type',
-                'display_value' => 'Customer Detail Types',
-                'description' => 'Types of the Customer Details',
+            [ //Contact Detail Type
+                'key' => 'contact_detail_type',
+                'display_value' => 'Contact Detail Types',
+                'description' => 'Types of the Contact Details',
                 'values' => [
                     [
-                        'key' => 'customer_detail_type_email',
+                        'key' => 'contact_detail_type_email',
                         'display_value' => 'Email',
                         'is_editable' => false,
                     ],
                     [
-                        'key' => 'customer_detail_type_phone',
+                        'key' => 'contact_detail_type_phone',
                         'display_value' => 'Phone',
                         'is_editable' => false,
                     ],
                     [
-                        'key' => 'customer_detail_type_socialhandle',
+                        'key' => 'contact_detail_type_socialhandle',
                         'display_value' => 'Social Site Handle',
                     ],
                     [
-                        'key' => 'customer_detail_type_webpage',
+                        'key' => 'contact_detail_type_webpage',
                         'display_value' => 'Web Page',
                     ],
                 ]
             ],
-            [ //Customer Detail SubTypes
-                'key' => 'customer_detail_type_sub',
-                'display_value' => 'Customer Detail SubTypes',
-                'description' => 'SubTypes of the Customer Details',
+            [ //Contact Detail SubTypes
+                'key' => 'contact_detail_subtype',
+                'display_value' => 'Contact Detail SubTypes',
+                'description' => 'SubTypes of the Contact Details',
                 'values' => [
                     [
-                        'key' => 'customer_detail_type_email_work',
+                        'key' => 'contact_detail_subtype_email_work',
                         'display_value' => 'Work',
                         'is_editable' => false,
                     ],
                     [
-                        'key' => 'customer_detail_type_email_personal',
+                        'key' => 'contact_detail_subtype_email_personal',
                         'display_value' => 'Personal',
                         'is_editable' => false,
                     ],
                     [
-                        'key' => 'customer_detail_type_phone_mobile',
+                        'key' => 'contact_detail_subtype_phone_mobile',
                         'display_value' => 'Phone-Mobile',
                         'is_editable' => false,
                     ],
                     [
-                        'key' => 'customer_detail_type_phone_landline',
+                        'key' => 'contact_detail_subtype_phone_landline',
                         'display_value' => 'Phone-Landline',
                     ],
                     [
-                        'key' => 'customer_detail_type_socialhandle_twitter',
+                        'key' => 'contact_detail_subtype_socialhandle_twitter',
                         'display_value' => 'Twitter',
                     ],
                     [
-                        'key' => 'customer_detail_type_socialhandle_facebook',
+                        'key' => 'contact_detail_subtype_socialhandle_facebook',
                         'display_value' => 'Facebook',
                     ],
                     [
-                        'key' => 'customer_detail_type_socialhandle_instagram',
+                        'key' => 'contact_detail_subtype_socialhandle_instagram',
                         'display_value' => 'Instagram',
                     ],
                     [
-                        'key' => 'customer_detail_type_webpage_website',
+                        'key' => 'contact_detail_subtype_webpage_website',
                         'display_value' => 'Website',
                     ],
                     [
-                        'key' => 'customer_detail_type_webpage_facebook_profile',
+                        'key' => 'contact_detail_subtype_webpage_facebook_profile',
                         'display_value' => 'Facebook Profile',
                     ],
                 ]
             ],
-            [ //Customer Address Type
-                'key' => 'customer_address_type',
-                'display_value' => 'Customer Address Types',
-                'description' => 'Types of the Customer Address',
+            [ //Contact Address Type
+                'key' => 'contact_address_type',
+                'display_value' => 'Contact Address Types',
+                'description' => 'Types of the Contact Address',
                 'values' => [
                     [
-                        'key' => 'customer_address_type_home',
+                        'key' => 'contact_address_type_home',
                         'display_value' => 'Home',
                         'is_editable' => false,
                     ],
                     [
-                        'key' => 'customer_address_type_work',
+                        'key' => 'contact_address_type_work',
                         'display_value' => 'Work',
                     ],
                     [
-                        'key' => 'customer_address_type_other',
+                        'key' => 'contact_address_type_other',
                         'display_value' => 'Other',
                     ],
                 ]
@@ -566,6 +566,29 @@ class LookupTableSeeder extends Seeder
                     [
                         'key' => 'service_request_source_channel_text',
                         'display_value' => 'Text Data',
+                        'is_editable' => false,
+                    ],
+                ]
+            ],
+            [ //Service Request - Communication Person Type
+                'key' => 'service_request_communication_person_type',
+                'display_value' => 'Service Request Event Activity - Participant Types',
+                'description' => 'List of Participant Types for the Communication of Service Request',
+                'is_editable' => false,
+                'values' => [
+                    [
+                        'key' => 'communication_person_type_system',
+                        'display_value' => 'System',
+                        'is_editable' => false,
+                    ],
+                    [
+                        'key' => 'communication_person_type_user',
+                        'display_value' => 'Internal User',
+                        'is_editable' => false,
+                    ],
+                    [
+                        'key' => 'communication_person_type_contact',
+                        'display_value' => 'Contact',
                         'is_editable' => false,
                     ],
                 ]

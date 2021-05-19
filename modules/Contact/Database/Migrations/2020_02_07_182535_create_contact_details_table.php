@@ -17,11 +17,11 @@ class CreateContactDetailsTable extends Migration
             $table->bigIncrements('id');
 
             $table->unsignedBigInteger('org_id');
-            $table->integer('contact_id');
+            $table->unsignedBigInteger('contact_id');
             $table->unsignedBigInteger('type_id')->nullable();
-            $table->integer('subtype_id')->nullable();
+            $table->unsignedBigInteger('subtype_id')->nullable();
 
-            $table->unsignedBigInteger('country_id')->nullable();
+            $table->string('phone_idd')->nullable();
             $table->string('identifier')->nullable();
             $table->string('proxy')->nullable();
 
@@ -32,7 +32,7 @@ class CreateContactDetailsTable extends Migration
             //Audit Log Fields
             $table->unsignedBigInteger('created_by')->default(0);
             $table->unsignedBigInteger('updated_by')->nullable();
-            $table->integer('deleted_by')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
             
             $table->timestamps();
             $table->softDeletes();

@@ -36,6 +36,11 @@ $api->version('v1', [
             $api->post('/', 'Backend\\ServiceRequestController@create');
             $api->put('{servicerequest}', 'Backend\\ServiceRequestController@update');
             $api->delete('{servicerequest}', 'Backend\\ServiceRequestController@destroy');
+
+            //Communication Endpoints
+            $api->get('{servicerequest}/call', 'Backend\\ServiceRequestCommunicationController@call');
+            $api->post('{servicerequest}/sms', 'Backend\\ServiceRequestCommunicationController@sms');
+            $api->post('{servicerequest}/mail', 'Backend\\ServiceRequestCommunicationController@mail');
         });
 
         // Task Endpoints

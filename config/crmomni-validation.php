@@ -591,7 +591,28 @@ return [
                         'size' => 'numeric'
                     ]
                 ],
-            ]
+            ],
+
+            // Communication Controller Requests
+            'communication' => [
+                'sms' => [
+                    'send' => [
+                        'validation_rules' => [
+                            'sms_message' => 'required|string|max:200',
+                        ]
+                    ],
+                ],
+
+                'mail' => [
+                    'send' => [
+                        'validation_rules' => [
+                            'email_cc' => 'sometimes|email|array', 
+                            'email_subject' => 'required|string|max:200', 
+                            'email_body' => 'required|string',
+                        ]
+                    ],
+                ],
+            ],
         ],
 
         'frontend' => [

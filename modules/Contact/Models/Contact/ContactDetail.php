@@ -31,7 +31,7 @@ class ContactDetail extends Model {
      */
     protected $fillable = [
         'org_id', 'contact_id', 'type_id', 'subtype_id', 
-        'country_id', 'identifier', 
+        'phone_idd', 'identifier', 
         'is_primary', 'is_verified',
     ];
 
@@ -43,7 +43,7 @@ class ContactDetail extends Model {
      */
     protected $hidden = [
         'org_id', 'contact_id', 'type_id', 'subtype_id',
-        'country_id', 'pivot', 'identifier', 'is_active',
+        'phone_idd', 'pivot', 'identifier', 'is_active',
         'created_by', 'updated_by', 'deleted_by',
         'created_at', 'updated_at', 'deleted_at'
     ]; 
@@ -72,7 +72,19 @@ class ContactDetail extends Model {
      * @var array
      */
     protected $with = ['type', 'subtype', 'country'];
-
+    
+    
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_primary' => 'boolean', 
+        'is_verified' => 'boolean',
+        'is_active' => 'boolean',
+    ];
+    
 
     /**
      * Default constructor

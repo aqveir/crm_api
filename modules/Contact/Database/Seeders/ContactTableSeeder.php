@@ -35,22 +35,22 @@ class ContactTableSeeder extends Seeder
                     
                         switch ($i) {
                             case 1: //Email
-                                $typeId=26;
-                                $subtypeId=$faker->numberBetween(30, 31);
+                                $typeId=42;
+                                $subtypeId=$faker->numberBetween(46, 47);
                                 $countryId=null;
                                 $identifier=$faker->unique()->safeEmail();
                                 break;
                     
                             case 2: //Phone
-                                $typeId=27;
-                                $subtypeId=$faker->numberBetween(32, 33);
-                                $countryId=1;
+                                $typeId=43;
+                                $subtypeId=$faker->numberBetween(48, 49);
+                                $countryId='91';
                                 $identifier=$faker->unique()->numberBetween(9800000000, 9900000000);
                                 break;
                     
                             case 3: //Social Handle
-                                $typeId=28;
-                                $subtypeId=$faker->numberBetween(34, 36);
+                                $typeId=44;
+                                $subtypeId=$faker->numberBetween(50, 54);
                                 $countryId=null;
                                 $identifier=$faker->url();
                                 break;
@@ -66,7 +66,7 @@ class ContactTableSeeder extends Seeder
                                 'contact_id' => $contact['id'],
                                 'type_id' => $typeId,
                                 'subtype_id' => $subtypeId,
-                                'country_id' => $countryId,
+                                'phone_idd' => $countryId,
                                 'identifier' => $identifier,
                             ])
                         );
@@ -165,22 +165,22 @@ class ContactTableSeeder extends Seeder
         $identifier='';
         switch ($index) {
             case 1: //Email
-                $typeId=36;
-                $subtypeId=$faker->numberBetween(40, 41);
+                $typeId=42;
+                $subtypeId=$faker->numberBetween(46, 47);
                 $countryId=null;
                 $identifier=$faker->unique()->safeEmail();
                 break;
 
             case 2: //Phone
-                $typeId=37;
-                $subtypeId=$faker->numberBetween(42, 43);
-                $countryId=1;
+                $typeId=43;
+                $subtypeId=$faker->numberBetween(48, 49);
+                $countryId='91';
                 $identifier=$faker->unique()->numberBetween(9800000000, 9900000000);
                 break;
 
             case 3: //Social Handle
-                $typeId=38;
-                $subtypeId=$faker->numberBetween(44, 46);
+                $typeId=44;
+                $subtypeId=$faker->numberBetween(50, 54);
                 $countryId=null;
                 $identifier=$faker->url();
                 break;
@@ -195,7 +195,7 @@ class ContactTableSeeder extends Seeder
             'contact_id' => $contact['id'],
             'type_id' => $typeId,
             'subtype_id' => $subtypeId,
-            'country_id' => $countryId,
+            'phone_idd' => $countryId,
             'identifier' => $identifier,
             'proxy' => $faker->numberBetween(100000, 999999),
             'is_primary' => $faker->numberBetween(0, 1),

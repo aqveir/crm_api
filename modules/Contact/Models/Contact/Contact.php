@@ -7,6 +7,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 
 use Modules\Core\Models\BaseModel as Model;
 use Modules\Contact\Models\Contact\Traits\Relationship\ContactRelationship;
+use Modules\Contact\Models\Contact\Traits\Action\ContactAction;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -29,7 +30,7 @@ class Contact extends Model implements
     CanResetPasswordContract
 {
     use Authenticatable, Authorizable, CanResetPassword;
-    use Notifiable, ContactRelationship;
+    use Notifiable, ContactRelationship, ContactAction;
     use SoftDeletes;
 
     /**
@@ -98,6 +99,26 @@ class Contact extends Model implements
      * @var array
      */
     protected $appends = ['name_initials', 'full_name', 'last_updated_at'];
+
+
+    /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = [];
+    
+    
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_primary' => 'boolean', 
+        'is_verified' => 'boolean',
+        'is_active' => 'boolean',
+    ];
 
 
     /**
@@ -251,6 +272,24 @@ class Contact extends Model implements
     public function getJWTCustomClaims()
     {
         return [];
+    } //Function ends
+
+
+    /**
+     * Route notifications for the mail channel.
+     *
+     * @param  \Illuminate\Notifications\Notification  $notification
+     * @return array|string
+     */
+    public function routeNotificationForMail($notification)
+    {
+        //Contact Full Name
+        $full_name = $this->getFullNameAttribute();
+
+        //Get Contact Details (Email - Active + Primary)
+        $contactDetail = $this->getContactDetailsForEmail(true, true);
+
+        return [$contactDetail['identifier'] => $full_name ];
     } //Function ends
 
 } //Class ends

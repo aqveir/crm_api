@@ -95,19 +95,12 @@ class TaskController extends ApiBaseController
      * @return \Illuminate\Http\JsonResponse
      *
      * @OA\Get(
-     *     path="/servicerequest/{srhash}/task/{id}",
+     *     path="/servicerequest/{hash}/task/{id}",
      *     tags={"Task"},
      *     operationId="api.backend.servicerequest.task.show",
      *     security={{"omni_token":{}}},
-     *     @OA\Parameter(
-     *          in="path", name="srhash", description="Enter service reqiest code or key", required=true,
-     *          @OA\Schema(type="string")
-     *     ),
-     *     @OA\Parameter(
-     *          in="path", name="id", description="Enter Task identifier code", required=true,
-     *          @OA\Schema(type="string")
-     *     ),
      *     @OA\Parameter(ref="#/components/parameters/hash_identifier"),
+     *     @OA\Parameter(ref="#/components/parameters/identifier"),
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
      *     @OA\Response(response=500, description="Internal Server Error")
@@ -198,6 +191,7 @@ class TaskController extends ApiBaseController
      *     operationId="api.backend.servicerequest.task.update",
      *     security={{"omni_token":{}}},
      *     @OA\Parameter(ref="#/components/parameters/hash_identifier"),
+     *     @OA\Parameter(ref="#/components/parameters/identifier"),
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
      *     @OA\Response(response=500, description="Internal Server Error")
@@ -243,6 +237,7 @@ class TaskController extends ApiBaseController
      *     operationId="api.backend.servicerequest.task.delete",
      *     security={{"omni_token":{}}},
      *     @OA\Parameter(ref="#/components/parameters/hash_identifier"),
+     *     @OA\Parameter(ref="#/components/parameters/identifier"),
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
      *     @OA\Response(response=500, description="Internal Server Error")

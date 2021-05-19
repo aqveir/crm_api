@@ -12,7 +12,7 @@ class TaskUpdatedEvent
     /**
      * Model variable
      */
-    public $task;
+    public $model;
 
 
     /**
@@ -20,9 +20,9 @@ class TaskUpdatedEvent
      *
      * @return void
      */
-    public function __construct(Task $task)
+    public function __construct(Task $model)
     {
-        $this->task = $task;
+        $this->model = $model;
     }
 
     

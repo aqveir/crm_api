@@ -14,7 +14,12 @@ use Modules\Boilerplate\Routing\Router;
 */
 $api = app(Router::class);
 
-$api->version('v1', function (Router $api) {
+$api->version('v1', [
+        'prefix' => 'api',
+        'middleware' => ['api'],
+        'namespace' => 'Modules\CloudTelephony\Http\Controllers',
+        'domain' => config('crmomni.settings.domain')
+    ], function (Router $api) {
 
     // Unauthenticated Endpoints for Telephony
     $api->group(['prefix' => 'telephony', 'middleware' => ['guest']], function(Router $api) {
@@ -22,14 +27,14 @@ $api->version('v1', function (Router $api) {
         // Exotel Endpoints
         $api->group(['prefix' => 'exotel'], function(Router $api) {
             //Exotels Calls
-            $api->any('call/callback','Modules\\CloudTelephony\\Http\\Controllers\\Exotel\\VoiceController@callback');
-            $api->any('call/passthru','Modules\\CloudTelephony\\Http\\Controllers\\Exotel\\VoiceController@passthru');
+            $api->any('callback','Exotel\\VoiceController@callback');
+            $api->any('passthru','Exotel\\VoiceController@passthru');
 
             //Exotels SMS
-            //$api->any('sms/callback','Modules\\CloudTelephony\\Http\\Controllers\\Exotel\\SmsController@callback');
+            //$api->any('sms/callback','Exotel\\SmsController@callback');
 
             //TODO: Delete this
-            $api->any('call/customer','Modules\\CloudTelephony\\Http\\Controllers\\Exotel\\VoiceController@test');
+            $api->any('call/customer','Exotel\\VoiceController@test');
         });
     });
 });

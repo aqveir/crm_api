@@ -12,7 +12,7 @@ class TaskCreatedEvent
     /**
      * Model variable
      */
-    public $task;
+    public $model;
 
 
     /**
@@ -26,9 +26,9 @@ class TaskCreatedEvent
      *
      * @return void
      */
-    public function __construct(Task $task, bool $isAutoCreated=false)
+    public function __construct(Task $model, bool $isAutoCreated=false)
     {
-        $this->task = $task;
+        $this->model = $model;
         $this->isAutoCreated = $isAutoCreated;
     }
 

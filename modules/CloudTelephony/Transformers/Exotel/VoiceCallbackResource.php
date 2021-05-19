@@ -62,11 +62,11 @@ class VoiceCallbackResource extends JsonResource
             } //End Switch
             
             $objReturnValue = [
-                'transaction_id'    => $this['CallSid'],
-                'direction'         => $callDirection,
-                'status'            => $callStatus,
-                'recording_url'     => $urlRecording,
-                'duration'          => $callDuration,
+                'transaction_uuid'  => $this['CallSid'],
+                'direction_key'     => $callDirection,
+                'call_status_key'   => $callStatus,
+                'call_recording_url'=> $urlRecording,
+                'call_duration'     => $callDuration,
                 'uri'               => isset($this['Uri'])?$this['Uri']:null,
                 'created_at'        => isset($this['DateCreated'])?$this['DateCreated']:null,
                 'updated_at'        => isset($this['DateUpdated'])?$this['DateUpdated']:null,

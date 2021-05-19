@@ -27,7 +27,7 @@ trait ContactDetailRelationship
 	{
 		return $this->hasOne(
 			config('crmomni-class.class_model.country'), 
-			'id', 'country_id'
+			'id', 'phone_idd'
 		);
 	}
 

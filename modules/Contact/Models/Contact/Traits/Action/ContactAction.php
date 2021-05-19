@@ -26,6 +26,54 @@ use App\Exceptions\DuplicateException;
  */
 trait ContactAction
 {
+    
+    /**
+     * Get Contact Details by Type Key
+     * 
+     * @param  \string  $typeKey
+     * @param  \array  $subtypeKeys
+     * @param  \mixed  $isActive
+     * @param  \mixed  $isPrimary
+     * @param  \mixed  $isVerified
+     */
+    public function getContactDetailsByKey(string $typeKey, array $subtypeKeys=null, $isActive=null, $isPrimary=null, $isVerified=null)
+    {
+		$objReturnValue=null;
+		try {
+            $query = $this->details()
+                ->with(['type', 'subtype'])
+                ->whereHas('type', function($inner_query) use ($typeKey) { $inner_query->where('key', $typeKey); })
+                ->whereHas('subtype', function($inner_query) use ($subtypeKeys) { $inner_query->whereIn('key', $subtypeKeys); });
+
+            //Active check
+            if (!empty($isActive)) { $query = $query->where('is_active', $isActive); }
+
+            //Primary check
+            if (!empty($isPrimary)) { $query = $query->where('is_primary', $isPrimary); }
+
+            //Verified check
+            if (!empty($isVerified)) { $query = $query->where('is_verified', $isVerified); }
+                
+            $query = $query->firstOrFail();
+
+            //Get the Contact Object
+            $objReturnValue = $query;
+		} catch (Exception $e) {
+			$objReturnValue=null;
+			throw $e;
+		} //Try-Catch ends
+		return $objReturnValue;
+    } //Function ends
+    public function getContactDetailsForEmail($isActive=null, $isPrimary=null) {
+        return $this->getContactDetailsByKey(
+            'contact_detail_type_email', 
+            ['contact_detail_subtype_email_work', 'contact_detail_subtype_email_personal'],
+            $isActive, $isPrimary
+        );
+    } //Function ends
+
+
+
 	/**
 	* Get Contact by Hash
 	*/
