@@ -17,7 +17,7 @@ use Modules\ServiceRequest\Events\Communication\MailCommunicationCreated;
 use Modules\ServiceRequest\Events\Communication\SMSCommunicationCreated;
 //use Modules\ServiceRequest\Events\Communication\EventDeleted;
 
-use Modules\ServiceRequest\Notifications\ServiceRequestCommunication;
+use Modules\ServiceRequest\Notifications\SendMailToContactNotification;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -97,6 +97,91 @@ class CommunicationService extends BaseService
 
 
     /**
+     * Send SMS to Contact
+     * 
+     * @param \string $orgHash
+     * @param \string $srHash
+     * @param \Illuminate\Support\Collection $payload
+     * @param \bool $isAutoCreated (optional)
+     *
+     * @return mixed
+     */
+    public function sendSMS(string $orgHash, string $srHash, Collection $payload, string $ipAddress=null)
+    {
+        $objReturnValue=null; $data=[];
+        try {
+            //Authenticated User
+            $user = $this->getCurrentUser('backend');
+
+            //Get organization data
+            $organization = $this->getOrganizationByHash($orgHash);
+            if (empty($organization)) { throw new BadRequestHttpException(); } //End if
+
+            //Get ServiceRequest details by identifier
+            $serviceRequest = $this->servicerequestRepository->getFullDataByIdentifier($organization['id'], $srHash);
+            if (empty($serviceRequest)) { throw new BadRequestHttpException(); } //End if
+
+            //Build data
+            $data = $payload->only(['sms_message'])->toArray();
+            $data = array_merge($data, [
+                'org_id' => $organization['id'],
+                'servicerequest_id' => $serviceRequest['id'] ,
+                'start_at' => Carbon::now()
+            ]);
+
+            //Lookup Communication Type data - Mail
+            $lookupCommType = $this->lookupRepository->getLookUpByKey($organization['id'], 'comm_type_sms');
+            if (empty($lookupCommType)) { throw new BadRequestHttpException(); } //End if
+            $data['activity_subtype_id'] = $lookupCommType['id'];
+
+            //Lookup Communication Direction data - Outward
+            $lookupCommDirection = $this->lookupRepository->getLookUpByKey($organization['id'], 'communication_direction_outgoing');
+            if (empty($lookupCommDirection)) { throw new BadRequestHttpException(); } //End if
+            $data['direction_id'] = $lookupCommDirection['id'];
+
+            //Lookup Communication From Person data
+            $lookupFromPersonType = $this->lookupRepository->getLookUpByKey($organization['id'], 'communication_person_type_user');
+            if (empty($lookupFromPersonType)) { throw new BadRequestHttpException(); } //End if
+            $data['from_person_type_id'] = $lookupFromPersonType['id'];
+            $data['from_person_identifier_id'] = $user['id'];
+            $data['sms_from'] = $user['phone'];
+
+            //Lookup Communication To Person data
+            $lookupToPersonType = $this->lookupRepository->getLookUpByKey($organization['id'], 'communication_person_type_contact');
+            if (empty($lookupToPersonType)) { throw new BadRequestHttpException(); } //End if
+            $data['to_person_type_id'] = $lookupToPersonType['id'];
+            $data['to_person_identifier_id'] = $serviceRequest->contact['id'];
+            $data['sms_to'] = $serviceRequest->contact['full_name'];
+
+            //Create Communication - Mail
+            $comm = $this->communicationRepository->create($data, $user['id'], $ipAddress);
+            $comm->makeVisible(['sms_message']);
+
+            //Send Mail
+            //Notification::send($serviceRequest->contact, new SendMailToContactNotification($comm, $user));
+                
+            //Raise event: Mail Communication Created
+            event(new SMSCommunicationCreated($comm));                
+
+            //Assign to the return value
+            $objReturnValue = $comm;
+
+        } catch(AccessDeniedHttpException $e) {
+            log::error('CommunicationService:sendMail:AccessDeniedHttpException:' . $e->getMessage());
+            throw new AccessDeniedHttpException($e->getMessage());
+        } catch(BadRequestHttpException $e) {
+            log::error('CommunicationService:sendMail:BadRequestHttpException:' . $e->getMessage());
+            throw new BadRequestHttpException($e->getMessage());
+        } catch(Exception $e) {
+            log::error('CommunicationService:sendMail:Exception:' . $e->getMessage());
+            throw new HttpException(500);
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends
+
+
+    /**
      * Send Mail to Contact
      * 
      * @param \string $orgHash
@@ -107,6 +192,91 @@ class CommunicationService extends BaseService
      * @return mixed
      */
     public function sendMail(string $orgHash, string $srHash, Collection $payload, string $ipAddress=null)
+    {
+        $objReturnValue=null; $data=[];
+        try {
+            //Authenticated User
+            $user = $this->getCurrentUser('backend');
+
+            //Get organization data
+            $organization = $this->getOrganizationByHash($orgHash);
+            if (empty($organization)) { throw new BadRequestHttpException(); } //End if
+
+            //Get ServiceRequest details by identifier
+            $serviceRequest = $this->servicerequestRepository->getFullDataByIdentifier($organization['id'], $srHash);
+            if (empty($serviceRequest)) { throw new BadRequestHttpException(); } //End if
+
+            //Build data
+            $data = $payload->only(['email_subject', 'email_body'])->toArray();
+            $data = array_merge($data, [
+                'org_id' => $organization['id'],
+                'servicerequest_id' => $serviceRequest['id'] ,
+                'start_at' => Carbon::now()
+            ]);
+
+            //Lookup Communication Type data - Mail
+            $lookupCommType = $this->lookupRepository->getLookUpByKey($organization['id'], 'comm_type_email');
+            if (empty($lookupCommType)) { throw new BadRequestHttpException(); } //End if
+            $data['activity_subtype_id'] = $lookupCommType['id'];
+
+            //Lookup Communication Direction data - Outward
+            $lookupCommDirection = $this->lookupRepository->getLookUpByKey($organization['id'], 'communication_direction_outgoing');
+            if (empty($lookupCommDirection)) { throw new BadRequestHttpException(); } //End if
+            $data['direction_id'] = $lookupCommDirection['id'];
+
+            //Lookup Communication From Person data
+            $lookupFromPersonType = $this->lookupRepository->getLookUpByKey($organization['id'], 'communication_person_type_user');
+            if (empty($lookupFromPersonType)) { throw new BadRequestHttpException(); } //End if
+            $data['from_person_type_id'] = $lookupFromPersonType['id'];
+            $data['from_person_identifier_id'] = $user['id'];
+            $data['email_from'] = $user['full_name'];
+
+            //Lookup Communication To Person data
+            $lookupToPersonType = $this->lookupRepository->getLookUpByKey($organization['id'], 'communication_person_type_contact');
+            if (empty($lookupToPersonType)) { throw new BadRequestHttpException(); } //End if
+            $data['to_person_type_id'] = $lookupToPersonType['id'];
+            $data['to_person_identifier_id'] = $serviceRequest->contact['id'];
+            $data['email_to'] = $serviceRequest->contact['full_name'];
+
+            //Create Communication - Mail
+            $comm = $this->communicationRepository->create($data, $user['id'], $ipAddress);
+            $comm->makeVisible(['email_subject', 'email_body']);
+
+            //Send Mail
+            Notification::send($serviceRequest->contact, new SendMailToContactNotification($comm, $user));
+                
+            //Raise event: Mail Communication Created
+            event(new MailCommunicationCreated($comm));                
+
+            //Assign to the return value
+            $objReturnValue = $comm;
+
+        } catch(AccessDeniedHttpException $e) {
+            log::error('CommunicationService:sendMail:AccessDeniedHttpException:' . $e->getMessage());
+            throw new AccessDeniedHttpException($e->getMessage());
+        } catch(BadRequestHttpException $e) {
+            log::error('CommunicationService:sendMail:BadRequestHttpException:' . $e->getMessage());
+            throw new BadRequestHttpException($e->getMessage());
+        } catch(Exception $e) {
+            log::error('CommunicationService:sendMail:Exception:' . $e->getMessage());
+            throw new HttpException(500);
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends
+
+
+    /**
+     * Receive Mail from Contact
+     * 
+     * @param \string $orgHash
+     * @param \string $srHash
+     * @param \Illuminate\Support\Collection $payload
+     * @param \bool $isAutoCreated (optional)
+     *
+     * @return mixed
+     */
+    public function receiveMail(string $orgHash, string $srHash, Collection $payload, string $ipAddress=null)
     {
         $objReturnValue=null; $data=[];
         try {
@@ -156,7 +326,7 @@ class CommunicationService extends BaseService
             $comm->makeVisible(['email_subject', 'email_body']);
 
             //Send Mail
-            Notification::send($serviceRequest->contact, new ServiceRequestCommunication($comm, $user));
+            Notification::send($serviceRequest->contact, new SendMailToContactNotification($comm, $user));
                 
             //Raise event: Mail Communication Created
             event(new MailCommunicationCreated($comm));                
@@ -183,11 +353,11 @@ class CommunicationService extends BaseService
      * Update ServiceRequestEvent
      * 
      * @param \Illuminate\Support\Collection $payload
-     * @param \int $eventId
+     * @param \int $commId
      *
      * @return mixed
      */
-    public function update(string $orgHash, string $srHash, Collection $payload, int $eventId, string $ipAddress=null)
+    public function update(string $orgHash, string $srHash, Collection $payload, int $commId, string $ipAddress=null)
     {
         $objReturnValue=null;
         try {
@@ -197,6 +367,10 @@ class CommunicationService extends BaseService
             //Get organization data
             $organization = $this->getOrganizationByHash($orgHash);
             if (empty($organization)) { throw new BadRequestHttpException(); } //End if
+
+            //Get ServiceRequest details by identifier
+            $serviceRequest = $this->servicerequestRepository->getFullDataByIdentifier($organization['id'], $srHash);
+            if (empty($serviceRequest)) { throw new BadRequestHttpException(); } //End if
 
             //Build data
             $data = $payload->only(['subject', 'description', 'scheduled_at', 'completed_at'])->toArray();

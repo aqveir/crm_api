@@ -30,7 +30,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
-class ServiceRequestCommunicationController extends ApiBaseController
+class CommunicationController extends ApiBaseController
 {
 
     /**
@@ -173,8 +173,8 @@ class ServiceRequestCommunicationController extends ApiBaseController
             //Create payload
             $payload = collect($request);
 
-            //Create customer
-            $data = $service->create($orgHash, $payload, $ipAddress);
+            //Call service to send sms
+            $data = $service->sendSMS($orgHash, $servicerequest['hash'], $payload, $ipAddress);
 
             //Send http status out
             return $this->response->success(compact('data'));
@@ -218,7 +218,7 @@ class ServiceRequestCommunicationController extends ApiBaseController
             //Create payload
             $payload = collect($request);
 
-            //Create customer
+            //Call service to send mail
             $data = $service->sendMail($orgHash, $servicerequest['hash'], $payload, $ipAddress);
 
             //Send http status out

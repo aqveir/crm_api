@@ -7,7 +7,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class ServiceRequestCommunication extends Notification
+class SendMailToContactNotification extends Notification
 {
     use Queueable;
 

@@ -38,9 +38,9 @@ $api->version('v1', [
             $api->delete('{servicerequest}', 'Backend\\ServiceRequestController@destroy');
 
             //Communication Endpoints
-            $api->get('{servicerequest}/call', 'Backend\\ServiceRequestCommunicationController@call');
-            $api->post('{servicerequest}/sms', 'Backend\\ServiceRequestCommunicationController@sms');
-            $api->post('{servicerequest}/mail', 'Backend\\ServiceRequestCommunicationController@mail');
+            $api->get('{servicerequest}/call', 'Backend\\CommunicationController@call');
+            $api->post('{servicerequest}/sms', 'Backend\\CommunicationController@sms');
+            $api->post('{servicerequest}/mail', 'Backend\\CommunicationController@mail');
         });
 
         // Task Endpoints
@@ -110,10 +110,10 @@ $api->version('v1', [
         //     $api->get('{hash}/event/{id}', 'Modules\\ServiceRequest\\Http\\Controllers\\Backend\\ServiceRequestEventController@show');
     
         //     //Communication Events
-        //     $api->post('{hash}/communication', 'Modules\\ServiceRequest\\Http\\Controllers\\Backend\\ServiceRequestCommunicationController@create');
-        //     $api->put('{hash}/communication/{id}', 'Modules\\ServiceRequest\\Http\\Controllers\\Backend\\ServiceRequestCommunicationController@update');
-        //     $api->get('{hash}/communication', 'Modules\\ServiceRequest\\Http\\Controllers\\Backend\\ServiceRequestCommunicationController@index');
-        //     $api->get('{hash}/communication/{id}', 'Modules\\ServiceRequest\\Http\\Controllers\\Backend\\ServiceRequestCommunicationController@show');
+        //     $api->post('{hash}/communication', 'Modules\\ServiceRequest\\Http\\Controllers\\Backend\\CommunicationController@create');
+        //     $api->put('{hash}/communication/{id}', 'Modules\\ServiceRequest\\Http\\Controllers\\Backend\\CommunicationController@update');
+        //     $api->get('{hash}/communication', 'Modules\\ServiceRequest\\Http\\Controllers\\Backend\\CommunicationController@index');
+        //     $api->get('{hash}/communication/{id}', 'Modules\\ServiceRequest\\Http\\Controllers\\Backend\\CommunicationController@show');
     
         //     //Preferences
         //     $api->post('{hash}/preferences', 'Modules\\ServiceRequest\\Http\\Controllers\\Backend\\ServiceRequestPreferencesController@save');
