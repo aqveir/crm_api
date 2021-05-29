@@ -76,7 +76,7 @@ class UserController extends ApiBaseController
             //Transform data
             $data = new UserMinifiedResource(collect($response));
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -125,7 +125,7 @@ class UserController extends ApiBaseController
             //Transform data
             $data = new UserResource($result);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -169,7 +169,7 @@ class UserController extends ApiBaseController
             //Transform data
             $data = new UserResource($result);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -220,7 +220,7 @@ class UserController extends ApiBaseController
 
             $data = $userService->exists($orgHash, $payload);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
         } catch(AccessDeniedHttpException $e) {
             return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
@@ -263,7 +263,7 @@ class UserController extends ApiBaseController
             //Create customer
             $data = $userService->create($orgHash, $payload, $ipAddress);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -308,7 +308,7 @@ class UserController extends ApiBaseController
             //Logout customer
             $data = $service->update($orgHash, $payload, $user['hash'], $ipAddress);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -353,7 +353,7 @@ class UserController extends ApiBaseController
             //Logout customer
             $data = $service->delete($orgHash, $payload, $user['hash'], $ipAddress);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {

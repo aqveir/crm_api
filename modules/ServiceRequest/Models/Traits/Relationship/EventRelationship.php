@@ -2,7 +2,8 @@
 
 namespace Modules\ServiceRequest\Models\Traits\Relationship;
 
-use Modules\ServiceRequest\Models\EventParticipant as ServiceRequestEventParticipant;
+use Log;
+use Modules\ServiceRequest\Models\ActivityParticipant;
 
 
 /**
@@ -66,7 +67,7 @@ trait EventRelationship
 	{
 		return $this->hasOne(
 			config('crmomni-class.class_model.lookup_value'),
-			'id', 'status_id'
+			'id', 'subtype_id'
 		);
 	} //Function ends
 
@@ -77,9 +78,9 @@ trait EventRelationship
 	public function participants()
 	{
 		return $this->hasMany(
-			ServiceRequestEventParticipant::class, 
+			ActivityParticipant::class, 
 			'activity_id', 'id'
 		);
-	}
+	} //Function ends
 
 } //Trait ends

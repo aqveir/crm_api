@@ -593,8 +593,27 @@ return [
                 ],
             ],
 
+            // Event Controller Requests
+            'event' => [
+                // Event Fetch request
+                'fetch' => [
+                    'validation_rules' => [                       
+                        'page' => 'numeric',
+                        'size' => 'numeric'
+                    ]
+                ],
+            ],
+
             // Communication Controller Requests
             'communication' => [
+                'call' => [
+                    // Outgoing Call or Make Call
+                    'outgoing' => [
+                        'validation_rules' => [
+                        ]
+                    ]
+                ],
+
                 'sms' => [
                     'send' => [
                         'validation_rules' => [

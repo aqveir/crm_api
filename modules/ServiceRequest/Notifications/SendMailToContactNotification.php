@@ -14,13 +14,13 @@ class SendMailToContactNotification extends Notification
     /**
      * Model variable
      */
-    public $communication;
+    private $communication;
 
 
     /**
      * Sender (User) object
      */
-    public $sender;
+    private $sender;
 
 
     /**

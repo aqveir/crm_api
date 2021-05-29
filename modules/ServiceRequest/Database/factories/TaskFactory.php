@@ -22,23 +22,28 @@ $factory->define(Task::class, function (Faker $faker) {
 
     $isCompleted = false;
     
-    $dtScheduledDate = $faker->dateTimeBetween($startDate = '-30 days', $endDate = '30 days', $timezone = null);
+    $dtStartAtDate = $faker->dateTimeBetween($startDate = '-30 days', $endDate = '30 days', $timezone = null);
+    $dtEndAtDate = $faker->dateTimeBetween($startDate = $dtStartAtDate, $endDate = '30 days', $timezone = null);
+    $statusId = $faker->numberBetween(78, 82);
 
-    if (Carbon::parse($dtScheduledDate) < Carbon::now()) {
+    if (Carbon::parse($dtEndAtDate) < Carbon::now()) {
         $isCompleted = $faker->boolean;
     } //End if
 
     $dtCompletedDate = null;
     if ($isCompleted) {
-        $dtCompletedDate = $faker->dateTimeBetween($startDate = $dtScheduledDate, $endDate = 'now', $timezone = null);
+        $statusId = 80;
+        $dtCompletedDate = $faker->dateTimeBetween($startDate = $dtEndAtDate, $endDate = 'now', $timezone = null);
     } //End if
     
     return [
         'subject' => $faker->word,
         'description' => $faker->text($maxNbChars = 100),
-        'is_scheduled' => 1,
-        'scheduled_at' => $dtScheduledDate,
-        'is_completed' => $isCompleted,
-        'completed_at' => $dtCompletedDate
+        'start_at' => $dtStartAtDate,
+        'end_at' => $dtEndAtDate,
+        'completed_at' => $dtCompletedDate,
+        'status_id' => $statusId,
+        'subtype_id' => $faker->numberBetween(71, 74),
+        'priority_id' => $faker->numberBetween(75, 77),
     ];
 });

@@ -67,7 +67,7 @@ class ContactController extends ApiBaseController
             //Get data for the contact
             $data = $service->getContactFullData($orgHash, $request);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
         } catch(AccessDeniedHttpException $e) {
             return $this->response->fail([], Response::HTTP_UNAUTHORIZED);

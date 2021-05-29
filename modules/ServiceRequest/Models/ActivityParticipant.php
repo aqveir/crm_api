@@ -4,11 +4,17 @@ namespace Modules\ServiceRequest\Models;
 
 use Modules\Core\Models\BaseModel as Model;
 
+use Modules\ServiceRequest\Models\Traits\Action\ActivityParticipantAction;
+use Modules\ServiceRequest\Models\Traits\Relationship\ActivityParticipantRelationship;
+
 
 /**
- * Eloquent Model for EventParticipant
+ * Eloquent Model for ActivityParticipant
  */
-class EventParticipant extends Model {
+class ActivityParticipant extends Model {
+
+    use ActivityParticipantAction, ActivityParticipantRelationship;
+    
 
     /**
      * The database table used by the model.
@@ -24,7 +30,7 @@ class EventParticipant extends Model {
      * @var array
      */
     protected $fillable = [
-        'activity_id','participant_type_id','participant_id'
+        'activity_id', 'participant_type_id', 'participant_id'
     ];
 
 
@@ -44,9 +50,9 @@ class EventParticipant extends Model {
      * @var array
      */
     protected $hidden = [
-        'id', 'activity_id','participant_type_id','participant_id',
+        'id', 'activity_id','participant_type_id','participant_id', 'completed_at',
         'created_by', 'updated_by', 'deleted_by',
-        'created_at', 'updated_at', 'deleted_at'
+        'created_at', 'updated_at', 'deleted_at', 'last_updated_at'
     ]; 
 
 
@@ -55,7 +61,7 @@ class EventParticipant extends Model {
      * @var array
      */
     protected $dates = [
-        'created_at', 'updated_at', 'deleted_at'
+        'created_at', 'updated_at', 'deleted_at', 'last_updated_at'
     ];
 
 
@@ -64,7 +70,7 @@ class EventParticipant extends Model {
      *
      * @var array
      */
-    protected $appends = ['last_updated_at'];
+    protected $appends = ['last_updated_at', 'participant'];
 
 
     /**
@@ -72,7 +78,7 @@ class EventParticipant extends Model {
      *
      * @var array
      */
-    protected $with = [];
+    protected $with = ['type'];
     
     
     /**

@@ -63,7 +63,7 @@ class SubscriptionController extends ApiBaseController
             //Fetch Subscriptions
             $data = $service->index($payload);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -106,7 +106,7 @@ class SubscriptionController extends ApiBaseController
             //Create subscription data
             $data = $service->create($payload);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -150,7 +150,7 @@ class SubscriptionController extends ApiBaseController
             //Update subscription
             $data = $service->update($payload, $subscription['id']);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -192,7 +192,7 @@ class SubscriptionController extends ApiBaseController
             //Delete subscription
             $data = $service->delete($payload, $subscription['id']);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {

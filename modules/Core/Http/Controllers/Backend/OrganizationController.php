@@ -76,7 +76,7 @@ class OrganizationController extends ApiBaseController
             //Fetch all organizations data
             $data = $organizationService->getAll($payload, true);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -124,7 +124,7 @@ class OrganizationController extends ApiBaseController
             //Fetch organization data
             $data = $organizationService->getData($payload, $organization['hash'], true);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -170,7 +170,7 @@ class OrganizationController extends ApiBaseController
             //Fetch all organizations data
             $data = $organizationService->create($payload, $ipAddress);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -224,7 +224,7 @@ class OrganizationController extends ApiBaseController
             //Update organizations data
             $data = $organizationService->update($orgHash, $payload, $file, $ipAddress);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -272,7 +272,7 @@ class OrganizationController extends ApiBaseController
             //Update organizations data
             $data = $organizationService->delete($orgHash, $payload, $ipAddress);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {

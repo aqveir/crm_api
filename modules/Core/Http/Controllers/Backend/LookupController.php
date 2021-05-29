@@ -15,6 +15,8 @@ use Modules\Core\Http\Requests\Backend\Lookup\UpdateLookupRequest;
 use Modules\Core\Models\Lookup\Lookup;
 use Modules\Core\Services\Lookup\LookupService;
 
+use Modules\Core\Transformers\Response\LookupMinifiedResource;
+
 use Symfony\Component\HttpFoundation\Response;
 
 use Exception;
@@ -71,9 +73,12 @@ class LookupController extends ApiBaseController
             $payload = collect($request);
 
             //Fetch all lookup data
-            $data = $service->index($orgHash, $payload);
+            $result = $service->index($orgHash, $payload);
 
-            //Send http status out
+            //Transform data
+            $data = new LookupMinifiedResource($result);
+
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -116,7 +121,7 @@ class LookupController extends ApiBaseController
             //Fetch all lookup data
             $data = $service->show($orgHash, $payload, $lookup['key']);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -159,7 +164,7 @@ class LookupController extends ApiBaseController
             //Fetch all lookup data
             $data = $service->show($orgHash, $payload, $key);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -203,7 +208,7 @@ class LookupController extends ApiBaseController
             //Fetch all lookup data
             $data = $service->show($orgHash, $payload, $key);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -247,7 +252,7 @@ class LookupController extends ApiBaseController
             //Fetch all lookup data
             $data = $service->show($orgHash, $payload, $key);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {

@@ -2,6 +2,7 @@
 
 namespace Modules\ServiceRequest\Models\Traits\Relationship;
 
+use Modules\ServiceRequest\Models\ActivityParticipant;
 
 /**
  * Class Task Relationship
@@ -51,8 +52,8 @@ trait TaskRelationship
 	public function assignee()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.user.main'),
-			'id', 'user_id'
+			ActivityParticipant::class, 
+			'activity_id', 'id'
 		);
     } //Function ends
 
@@ -89,6 +90,18 @@ trait TaskRelationship
 		return $this->hasOne(
 			config('crmomni-class.class_model.lookup_value'),
 			'id', 'priority_id'
+		);
+	} //Function ends
+
+
+    /**
+     * Task Status
+     */
+	public function status()
+	{
+		return $this->hasOne(
+			config('crmomni-class.class_model.lookup_value'),
+			'id', 'status_id'
 		);
 	} //Function ends
 

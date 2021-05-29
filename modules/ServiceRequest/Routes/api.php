@@ -46,14 +46,15 @@ $api->version('v1', [
         // Task Endpoints
         $api->group(['prefix' => 'task'], function(Router $api) {
             $api->post('fetch', 'Backend\\TaskController@index');
-            $api->get('{id}', 'Backend\\TaskController@show');
+            $api->get('{task}', 'Backend\\TaskController@show');
             $api->post('/', 'Backend\\TaskController@create');
-            $api->put('{id}', 'Backend\\TaskController@update');
-            $api->delete('{id}', 'Backend\\TaskController@destroy');
+            $api->put('{task}', 'Backend\\TaskController@update');
+            $api->delete('{task}', 'Backend\\TaskController@destroy');
         });
 
         // Event Endpoints
         $api->group(['prefix' => 'event'], function(Router $api) {
+            $api->post('fetch', 'Backend\\EventController@index');
             $api->get('{id}', 'Backend\\EventController@show');
             $api->post('/', 'Backend\\EventController@create');
             $api->put('{id}', 'Backend\\EventController@update');

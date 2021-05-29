@@ -30,19 +30,16 @@ class CreateServicerequestActivityTable extends Migration
             //SR Activity Common Attributes
             $table->string('subject', 255);
             $table->string('description', 4000)->nullable();
+            $table->timestamp('start_at')->nullable();
+            $table->timestamp('end_at')->nullable();            
 
             //Task Specific Attributes
-            $table->boolean('is_scheduled')->default(true);
-            $table->boolean('is_completed')->default(false);
-            $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('priority_id')->nullable();
-            $table->timestamp('scheduled_at')->nullable();
+            $table->unsignedBigInteger('status_id')->nullable();
             $table->timestamp('completed_at')->nullable();
 
             //Event Specific Attributes
             $table->string('location', 4000)->nullable();
-            $table->timestamp('start_at')->nullable();
-            $table->timestamp('end_at')->nullable();
 
             //Audit Log Fields
             $table->unsignedBigInteger('created_by')->default(0);
@@ -61,6 +58,9 @@ class CreateServicerequestActivityTable extends Migration
             $table->unsignedBigInteger('activity_id');
             $table->unsignedBigInteger('participant_type_id');
             $table->unsignedBigInteger('participant_id');
+
+            //Task Specific Attributes
+            $table->timestamp('completed_at')->nullable();
 
             $table->timestamps();
         });

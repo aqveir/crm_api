@@ -75,7 +75,7 @@ class PrivilegeController extends ApiBaseController
             //Fetch all privilege data
             $data = $service->index($orgHash, $payload);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -120,7 +120,7 @@ class PrivilegeController extends ApiBaseController
             //Fetch all privilege data
             $data = $service->show($orgHash, $payload, $privilege['key']);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -163,7 +163,7 @@ class PrivilegeController extends ApiBaseController
             //Create privilege data
             $data = $service->create($orgHash, $payload);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -208,7 +208,7 @@ class PrivilegeController extends ApiBaseController
             //Update privilege data
             $data = $service->update($orgHash, $payload, $privilege['key']);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -253,7 +253,7 @@ class PrivilegeController extends ApiBaseController
             //Delete privilege data by key
             $data = $service->delete($orgHash, $payload, $privilege['key']);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {

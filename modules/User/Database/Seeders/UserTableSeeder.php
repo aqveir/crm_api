@@ -28,5 +28,25 @@ class UserTableSeeder extends Seeder
             'role_id' => 1,
             'description' => 'System Generated'
         ]);
+
+        //Log environment
+        echo('Environment -> ' . \App::environment());
+
+        //Environemnt check
+        if (\App::environment() !== 'production') {
+
+            //Faker instance
+            $faker = \Faker\Factory::create();
+
+            factory(\Modules\User\Models\User\User::class, 200)->create()
+            ->each(function($user) use ($faker) {
+
+                $data = \Modules\User\Models\User\UserRole::create([
+                    'user_id' => $user['id'],
+                    'role_id' => $faker->numberBetween(2, 4),
+                    'description' => 'System Generated'
+                ]);
+            });
+        } //End if
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Modules\ServiceRequest\Database\Seeders;
 
+use Log;
 use Modules\ServiceRequest\Models\ServiceRequest;
 use Modules\Core\Models\Lookup\LookupValue;
 
@@ -33,6 +34,18 @@ class TaskDataSeeder extends Seeder
                 //Organization
                 $organization = $servicerequest->organization;
 
+                //Owner-Assignee
+                $assigneeId = $servicerequest->owner['id'];
+
+                //Org Users
+                $users = $organization->users;
+                if (!empty($users)) {
+                    $randId = rand(0, (count($users)-1));
+
+                    //Owner-Assignee
+                    $assigneeId = $users[$randId]['id'];
+                } //End if                
+
                 //Get Lookup Value for Task
                 $lookupvalueTaskId = 69;
                 $lookupvalueTask = LookupValue::where('key', 'service_request_activity_type_task')
@@ -53,10 +66,17 @@ class TaskDataSeeder extends Seeder
                         'org_id' => $servicerequest['org_id'],
                         'servicerequest_id' => $servicerequest['id'],
                         'type_id' => $lookupvalueTaskId,
-                        'subtype_id' => $faker->numberBetween(71, 74),
-                        'user_id' => 1,
-                        'priority_id' => $faker->numberBetween(75, 77),
+                        'created_by' => $servicerequest->owner['id']
                     ]);
+
+                    //Add Participant (Owner)
+                    $account->assignee()->save(factory(\Modules\ServiceRequest\Models\ActivityParticipant::class)
+                        ->make([
+                            'activity_id' => $account['id'],
+                            'participant_type_id' => 90,
+                            'participant_id' => $assigneeId
+                        ])
+                    );
                 } //Loop ends
                
             } //Loop ends

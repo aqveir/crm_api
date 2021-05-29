@@ -65,7 +65,7 @@ class NoteController extends ApiBaseController
             //Create customer
             $data = $service->create($payload);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -109,7 +109,7 @@ class NoteController extends ApiBaseController
             //Update note
             $data = $service->update($payload, $note['id']);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -151,7 +151,7 @@ class NoteController extends ApiBaseController
             //Delete note
             $data = $service->delete($payload, $note['id']);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {

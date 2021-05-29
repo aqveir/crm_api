@@ -101,7 +101,7 @@ class ContactSocialAuthController extends ApiBaseController
             if ($payload) {
                 $data = $customerAuthService->socialAuthenticate($orgHash, $social, collect($payload), $ipAddress);
 
-                //Send http status out
+                //Send response data
                 return $this->response->success(compact('data'));
             } else {
                 throw new AccessDeniedHttpException();

@@ -26,7 +26,6 @@ class TaskRepository extends EloquentRepository implements TaskContract
     }
 
 
-
     /**
      * Get Full Data for an Organization (Backend)
      * 
@@ -82,7 +81,7 @@ class TaskRepository extends EloquentRepository implements TaskContract
             ->where('org_id', $orgId)
             ->where('type_id', $typeId)
             ->orderBy('updated_at', 'desc')
-            ->orderBy('is_completed')
+            ->orderBy('end_at')
             ->skip(($page - 1) * $size)
             ->take($size)
             ->get();
@@ -96,15 +95,16 @@ class TaskRepository extends EloquentRepository implements TaskContract
 
 
     /**
-     * Get Full Data for a ServiceRequest by Identifier
+     * Get Full Data by Identifier
      * 
      * @param  int     $orgId
-     * @param  string  $hash
+     * @param  int     $typeId
+     * @param  int     $id
      * @param  bool    $isForcedDB
      * 
      * @return $objReturnValue
      */
-    public function getFullDataByIdentifier(int $orgId, string $hash, bool $isForcedDB=false)
+    public function getFullDataByIdentifier(int $orgId, int $typeId, int $id, bool $isForcedDB=false)
     {
         $objReturnValue=null;
         try {
@@ -113,7 +113,7 @@ class TaskRepository extends EloquentRepository implements TaskContract
             } //End if
 
             if (empty($objReturnValue)) {
-                $objReturnValue = $this->getFullDataByIdentifierFromDB($orgId, $hash);
+                $objReturnValue = $this->getFullDataByIdentifierFromDB($orgId, $typeId, $id);
             } //End if
         } catch(Exception $e) {
             log::error($e);
@@ -123,20 +123,22 @@ class TaskRepository extends EloquentRepository implements TaskContract
 
 
     /**
-     * Get Full Data by DB for a ServiceRequest by Identifier
+     * Get Full Data from DB by Identifier
      * 
      * @param  int     $orgId
-     * @param  string  $hash
+     * @param  int     $typeId
+     * @param  int     $id
      * 
      * @return $data
      */
-    private function getFullDataByIdentifierFromDB(int $orgId, string $hash)
+    private function getFullDataByIdentifierFromDB(int $orgId, int $typeId, int $id)
     {
         $objReturnValue=null;
         try {
             $data = $this->model
                 ->where('org_id', $orgId)
-                ->where('hash', $hash)
+                ->where('id', $id)
+                ->where('type_id', $typeId)
                 ->first();
 
             $objReturnValue = $data;

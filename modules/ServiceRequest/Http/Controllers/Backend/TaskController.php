@@ -50,8 +50,8 @@ class TaskController extends ApiBaseController
      * 
      * @return \Illuminate\Http\JsonResponse
      *
-     * @OA\Get(
-     *     path="/task",
+     * @OA\Post(
+     *     path="/task/fetch",
      *     tags={"Task"},
      *     operationId="api.backend.servicerequest.task.index",
      *     security={{"omni_token":{}}},
@@ -69,13 +69,13 @@ class TaskController extends ApiBaseController
             //Create payload
             $payload = collect($request);
 
-            //Fetch Users data for Organization
+            //Fetch data
             $response = $service->getAll($orgHash, $payload);
 
             //Transform data
             $data = new TaskMinifiedResource(collect($response));
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -89,13 +89,13 @@ class TaskController extends ApiBaseController
     /**
      * Show Task By Identifier
      *
-     * @param \Modules\ServiceRequest\Http\Requests\Backend\ServiceRequest\FetchTaskRequest $request
+     * @param \Modules\ServiceRequest\Http\Requests\Backend\Task\FetchTaskRequest $request
      * @param \Modules\ServiceRequest\Services\TaskService $service
      * 
      * @return \Illuminate\Http\JsonResponse
      *
      * @OA\Get(
-     *     path="/servicerequest/{hash}/task/{id}",
+     *     path="/task/{id}",
      *     tags={"Task"},
      *     operationId="api.backend.servicerequest.task.show",
      *     security={{"omni_token":{}}},
@@ -106,7 +106,7 @@ class TaskController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function show(FetchTaskRequest $request, TaskService $service, string $subdomain, ServiceRequest $servicerequest)
+    public function show(FetchTaskRequest $request, TaskService $service, string $subdomain, Task $task)
     {   
         try {
             //Get Org Hash 
@@ -115,13 +115,13 @@ class TaskController extends ApiBaseController
             //Create payload
             $payload = collect($request);
 
-            //Fetch ServiceRequest record
-            $result = $service->show($orgHash, $payload, $servicerequest['hash']);
+            //Fetch Task record
+            $result = $service->show($orgHash, $payload, $task['id']);
 
             //Transform data
-            $data = new ServiceRequestResource($result);
+            $data = new TaskResource($result);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -166,7 +166,7 @@ class TaskController extends ApiBaseController
             //Create customer
             $data = $service->create($orgHash, $payload, $ipAddress);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -212,7 +212,7 @@ class TaskController extends ApiBaseController
             //Logout customer
             $data = $service->update($orgHash, $payload, $servicerequest['hash'], $ipAddress);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -258,7 +258,7 @@ class TaskController extends ApiBaseController
             //Logout customer
             $data = $service->delete($orgHash, $payload, $servicerequest['hash'], $ipAddress);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {

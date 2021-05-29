@@ -504,20 +504,61 @@ class LookupTableSeeder extends Seeder
                     [
                         'key' => 'priority_low',
                         'display_value' => 'Low',
+                        'order' => 1,
                         'is_editable' => false,
                     ],
                     [
-                        'key' => 'priority_moderate',
-                        'display_value' => 'Moderate',
+                        'key' => 'priority_normal',
+                        'display_value' => 'Normal',
+                        'order' => 2,
                         'is_editable' => false,
                     ],
                     [
                         'key' => 'priority_high',
                         'display_value' => 'High',
+                        'order' => 3,
                         'is_editable' => false,
                     ]
                 ]
             ],
+            [ //Service Request Activity - Task Status
+                'key' => 'service_request_activity_type_task_status',
+                'display_value' => 'Task Status',
+                'description' => 'List of status for the Task Activity of Service Request',
+                'is_editable' => false,
+                'values' => [
+                    [
+                        'key' => 'task_status_not_started',
+                        'display_value' => 'Not Started',
+                        'order' => 1,
+                        'is_editable' => false,
+                    ],
+                    [
+                        'key' => 'task_status_started',
+                        'display_value' => 'In Progress',
+                        'order' => 2,
+                        'is_editable' => false,
+                    ],
+                    [
+                        'key' => 'task_status_completed',
+                        'display_value' => 'Completed',
+                        'order' => 3,
+                        'is_editable' => false,
+                    ],
+                    [
+                        'key' => 'task_status_awaiting_inputs',
+                        'display_value' => 'Hold / Awaiting Inputs',
+                        'order' => 4,
+                        'is_editable' => false,
+                    ],
+                    [
+                        'key' => 'task_status_deferred',
+                        'display_value' => 'Deferred',
+                        'order' => 5,
+                        'is_editable' => false,
+                    ],
+                ]
+            ],       
             [ //Service Request Activity - Event SubTypes
                 'key' => 'service_request_activity_type_event_subtype',
                 'display_value' => 'Service Request Event Activity Sub-Types',
@@ -530,19 +571,19 @@ class LookupTableSeeder extends Seeder
                     ],
                 ]
             ],
-            [ //Service Request Activity - Event Participants Type
-                'key' => 'service_request_activity_type_event_participant_type',
-                'display_value' => 'Service Request Event Activity - Participant Types',
-                'description' => 'List of Participant Types for the Event Activity of Service Request',
+            [ //Service Request Activity - Participants Type
+                'key' => 'service_request_activity_participant_type',
+                'display_value' => 'Service Request Activity - Participant Types',
+                'description' => 'List of Participant Types for the Activities of Service Request',
                 'is_editable' => false,
                 'values' => [
                     [
-                        'key' => 'service_request_activity_type_event_participant_type_user',
+                        'key' => 'service_request_activity_participant_type_user',
                         'display_value' => 'Internal User',
                         'is_editable' => false,
                     ],
                     [
-                        'key' => 'service_request_activity_type_event_participant_type_contact',
+                        'key' => 'service_request_activity_participant_type_contact',
                         'display_value' => 'Contact',
                         'is_editable' => false,
                     ],

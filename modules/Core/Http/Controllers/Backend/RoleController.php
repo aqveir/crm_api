@@ -74,7 +74,7 @@ class RoleController extends ApiBaseController
             //Fetch all role data
             $data = $service->index($orgHash, $payload);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -120,7 +120,7 @@ class RoleController extends ApiBaseController
             //Fetch all role data
             $data = $service->show($orgHash, $payload, $role['key']);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -163,7 +163,7 @@ class RoleController extends ApiBaseController
             //Fetch all role data
             $data = $service->create($orgHash, $payload);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -207,7 +207,7 @@ class RoleController extends ApiBaseController
             //Fetch all role data
             $data = $service->update($orgHash, $payload, $role['key']);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -251,7 +251,7 @@ class RoleController extends ApiBaseController
             //Fetch all role data
             $data = $service->delete($orgHash, $payload, $role['key']);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {

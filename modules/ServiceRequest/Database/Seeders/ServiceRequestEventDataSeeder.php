@@ -64,23 +64,23 @@ class ServiceRequestEventDataSeeder extends Seeder
                         'servicerequest_id' => $servicerequest['id'],
                         'type_id' => $lookupvalueEventId,
                         'subtype_id' => 78,
-                        'user_id' => $ownerId,
+                        'created_by' => $ownerId,
                     ]);
 
                     //Add Participant (Owner)
-                    $event->participants()->save(factory(\Modules\ServiceRequest\Models\EventParticipant::class)
+                    $event->participants()->save(factory(\Modules\ServiceRequest\Models\ActivityParticipant::class)
                         ->make([
                             'activity_id' => $event['id'],
-                            'participant_type_id' => 79,
+                            'participant_type_id' => 90,
                             'participant_id' => $ownerId
                         ])
                     );
 
                     //Add Participant (Contact)
-                    $event->participants()->save(factory(\Modules\ServiceRequest\Models\EventParticipant::class)
+                    $event->participants()->save(factory(\Modules\ServiceRequest\Models\ActivityParticipant::class)
                         ->make([
                             'activity_id' => $event['id'],
-                            'participant_type_id' => 80,
+                            'participant_type_id' => 91,
                             'participant_id' => $contact['id']
                         ])
                     );

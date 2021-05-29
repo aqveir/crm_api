@@ -81,7 +81,7 @@ class UserAuthController extends ApiBaseController
             //Authenticate Customer
             $data = $userAuthService->authenticate($orgHash, $credentials, $ipAddress);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
         } catch(AccessDeniedHttpException $e) {
             return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
@@ -122,7 +122,7 @@ class UserAuthController extends ApiBaseController
             //Logout customer
             $data = $userAuthService->logout($payload, $ipAddress);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -168,7 +168,7 @@ class UserAuthController extends ApiBaseController
             //Forgot password request
             $data = $userAuthService->sendForgotPasswordResetLink($orgHash, $payload, $ipAddress);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -194,7 +194,7 @@ class UserAuthController extends ApiBaseController
             //Reset Password request
             $data = $userAuthService->resetPassword($orgHash, $payload, $ipAddress);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -246,7 +246,7 @@ class UserAuthController extends ApiBaseController
             //Verify User Email
             $data = $userService->verify($orgHash, $payload, $token);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
         } catch(AccessDeniedHttpException $e) {
             return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
@@ -290,7 +290,7 @@ class UserAuthController extends ApiBaseController
 
             $data = $userService->activate($payload, $token);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
         } catch(AccessDeniedHttpException $e) {
             return $this->response->fail([], Response::HTTP_UNAUTHORIZED);

@@ -9,6 +9,7 @@ use Modules\ServiceRequest\Models\Event;
 
 use Modules\Core\Http\Controllers\ApiBaseController;
 
+use Modules\ServiceRequest\Http\Requests\Backend\Event\FetchEventRequest;
 use Modules\ServiceRequest\Http\Requests\Backend\Event\CreateEventRequest;
 use Modules\ServiceRequest\Http\Requests\Backend\Event\UpdateEventRequest;
 use Modules\ServiceRequest\Http\Requests\Backend\Event\DeleteEventRequest;
@@ -44,13 +45,14 @@ class EventController extends ApiBaseController
     /**
      * Get All Events for an Organization
      *
-     * @param \Modules\ServiceRequest\Http\Requests\Backend\ServiceRequest\GetServiceRequestRequest $request
+     * @param \Modules\ServiceRequest\Http\Requests\Backend\Event\FetchEventRequest $request
      * @param \Modules\ServiceRequest\Services\EventService $service
+     * @param \string $subdomain
      * 
      * @return \Illuminate\Http\JsonResponse
      *
-     * @OA\Get(
-     *     path="/event",
+     * @OA\Post(
+     *     path="/event/fetch",
      *     tags={"Event"},
      *     operationId="api.backend.servicerequest.event.index",
      *     security={{"omni_token":{}}},
@@ -59,7 +61,7 @@ class EventController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function index(GetServiceRequestRequest $request, EventService $service, string $subdomain)
+    public function index(FetchEventRequest $request, EventService $service, string $subdomain)
     {
         try {
             //Get Org Hash 
@@ -68,13 +70,13 @@ class EventController extends ApiBaseController
             //Create payload
             $payload = collect($request);
 
-            //Fetch Users data for Organization
+            //Fetch data
             $response = $service->getAll($orgHash, $payload);
 
             //Transform data
             $data = new EventMinifiedResource(collect($response));
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -94,7 +96,7 @@ class EventController extends ApiBaseController
      * @return \Illuminate\Http\JsonResponse
      *
      * @OA\Get(
-     *     path="/servicerequest/{srhash}/event/{id}",
+     *     path="/event/{id}",
      *     tags={"Event"},
      *     operationId="api.backend.servicerequest.event.show",
      *     security={{"omni_token":{}}},
@@ -112,7 +114,7 @@ class EventController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function show(GetServiceRequestRequest $request, EventService $service, string $subdomain, ServiceRequest $servicerequest)
+    public function show(FetchEventRequest $request, EventService $service, string $subdomain, ServiceRequest $servicerequest)
     {   
         try {
             //Get Org Hash 
@@ -121,13 +123,13 @@ class EventController extends ApiBaseController
             //Create payload
             $payload = collect($request);
 
-            //Fetch ServiceRequest record
+            //Fetch individual record
             $result = $service->show($orgHash, $payload, $servicerequest['hash']);
 
             //Transform data
             $data = new ServiceRequestResource($result);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -172,7 +174,7 @@ class EventController extends ApiBaseController
             //Create customer
             $data = $service->create($orgHash, $payload, $ipAddress);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -217,7 +219,7 @@ class EventController extends ApiBaseController
             //Logout customer
             $data = $service->update($orgHash, $payload, $servicerequest['hash'], $ipAddress);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -262,7 +264,7 @@ class EventController extends ApiBaseController
             //Logout customer
             $data = $service->delete($orgHash, $payload, $servicerequest['hash'], $ipAddress);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {

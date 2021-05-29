@@ -62,7 +62,7 @@ abstract class BaseVoiceController extends ApiBaseController
             //Process telephony callback
             $data = $service->callback($orgHash, $provider, $payload, $ipAddress);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {

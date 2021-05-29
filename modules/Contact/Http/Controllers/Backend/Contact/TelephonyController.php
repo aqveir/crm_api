@@ -100,7 +100,7 @@ class TelephonyController extends ApiBaseController
             //Call the 
             $data = $service->makeCall($orgHash, $hash, $proxy, $payload, $ipAddress);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
         } catch(AccessDeniedHttpException $e) {
             return $this->response->fail([], Response::HTTP_UNAUTHORIZED);

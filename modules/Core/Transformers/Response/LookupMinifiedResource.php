@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\ServiceRequest\Transformers\Responses;
+namespace Modules\Core\Transformers\Response;
 
 use Illuminate\Http\Resources\Json\Responses;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -8,7 +8,7 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 use Exception;
 
-class TaskMinifiedResource extends ResourceCollection
+class LookupMinifiedResource extends ResourceCollection
 {
 
     public function __construct($collection)
@@ -31,18 +31,12 @@ class TaskMinifiedResource extends ResourceCollection
         try {
             $objReturnValue = [];
             foreach ($this->collection as $data) {
-                $data->load('type', 'subtype', 'servicerequest', 'assignee', 'priority', 'status', 'owner');
-
-                $assignee = $data['assignee'];
-                if (!empty($assignee)) {
-                    $assignee->makeVisible(['completed_at']);
-                } //End if                    
+                $values = $data->values->makeVisible(['is_active', 'is_editable']);
 
                 $response = $data->only([
-                    'id', 'subject',
-                    'start_at', 'end_at', 'completed_at', 'last_updated_at',
-                    'type', 'subtype', 'servicerequest', 'priority', 'status', 'owner', 'assignee'
+                    'key', 'display_value', 'is_editable',
                 ]);
+                $response['values'] = $values;
 
                 array_push($objReturnValue, $response);
             } //Loop ends

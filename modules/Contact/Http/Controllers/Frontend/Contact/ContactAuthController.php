@@ -81,7 +81,7 @@ class ContactAuthController extends ApiBaseController
 
             $data = $service->validateContactExists($orgHash, $payload);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
         } catch(Exception $e) {
 
@@ -138,7 +138,7 @@ class ContactAuthController extends ApiBaseController
         //Register Contact
         $data = $customerAuthService->register($orgHash, $payload, $ipAddress);
 
-        //Send http status out
+        //Send response data
         return $this->response->success(compact('data'));
     } //Function ends
 
@@ -148,7 +148,7 @@ class ContactAuthController extends ApiBaseController
         try {
             $data = $customerAuthService->activate($request, $hash);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
         } catch(AccessDeniedHttpException $e) {
             return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
@@ -207,7 +207,7 @@ class ContactAuthController extends ApiBaseController
             //Authenticate Contact
             $data = $customerAuthService->authenticate($orgHash, $credentials, $ipAddress);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
         } catch(AccessDeniedHttpException $e) {
             return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
@@ -254,7 +254,7 @@ class ContactAuthController extends ApiBaseController
             //Logout contact
             $data = $customerAuthService->logout($orgHash, $payload, $ipAddress);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {

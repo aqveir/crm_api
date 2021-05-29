@@ -39,7 +39,7 @@ class SaveContactController extends ApiBaseController
             //Authenticate
             $data=$service->getContactData($request, 1);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
         } catch(Exception $e) {
 

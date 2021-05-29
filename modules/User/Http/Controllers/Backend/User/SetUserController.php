@@ -66,7 +66,7 @@ class SetUserController extends ApiBaseController
             //Create customer
             $data = $userService->register($payload, $ipAddress);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {

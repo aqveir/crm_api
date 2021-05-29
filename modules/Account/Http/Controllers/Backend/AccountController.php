@@ -73,7 +73,7 @@ class AccountController extends ApiBaseController
             //Transform data
             $data = new AccountMinifiedResource(collect($response));
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -118,7 +118,7 @@ class AccountController extends ApiBaseController
             //Transform data
             $data = new AccountResource($result);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -162,7 +162,7 @@ class AccountController extends ApiBaseController
             //Transform data
             $data = new AccountResource($result);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -209,7 +209,7 @@ class AccountController extends ApiBaseController
             //Transform data
             $data = new AccountResource($result);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -251,7 +251,7 @@ class AccountController extends ApiBaseController
             //Delete account
             $data = $service->delete($orgHash, $payload, $accounts['id']);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {

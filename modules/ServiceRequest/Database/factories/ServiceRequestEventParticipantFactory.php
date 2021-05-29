@@ -2,7 +2,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use Modules\ServiceRequest\Models\EventParticipant as ServiceRequestEventParticipant;
+use Modules\ServiceRequest\Models\ActivityParticipant;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 
@@ -18,7 +18,7 @@ use Illuminate\Support\Str;
 |
 */
 
-$factory->define(ServiceRequestEventParticipant::class, function (Faker $faker) {
+$factory->define(ActivityParticipant::class, function (Faker $faker) {
     return [
     ];
 });

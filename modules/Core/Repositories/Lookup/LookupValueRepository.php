@@ -114,6 +114,7 @@ class LookupValueRepository extends EloquentRepository
             $query = $this->model;
             $query = $query->where('org_id', $orgId);
             $query = $query->orWhere('org_id', 0);
+            $query = $query->orderBy('order', 'asc');
             $query = $query->orderBy('id', 'asc');
             $query = $query->get();
 

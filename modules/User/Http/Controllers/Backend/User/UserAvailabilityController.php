@@ -70,7 +70,7 @@ class UserAvailabilityController extends ApiBaseController
             //Set Status
             $data = $service->fetch($orgHash, $payload);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(NotFoundHttpException $e) {
@@ -113,7 +113,7 @@ class UserAvailabilityController extends ApiBaseController
             //Set Status
             $data = $service->fetch($orgHash, $payload, $hash);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(NotFoundHttpException $e) {
@@ -163,7 +163,7 @@ class UserAvailabilityController extends ApiBaseController
             //Set Status
             $data = $service->update($payload, $key, $ipAddress);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(ExistingDataException $e) {
@@ -218,7 +218,7 @@ class UserAvailabilityController extends ApiBaseController
             $outputFormat = ($request->has('output'))?$request['output']:'hash,first_name,full_name,phone';
             $phoneFormat = ($request->has('phoneformat'))?$request['phoneformat']:'0[number]';
 
-            //Send http status out
+            //Send response data
             switch ($request->headers->get('CONTENT-TYPE')) {
                 case 'application/json':
                     $data = new UserStatusJsonResponseResource(collect($response), $outputFormat, $phoneFormat);

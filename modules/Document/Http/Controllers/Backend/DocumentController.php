@@ -121,7 +121,7 @@ class DocumentController extends ApiBaseController
             //Create document
             $data = $service->create($orgHash, $payload, $request->file('document'));
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -163,7 +163,7 @@ class DocumentController extends ApiBaseController
             //Update document
             $data = $service->update($orgHash, $payload, $document['id']);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -205,7 +205,7 @@ class DocumentController extends ApiBaseController
             //Delete document
             $data = $service->delete($orgHash, $payload, $document['id']);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {

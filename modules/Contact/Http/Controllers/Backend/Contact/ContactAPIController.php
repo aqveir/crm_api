@@ -68,7 +68,7 @@ class ContactAPIController extends ApiBaseController
             //Get collection of all contacts
             $data=$service->getFullData($orgHash, $payload);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
         } catch (AccessDeniedHttpException $e) {
             throw new AccessDeniedHttpException($e->getMessage());
@@ -114,7 +114,7 @@ class ContactAPIController extends ApiBaseController
             //Get data of the Contact
             $data=$service->getFullDataByHash($orgHash, $payload, $contact['hash']);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
         } catch (AccessDeniedHttpException $e) {
             throw new AccessDeniedHttpException($e->getMessage());

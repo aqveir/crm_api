@@ -78,7 +78,7 @@ class CommunicationController extends ApiBaseController
             //Transform data
             $data = new CommunicationMinifiedResource(collect($response));
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -131,7 +131,7 @@ class CommunicationController extends ApiBaseController
             //Transform data
             $data = new ServiceRequestResource($result);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -176,7 +176,7 @@ class CommunicationController extends ApiBaseController
             //Call service to send sms
             $data = $service->sendSMS($orgHash, $servicerequest['hash'], $payload, $ipAddress);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -221,7 +221,7 @@ class CommunicationController extends ApiBaseController
             //Call service to send mail
             $data = $service->sendMail($orgHash, $servicerequest['hash'], $payload, $ipAddress);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -267,7 +267,7 @@ class CommunicationController extends ApiBaseController
             //Logout customer
             $data = $service->update($orgHash, $payload, $servicerequest['hash'], $ipAddress);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -313,7 +313,7 @@ class CommunicationController extends ApiBaseController
             //Logout customer
             $data = $service->delete($orgHash, $payload, $servicerequest['hash'], $ipAddress);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {

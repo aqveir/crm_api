@@ -75,7 +75,7 @@ class ServiceRequestController extends ApiBaseController
             //Transform data
             $data = new ServiceRequestMinifiedResource(collect($response));
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -124,7 +124,7 @@ class ServiceRequestController extends ApiBaseController
             //Transform data
             $data = new ServiceRequestResource($result);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -168,7 +168,7 @@ class ServiceRequestController extends ApiBaseController
             //Create customer
             $data = $service->create($orgHash, $payload, $ipAddress);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -213,7 +213,7 @@ class ServiceRequestController extends ApiBaseController
             //Logout customer
             $data = $service->update($orgHash, $payload, $servicerequest['hash'], $ipAddress);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -258,7 +258,7 @@ class ServiceRequestController extends ApiBaseController
             //Logout customer
             $data = $service->delete($orgHash, $payload, $servicerequest['hash'], $ipAddress);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {

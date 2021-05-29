@@ -73,7 +73,7 @@ class PreferenceController extends ApiBaseController
             //Fetch all organizations data
             $data = $service->getAll($orgHash, $payload);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -120,7 +120,7 @@ class PreferenceController extends ApiBaseController
             //Fetch organization data
             $data = $service->show($orgHash, $payload, $preference['id']);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -162,7 +162,7 @@ class PreferenceController extends ApiBaseController
             //Create customer
             $data = $service->create($orgHash, $payload);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -208,7 +208,7 @@ class PreferenceController extends ApiBaseController
             //Update preference
             $data = $service->update($orgHash, $payload, $preference['id']);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -252,7 +252,7 @@ class PreferenceController extends ApiBaseController
             //Delete preference
             $data = $service->delete($orgHash, $payload, $preference['id']);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
@@ -294,7 +294,7 @@ class PreferenceController extends ApiBaseController
             //Create customer
             $data = $service->refresh($orgHash, $payload);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {

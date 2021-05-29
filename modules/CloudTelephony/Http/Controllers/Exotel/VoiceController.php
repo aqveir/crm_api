@@ -133,7 +133,7 @@ class VoiceController extends BaseVoiceController
             //Process telephony details
             $data = $service->makecall($orgHash, $payload);
 
-            //Send http status out
+            //Send response data
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {

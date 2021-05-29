@@ -32,6 +32,7 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 /**
  * Class EventService
+ * 
  * @package Modules\ServiceRequest\Services
  */
 class EventService extends BaseService
@@ -88,6 +89,46 @@ class EventService extends BaseService
         $this->lookupRepository         = $lookupRepository;
         $this->userRepository           = $userRepository;
         $this->eventRepository          = $eventRepository;
+    } //Function ends
+
+
+    /**
+     * Get All Event Data for an Oraganization (Backend)
+     * 
+     * @para  \string $orgHash
+     * @param \Illuminate\Support\Collection $payload
+     * 
+     * @return object
+     */
+    public function getAll(string $orgHash, Collection $payload)
+    {
+        $objReturnValue=null;
+        try {
+            //Authenticated User
+            $user = $this->getCurrentUser('backend');
+
+            //Get Organization data
+            $organization = $this->getOrganizationByHash($orgHash);
+            if (empty($organization)) { throw new BadRequestHttpException(); } //End if
+
+            //Forced params
+            $isForcedFromDB = $this->isForced($payload);
+
+            //Page number and size limit
+            $page = ($payload->has('page'))?$payload['page']:1;
+            $size = ($payload->has('size'))?$payload['size']:10;
+
+            //Get Activity Type: Event Lookup data
+            $typeEvent = $this->lookupRepository->getLookUpByKey($organization['id'], 'service_request_activity_type_event');
+
+            //Load Event Data
+            $objReturnValue = $this->eventRepository
+                ->getFullData($organization['id'], $typeEvent['id'], $isForcedFromDB, $page, $size);
+
+        } catch(Exception $e) {
+            log::error($e);
+        }
+        return $objReturnValue;
     } //Function ends
 
 

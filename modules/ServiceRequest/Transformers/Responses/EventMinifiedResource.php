@@ -8,7 +8,7 @@ use Illuminate\Http\Resources\Json\ResourceCollection;
 
 use Exception;
 
-class TaskMinifiedResource extends ResourceCollection
+class EventMinifiedResource extends ResourceCollection
 {
 
     public function __construct($collection)
@@ -31,17 +31,15 @@ class TaskMinifiedResource extends ResourceCollection
         try {
             $objReturnValue = [];
             foreach ($this->collection as $data) {
-                $data->load('type', 'subtype', 'servicerequest', 'assignee', 'priority', 'status', 'owner');
-
-                $assignee = $data['assignee'];
-                if (!empty($assignee)) {
-                    $assignee->makeVisible(['completed_at']);
-                } //End if                    
+                $data->load([
+                    'type', 'subtype', 'servicerequest', 'owner', 
+                    'participants'
+                ]);                  
 
                 $response = $data->only([
-                    'id', 'subject',
-                    'start_at', 'end_at', 'completed_at', 'last_updated_at',
-                    'type', 'subtype', 'servicerequest', 'priority', 'status', 'owner', 'assignee'
+                    'id', 'subject', 'location',
+                    'start_at', 'end_at', 'last_updated_at',
+                    'type', 'subtype', 'servicerequest', 'owner', 'participants'
                 ]);
 
                 array_push($objReturnValue, $response);

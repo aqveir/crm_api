@@ -106,7 +106,7 @@ class TaskService extends BaseService
             //Authenticated User
             $user = $this->getCurrentUser('backend');
 
-            //Get organization data
+            //Get Organization data
             $organization = $this->getOrganizationByHash($orgHash);
             if (empty($organization)) { throw new BadRequestHttpException(); } //End if
 
@@ -120,7 +120,7 @@ class TaskService extends BaseService
             //Get Activity Type: Task Lookup data
             $typeTask = $this->lookupRepository->getLookUpByKey($organization['id'], 'service_request_activity_type_task');
 
-            //Load Contact Data
+            //Load Task Data
             $objReturnValue = $this->taskRepository
                 ->getFullData($organization['id'], $typeTask['id'], $isForcedFromDB, $page, $size);
 
@@ -130,6 +130,42 @@ class TaskService extends BaseService
         return $objReturnValue;
     } //Function ends
 
+
+    /**
+     * Get Task Data by Identifier (Backend)
+     * 
+     * @param  \string $orgHash
+     * @param  \Illuminate\Support\Collection $payload
+     * @param  \int $taskId
+     * 
+     * @return object
+     */
+    public function show(string $orgHash, Collection $payload, int $taskId)
+    {
+        $objReturnValue=null;
+        try {
+            //Authenticated User
+            $user = $this->getCurrentUser('backend');
+
+            //Get Organization data
+            $organization = $this->getOrganizationByHash($orgHash);
+            if (empty($organization)) { throw new BadRequestHttpException(); } //End if
+
+            //Forced params
+            $isForcedFromDB = $this->isForced($payload);
+
+            //Get Activity Type: Task Lookup data
+            $typeTask = $this->lookupRepository->getLookUpByKey($organization['id'], 'service_request_activity_type_task');
+
+            //Load Task Data
+            $objReturnValue = $this->taskRepository
+                ->getFullDataByIdentifier($organization['id'], $typeTask['id'], $taskId, $isForcedFromDB);
+
+        } catch(Exception $e) {
+            log::error($e);
+        }
+        return $objReturnValue;
+    } //Function ends
 
 
     /**
