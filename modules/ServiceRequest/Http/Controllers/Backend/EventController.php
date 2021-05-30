@@ -149,7 +149,7 @@ class EventController extends ApiBaseController
      * @return \Illuminate\Http\JsonResponse
      *
      * @OA\Post(
-     *     path="/servicerequest/{hash}/event",
+     *     path="/event",
      *     tags={"Event"},
      *     operationId="api.backend.servicerequest.event.create",
      *     security={{"omni_token":{}}},

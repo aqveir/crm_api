@@ -43,16 +43,16 @@ class ServiceRequestEventDataSeeder extends Seeder
                     $ownerId = $owner['id'];
                 } //End if
 
-                //Get Lookup Value for Task
+                //Get Lookup Value for Event
                 $lookupvalueEventId = 70;
-                $lookupvalueTask = LookupValue::where('key', 'service_request_activity_type_event')
+                $lookupvalueEvent = LookupValue::where('key', 'service_request_activity_type_event')
                     ->where(function ($innerQuery) use ($servicerequest) {
                         $innerQuery->where('org_id', $servicerequest['org_id'])
                             ->orWhere('org_id', 0);
                     })
                     ->first();
 
-                $lookupvalueEventId = (empty($lookupvalueTask))?$lookupvalueTask['id']:70;
+                $lookupvalueEventId = (empty($lookupvalueEvent))?$lookupvalueEvent['id']:70;
 
                 //Records of Account to be created
                 $maxRecord = $faker->numberBetween(1, 4);
@@ -63,7 +63,8 @@ class ServiceRequestEventDataSeeder extends Seeder
                         'org_id' => $servicerequest['org_id'],
                         'servicerequest_id' => $servicerequest['id'],
                         'type_id' => $lookupvalueEventId,
-                        'subtype_id' => 78,
+                        'subtype_id' => 83,
+                        'location' => $faker->streetAddress,
                         'created_by' => $ownerId,
                     ]);
 

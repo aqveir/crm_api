@@ -591,6 +591,22 @@ return [
                         'size' => 'numeric'
                     ]
                 ],
+
+                'create' => [
+                    'validation_rules' => [                       
+                        'sr_hash' => 'required|string',
+                        'subject' => 'required|string|max:200',
+                        'description' => 'string|max:1000',
+                        'start_at' => 'required|date',
+                        'end_at' => 'required|date',
+                        'subtype_key' => 'required|string',
+                        'priority_key' => 'required|string',
+                        'status_key' => 'required|string',
+                        'assignee' => 'required|array',
+                        'assignee.*.participant_type_key' => 'required|string',
+                        'assignee.*.participant_hash' => 'required|string',
+                    ]
+                ]
             ],
 
             // Event Controller Requests
@@ -602,6 +618,13 @@ return [
                         'size' => 'numeric'
                     ]
                 ],
+
+                'create' => [
+                    'validation_rules' => [                       
+                        'page' => 'numeric',
+                        'size' => 'numeric'
+                    ]
+                ]
             ],
 
             // Communication Controller Requests
