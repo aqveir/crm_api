@@ -22,7 +22,11 @@ class TaskResource extends JsonResource
 
         try {
             $this->load('type', 'subtype', 'servicerequest', 'assignee', 'priority', 'status', 'owner');
-            // $this->loadCount('tasks', 'events', 'notes', 'documents');
+
+            $assignee = $this['assignee'];
+            if (!empty($assignee)) {
+                $assignee->makeVisible(['completed_at']);
+            } //End if 
             
             $response = $this->only([
                 'id', 'subject', 'description',
