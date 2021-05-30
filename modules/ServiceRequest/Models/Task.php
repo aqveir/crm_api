@@ -66,7 +66,7 @@ class Task extends Model {
      */
     protected $dates = [
         'start_at', 'end_at', 'completed_at',
-        'created_at', 'updated_at', 'deleted_at'
+        'created_at', 'updated_at', 'deleted_at', 'last_updated_at'
     ];
 
 
