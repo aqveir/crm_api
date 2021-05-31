@@ -39,7 +39,7 @@ class TaskMinifiedResource extends ResourceCollection
                 } //End if                    
 
                 $response = $data->only([
-                    'id', 'subject',
+                    'id', 'subject', 'description',
                     'start_at', 'end_at', 'completed_at', 'last_updated_at',
                     'type', 'subtype', 'servicerequest', 'priority', 'status', 'owner', 'assignee'
                 ]);

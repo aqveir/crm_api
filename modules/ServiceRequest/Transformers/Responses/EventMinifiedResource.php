@@ -37,7 +37,7 @@ class EventMinifiedResource extends ResourceCollection
                 ]);                  
 
                 $response = $data->only([
-                    'id', 'subject', 'location',
+                    'id', 'subject', 'description', 'location',
                     'start_at', 'end_at', 'last_updated_at',
                     'type', 'subtype', 'servicerequest', 'owner', 'participants'
                 ]);
