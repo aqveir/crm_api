@@ -23,7 +23,7 @@ class AccountResource extends JsonResource
             $this->load('type', 'owner', 'timezone', 'state', 'country');
             
             $response = $this->only([
-                'id', 'name', 'description', 
+                'id', 'hash', 'name', 'description', 
                 'type', 'owner',
                 'address', 'locality', 'city', 'zipcode',
                 'state', 'country', 'timezone', 

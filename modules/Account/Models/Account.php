@@ -112,6 +112,17 @@ class Account extends Model {
 
 
     /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'hash';
+    }
+    
+
+    /**
      * Default constructor
      * @param array $attributes
      */
@@ -120,5 +131,32 @@ class Account extends Model {
         parent::__construct($attributes);
         $this->table = config('crmomni-migration.table_name.account.main');
     }
+
+
+    /**
+     * Boot function for using with User Events
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model)
+        {
+            $model->generateHashKey();
+        });
+    } //Function ends
+
+
+    /**
+     * Generate the Model hash unique identifier that is called
+     * on the Model event while creating record.
+     * 
+     */
+    private function generateHashKey() {
+        $this->attributes['hash'] = $this->generateRandomHash('ac');
+        return !is_null($this->attributes['hash']);
+    } //Function ends
 
 } //Class ends

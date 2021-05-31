@@ -34,7 +34,7 @@ class AccountMinifiedResource extends ResourceCollection
                 $data->load('type', 'owner');
                   
                 $response = $data->only([
-                    'id', 'name', 'description', 
+                    'id', 'hash', 'name', 'description', 
                     'type', 'owner',
                     'is_default', 'last_updated_at'
                 ]);

@@ -17,7 +17,7 @@ return [
             'account' => [
                 'name' => 'Default',
                 'default_text' => 'System created.',
-                'account_type' => 'account_type_undefined',
+                'account_type' => 'account_type_default',
                 'email' => [
                     'action_label' => 'Activate Account',
                     'url' => '/user/activate/{activation_token}?email={user_email}&source=web'

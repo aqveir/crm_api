@@ -194,8 +194,8 @@ class LookupTableSeeder extends Seeder
                 'is_editable' => false,
                 'values' => [
                     [
-                        'key' => 'account_type_undefined',
-                        'display_value' => 'Undefined',
+                        'key' => 'account_type_default',
+                        'display_value' => 'Default',
                     ],
                     [
                         'key' => 'account_type_internal',

@@ -15,6 +15,7 @@ class CreateAccountTable extends Migration
     {
         Schema::create(config('crmomni-migration.table_name.account.main'), function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('hash')->nullable();
 
             $table->unsignedBigInteger('org_id');
             $table->string('name');
