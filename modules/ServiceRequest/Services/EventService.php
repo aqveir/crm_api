@@ -173,7 +173,7 @@ class EventService extends BaseService
             $data['org_id'] = $organization['id'];
 
             //Get ServiceRequest details by identifier
-            $serviceRequest = $this->servicerequestRepository->getServiceRequestByHash($organization['id'], $srHash);
+            $serviceRequest = $this->servicerequestRepository->getFullDataByIdentifier($organization['id'], $srHash);
             if (empty($serviceRequest)) { throw new BadRequestHttpException(); } //End if
             $data['servicerequest_id'] = $serviceRequest['id'];
 
