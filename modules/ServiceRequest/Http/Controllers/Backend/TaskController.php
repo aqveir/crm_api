@@ -141,7 +141,7 @@ class TaskController extends ApiBaseController
      * @return \Illuminate\Http\JsonResponse
      *
      * @OA\Post(
-     *     path="/servicerequest/{hash}/task",
+     *     path="/task",
      *     tags={"Task"},
      *     operationId="api.backend.servicerequest.task.create",
      *     security={{"omni_token":{}}},
@@ -164,7 +164,7 @@ class TaskController extends ApiBaseController
             $payload = collect($request);
 
             //Create customer
-            $data = $service->create($orgHash, $payload, $ipAddress);
+            $data = $service->create($orgHash, $payload['sr_hash'], $payload, $ipAddress);
 
             //Send response data
             return $this->response->success(compact('data'));
