@@ -606,6 +606,21 @@ return [
                         'assignee.*.participant_type_key' => 'required|string',
                         'assignee.*.participant_hash' => 'required|string',
                     ]
+                ],
+
+                'update' => [
+                    'validation_rules' => [                       
+                        'subject' => 'required|string|max:200',
+                        'description' => 'string|max:1000',
+                        'start_at' => 'required|date',
+                        'end_at' => 'required|date',
+                        'subtype_key' => 'required|string',
+                        'priority_key' => 'required|string',
+                        'status_key' => 'required|string',
+                        'assignee' => 'required|array',
+                        'assignee.*.participant_type_key' => 'required|string',
+                        'assignee.*.participant_hash' => 'required|string',
+                    ]
                 ]
             ],
 

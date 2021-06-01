@@ -13,6 +13,8 @@ use Modules\ServiceRequest\Repositories\TaskRepository;
 
 use Modules\Core\Services\BaseService;
 
+use Modules\ServiceRequest\Traits\ParticipantTrait;
+
 use Modules\ServiceRequest\Events\Task\TaskCreatedEvent;
 use Modules\ServiceRequest\Events\Task\TaskUpdatedEvent;
 use Modules\ServiceRequest\Events\Task\TaskDeletedEvent;
@@ -36,6 +38,7 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
  */
 class TaskService extends BaseService
 {
+    use ParticipantTrait;
 
     /**
      * @var Modules\Core\Repositories\Organization\OrganizationRepository
@@ -185,23 +188,14 @@ class TaskService extends BaseService
             if (empty($organization)) { throw new BadRequestHttpException(); } //End if
 
             //Build data
-            $data = $payload->only(['subject', 'description', 'scheduled_at'])->toArray();
+            $data = $payload->only(['subject', 'description', 'start_at', 'end_at'])->toArray();
 
-            if ($isAutoCreated) {
-                //Build data
-                $data = array_merge($data, [
-                    'created_by' => 0,
-                    'ip_address' => $ipAddress
-                ]);
-            } else {
+            $createdBy = 0;
+            if (!$isAutoCreated) {
                 //Authenticated User
                 $user = $this->getCurrentUser('backend');
 
-                //Build data
-                $data = array_merge($data, [
-                    'created_by' => $user['id'] ,
-                    'ip_address' => $ipAddress
-                ]);
+                $createdBy = $user['id'];
             } //End if
 
             //Set Organization data
@@ -212,28 +206,27 @@ class TaskService extends BaseService
             if (empty($serviceRequest)) { throw new BadRequestHttpException(); } //End if
             $data['servicerequest_id'] = $serviceRequest['id'];
 
-            //Get Assignee User by Hash
-            $assigneeUser = $this->userRepository->getDataByHash($organization['id'], $payload['assignee_uHash']);
-            if (empty($assigneeUser)) { throw new BadRequestHttpException(); } //End if
-            $data['user_id'] = $assigneeUser['id'];
-
             //Lookup Type data
-            $lookupType = $this->lookupRepository->getLookUpByKey($organization['id'], 'service_request_activity_type_task');
-            if (empty($lookupType)) { throw new BadRequestHttpException(); } //End if
-            $data['type_id'] = $lookupType['id'];
+            $data['type_id'] = $this->getLookupValueId($organization['id'], $payload, null, 'service_request_activity_type_task');
 
             //Lookup SubType data
-            $lookupSubType = $this->lookupRepository->getLookUpByKey($organization['id'], $payload['subtype_key']);
-            if (empty($lookupSubType)) { throw new BadRequestHttpException(); } //End if
-            $data['subtype_id'] = $lookupSubType['id'];
+            $data['subtype_id'] = $this->getLookupValueId($organization['id'], $payload, 'subtype_key', 'comm_type_other');
 
             //Lookup Task Priority data
-            $lookupPriority = $this->lookupRepository->getLookUpByKey($organization['id'], $payload['priority_key']);
-            if (empty($lookupPriority)) { throw new BadRequestHttpException(); } //End if
-            $data['priority_id'] = $lookupPriority['id'];
+            $data['priority_id'] = $this->getLookupValueId($organization['id'], $payload, 'priority_key', 'priority_normal');
+
+            //Lookup Task Status data
+            $data['status_id'] = $this->getLookupValueId($organization['id'], $payload, 'status_key', 'task_status_not_started');
+
+            //Create assignee data
+            $assigneeCollection = $this->getParticipants($organization, $payload['assignee']);
 
             //Create Task
-            $task = $this->taskRepository->create($data);
+            $task = $this->taskRepository->create($data, $createdBy, $ipAddress);
+            if ($assigneeCollection && count($assigneeCollection)>0) {
+                $task->assignee()->create($assigneeCollection[0]);
+            } //End if
+            
             $task->load('subtype', 'priority', 'assignee', 'owner');
                 
             //Raise event: Task Created
@@ -277,28 +270,26 @@ class TaskService extends BaseService
             if (empty($organization)) { throw new BadRequestHttpException(); } //End if
 
             //Build data
-            $data = $payload->only(['subject', 'description', 'scheduled_at', 'completed_at'])->toArray();
-
-            //Get Assignee User by Hash
-            $assigneeUser = $this->userRepository->getDataByHash($organization['id'], $payload['assignee_uHash']);
-            if (empty($assigneeUser)) { throw new BadRequestHttpException(); } //End if
-            $data['user_id'] = $assigneeUser['id'];
+            $data = $payload->only(['subject', 'description', 'start_at', 'end_at'])->toArray();
 
             //Lookup SubType data
-            $lookupSubType = $this->lookupRepository->getLookUpByKey($organization['id'], $payload['subtype_key']);
-            if (empty($lookupSubType)) { throw new BadRequestHttpException(); } //End if
-            $data['subtype_id'] = $lookupSubType['id'];
+            $data['subtype_id'] = $this->getLookupValueId($organization['id'], $payload, 'subtype_key', 'comm_type_other');
 
             //Lookup Task Priority data
-            $lookupPriority = $this->lookupRepository->getLookUpByKey($organization['id'], $payload['priority_key']);
-            if (empty($lookupPriority)) { throw new BadRequestHttpException(); } //End if
-            $data['priority_id'] = $lookupPriority['id'];
+            $data['priority_id'] = $this->getLookupValueId($organization['id'], $payload, 'priority_key', 'priority_normal');
 
-            //Update IP address
-            $data['ip_address'] = $ipAddress;
+            //Lookup Task Status data
+            $data['status_id'] = $this->getLookupValueId($organization['id'], $payload, 'status_key', 'task_status_not_started');
+            if ($payload['status_key']=='task_status_completed') {
+                $payload['completed_at'] = Carbon.now();
+            } //End if
+
+            //Create assignee data
+            $assigneeCollection = $this->getParticipants($organization, $payload['assignee']);
 
             //Update Task
-            $task = $this->taskRepository->update($taskId, 'id', $data, $user['id']);
+            $task = $this->taskRepository->update($taskId, 'id', $data, $user['id'], $ipAddress);
+            $task->assignee()->update($assigneeCollection[0]);
                 
             //Raise event: Task Updated
             event(new TaskUpdatedEvent($task));                

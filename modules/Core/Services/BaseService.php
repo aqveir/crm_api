@@ -169,12 +169,12 @@ abstract class BaseService
      * 
      * @return int
      */
-    public function getLookupValueId(int $orgId, Collection $payload, string $key, string $defaultKey=null)
+    public function getLookupValueId(int $orgId, Collection $payload, string $key=null, string $defaultKey=null)
     {
         $objReturnValue=null;
         try {
 
-            $lookupKey = ($payload->has($key) && (!empty($payload[$key])))?$payload[$key]:$defaultKey;
+            $lookupKey = ((!empty($key)) && $payload->has($key) && (!empty($payload[$key])))?$payload[$key]:$defaultKey;
 
             //Check if the lookup key exists
             if (!empty($lookupKey)) {
@@ -190,4 +190,5 @@ abstract class BaseService
 
         return $objReturnValue;
     } //Function ends
+
 } //Class ends

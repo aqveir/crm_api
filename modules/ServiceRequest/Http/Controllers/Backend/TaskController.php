@@ -186,7 +186,7 @@ class TaskController extends ApiBaseController
      * @return \Illuminate\Http\JsonResponse
      *
      * @OA\Put(
-     *     path="/servicerequest/{hash}/task/{id}",
+     *     path="/task/{id}",
      *     tags={"Task"},
      *     operationId="api.backend.servicerequest.task.update",
      *     security={{"omni_token":{}}},
@@ -197,7 +197,7 @@ class TaskController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function update(UpdateUserRequest $request, TaskService $service, string $subdomain, ServiceRequest $hash)
+    public function update(UpdateTaskRequest $request, TaskService $service, string $subdomain, Task $task)
     {   
         try {
             //Get Org Hash 
@@ -210,7 +210,7 @@ class TaskController extends ApiBaseController
             $payload = collect($request);
 
             //Logout customer
-            $data = $service->update($orgHash, $payload, $servicerequest['hash'], $ipAddress);
+            $data = $service->update($orgHash, $payload['sr_hash'], $payload, $task['id'], $ipAddress);
 
             //Send response data
             return $this->response->success(compact('data'));

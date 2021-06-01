@@ -30,9 +30,8 @@ class Task extends Model {
      */
     protected $fillable = [
         'org_id', 'servicerequest_id', 'type_id', 'subtype_id',
-        'subject', 'description', 'user_id', 'priority_id',
-        'start_at', 'end_at', 'completed_at',
-        'created_by', 'ip_address' 
+        'subject', 'description', 'user_id', 'priority_id', 'status_id',
+        'start_at', 'end_at', 'completed_at' 
     ];
 
 
@@ -53,7 +52,7 @@ class Task extends Model {
      */
     protected $hidden = [
         'org_id', 'servicerequest_id', 'type_id', 'subtype_id',
-        'description', 'user_id', 'priority_id',
+        'description', 'user_id', 'priority_id', 'status_id',
         'start_at', 'end_at', 'completed_at', 'ip_address',
         'created_by', 'updated_by', 'deleted_by',
         'created_at', 'updated_at', 'deleted_at'
