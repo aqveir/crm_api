@@ -79,7 +79,7 @@ class ContactAuthController extends ApiBaseController
             //Create payload
             $payload = collect($request);
 
-            $data = $service->validateContactExists($orgHash, $payload);
+            $data = $service->exists($orgHash, $payload);
 
             //Send response data
             return $this->response->success(compact('data'));

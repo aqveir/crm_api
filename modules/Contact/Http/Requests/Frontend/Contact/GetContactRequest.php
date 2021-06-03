@@ -5,7 +5,7 @@ namespace Modules\Contact\Http\Requests\Frontend\Contact;
 use Config;
 use Modules\Boilerplate\Http\FormRequest;
 
-class GetContactRequest extends FormRequest
+class FetchContactRequest extends FormRequest
 {
     public function rules()
     {

@@ -10,7 +10,7 @@ use Modules\Core\Repositories\Organization\OrganizationRepository;
 use Modules\Contact\Repositories\Contact\ContactRepository;
 use Modules\Contact\Repositories\Contact\ContactDetailRepository;
 
-use Modules\Contact\Events\ContactAddedEvent;
+use Modules\Contact\Events\ContactCreatedEvent;
 
 use Modules\Core\Services\BaseService;
 use Modules\Contact\Notifications\ContactActivationNotification;

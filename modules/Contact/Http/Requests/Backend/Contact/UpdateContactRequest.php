@@ -12,8 +12,10 @@ class UpdateContactRequest extends FormRequest
         return Config::get('crmomni-validation.request_handler.backend.contact.update.validation_rules');
     }
 
+
     public function authorize()
     {
         return true;
     }
-}
+
+} //Class ends

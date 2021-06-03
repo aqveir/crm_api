@@ -352,8 +352,26 @@ return [
 
             // Contact Controller Requests
             'contact' => [
-                'index' => [
+                'fetch' => [
                     'validation_rules' => []
+                ],
+
+                'create' => [
+                    'validation_rules' => []
+                ],
+
+                'update' => [
+                    'validation_rules' => []
+                ],
+
+                'delete' => [
+                    'validation_rules' => []
+                ],
+
+                'upload' => [
+                    'validation_rules' => [
+                        'uploaded_contacts' => 'required|file|mimes:csv,txt,xls,xlsx|max:1024'
+                    ]
                 ],
 
                 // Telephony

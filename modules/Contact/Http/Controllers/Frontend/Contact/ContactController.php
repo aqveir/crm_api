@@ -6,7 +6,7 @@ use Config;
 use Illuminate\Support\Facades\Log;
 
 use Modules\Core\Http\Controllers\ApiBaseController;
-use Modules\Contact\Http\Requests\Frontend\Contact\GetContactRequest;
+use Modules\Contact\Http\Requests\Frontend\Contact\FetchContactRequest;
 
 use Modules\Contact\Services\Contact\ContactService;
 
@@ -58,7 +58,7 @@ class ContactController extends ApiBaseController
      *      @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function show(GetContactRequest $request, ContactService $service)
+    public function show(FetchContactRequest $request, ContactService $service)
     {
         try {
             //Get Org Hash 

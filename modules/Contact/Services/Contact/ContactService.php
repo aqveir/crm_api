@@ -9,13 +9,20 @@ use Modules\Core\Repositories\Lookup\LookupValueRepository;
 use Modules\Core\Repositories\Organization\OrganizationRepository;
 use Modules\Contact\Repositories\Contact\ContactRepository;
 use Modules\Contact\Repositories\Contact\ContactDetailRepository;
+use Modules\Core\Repositories\Core\FileSystemRepository;
 
-use Modules\Contact\Events\ContactAddedEvent;
+use Modules\Contact\Events\ContactCreatedEvent;
+use Modules\Contact\Events\ContactUpdatedEvent;
+use Modules\Contact\Events\ContactDeletedEvent;
+use Modules\Contact\Events\ContactUploadedEvent;
 
 use Modules\Core\Services\BaseService;
 use Modules\Contact\Notifications\ContactActivationNotification;
 
+use Modules\Core\Traits\FileStorageAction;
+
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile as File;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
@@ -35,6 +42,8 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
  */
 class ContactService extends BaseService
 {
+    use FileStorageAction;
+
     /**
      * @var Modules\Core\Repositories\Lookup\LookupValueRepository
      */
@@ -44,7 +53,7 @@ class ContactService extends BaseService
     /**
      * @var Modules\Core\Repositories\Organization\OrganizationRepository
      */
-    protected $organizationrepository;
+    protected $organizationRepository;
 
 
     /**
@@ -60,21 +69,29 @@ class ContactService extends BaseService
 
 
     /**
+     * @var Modules\Core\Repositories\Core\FileSystemRepository
+     */
+    protected $filesystemRepository;
+
+    /**
      * Service constructor.
      * 
+     * @param \Modules\Core\Repositories\Organization\OrganizationRepository    $organizationRepository
      * @param \Modules\Core\Repositories\Lookup\LookupValueRepository           $lookuprepository
-     * @param \Modules\Core\Repositories\Organization\OrganizationRepository    $organizationrepository
-     * @param \Modules\Contact\Repositories\Contact\ContactRepository        $customerrepository
-     * @param \Modules\Contact\Repositories\Contact\ContactDetailRepository  $customerdetailrepository
+     * @param \Modules\Core\Repositories\Core\FileSystemRepository              $filesystemRepository
+     * @param \Modules\Contact\Repositories\Contact\ContactRepository           $customerrepository
+     * @param \Modules\Contact\Repositories\Contact\ContactDetailRepository     $customerdetailrepository
      */
     public function __construct(
+        OrganizationRepository              $organizationRepository,
         LookupValueRepository               $lookuprepository,
-        OrganizationRepository              $organizationrepository,
+        FileSystemRepository                $filesystemRepository,
         ContactRepository                   $customerrepository,
         ContactDetailRepository             $customerdetailrepository
     ) {
+        $this->organizationRepository       = $organizationRepository;
         $this->lookuprepository             = $lookuprepository;
-        $this->organizationrepository       = $organizationrepository;
+        $this->filesystemRepository         = $filesystemRepository;
         $this->customerrepository           = $customerrepository;
         $this->customerdetailrepository     = $customerdetailrepository;
     } //Function ends
@@ -88,12 +105,12 @@ class ContactService extends BaseService
      * 
      * @return bool
      */
-    public function validateContactExists(string $orgHash, Collection $payload)
+    public function exists(string $orgHash, Collection $payload)
     {
         $objReturnValue=false;
         try {
             //Get organization data
-            $organization = $this->organizationrepository->getOrganizationByHash($orgHash);
+            $organization = $this->organizationRepository->getOrganizationByHash($orgHash);
 
             $type_key = null;
             $data = null;
@@ -112,9 +129,9 @@ class ContactService extends BaseService
 
             $objReturnValue = !empty($response);
         } catch(ModelNotFoundException $e) {
-            Log::error('ContactService:validateContactExists:ModelNotFoundException:' . $e->getMessage());
+            Log::error('ContactService:exists:ModelNotFoundException:' . $e->getMessage());
         } catch (Exception $e) {
-            log::error('ContactService:validateContactExists:Exception:' . $e->getMessage());
+            log::error('ContactService:exists:Exception:' . $e->getMessage());
             throw new HttpException(500);
         } //Try-catch ends
 
@@ -129,7 +146,7 @@ class ContactService extends BaseService
      * 
      * @return object
      */
-    public function getFullData(string $orgHash, Collection $payload)
+    public function index(string $orgHash, Collection $payload)
     {
         $objReturnValue=null;
         try {
@@ -162,7 +179,7 @@ class ContactService extends BaseService
      * 
      * @return object
      */
-    public function getFullDataByHash(string $orgHash, Collection $payload, string $hash)
+    public function show(string $orgHash, Collection $payload, string $hash)
     {
         $objReturnValue=null;
         try {
@@ -250,28 +267,91 @@ class ContactService extends BaseService
 
 
     /**
-     * Create New Contact
+     * Create Default User
      * 
-     * @param string $orgHash
      * @param \Illuminate\Support\Collection $payload
-     * @param string $ipAddress (optional)
-     * @param string $provider (optional)
-     * @param int $createdBy (optional)
-     * @param bool $isEmailValid (optional)
-     * @param bool $isPhoneValid (optional)
+     * @param \int $orgId
+     * 
+     * @return mixed
+     */
+    public function createDefault(Collection $payload, Organization $organization, string $ipAddress=null)
+    {
+        $objReturnValue=null;
+        try {
+            $data = $payload->only(['email', 'phone', 'first_name', 'last_name'])->toArray();
+            $data = array_merge($data, [
+                'username' => $data['email'],
+                'password' => config('user.settings.new_organization.default_password'),
+                'is_remote_access_only' => 0
+            ]);
+
+            //Create defult user
+            $user = $this->create($organization['hash'], collect($data), $ipAddress, true);
+            if (empty($user)) {
+                throw new BadRequestHttpException();
+            } //End if
+
+            //Store Additional Settings
+            $user['is_active'] = true;
+            $user['is_pool'] = true;
+            $user['is_default'] = true;
+            if (!($user->save())) {
+                throw new HttpException(500);
+            } //End if
+
+            //Get Organization roles
+            $roles = $organization->roles;
+            if (!empty($roles)) {
+                $roleOrgAdmin = collect($roles)->where('key', 'organization_admin')->first();
+
+                //Assign the role to new user
+                $user->roles()->attach($roleOrgAdmin['id'], [
+                    'account_id' => null,
+                    'description' => 'System Generated',
+                    'created_by' => 0
+                ]);
+            } //End if
+
+            //Assign to the return value
+            $objReturnValue = $user;
+
+        } catch(AccessDeniedHttpException $e) {
+            log::error('UserService:createDefault:AccessDeniedHttpException:' . $e->getMessage());
+            throw new AccessDeniedHttpException($e->getMessage());
+        } catch(BadRequestHttpException $e) {
+            log::error('UserService:createDefault:BadRequestHttpException:' . $e->getMessage());
+            throw new BadRequestHttpException($e->getMessage());
+        } catch(Exception $e) {
+            log::error('UserService:createDefault:Exception:' . $e->getMessage());
+            throw new HttpException(500);
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends 
+
+
+    /**
+     * Create Contact
+     * 
+     * @param  \string  $orgHash
+     * @param  \Illuminate\Support\Collection  $payload
+     * @param  \string  $ipAddress (optional)
+     * @param  \bool  $isAutoCreated (optional)
      * 
      */
-    public function create(
-        string $orgHash, Collection $payload, string $ipAddress='0.0.0.0',
-        string $provider=null, int $createdBy=0,
-        bool $isEmailValid=false, bool $isPhoneValid=false
-    )
+    public function create(string $orgHash, Collection $payload, string $ipAddress=null, bool $isAutoCreated=false)
     {
         $objReturnValue=null;
 
         try {
             //Get organization data
             $organization = $this->getOrganizationByHash($orgHash);
+
+            $createdBy = 0;
+            if (!$isAutoCreated) {
+                $user = $this->getCurrentUser('backend');
+                $createdBy = $user['id'];
+            } //End if
 
             //Data for validation
             $dataValidate = ($payload->only(['email', 'phone']))->toArray();
@@ -288,13 +368,11 @@ class ContactService extends BaseService
                         'org_id' => $organization['id'],
                         '2fa_secret' => null,
                         'group_id' => 0,
-                        'created_by' => $createdBy,
-                        'ip_address' => $ipAddress
                     ]
                 );
 
                 //Create Contact
-                $contact = $this->customerrepository->create($payload);
+                $contact = $this->customerrepository->create($payload, $createdBy, $ipAddress);
 
                 //Create Contact details - Email
                 if(!empty($payload['email'])) {
@@ -334,7 +412,203 @@ class ContactService extends BaseService
                 //$contact->notify(new ContactActivationNotification($contact));
 
                 //Raise event: New Contact Added
-                event(new ContactAddedEvent($contact));
+                event(new ContactCreatedEvent($contact));
+
+                $objReturnValue=$contact;
+            } else {
+                throw new DuplicateDataException();
+            } //End if
+        } catch(DuplicateDataException $e) {
+            throw new DuplicateDataException();
+        } catch(Exception $e) {
+            throw new HttpException(500);
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends
+
+
+    /**
+     * Update Contact
+     * 
+     * @param  \string  $orgHash
+     * @param  \Illuminate\Support\Collection  $payload
+     * @param  \string  $cHash
+     * @param  \string  $ipAddress (optional)
+     * 
+     */
+    public function update(string $orgHash, Collection $payload, string $cHash, string $ipAddress=null)
+    {
+        $objReturnValue=null;
+
+        try {
+            //Get organization data
+            $organization = $this->getOrganizationByHash($orgHash);
+
+            $createdBy = 0;
+            if (!$isAutoCreated) {
+                $user = $this->getCurrentUser('backend');
+                $createdBy = $user['id'];
+            } //End if
+
+            //Data for validation
+            $dataValidate = ($payload->only(['email', 'phone']))->toArray();
+
+            //Duplicate check
+            $isDuplicate=$this->customerdetailrepository->validate($organization['id'], $dataValidate);
+            if (!$isDuplicate) {
+
+                //Generate the data payload to create user
+                $payload = $payload->only('password', 'first_name', 'middle_name', 'last_name');
+                $payload = array_merge(
+                    $payload,
+                    [
+                        'org_id' => $organization['id'],
+                        '2fa_secret' => null,
+                        'group_id' => 0,
+                    ]
+                );
+
+                //Create Contact
+                $contact = $this->customerrepository->create($payload, $createdBy, $ipAddress);
+
+                //Create Contact details - Email
+                if(!empty($payload['email'])) {
+                    //Get Email Type for the Organization
+                    $type = $this->getLookupValueByKey($organization['id'], config('omnichannel.settings.static.key.lookup_value.email'));
+
+                    $payloadDetails = [
+                        'org_id' => $organization['id'],
+                        'type_id' => (empty($type)?0:$type['id']),
+                        'contact_id' => $contact['id'],
+                        'identifier' => $payload['email'],
+                        'is_primary' => 1,
+                        'is_verified' => $isEmailValid,
+                        'created_by'=> $createdBy
+                    ];
+                    $this->customerdetailrepository->create($payloadDetails);
+                } //End if
+
+                //Create Contact details - Phone
+                if(!empty($payload['phone'])) {
+                    //Get Phone Type for the Organization
+                    $type = $this->getLookupValueByKey($organization['id'], config('omnichannel.settings.static.key.lookup_value.phone'));
+
+                    $payloadDetails = [
+                        'org_id' => $organization['id'],
+                        'type_id' => (empty($type)?0:$type['id']),
+                        'contact_id' => $contact['id'],
+                        'identifier' => $payload['phone'],
+                        'is_primary' => 1,
+                        'is_verified' => $isPhoneValid,
+                        'created_by'=> $createdBy
+                    ];
+                    $this->customerdetailrepository->create($payloadDetails);
+                } //End if
+
+                //Notify user to Activate Account
+                //$contact->notify(new ContactActivationNotification($contact));
+
+                //Raise event: New Contact Added
+                event(new ContactCreatedEvent($contact));
+
+                $objReturnValue=$contact;
+            } else {
+                throw new DuplicateDataException();
+            } //End if
+        } catch(DuplicateDataException $e) {
+            throw new DuplicateDataException();
+        } catch(Exception $e) {
+            throw new HttpException(500);
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends
+
+
+    /**
+     * Delete Contact
+     * 
+     * @param  \string  $orgHash
+     * @param  \Illuminate\Support\Collection  $payload
+     * @param  \string  $cHash
+     * @param  \string  $ipAddress (optional)
+     * 
+     */
+    public function delete(string $orgHash, Collection $payload, string $ipAddress=null)
+    {
+        $objReturnValue=null;
+
+        try {
+            //Get organization data
+            $organization = $this->getOrganizationByHash($orgHash);
+
+            $createdBy = 0;
+            if (!$isAutoCreated) {
+                $user = $this->getCurrentUser('backend');
+                $createdBy = $user['id'];
+            } //End if
+
+            //Data for validation
+            $dataValidate = ($payload->only(['email', 'phone']))->toArray();
+
+            //Duplicate check
+            $isDuplicate=$this->customerdetailrepository->validate($organization['id'], $dataValidate);
+            if (!$isDuplicate) {
+
+                //Generate the data payload to create user
+                $payload = $payload->only('password', 'first_name', 'middle_name', 'last_name');
+                $payload = array_merge(
+                    $payload,
+                    [
+                        'org_id' => $organization['id'],
+                        '2fa_secret' => null,
+                        'group_id' => 0,
+                    ]
+                );
+
+                //Create Contact
+                $contact = $this->customerrepository->create($payload, $createdBy, $ipAddress);
+
+                //Create Contact details - Email
+                if(!empty($payload['email'])) {
+                    //Get Email Type for the Organization
+                    $type = $this->getLookupValueByKey($organization['id'], config('omnichannel.settings.static.key.lookup_value.email'));
+
+                    $payloadDetails = [
+                        'org_id' => $organization['id'],
+                        'type_id' => (empty($type)?0:$type['id']),
+                        'contact_id' => $contact['id'],
+                        'identifier' => $payload['email'],
+                        'is_primary' => 1,
+                        'is_verified' => $isEmailValid,
+                        'created_by'=> $createdBy
+                    ];
+                    $this->customerdetailrepository->create($payloadDetails);
+                } //End if
+
+                //Create Contact details - Phone
+                if(!empty($payload['phone'])) {
+                    //Get Phone Type for the Organization
+                    $type = $this->getLookupValueByKey($organization['id'], config('omnichannel.settings.static.key.lookup_value.phone'));
+
+                    $payloadDetails = [
+                        'org_id' => $organization['id'],
+                        'type_id' => (empty($type)?0:$type['id']),
+                        'contact_id' => $contact['id'],
+                        'identifier' => $payload['phone'],
+                        'is_primary' => 1,
+                        'is_verified' => $isPhoneValid,
+                        'created_by'=> $createdBy
+                    ];
+                    $this->customerdetailrepository->create($payloadDetails);
+                } //End if
+
+                //Notify user to Activate Account
+                //$contact->notify(new ContactActivationNotification($contact));
+
+                //Raise event: New Contact Added
+                event(new ContactCreatedEvent($contact));
 
                 $objReturnValue=$contact;
             } else {

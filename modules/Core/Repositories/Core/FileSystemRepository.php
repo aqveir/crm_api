@@ -3,13 +3,19 @@
 namespace Modules\Core\Repositories\Core;
 
 use Config;
-use Exception;
 use Carbon\Carbon;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile as File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+
+use Exception;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 /**
  * Class FileSystemRepository.
@@ -21,9 +27,9 @@ class FileSystemRepository
      *
      * @return objReturnValue
      */
-    public function upload(File $file, string $prefixPath=null, int $maxUploadFileSize=0)
+    public function upload(File $file, string $prefixPath=null, int $maxUploadFileSize=0, bool $keepOriginalExtension=true)
     {
-        $objReturnValue = null; 
+        $objReturnValue = null; $filePath = null;
 
         try {
             if ($file->isValid()) 
@@ -33,6 +39,7 @@ class FileSystemRepository
 
                 //Get File Related Info
                 $fileName = $file->getClientOriginalName();
+                $fileExtension = $file->getClientOriginalExtension();
                 $fileSize = $file->getSize();
 
                 if ($fileSize > $MAX_UPLOAD_FILESIZE) 
@@ -42,12 +49,21 @@ class FileSystemRepository
                 } //End if                
 
                 //Create File + Folder details
-                $filenameToStore = config('filesystems.upload_folder');
-                $filenameToStore .= empty($prefixPath)?'':('/' . $prefixPath);
+                $filePath = config('filesystems.upload_folder');
+                $filePath .= empty($prefixPath)?'':('/' . $prefixPath);
 
                 //Save in the directory, if dir is not exist it will created automatically.
-                //$filePath = Storage::putFile($filenameToStore, $file, 'public');
-                $filePath = $file->store($filenameToStore);
+                //$filePath = Storage::putFile($filePath, $file, 'public');
+                if ($keepOriginalExtension) {
+                    $fullFileName = \Str::random(40) . '.' . $fileExtension;
+                    $filePath = $file->storeAs($filePath, $fullFileName);
+                } else {
+                    $filePath = $file->store($filePath);
+                } //End if
+                
+                if (empty($filePath)) {
+                    throw new BadRequestHttpException();
+                } //End if
 
                 //Send document object
                 $objReturnValue=[];
@@ -57,7 +73,7 @@ class FileSystemRepository
             } //End if
         } catch(Exception $e) {
             $objReturnValue = null;
-            throw new Exception($e->getMessage());      
+            throw $e;      
         } //Try-Catch ends
 
         return $objReturnValue;

@@ -5,15 +5,15 @@ namespace Modules\Contact\Events;
 use Modules\Contact\Models\Contact\Contact;
 use Illuminate\Queue\SerializesModels;
 
-class ContactAddedEvent
+class ContactUpdatedEvent
 {
     use SerializesModels;
 
-    
+
     /**
-     * Contact variable
+     * Model variable
      */
-    public $contact;
+    public $model;
 
 
     /**
@@ -21,10 +21,11 @@ class ContactAddedEvent
      *
      * @return void
      */
-    public function __construct(Contact $contact)
+    public function __construct(Contact $model)
     {
-        $this->contact = $contact;
+        $this->model = $model;
     }
+
 
     /**
      * Get the channels the event should be broadcast on.

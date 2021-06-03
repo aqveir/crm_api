@@ -69,11 +69,13 @@ $api->version('v1', [
         $api->group(['prefix' => 'contact'], function(Router $api) {
             // Contact Management
             $api->post('fetch', 'Backend\\Contact\\ContactAPIController@index');
+            $api->post('upload', 'Backend\\Contact\\ContactAPIController@upload');
             $api->get('{hash}', 'Backend\\Contact\\ContactAPIController@show');
-            //$api->post('/', 'Modules\\Contacts\\Http\\Controllers\\Frontend\\Contact\\ContactController@create');
-            //$api->put('{hash}', 'Modules\\Contacts\\Http\\Controllers\\Frontend\\Contact\\ContactController@update');
+            $api->post('/', 'Backend\\Contact\\ContactAPIController@create');
+            $api->put('{hash}', 'Backend\\Contact\\ContactAPIController@update');
+            $api->delete('{hash}', 'Backend\\Contact\\ContactAPIController@destroy');
 
-            //Telephony
+            // Telephony
             $api->post('{hash}/call', 'Backend\\Contact\\TelephonyController@call');
             $api->post('{hash}/call/{proxy}', 'Backend\\Contact\\TelephonyController@callToProxy');
         });
