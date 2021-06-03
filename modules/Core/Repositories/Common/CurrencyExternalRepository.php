@@ -4,7 +4,7 @@ namespace Modules\Core\Repositories\Common;
 
 use Config;
 
-use Modules\Core\Repositories\ExternalRepository;
+use Modules\Core\Repositories\Core\ExternalRepository;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;

@@ -32,6 +32,17 @@ return [
             ],
         ],
 
+        //Response transformation array
+        'response_transform' => [
+            'country' => [
+                'properties' => [
+                    'alpha2_code', 'alpha3_code', 'numeric_code', 'iso3166_2_code',
+                    'display_value', 'display_official_name', 'official_domain_extn',
+                    'currency_code', 'phone_idd_code'
+                ]
+            ]
+        ],
+
         //New Organization Settings
         'new_organization' => [
             'default_text' => 'System created.',

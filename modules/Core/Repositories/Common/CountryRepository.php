@@ -32,13 +32,13 @@ class CountryRepository extends EloquentRepository implements CountryContract
     /**
 	 * Get Country Object by Code
 	 */
-	public function getCountryByCode(string $code)
+	public function getCountryByCode(string $code, string $column='alpha3_code')
 	{
 		$objReturnValue=null;
 		
 		try {
 	        $query = $this->model;
-	        $query = $query->where('alpha3_code', $code);
+	        $query = $query->where($column, $code);
 	        $query = $query->first();
 
 	        $objReturnValue = $query;		

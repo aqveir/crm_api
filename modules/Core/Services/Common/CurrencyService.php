@@ -59,7 +59,7 @@ class CurrencyService extends BaseService
     /**
      * Get All the Currency Data
      */
-    public function getAllCurrencyData(bool $isActive=true)
+    public function index(bool $isActive=true)
     {
         $objReturnValue=null;
         try {

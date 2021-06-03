@@ -39,6 +39,8 @@ class CountryService extends BaseService
      *
      * @param \Modules\Core\Repositories\Common\CountryRepository    $countryrepository
      */
+
+
     public function __construct(
         CountryRepository               $countryrepository
     ) {
@@ -46,11 +48,14 @@ class CountryService extends BaseService
     } //Function ends
 
 
-    public function getAllCountryData()
+    public function index()
     {
         $objReturnValue=null;
         try {
+            
+            //Get country data
             $objReturnValue = $this->countryrepository->getAllCountryData();
+
         } catch(AccessDeniedHttpException $e) {
             throw new AccessDeniedHttpException($e->getMessage());
         } catch(BadRequestHttpException $e) {

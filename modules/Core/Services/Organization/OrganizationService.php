@@ -79,7 +79,7 @@ class OrganizationService extends BaseService
     ) {
         $this->organizationRepository       = $organizationRepository;
         $this->lookupRepository             = $lookupRepository;
-        $this->filesystemRepository               = $filesystemRepository;
+        $this->filesystemRepository         = $filesystemRepository;
         $this->roleService                  = $roleService;
     } //Function ends
 

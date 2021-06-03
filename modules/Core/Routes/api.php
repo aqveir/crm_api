@@ -33,8 +33,8 @@ $api->version('v1', [
 
         // Organization Endpoint
         $api->group(['prefix' => 'meta'], function(Router $api) {
-            $api->get('countries', 'Backend\\OrganizationController@index');
-            $api->get('timezones', 'Backend\\OrganizationController@index');
+            $api->get('country', 'Backend\\CountryController@index');
+            $api->get('timezone', 'Backend\\TimezoneController@index');
         });
 
         // Organization Endpoint

@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Core\Repositories;
+namespace Modules\Core\Repositories\Core;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
