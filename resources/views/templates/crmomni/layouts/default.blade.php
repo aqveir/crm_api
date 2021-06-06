@@ -166,7 +166,7 @@
                                             <li><a href="#">Sales Analytics</a></li>
                                             <li><a href="#">Digital Marketing</a></li>
                                             <li><a href="#">Financial Help</a></li>
-                                            <li><a href="{{ route('crmomni.site.faq', [request()->getHost()]) }}">FAQs</a></li>
+                                            <li><a href="{{ url('/faq') }}">FAQs</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -180,16 +180,16 @@
                 </div>
             </div>
 
-            <div class="copyright d-flex">
-                <div class="flex-grow-0 footer-bottom ml-3">
+            <div class="footer-bottom copyright d-flex p-4">
+                <div class="flex-grow-0">
                     &copy; {{ now()->year }} 
                     <a target="_blank" href="https://www.ellaisys.com/">Ellai Information Systetms Pvt Ltd</a>. All rights reserved
                 </div>
-                <div class="flex-fill footer-bottom mr-3">
+                <div class="flex-fill">
                     <ul class="footer-nav pull-right">
-                        <li><a href="{{ route('crmomni.site.tnc', [request()->getHost()]) }}">Terms &amp; Conditions</a></li>
-                        <li><a href="{{ route('crmomni.site.policy', [request()->getHost()]) }}">Privacy Policy</a></li>
-                        <li><a href="{{ route('crmomni.site.legal', [request()->getHost()]) }}">Legal</a></li>
+                        <li><a href="{{ url('/terms_conditions') }}">Terms &amp; Conditions</a></li>
+                        <li><a href="{{ url('/privacy_policy') }}">Privacy Policy</a></li>
+                        <li><a href="{{ url('/legal') }}">Legal</a></li>
                     </ul>
                 </div>
             </div>

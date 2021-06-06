@@ -21168,3 +21168,8 @@ div#mCSB_1_container{
 .main-footer.style-six .copyright {
   margin-top: 50px;
 }
+
+.scroll-top.open {
+  bottom: 100px;
+  border-radius: 25px;
+}

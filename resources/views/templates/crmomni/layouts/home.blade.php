@@ -566,8 +566,21 @@
                     </div>
                 </div>
             </div>
+            
             <div class="footer-bottom">
-                <div class="copyright">&copy; 2020 <a href="#">appway</a>. All rights reserved</div>
+                <div class="copyright d-flex p-2">
+                    <div class="flex-grow-0">
+                        &copy; {{ now()->year }} 
+                        <a target="_blank" href="https://www.ellaisys.com/">Ellai Information Systetms Pvt Ltd</a>. All rights reserved
+                    </div>
+                    <div class="flex-fill">
+                        <ul class="footer-nav list-inline pull-right">
+                            <li class="list-inline-item"><a href="{{ url('/terms_conditions') }}">Terms &amp; Conditions</a></li>
+                            <li class="list-inline-item"><a href="{{ url('/privacy_policy') }}">Privacy Policy</a></li>
+                            <li class="list-inline-item"><a href="{{ url('/legal') }}">Legal</a></li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </footer>
