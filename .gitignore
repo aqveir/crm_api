@@ -19,4 +19,10 @@ yarn-error.log
 /storage/api-docs/api-docs.json
 
 # Ignore folders in public folder
-/public/**
+/public/*
+
+# Include some folder in public folder
+!/public/css
+!/public/fonts
+!/public/images
+!/public/js

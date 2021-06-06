@@ -6,11 +6,23 @@ return [
 
         /*
         |--------------------------------------------------------------------------
-        | Back-end URI prefix
+        | Application Domain
         |--------------------------------------------------------------------------
         |
-        | Specifies the URL name used for accessing back-end pages.
-        | For example: backend -> http://localhost/console
+        | Specifies the Application Domian name used for accessing the console pages.
+        | For example: {subdomain}.domainname.com
+        |
+        */
+        'website' => env('APPLICATION_WEBSITE', ['localhost', 'www', '']),
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Application Domain
+        |--------------------------------------------------------------------------
+        |
+        | Specifies the Application Domian name used for accessing the console pages.
+        | For example: {subdomain}.domainname.com
         |
         */
         'domain' => env('APPLICATION_DOAMIN', '{subdomain}.crmomni.com'),
@@ -105,6 +117,12 @@ return [
             ]
         ],
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | Specifies the HTTP Status code
+        |--------------------------------------------------------------------------
+        */
         'http_status_code' => [
             'success' => 200
         ],
@@ -126,14 +144,18 @@ return [
             ],
         ],
 
+
+        /*
+        |--------------------------------------------------------------------------
+        | Specifies the external endpoints and configurations
+        |--------------------------------------------------------------------------
+        */
         'external_data' => [
             //Currency exchange rates
             'currency_exchange' => [
                 'base_uri' => 'https://api.ratesapi.io/api',
                 'timeout' => 60
             ],
-
-            
         ],
     ],
 ];

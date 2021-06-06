@@ -157,6 +157,17 @@ class ContactFileService extends BaseService
             //Get organization data
             $organization = $this->getOrganizationByHash($orgHash);
 
+            //Create file object from path
+            //$file = new File($payload['file_path']);
+
+            var_dump($payload);
+
+
+            /**
+             * REFER: https://www.youtube.com/watch?v=6P_nqOX38CE
+             */
+
+
             Log::info('processUpload called');
 
 
