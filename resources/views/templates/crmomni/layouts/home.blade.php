@@ -37,7 +37,7 @@
             <div class="container">
                 <div class="main-box clearfix">
                     <div class="logo-box pull-left">
-                        <figure class="logo"><a href="http://crmomni.com/"><img src="images/logo-3.png" alt=""></a></figure>
+                        <figure class="logo"><a href="{{ url('/') }}"><img src="images/logo-3.png" alt=""></a></figure>
                     </div>
 
                     @include('templates.crmomni.partials.layout-menu-header')
@@ -60,7 +60,7 @@
     <!-- main-header end -->
 
     <!-- Mobile Menu  -->
-    <div class="mobile-menu">
+    <div class="mobile-menu d-block d-md-none d-lg-none d-xl-none">
         <div class="menu-backdrop"></div>
         <div class="close-btn"><i class="fas fa-times"></i></div>
         
@@ -101,15 +101,10 @@
             <div class="row align-items-center">
                 <div class="col-lg-6 col-md-12 col-sm-12 content-column">
                     <div class="content-box">
-                        <h1>Close more deals with the world's favorite <br /><span>CRM</span></h1>
-                        <div class="text">Appway CRM helps you engage with leads and customers, get insights about your business, build a scalable sales process, and grow your business faster</div>
+                        <h1>Empower your business with the AI Powered<br /><span>Omni CRM</span></h1>
+                        <div class="text">Omni CRM helps you engage your leads and customers, get insights about your business, build a scalable sales process, and grow your business faster</div>
                         <div class="mail-box">
-                            <form action="#" method="post">
-                                <div class="form-group">
-                                    <input type="email" name="email" placeholder="Enter Your Email" required="">
-                                    <button type="submit">Start Today</button>
-                                </div>
-                            </form>
+                            <a href="{{ url('/register') }}" class="btn btn-crmomni-primary">Start Now</a>
                         </div>
                     </div>
                 </div>
@@ -124,7 +119,7 @@
     <!-- banner-section end -->
 
     <!-- award-section -->
-    <section class="award-section" hidden>
+    <section class="award-section d-none" hidden>
         <div class="container">
             <div class="row">
                 <div class="col-lg-10 col-md-12 col-sm-12 offset-lg-1 content-column">
@@ -160,6 +155,7 @@
                             <li>Best-in-class sales automation features for automating your entire business process.</li>
                             <li>Spend more time interacting with your customers and less on manually entering data.</li>
                             <li>Powerful analytics and reporting that helps you make smarter business decisions.</li>
+                            <li>Empowered with AI based solutions that automate your work and secure your data.</li>
                         </ul>
                     </div>
                 </div>
@@ -553,13 +549,13 @@
                                 <h4 class="widget-title">Links</h4>
                                 <div class="widget-content">
                                     <ul class="list clearfix">
-                                        <li><a href="{{ route('crmomni.site.index', [request()->getHost()]) }}">Home</a></li>
+                                        <li><a href="{{ url('/') }}">Home</a></li>
                                         <li><a href="#">Services</a></li>
                                         <li><a href="#">Price Plan</a></li>
                                         <li><a href="#">Testimonials</a></li>
                                         <li><a href="#">News</a></li>
-                                        <li><a href="{{ route('crmomni.site.contact', [request()->getHost()]) }}">Contact Us</a></li>
-                                        <li><a href="{{ route('crmomni.site.faq', [request()->getHost()]) }}">FAQs</a></li>
+                                        <li><a href="{{ url('/contact') }}">Contact Us</a></li>
+                                        <li><a href="{{ url('/faq') }}">FAQs</a></li>
                                     </ul>
                                 </div>
                             </div>

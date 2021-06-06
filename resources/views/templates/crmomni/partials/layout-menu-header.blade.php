@@ -9,7 +9,7 @@
     <nav class="main-menu navbar-expand-md navbar-light">
         <div class="collapse navbar-collapse show clearfix" id="navbarSupportedContent">
             <ul class="navigation clearfix">
-                <li class="{{ Route::currentRouteName() == 'crmomni.site.index' ? 'current' : '' }}"><a href="{{ route('crmomni.site.index', [request()->getHost()]) }}">Home</a></li>
+                <li class="{{ Route::currentRouteName() == 'crmomni.site.index' ? 'current' : '' }}"><a href="{{ url('/') }}">Home</a></li>
                 <li class="dropdown" hidden><a href="#">App</a>
                     <ul class="megamenu clearfix">
                         <li><a href="index.html">App Landing</a></li>
@@ -225,8 +225,8 @@
                         <li><a href="blog-details.html">News Details</a></li>
                     </ul>
                 </li>
-                <li class="{{ Route::currentRouteName() == 'crmomni.site.pricing' ? 'current' : '' }}"><a href="{{ route('crmomni.site.pricing', [request()->getHost()]) }}">Pricing Plans</a></li>                              
-                <li class="{{ Route::currentRouteName() == 'crmomni.site.contact' ? 'current' : '' }}"><a href="{{ route('crmomni.site.contact', [request()->getHost()]) }}">Contact</a></li>
+                <li class="{{ Route::currentRouteName() == 'crmomni.site.pricing' ? 'current' : '' }}"><a href="{{ url('/pricing') }}">Pricing Plans</a></li>                              
+                <li class="{{ Route::currentRouteName() == 'crmomni.site.contact' ? 'current' : '' }}"><a href="{{ url('/contact') }}">Contact</a></li>
             </ul>
         </div>
     </nav>
