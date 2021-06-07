@@ -4,11 +4,27 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<meta name="author" content="CRM OMNI, an EllaiSys brand">
+		<meta name="copyright" content="&copy; 2021 Ellai Information Systems Private Limited" />
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+		<meta http-equiv="Content-Language" content="en-EN">
+		<meta name="description" content="CRM OMNI - AI Powered CRM Platform">
+		<meta name="keywords" content="crm,ai,leads,customer,contact,ellaisys,ellaisys.com,ellai,crmomni.com,pune,india,technology">
+		<meta http-equiv="CACHE-CONTROL" content="NO-CACHE" />
+		<meta http-equiv="CACHE-CONTROL" content="max-age=0" />
+		<meta http-equiv="EXPIRES" content="0" />
+		<meta http-equiv="EXPIRES" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+		<meta http-equiv="PRAGMA" content="NO-CACHE" />
+		<meta name="GOOGLEBOT" content="NOARCHIVE" />
+		<meta name="google" content="notranslate">
+		<meta name="ROBOTS" content="NONE" />
+		<meta name="msapplication-TileColor" content="#ffffff">
+		<meta name="theme-color" content="#ffffff">
 
         <title>@yield('site_title') [Omni CRM]</title>
 
         <!-- Fav Icon -->
-        <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="{{ asset('images/favicon.ico') }}" type="image/x-icon">
 
         <!-- Google Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,300i,400,400i,500,500i,700,700i&display=swap" rel="stylesheet">
@@ -87,7 +103,7 @@
         </div><!-- End Mobile Menu -->
 
         <!-- page-title -->
-        <section class="page-title" style="background-image: url({{ asset('images/background/pagetitle-bg.png') }});background-position-y: -185px;">
+        <section class="page-title" style="background-image: url({{ asset('images/background/pagetitle-bg.png') }}); background-position-y: -344px; background-position-x: -80px; background-size: initial;">
             <div class="anim-icons">
                 <div class="icon icon-1"><img src="{{ asset('images/icons/anim-icon-17.png') }}" alt=""></div>
                 <div class="icon icon-2 rotate-me"><img src="{{ asset('images/icons/anim-icon-18.png') }}" alt=""></div>
@@ -148,10 +164,10 @@
                                     <h4 class="widget-title">Company</h4>
                                     <div class="widget-content">
                                         <ul class="list clearfix">
-                                            <li><a href="#">About</a></li>
-                                            <li><a href="#">Our Leadership</a></li>
-                                            <li><a href="#">Carrers</a></li>
-                                            <li><a href="#">What We Do</a></li>
+                                            <li><a href="{{ url('/company/about') }}">About Us</a></li>
+                                            <li><a href="{{ url('/company/team') }}">Core Team</a></li>
+                                            <li><a href="{{ url('/company/careers') }}">Carrers</a></li>
+                                            <li><a href="{{ url('/company/news') }}">News &amp; Press</a></li>
                                         </ul>
                                     </div>
                                 </div>

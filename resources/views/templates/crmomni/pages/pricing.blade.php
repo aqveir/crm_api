@@ -13,16 +13,16 @@
                     <div class="pricing-table">
                         <div class="table-header">
                             <h3 class="title">Starter</h3>
-                            <div class="text">on the other hand</div>
-                            <h2 class="price">FREE<span> forever</span></h2>
+                            <div class="text"> </div>
+                            <h2 class="price">FREE</h2>
                         </div>
                         <div class="table-content">
-                            <ul> 
-                                <li>Free Customer Support</li>
-                                <li>Free installation</li>
+                            <ul>
+                                <li>Free setup</li>
                                 <li>Free Back-up</li>
-                                <li>-</li>
-                                <li>-</li>
+                                <li>100 Contacts</li>
+                                <li>250 Leads/Opportunities</li>
+                                <li>1 User</li>
                             </ul>
                         </div>
                         <div class="table-footer">

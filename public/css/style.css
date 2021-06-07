@@ -21122,10 +21122,6 @@ div#mCSB_1_container{
 
 ***/
 
-.w-25p { width: 25%; }
-.w-50p { width: 50%; }
-.w-100p { width: 100%; }
-
 .sticky-header {
   background-color: #336699;
 }
@@ -21147,6 +21143,23 @@ div#mCSB_1_container{
   left: calc(100% - 500px);
 }
 
+.main-menu .navigation > li > .megamenu.megamenu-right li {
+
+}
+.main-menu .navigation > li > .megamenu.megamenu-right li:hover {
+  background-color: #f3f5fe;
+}
+.main-menu .navigation > li > .megamenu.megamenu-right li:hover::before {
+  content: '\00BB';
+  position: absolute;
+  left: 10px;
+  top: 2px;
+  font-weight: 800;
+}
+.main-menu .navigation > li > .megamenu.megamenu-right li:first-child:hover::before {
+  content: '';
+}
+
 .main-box .main-menu .navigation > li {
   margin: 0px 20px !important;
 }
@@ -21166,7 +21179,7 @@ div#mCSB_1_container{
   margin-bottom: 40px;
 }
 
-.page-title{
+.page-title {
   padding: 140px 0px 140px 0px;
 }
 
@@ -21174,8 +21187,8 @@ div#mCSB_1_container{
   background: none;
 }
 
-.contact-section, .faq-section {
-  padding: 50px 0px 100px 0px;
+.contact-section, .faq-section, .team-style-two, .our-history, .pricing-style-two {
+  padding: 50px 0px 100px 0px !important;
 }
 
 .main-footer.style-six .copyright {
@@ -21185,4 +21198,36 @@ div#mCSB_1_container{
 .scroll-top.open {
   bottom: 100px;
   border-radius: 25px;
+}
+
+ul.team-social > li.social_icons {
+  margin-right: 2px !important;
+}
+ul.team-social > li.social_icons i.fab {
+  padding: 7px;
+  border-radius: 16px;
+  width: 32px;
+  background: #f4f4f4;
+}
+.team-social > .social_icons i.fab:hover {
+  color: white;
+  background: #336699;  
+}
+ul.team-social > li.social_icons i.fab.fa-facebook-f::before {
+  margin-left: 4px;
+}
+
+span.role {
+  padding: 14px !important;
+  line-height: 0px !important;
+  border-radius: 4px !important;
+}
+.pricing-block-two .pricing-table .table-header {
+  height: 170px;
+}
+.pricing-block-two .pricing-table .table-content {
+  height: 300px;
+}
+.pricing-block-two .pricing-table .table-header .price:before{
+  content: '' !important;
 }

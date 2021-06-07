@@ -227,8 +227,8 @@
                 </li>
                 <li class="dropdown"><a href="#">Company</a>
                     <ul class="megamenu megamenu-right clearfix">
-                        <li>
-                            <img src="{{ asset('images/resource/case-4.png') }}" class="rounded mx-auto d-block" />
+                        <li class="p-0 m-0">
+                            <img src="{{ asset('images/resource/company-menu.png') }}" class="rounded mx-auto d-block" />
                         </li>
                         <li><a href="{{ url('/company/about') }}">About Us</a></li>
                         <li><a href="{{ url('/company/team') }}">Core Team</a></li>
@@ -243,7 +243,7 @@
         </div>
     </nav>
 
-    <div class="menu-right-content clearfix d-block d-sm-none">
+    <div class="menu-right-content clearfix d-none">
         <div class="btn-box"><a href="{{ url('/register') }}">Start Now</a></div>
     </div>
 </div>
