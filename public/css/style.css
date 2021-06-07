@@ -21121,6 +21121,15 @@ div#mCSB_1_container{
 ====================================================================
 
 ***/
+
+.w-25p { width: 25%; }
+.w-50p { width: 50%; }
+.w-100p { width: 100%; }
+
+.sticky-header {
+  background-color: #336699;
+}
+
 .btn.btn-crmomni-primary {
   width: 170px;
   height: 60px;
@@ -21132,6 +21141,10 @@ div#mCSB_1_container{
   border-radius: 30px;
   cursor: pointer;
   transition: all 500ms ease;
+}
+
+.main-menu .navigation > li > .megamenu.megamenu-right {
+  left: calc(100% - 500px);
 }
 
 .main-box .main-menu .navigation > li {

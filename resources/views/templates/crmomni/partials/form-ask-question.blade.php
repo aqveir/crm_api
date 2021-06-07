@@ -1,6 +1,6 @@
 <!-- question-section -->
 <section class="question-section">
-    <div class="image-layer" style="background-image: url(images/icons/layer-image-8.png);"></div>
+    <div class="image-layer" style="background-image: url({{ asset('images/icons/layer-image-8.png') }});"></div>
     <div class="container">
         <div class="row">
             <div class="col-lg-10 col-md-12 col-sm-12 offset-lg-1 inner-column">

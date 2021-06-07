@@ -33,6 +33,14 @@ Route::domain(config('crmomni.settings.domain'))->group(function() {
 
 	Route::get('/register', function() { return view('templates.crmomni.pages.register'); })->name('crmomni.site.register');
 
+	Route::prefix('company')->group(function() {
+		Route::get('/about', function() { return view('templates.crmomni.pages.company.about'); })->name('crmomni.site.company.about');
+		Route::get('/team', function() { return view('templates.crmomni.pages.company.team'); })->name('crmomni.site.company.team');
+		Route::get('/partners', function() { return view('templates.crmomni.pages.company.partners'); })->name('crmomni.site.company.partners');
+		Route::get('/careers', function() { return view('templates.crmomni.pages.company.careers'); })->name('crmomni.site.company.careers');
+		Route::get('/news', function() { return view('templates.crmomni.pages.company.news'); })->name('crmomni.site.company.news');
+	});
+
 	// Default route
 	Route::get('/', function(Request $request, string $subdomain) {
 		if (in_array($subdomain , config('crmomni.settings.website'))) {

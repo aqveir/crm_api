@@ -14,14 +14,14 @@
         <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,300i,400,400i,500,500i,700,700i&display=swap" rel="stylesheet">
 
         <!-- Stylesheets -->
-        <link href="css/font-awesome-all.css" rel="stylesheet">
-        <link href="css/flaticon.css" rel="stylesheet">
-        <link href="css/owl.css" rel="stylesheet">
-        <link href="css/bootstrap.css" rel="stylesheet">
-        <link href="css/jquery.fancybox.min.css" rel="stylesheet">
-        <link href="css/animate.css" rel="stylesheet">
-        <link href="css/style.css" rel="stylesheet">
-        <link href="css/responsive.css" rel="stylesheet">
+        <link href="{{ asset('css/font-awesome-all.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/flaticon.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/owl.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/jquery.fancybox.min.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/animate.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+        <link href="{{ asset('css/responsive.css') }}" rel="stylesheet">
     </head>
 
     <!-- page wrapper -->
@@ -37,7 +37,7 @@
                 <div class="container">
                     <div class="main-box clearfix">
                         <div class="logo-box pull-left">
-                            <figure class="logo"><a href="http://www.crmomni.com/"><img src="images/logo-4.png" alt=""></a></figure>
+                            <figure class="logo"><a href="http://www.crmomni.com/"><img src="{{ asset('images/logo-4.png') }}" alt=""></a></figure>
                         </div>
                         @include('templates.crmomni.partials.layout-menu-header')
                     </div>
@@ -47,7 +47,7 @@
             <!--sticky Header-->
             <div class="sticky-header">
                 <div class="container clearfix">
-                    <figure class="logo-box"><a href="http://www.crmomni.com/"><img src="images/small-logo.png" alt=""></a></figure>
+                    <figure class="logo-box"><a href="http://www.crmomni.com/"><img src="{{ asset('images/small-logo.png') }}" alt=""></a></figure>
                     <div class="menu-area">
                         <nav class="main-menu clearfix">
                             <!--Keep This Empty / Menu will come through Javascript-->
@@ -64,7 +64,7 @@
             <div class="close-btn"><i class="fas fa-times"></i></div>
             
             <nav class="menu-box">
-                <div class="nav-logo"><a href="index.html"><img src="images/logo.png" alt="" title=""></a></div>
+                <div class="nav-logo"><a href="index.html"><img src="{{ asset('images/logo.png') }}" alt="" title=""></a></div>
                 <div class="menu-outer"><!--Here Menu Will Come Automatically Via Javascript / Same Menu as in Header--></div>
                 <div class="contact-info">
                     <h4>Contact Info</h4>
@@ -87,11 +87,11 @@
         </div><!-- End Mobile Menu -->
 
         <!-- page-title -->
-        <section class="page-title" style="background-image: url(images/background/pagetitle-bg.png);background-position-y: -185px;">
+        <section class="page-title" style="background-image: url({{ asset('images/background/pagetitle-bg.png') }});background-position-y: -185px;">
             <div class="anim-icons">
-                <div class="icon icon-1"><img src="images/icons/anim-icon-17.png" alt=""></div>
-                <div class="icon icon-2 rotate-me"><img src="images/icons/anim-icon-18.png" alt=""></div>
-                <div class="icon icon-3 rotate-me"><img src="images/icons/anim-icon-19.png" alt=""></div>
+                <div class="icon icon-1"><img src="{{ asset('images/icons/anim-icon-17.png') }}" alt=""></div>
+                <div class="icon icon-2 rotate-me"><img src="{{ asset('images/icons/anim-icon-18.png') }}" alt=""></div>
+                <div class="icon icon-3 rotate-me"><img src="{{ asset('images/icons/anim-icon-19.png') }}" alt=""></div>
                 <div class="icon icon-4" style="top:280px;"></div>
             </div>
             <div class="container">
@@ -114,9 +114,9 @@
         <!-- main-footer -->
         <footer class="main-footer style-five style-six">
             <div class="anim-icons">
-                <div class="icon icon-1"><img src="images/icons/pattern-21.png" alt=""></div>
+                <div class="icon icon-1"><img src="{{ asset('images/icons/pattern-21.png') }}" alt=""></div>
             </div>
-            <div class="image-layer" style="background-image: url(images/icons/footer-bg-6.png);"></div>
+            <div class="image-layer" style="background-image: url({{ asset('images/icons/footer-bg-6.png') }});"></div>
             <div class="container">
                 <div class="footer-top">
                     <div class="widget-section pb-5">
@@ -248,28 +248,28 @@
         </button>
 
         <!-- jequery plugins -->
-        <script src="js/jquery.js"></script>
-        <script src="js/popper.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/owl.js"></script>
-        <script src="js/wow.js"></script>
-        <script src="js/validation.js"></script>
-        <script src="js/jquery.fancybox.js"></script>
-        <script src="js/appear.js"></script>
-        <script src="js/circle-progress.js"></script>
-        <script src="js/jquery.countTo.js"></script>
-        <script src="js/scrollbar.js"></script>
-        <script src="js/nav-tool.js"></script>
-        <script src="js/jquery.paroller.min.js"></script>
-        <script src="js/tilt.jquery.js"></script>
+        <script src="{{ asset('js/jquery.js') }}"></script>
+        <script src="{{ asset('js/popper.min.js') }}"></script>
+        <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('js/owl.js') }}"></script>
+        <script src="{{ asset('js/wow.js') }}"></script>
+        <script src="{{ asset('js/validation.js') }}"></script>
+        <script src="{{ asset('js/jquery.fancybox.js') }}"></script>
+        <script src="{{ asset('js/appear.js') }}"></script>
+        <script src="{{ asset('js/circle-progress.js') }}"></script>
+        <script src="{{ asset('js/jquery.countTo.js') }}"></script>
+        <script src="{{ asset('js/scrollbar.js') }}"></script>
+        <script src="{{ asset('js/nav-tool.js') }}"></script>
+        <script src="{{ asset('s/jquery.paroller.min.js') }}"></script>
+        <script src="{{ asset('js/tilt.jquery.js') }}"></script>
 
         <!-- map script -->
         <script src="http://maps.google.com/maps/api/js?key=AIzaSyATY4Rxc8jNvDpsK8ZetC7JyN4PFVYGCGM"></script>
-        <script src="js/gmaps.js"></script>
-        <script src="js/map-helper.js"></script>
+        <script src="{{ asset('js/gmaps.js') }}"></script>
+        <script src="{{ asset('js/map-helper.js') }}"></script>
 
         <!-- main-js -->
-        <script src="js/script.js"></script>
+        <script src="{{ asset('js/script.js') }}"></script>
 
     </body><!-- End of .page_wrapper -->
 </html>

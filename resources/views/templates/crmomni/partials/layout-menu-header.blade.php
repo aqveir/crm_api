@@ -10,7 +10,7 @@
         <div class="collapse navbar-collapse show clearfix" id="navbarSupportedContent">
             <ul class="navigation clearfix">
                 <li class="{{ Route::currentRouteName() == 'crmomni.site.index' ? 'current' : '' }}"><a href="{{ url('/') }}">Home</a></li>
-                <li class="dropdown" hidden><a href="#">App</a>
+                <li class="dropdown"><a href="#">App</a>
                     <ul class="megamenu clearfix">
                         <li><a href="index.html">App Landing</a></li>
                         <li><a href="e-commerce.html">E-Commerce</a></li>
@@ -33,7 +33,7 @@
                         <li><a href="home-charity.html">Home Charity</a></li>
                     </ul>
                 </li> 
-                <li class="dropdown" hidden><a href="#">Pages</a>
+                <li class="dropdown"><a href="#">Pages</a>
                     <ul>
                         <li class="dropdown"><a href="#">Team Page</a>
                             <ul>
@@ -225,13 +225,25 @@
                         <li><a href="blog-details.html">News Details</a></li>
                     </ul>
                 </li>
-                <li class="{{ Route::currentRouteName() == 'crmomni.site.pricing' ? 'current' : '' }}"><a href="{{ url('/pricing') }}">Pricing Plans</a></li>                              
-                <li class="{{ Route::currentRouteName() == 'crmomni.site.contact' ? 'current' : '' }}"><a href="{{ url('/contact') }}">Contact</a></li>
+                <li class="dropdown"><a href="#">Company</a>
+                    <ul class="megamenu megamenu-right clearfix">
+                        <li>
+                            <img src="{{ asset('images/resource/case-4.png') }}" class="rounded mx-auto d-block" />
+                        </li>
+                        <li><a href="{{ url('/company/about') }}">About Us</a></li>
+                        <li><a href="{{ url('/company/team') }}">Core Team</a></li>
+                        <li><a href="{{ url('/company/partners') }}">Partners</a></li>
+                        <li><a href="{{ url('/company/careers') }}">Careers</a></li>
+                        <li><a href="{{ url('/company/news') }}">News &amp; Press</a></li>
+                    </ul>
+                </li>
+
+                <li class="{{ Route::currentRouteName() == 'crmomni.site.pricing' ? 'current' : '' }}"><a href="{{ url('/pricing') }}">Pricing</a></li>
             </ul>
         </div>
     </nav>
 
-    <div class="menu-right-content clearfix">
+    <div class="menu-right-content clearfix d-block d-sm-none">
         <div class="btn-box"><a href="{{ url('/register') }}">Start Now</a></div>
     </div>
 </div>

@@ -4,6 +4,22 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<meta name="author" content="CRM OMNI, an EllaiSys brand">
+		<meta name="copyright" content="&copy; 2021 Ellai Information Systems Private Limited" />
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+		<meta http-equiv="Content-Language" content="en-EN">
+		<meta name="description" content="CRM OMNI - AI Powered CRM Platform">
+		<meta name="keywords" content="crm,ai,leads,customer,contact,ellaisys,ellaisys.com,ellai,crmomni.com,pune,india,technology">
+		<meta http-equiv="CACHE-CONTROL" content="NO-CACHE" />
+		<meta http-equiv="CACHE-CONTROL" content="max-age=0" />
+		<meta http-equiv="EXPIRES" content="0" />
+		<meta http-equiv="EXPIRES" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+		<meta http-equiv="PRAGMA" content="NO-CACHE" />
+		<meta name="GOOGLEBOT" content="NOARCHIVE" />
+		<meta name="google" content="notranslate">
+		<meta name="ROBOTS" content="NONE" />
+		<meta name="msapplication-TileColor" content="#ffffff">
+		<meta name="theme-color" content="#ffffff">
 
         <title>@yield('title')</title>
 

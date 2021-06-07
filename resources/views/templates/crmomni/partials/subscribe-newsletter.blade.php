@@ -5,8 +5,8 @@
             <div class="col-lg-6 col-md-12 col-sm-12 image-column">
                 <div id="image_block_38">
                     <div class="image-box">
-                        <div class="bg-layer" style="background-image: url(images/icons/user-icon.png);"></div>
-                        <figure class="image float-bob-y clearfix"><img src="images/resource/user-16.png" alt=""></figure>
+                        <div class="bg-layer" style="background-image: url({{ asset('images/icons/user-icon.png') }});"></div>
+                        <figure class="image float-bob-y clearfix"><img src="{{ asset('images/resource/user-16.png') }}" alt=""></figure>
                     </div>
                 </div>
             </div>
