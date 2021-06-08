@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Core\Transformers\Organization;
+namespace Modules\Core\Transformers\Response\Organization;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;

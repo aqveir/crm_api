@@ -9,9 +9,6 @@ use Modules\Core\Contracts\{OrganizationContract};
 use Modules\Core\Models\Organization\Organization;
 use Modules\Core\Repositories\EloquentRepository;
 
-use Modules\Core\Transformers\Organization\OrganizationResource;
-use Modules\Core\Transformers\Organization\OrganizationMiniResource;
-
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
 
@@ -56,10 +53,7 @@ class OrganizationRepository extends EloquentRepository implements OrganizationC
             } //End if
             $query = $query->load(['users', 'configurations']);
 
-            $objReturnValue = $query;
-
-            //Transform data
-            //$objReturnValue = new OrganizationResource($query);	
+            $objReturnValue = $query;	
 		} catch(Exception $e) {
 			$objReturnValue=null;
 			throw $e;
@@ -135,7 +129,7 @@ class OrganizationRepository extends EloquentRepository implements OrganizationC
             $query = $query->get();
 
             //Transform data
-            $objReturnValue = OrganizationMiniResource::collection($query);
+            $objReturnValue = $query;
         } catch(Exception $e) {
             $objReturnValue=null;
             Log::error(json_encode($e));

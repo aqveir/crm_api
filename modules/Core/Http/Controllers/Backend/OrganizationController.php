@@ -16,6 +16,9 @@ use Modules\Core\Http\Requests\Backend\Organization\DeleteOrganizationRequest;
 
 use Modules\Core\Services\Organization\OrganizationService;
 
+use Modules\Core\Transformers\Response\Organization\OrganizationResource;
+use Modules\Core\Transformers\Response\Organization\OrganizationMiniResource;
+
 use Symfony\Component\HttpFoundation\Response;
 
 use Exception;
@@ -74,7 +77,10 @@ class OrganizationController extends ApiBaseController
             $payload = collect($request);
 
             //Fetch all organizations data
-            $data = $organizationService->getAll($payload, true);
+            $result = $organizationService->getAll($payload, true);
+
+            //Transform data
+            $data = new OrganizationMiniResource($result);
 
             //Send response data
             return $this->response->success(compact('data'));
@@ -122,7 +128,10 @@ class OrganizationController extends ApiBaseController
             $payload = collect($request);
 
             //Fetch organization data
-            $data = $organizationService->getData($payload, $organization['hash'], true);
+            $result = $organizationService->getData($payload, $organization['hash'], true);
+
+            //Transform data
+            $data = new OrganizationResource($result);
 
             //Send response data
             return $this->response->success(compact('data'));
