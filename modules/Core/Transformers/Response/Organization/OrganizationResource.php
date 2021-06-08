@@ -15,15 +15,21 @@ class OrganizationResource extends JsonResource
      */
     public function toArray($request)
     {
+        //Load dependencies
+        $this->load(['industry', 'country', 'timezone', 'configurations']);
+
         //Get image path if exists
         $logoPath = empty($this->logo)?null:url(Storage::url($this->logo));
 
         //Build response
         $response = $this->only([
-            'hash', 'name', 'subdomain',
-            'website', 'contact_person_name', 'phone', 'phone_idd', 'email',
-            'last_updated_at', 'users_count',
-            'country', 'industry', 'configurations'
+            'hash', 'name', 'subdomain', 'custom_domain', 'website',
+            'address', 'locality', 'city', 'zipcode',
+            'google_place_id', 'longitude', 'latitude',
+            'contact_person_name', 'email', 'phone', 'phone_idd',
+            'search_tags', 'last_updated_at', 'is_active', 
+            'users_count',
+            'industry', 'country', 'timezone', 'configurations'
         ]);
         $response['logo'] = $logoPath;
 

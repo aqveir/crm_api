@@ -39,7 +39,7 @@ class OrganizationMiniResource extends ResourceCollection
 
                 $response = $data->only(
                     'hash', 'name', 'subdomain',
-                    'users_count', 'last_updated_at'
+                    'users_count', 'last_updated_at', 'is_active'
                 );
 
                 $response['logo'] = $logoPath;

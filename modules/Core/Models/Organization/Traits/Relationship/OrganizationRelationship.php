@@ -85,7 +85,7 @@ trait OrganizationRelationship
 
 
 	/**
-	 * Roles
+	 * All Roles in Organization
 	 */
 	public function roles()
 	{
@@ -97,7 +97,7 @@ trait OrganizationRelationship
 
 
 	/**
-	 * Accounts
+	 * All Accounts in Organization
 	 */
 	public function accounts()
 	{
