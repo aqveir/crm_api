@@ -99,11 +99,11 @@ class ContactFileService extends BaseService
      * 
      * @param  \string  $orgHash
      * @param  \Illuminate\Support\Collection  $payload
-     * @param  \Illuminate\Http\UploadedFile  $file
+     * @param  \Illuminate\Http\UploadedFile  $files
      * @param  \string  $ipAddress (optional)
      * 
      */
-    public function upload(string $orgHash, Collection $payload, File $file, string $ipAddress=null)
+    public function upload(string $orgHash, Collection $payload, array $files, string $ipAddress=null)
     {
         $objReturnValue=null;
 
@@ -112,18 +112,24 @@ class ContactFileService extends BaseService
             $organization = $this->getOrganizationByHash($orgHash);
 
             //Upload file, if exists
-            if (empty($file)) {
+            if (empty($files)) {
                 throw new BadRequestHttpException();
             } //End if
 
-            //Upload file
-            $savedFile = $this->uploadFile($orgHash, $file, 'contacts/bulk');
+            //Iterate files and upload
+            $savedFiles = [];
+            foreach ($files as $file) {
+                //Upload file
+                $savedFile = $this->uploadFile($orgHash, $file, 'contacts/bulk');
+
+                array_push($savedFiles, $savedFile);
+            } //End if
 
             //Raise upload event
-            event(new ContactUploadedEvent($organization, $savedFile));
+            //event(new ContactUploadedEvent($organization, $savedFile));
 
             //Assign to the return value
-            $objReturnValue = $savedFile;
+            $objReturnValue = $savedFiles;
 
         } catch(AccessDeniedHttpException $e) {
             log::error('ContactFileService:upload:AccessDeniedHttpException:' . $e->getMessage());

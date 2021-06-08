@@ -313,16 +313,18 @@ class ContactAPIController extends ApiBaseController
             $ipAddress = $this->getIpAddressInRequest($request);
 
             //Uploaded file
-            $file=null;
-            if ($request->hasFile('uploaded_contacts')) {
-                $file = $request->file('uploaded_contacts');
+            $files=null;
+            if ($request->hasFile('files')) {
+                $files = $request->file('files');
+            } else {
+                throw new BadRequestHttpException();
             } //End if
 
             //Create payload
             $payload = collect($request);
 
             //Get data of the Contact
-            $data=$service->upload($orgHash, $payload, $file, $ipAddress);
+            $data=$service->upload($orgHash, $payload, $files, $ipAddress);
 
             //Send response data
             return $this->response->success(compact('data'));

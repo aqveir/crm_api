@@ -370,7 +370,7 @@ return [
 
                 'upload' => [
                     'validation_rules' => [
-                        'uploaded_contacts' => 'required|file|mimes:csv,txt,xls,xlsx|max:1024'
+                        'files.*' => 'required|file|mimes:csv,txt,xls,xlsx|max:1024'
                     ]
                 ],
 
