@@ -11,7 +11,7 @@ use Modules\Contact\Http\Requests\Backend\Contact\FetchContactRequest;
 use Modules\Contact\Http\Requests\Backend\Contact\CreateContactRequest;
 use Modules\Contact\Http\Requests\Backend\Contact\UpdateContactRequest;
 use Modules\Contact\Http\Requests\Backend\Contact\DeleteContactRequest;
-use Modules\Contact\Http\Requests\Backend\Contact\uploadContactRequest;
+use Modules\Contact\Http\Requests\Backend\Contact\UploadContactRequest;
 
 use Modules\Contact\Models\Contact\Contact;
 use Modules\Contact\Services\Contact\ContactService;
