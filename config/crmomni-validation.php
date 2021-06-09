@@ -461,7 +461,7 @@ return [
                         'is_maximum' => 'sometimes|boolean', 
                         'is_multiple' => 'sometimes|boolean', 
                         'keywords' => 'sometimes|string', 
-                        'order' => 'sometimes|number', 
+                        'order' => 'sometimes|numeric', 
                         'type_key' => 'required|string|exists:' . config('crmomni-migration.table_name.lookup_value') . ',key',
                         'data' => 'sometimes',
                         'data.values' => 'required_with:data|array'
