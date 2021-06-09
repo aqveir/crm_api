@@ -436,13 +436,13 @@ return [
                             Rule::unique('preferences', 'name')
                         ],
                         'display_value' => 'required|string|max:100',
-                        'description' => 'sometimes|string|max:1000', 
-                        'column_name' => 'sometimes|string|max:100',
+                        'description' => 'nullable|string|max:1000', 
+                        'column_name' => 'nullable|string|max:100',
                         'is_minimum' => 'sometimes|boolean', 
                         'is_maximum' => 'sometimes|boolean', 
                         'is_multiple' => 'sometimes|boolean', 
                         'keywords' => 'sometimes|string', 
-                        'order' => 'sometimes|number', 
+                        'order' => 'sometimes|numeric', 
                         'type_key' => 'required|string|exists:' . config('crmomni-migration.table_name.lookup_value') . ',key',
                         'data' => 'sometimes',
                         'data.values' => 'required_with:data|array'
