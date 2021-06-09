@@ -110,16 +110,22 @@ class DocumentController extends ApiBaseController
             //Get Org Hash 
             $orgHash = $this->getOrgHashInRequest($request, $subdomain);
 
+            //Get IP Address
+            $ipAddress = $this->getIpAddressInRequest($request);
+
             //Create payload
             $payload = collect($request);
 
             //Check for file upload
-            if (!$request->hasFile('document')) {
-                throw new Exception(400);
+            $files=null;
+            if ($request->hasFile('files')) {
+                $files = $request->file('files');
+            } else {
+                throw new BadRequestHttpException();
             } //End if
 
             //Create document
-            $data = $service->create($orgHash, $payload, $request->file('document'));
+            $data = $service->create($orgHash, $payload, $files, $ipAddress);
 
             //Send response data
             return $this->response->success(compact('data'));

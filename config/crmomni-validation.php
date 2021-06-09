@@ -332,7 +332,7 @@ return [
                         'reference_id'    => 'required|numeric',
                         'title'           => 'required|string|max:150',
                         'description'     => 'string|max:1000',
-                        'document'        => 'required|file|mimes:pdf,doc,docx,jpg,jpeg,png,xls,xlsx,zip,rar,txt'
+                        'files.*'         => 'required|file|mimes:pdf,doc,docx,jpg,jpeg,png,xls,xlsx,zip,rar,txt'
                     ]
                 ],
 

@@ -88,12 +88,12 @@ class DocumentService extends BaseService
      * 
      * @param \string $orgHash
      * @param \Illuminate\Support\Collection $payload
-     * @param \File $file
+     * @param \array $files
      * @param \bool $isAutoCreated (optional)
      *
      * @return mixed
      */
-    public function create(string $orgHash, Collection $payload, File $file, bool $isAutoCreated=false)
+    public function create(string $orgHash, Collection $payload, array $files, string $ipAddress=null, bool $isAutoCreated=false)
 	{
 		$objReturnValue=null;
 		try {
@@ -138,34 +138,40 @@ class DocumentService extends BaseService
             } //Switch ends
             $folderName=(empty($folderName))?:($folderName . '/' . (string) $payload['reference_id']);
 
-            //Save the file to the storage
-            $objFileStore=$this->filesystemRepository->upload($file, $folderName);
-            if (empty($objFileStore)) {
-                throw new BadRequestHttpException();
-            } //End if
+            //Iterate files and upload
+            $documents = [];
+            foreach ($files as $file) {
 
-            //Generate the data payload
-            $data = $payload->only('reference_id', 'title', 'description')->toArray();
-            $data = array_merge(
-                $data,
-                [
-                    'entity_type_id'    => $lookupEntity['id'],
-                    'file_path'         => $objFileStore['file_path'],
-                    'file_extn'         => $file->extension(),
-                    'file_size_in_kb'   => ($objFileStore['file_size']>0)?($objFileStore['file_size']/1024):0,
-                    'is_full_path'      => 0,
-                    'org_id'            => $user['org_id'],
-                    'created_by'        => $user['id']
-                ]
-            );
+                //Save the file to the storage
+                $objFileStore=$this->filesystemRepository->upload($file, $folderName);
+                if (empty($objFileStore)) {
+                    throw new BadRequestHttpException();
+                } //End if
+                
+                //Generate the data payload
+                $data = $payload->only('reference_id', 'title', 'description')->toArray();
+                $data = array_merge(
+                    $data,
+                    [
+                        'entity_type_id'    => $lookupEntity['id'],
+                        'file_path'         => $objFileStore['file_path'],
+                        'file_extn'         => $file->extension(),
+                        'file_size_in_kb'   => ($objFileStore['file_size']>0)?($objFileStore['file_size']/1024):0,
+                        'is_full_path'      => 0,
+                        'org_id'            => $user['org_id']
+                    ]
+                );
 
-            //Create Document
-            $document = $this->documentRepository->create($data);
+                //Create Document
+                $document = $this->documentRepository->create($data, $user['id'], $ipAddress);
+                
+                //Raise event: Document Created
+                event(new DocumentCreatedEvent($document, $isAutoCreated));
+                
+                array_push($documents, $document);
+            } //Loop ends
 
-            //Raise event: Document Created
-            event(new DocumentCreatedEvent($document, $isAutoCreated));
-
-	        $objReturnValue = $document;		
+	        $objReturnValue = $documents;		
         } catch(AccessDeniedHttpException $e) {
             log::error('DocumentService:create:AccessDeniedHttpException:' . $e->getMessage());
             throw new AccessDeniedHttpException($e->getMessage());

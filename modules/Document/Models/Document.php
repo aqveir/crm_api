@@ -49,6 +49,14 @@ class Document extends Model {
 
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = ['last_updated_at'];
+
+
+    /**
      *
      * @var array
      */
@@ -63,6 +71,16 @@ class Document extends Model {
      * @var array
      */
     protected $with = ['type', 'owner'];
+    
+    
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_full_path' => 'boolean'
+    ];
 
 
     /**

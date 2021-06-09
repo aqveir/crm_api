@@ -36,6 +36,7 @@ class CreateDocumentsTable extends Migration
 
             $table->timestamps();
             $table->softDeletes();
+            $table->ipAddress('ip_address')->nullable();
         });
     }
 
