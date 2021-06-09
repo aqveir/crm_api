@@ -272,11 +272,12 @@ class PreferenceController extends ApiBaseController
      * 
      * @return \Illuminate\Http\JsonResponse
      *
-     * @OA\Post(
+     * @OA\Get(
      *     path="/preference/refresh",
      *     tags={"Preference"},
      *     operationId="api.backend.preference.refresh",
      *     security={{"omni_token":{}}},
+     *     @OA\Parameter(ref="#/components/parameters/organization_key"),
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
      *     @OA\Response(response=500, description="Internal Server Error")
@@ -305,4 +306,5 @@ class PreferenceController extends ApiBaseController
             return $this->response->fail([], Response::HTTP_BAD_REQUEST);
         }
     } //Function ends
+    
 } //Class ends

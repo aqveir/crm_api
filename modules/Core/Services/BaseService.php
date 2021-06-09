@@ -173,6 +173,26 @@ abstract class BaseService
     {
         $objReturnValue=null;
         try {
+            $lookupData = $this->getLookupValue($orgId, $payload, $key, $defaultKey);
+            $objReturnValue = $lookupData['id'];
+        } catch(Exception $e) {
+            log::error('BaseService:getLookupValueId:Exception:' . $e->getMessage());
+            throw $e;
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends
+
+
+    /**
+     * Process Lookup Data
+     * 
+     * @return mixed
+     */
+    public function getLookupValue(int $orgId, Collection $payload, string $key=null, string $defaultKey=null)
+    {
+        $objReturnValue=null;
+        try {
 
             $lookupKey = ((!empty($key)) && $payload->has($key) && (!empty($payload[$key])))?$payload[$key]:$defaultKey;
 
@@ -181,10 +201,10 @@ abstract class BaseService
                 //Get lookup data
                 $lookupData = $this->lookupRepository->getLookUpByKey($orgId, $lookupKey);
                 if (empty($lookupData)) { throw new BadRequestHttpException(); } //End if
-                $objReturnValue = $lookupData['id'];
+                $objReturnValue = $lookupData;
             } //End if
         } catch(Exception $e) {
-            log::error('ServiceRequestService:processLookup:Exception:' . $e->getMessage());
+            log::error('BaseService:getLookupValue:Exception:' . $e->getMessage());
             throw $e;
         } //Try-catch ends
 

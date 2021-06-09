@@ -312,7 +312,7 @@ class ContactAPIController extends ApiBaseController
             //Get IP Address
             $ipAddress = $this->getIpAddressInRequest($request);
 
-            //Uploaded file
+            //Check for file upload
             $files=null;
             if ($request->hasFile('files')) {
                 $files = $request->file('files');

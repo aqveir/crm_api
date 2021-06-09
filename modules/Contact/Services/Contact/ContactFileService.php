@@ -99,7 +99,7 @@ class ContactFileService extends BaseService
      * 
      * @param  \string  $orgHash
      * @param  \Illuminate\Support\Collection  $payload
-     * @param  \Illuminate\Http\UploadedFile  $files
+     * @param  \array  $files
      * @param  \string  $ipAddress (optional)
      * 
      */

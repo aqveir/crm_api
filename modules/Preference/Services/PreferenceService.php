@@ -181,6 +181,7 @@ class PreferenceService extends BaseService
     {
         $objReturnValue=null;
         try {
+            //Get Industry
             $industry = $organization->industry()->first();
             $industryKey = (!empty($industry))?($industry['key']):'industry_type_vanilla';
 
@@ -189,13 +190,9 @@ class PreferenceService extends BaseService
             if (!empty($preferences)) {
                 $data = [];
                 foreach ($preferences as $key => $preference) {
-                    //Preference lookup type
-                    $preferencetType = $preference['type_key'];
-                    $type = $this->lookupRepository->getLookUpByKey($organization['id'], $preferencetType);
-                    if (empty($type))
-                    {
-                        throw new Exception('Unable to resolve the entity type');   
-                    } //End if
+
+                    //Preference type identifier
+                    $prefTypeId = $this->getLookupValueId($organization['id'], collect($preference), 'type_key');
 
                     //Preference data values (for lookup)
                     $data_value = [];
@@ -214,7 +211,7 @@ class PreferenceService extends BaseService
                         'is_multiple' => $preference['is_multiple'],
                         'keywords' => $preference['keywords'],
                         'order' => $preference['order'],
-                        'type_id' => $type['id'],
+                        'type_id' => $prefTypeId,
                         'created_by' => 0,
                         'data' => $data_value
                     ];
@@ -271,12 +268,8 @@ class PreferenceService extends BaseService
                     $orgId = $user['org_id'];
                 } //End if
 
-                $preferencetType = $payload['type_key'];
-                $type = $this->lookupRepository->getLookUpByKey($organization['id'], $preferencetType);
-                if (empty($type))
-                {
-                    throw new Exception('Unable to resolve the entity type');   
-                } //End if
+                //Preference type identifier
+                $prefTypeId = $this->getLookupValueId($organization['id'], $payload, 'type_key');
 
                 //Build data
                 $data = [];
@@ -286,7 +279,7 @@ class PreferenceService extends BaseService
                     'keywords', 'order', 'data'
                 ])->toArray();
                 $request = array_merge($request, [
-                    'type_id' => $type['id'],
+                    'type_id' => $prefTypeId,
                     'org_id' => $orgId, 
                     'created_by' => $user['id'] 
                 ]);
@@ -445,16 +438,12 @@ class PreferenceService extends BaseService
             //Authenticated User
             $user = $this->getCurrentUser('backend');
 
-            //Get organization details
-            if ($user->hasRoles(config('crmomni.settings.default.role.key_super_admin'))) {
-                //Get organization data
-                $organization = $this->organizationRepository->where('hash', $orgHash)->first();
+            //Get organization data
+            $organization = $this->getOrganizationByHash($orgHash);
 
-                //Assign to the return value
-                $objReturnValue = $this->createDefault($payload, $organization);                
-            } else {
-                throw new AccessDeniedHttpException();
-            } //End if
+            //Assign to the return value
+            $objReturnValue = $this->createDefault($payload, $organization);
+            
         } catch(AccessDeniedHttpException $e) {
             throw new AccessDeniedHttpException($e->getMessage());
         } catch(BadRequestHttpException $e) {
