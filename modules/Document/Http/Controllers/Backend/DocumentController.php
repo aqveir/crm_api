@@ -43,7 +43,7 @@ class DocumentController extends ApiBaseController
      */
     public function index()
     {
-        return view('note::index');
+        throw new NotFoundHttpException();
     } //Function ends
 
 
@@ -56,11 +56,11 @@ class DocumentController extends ApiBaseController
      * @return \Illuminate\Http\JsonResponse
      *
      * @OA\Get(
-     *     path="/document/{id}",
+     *     path="/document/{hash}",
      *     tags={"Document"},
      *     operationId="api.backend.document.show",
      *     security={{"omni_token":{}}},
-     *     @OA\Parameter(ref="#/components/parameters/identifier"),
+     *     @OA\Parameter(ref="#/components/parameters/hash_identifier"),
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
      *     @OA\Response(response=500, description="Internal Server Error")
@@ -76,14 +76,14 @@ class DocumentController extends ApiBaseController
             $payload = collect($request);
 
             //Update document
-            return $service->download($orgHash, $payload, $document['id']);
+            return $service->download($orgHash, $payload, $document['hash']);
             
         } catch(AccessDeniedHttpException $e) {
             return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
         } catch(Exception $e) {
             return $this->response->fail([], Response::HTTP_BAD_REQUEST);
         }
-    }
+    } //Function ends
 
 
     /**
@@ -147,11 +147,11 @@ class DocumentController extends ApiBaseController
      * @return \Illuminate\Http\JsonResponse
      *
      * @OA\Put(
-     *     path="/document/{id}",
+     *     path="/document/{hash}",
      *     tags={"Document"},
      *     operationId="api.backend.document.update",
      *     security={{"omni_token":{}}},
-     *     @OA\Parameter(ref="#/components/parameters/identifier"),
+     *     @OA\Parameter(ref="#/components/parameters/hash_identifier"),
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
      *     @OA\Response(response=500, description="Internal Server Error")
@@ -167,7 +167,7 @@ class DocumentController extends ApiBaseController
             $payload = collect($request);
 
             //Update document
-            $data = $service->update($orgHash, $payload, $document['id']);
+            $data = $service->update($orgHash, $payload, $document['hash']);
 
             //Send response data
             return $this->response->success(compact('data'));
@@ -189,11 +189,11 @@ class DocumentController extends ApiBaseController
      * @return \Illuminate\Http\JsonResponse
      *
      * @OA\Delete(
-     *     path="/document/{id}",
+     *     path="/document/{hash}",
      *     tags={"Document"},
      *     operationId="api.backend.document.delete",
      *     security={{"omni_token":{}}},
-     *     @OA\Parameter(ref="#/components/parameters/identifier"),
+     *     @OA\Parameter(ref="#/components/parameters/hash_identifier"),
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
      *     @OA\Response(response=500, description="Internal Server Error")
@@ -209,7 +209,7 @@ class DocumentController extends ApiBaseController
             $payload = collect($request);
 
             //Delete document
-            $data = $service->delete($orgHash, $payload, $document['id']);
+            $data = $service->delete($orgHash, $payload, $document['hash']);
 
             //Send response data
             return $this->response->success(compact('data'));

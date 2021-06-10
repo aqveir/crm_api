@@ -101,17 +101,11 @@ class DocumentService extends BaseService
             $user = $this->getCurrentUser('backend');
 
             //Lookup data
-            $entityType = $payload['entity_type'];
-            $lookupEntity = $this->lookupRepository->getLookUpByKey($user['org_id'], $entityType);
-            if (empty($lookupEntity))
-            {
-                log::error('Unable to resolve $lookupEntity');
-                throw new Exception('Unable to resolve the entity type');   
-            } //End if
+            $entityTypeId = $this->getLookupValueId($user['org_id'], $payload, 'entity_type');
 
             //Create
             $folderName=$orgHash . '/';
-            switch ($entityType) {
+            switch ($payload['entity_type']) {
                 case 'entity_type_contact':
                     $folderName .= 'contact';
                     break;
@@ -153,9 +147,10 @@ class DocumentService extends BaseService
                 $data = array_merge(
                     $data,
                     [
-                        'entity_type_id'    => $lookupEntity['id'],
+                        'entity_type_id'    => $entityTypeId,
                         'file_path'         => $objFileStore['file_path'],
-                        'file_extn'         => $file->extension(),
+                        'file_name'         => $objFileStore['file_name'],
+                        'file_extn'         => $objFileStore['file_extn'],
                         'file_size_in_kb'   => ($objFileStore['file_size']>0)?($objFileStore['file_size']/1024):0,
                         'is_full_path'      => 0,
                         'org_id'            => $user['org_id']
@@ -192,11 +187,11 @@ class DocumentService extends BaseService
      * 
      * @param \string $orgHash
      * @param \Illuminate\Support\Collection $payload
-     * @param \int $documentId
+     * @param \string $documentHash
      * 
      * @return mixed
      */
-    public function update(string $orgHash, Collection $payload, int $documentId)
+    public function update(string $orgHash, Collection $payload, string $documentHash)
     {
 		$objReturnValue=null;
 		try {
@@ -207,7 +202,7 @@ class DocumentService extends BaseService
             $data = $payload->only(['title', 'description'])->toArray();
 
             //Update Document Metadata
-            $document = $this->documentRepository->update($documentId, 'id', $data, $user['id']);
+            $document = $this->documentRepository->update($documentHash, 'hash', $data, $user['id']);
 
             //Raise event: Document Deleted
             event(new DocumentUpdatedEvent($document));  
@@ -233,28 +228,25 @@ class DocumentService extends BaseService
      * 
      * @param \string $orgHash
      * @param \Illuminate\Support\Collection $payload
-     * @param \int $documentId
+     * @param \string $documentHash
      * 
      * @return mixed
      */
-    public function delete(string $orgHash, Collection $payload, int $documentId)
+    public function delete(string $orgHash, Collection $payload, string $documentHash, string $ipAddress=null)
     {
 		$objReturnValue=null;
 		try {
             //Authenticated User
             $user = $this->getCurrentUser('backend');
 
-            //Get Document
-            $document = $this->documentRepository->getById($documentId);
-
             //SoftDelete Document
-            $response = $this->documentRepository->deleteById($documentId, $user['id']);
-            if ($response) {
+            $document = $this->documentRepository->delete($documentHash, 'hash', $user['id'], $ipAddress);
+            if ($document) {
                 //Raise event: Document Deleted
                 event(new DocumentDeletedEvent($document));
             } //End if
 
-	        $objReturnValue = $response;		
+	        $objReturnValue = $document;		
         } catch(AccessDeniedHttpException $e) {
             log::error('DocumentService:delete:AccessDeniedHttpException:' . $e->getMessage());
             throw new AccessDeniedHttpException($e->getMessage());
@@ -275,11 +267,11 @@ class DocumentService extends BaseService
      * 
      * @param \string $orgHash
      * @param \Illuminate\Support\Collection $payload
-     * @param \int $documentId
+     * @param \string $documentHash
      * 
      * @return mixed
      */
-    public function download(string $orgHash, Collection $payload, int $documentId)
+    public function download(string $orgHash, Collection $payload, string $documentHash)
     {
 		$objReturnValue=null;
 		try {
@@ -287,13 +279,13 @@ class DocumentService extends BaseService
             $user = $this->getCurrentUser('backend');
 
             //Get Document
-            $document = $this->documentRepository->getById($documentId);
+            $document = $this->documentRepository->getByColumn($documentHash, 'hash');
 
             if(empty($document)) {
                 throw new BadRequestHttpException();
             } //End if
 
-            $objReturnValue = Storage::response($document['file_path']);
+            $objReturnValue = Storage::download($document['file_path'], $document['file_name']);
 
         } catch(AccessDeniedHttpException $e) {
             log::error('DocumentService:update:AccessDeniedHttpException:' . $e->getMessage());

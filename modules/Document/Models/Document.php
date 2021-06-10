@@ -30,9 +30,8 @@ class Document extends Model {
      */
     protected $fillable = [
         'org_id', 'entity_type_id', 'reference_id',
-        'title', 'description', 'file_path', 'file_extn', 
-        'file_size_in_kb', 'is_full_path',
-        'created_by'
+        'title', 'description', 'file_path', 'file_name', 'file_extn', 
+        'file_size_in_kb', 'is_full_path'
     ];
 
 
@@ -42,9 +41,10 @@ class Document extends Model {
      * @var array
      */
     protected $hidden = [
-        'org_id', 'entity_type_id','reference_id',
+        'id', 'org_id', 'entity_type_id','reference_id',
         'created_by', 'updated_by', 'deleted_by',
-        'created_at', 'updated_at', 'deleted_at'
+        'created_at', 'updated_at', 'deleted_at',
+        'ip_address'
     ]; 
 
 
@@ -93,6 +93,17 @@ class Document extends Model {
     {
         return $date->format(config('crmomni.settings.date_format_response_generic'));
     }
+    
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'hash';
+    }
 
 
     /**
@@ -104,5 +115,31 @@ class Document extends Model {
         parent::__construct($attributes);
         $this->table = config('crmomni-migration.table_name.documents');
     }
+
+
+    /**
+     * Boot function for using with User Events
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->generateHashKey();
+        });
+    } //Function ends
+
+
+    /**
+     * Generate the Model hash unique identifier that is called
+     * on the Model event while creating record.
+     * 
+     */
+    private function generateHashKey() {
+        $this->attributes['hash'] = $this->generateRandomHash('doc');
+        return !is_null($this->attributes['hash']);
+    } //Function ends
 
 } //Class ends

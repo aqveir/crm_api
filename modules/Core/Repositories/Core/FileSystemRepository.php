@@ -69,6 +69,7 @@ class FileSystemRepository
                 $objReturnValue=[];
                 $objReturnValue['file_path'] = $filePath;
                 $objReturnValue['file_name'] = $fileName;
+                $objReturnValue['file_extn'] = $fileExtension;
                 $objReturnValue['file_size'] = $fileSize;                 
             } //End if
         } catch(Exception $e) {
