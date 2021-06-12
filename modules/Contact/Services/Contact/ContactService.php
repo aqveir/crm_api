@@ -187,7 +187,7 @@ class ContactService extends BaseService
             $user = $this->getCurrentUser('backend');
 
             //Forced params
-            $isForcedFromDB = $this->isForced($payload);
+            $isForcedFromDB = true; //$this->isForced($payload);
 
             //Load Contact Data
             $objReturnValue = $this->customerrepository->getFullDataByIdentifier($user['org_id'], $hash, $isForcedFromDB);

@@ -17,6 +17,9 @@ use Modules\Contact\Models\Contact\Contact;
 use Modules\Contact\Services\Contact\ContactService;
 use Modules\Contact\Services\Contact\ContactFileService;
 
+use Modules\Contact\Transformers\Responses\ContactResource;
+use Modules\Contact\Transformers\Responses\ContactMinifiedResource;
+
 use Exception;
 use Modules\Core\Exceptions\DuplicateDataException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -72,7 +75,10 @@ class ContactAPIController extends ApiBaseController
             $payload = collect($request);
 
             //Get collection of all contacts
-            $data=$service->index($orgHash, $payload);
+            $response=$service->index($orgHash, $payload);
+
+            //Transform data
+            $data = new ContactMinifiedResource(collect($response));
 
             //Send response data
             return $this->response->success(compact('data'));
@@ -118,7 +124,10 @@ class ContactAPIController extends ApiBaseController
             $payload = collect($request);
 
             //Get data of the Contact
-            $data=$service->show($orgHash, $payload, $contact['hash']);
+            $response=$service->show($orgHash, $payload, $contact['hash']);
+
+            //Transform data
+            $data = new ContactResource($response);
 
             //Send response data
             return $this->response->success(compact('data'));
@@ -166,7 +175,10 @@ class ContactAPIController extends ApiBaseController
             $payload = collect($request);
 
             //Get data of the Contact
-            $data=$service->create($orgHash, $payload, $ipAddress);
+            $response=$service->create($orgHash, $payload, $ipAddress);
+
+            //Transform data
+            $data = new ContactResource($response);
 
             //Send response data
             return $this->response->success(compact('data'));

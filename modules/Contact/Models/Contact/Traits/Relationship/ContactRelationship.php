@@ -81,8 +81,7 @@ trait ContactRelationship
 			)
 			->with(['type', 'owner'])
 			->whereHas('type', function($inner_query){$inner_query->where('key', 'entity_type_contact');})
-			->orderBy('created_at', 'desc')
-			->take(10);
+			->orderBy('created_at', 'desc');
 		} else {
 			return [];
 		} //End if
@@ -161,6 +160,18 @@ trait ContactRelationship
 		return $this->hasOne(
 			config('crmomni-class.class_model.lookup_value'),
 			'id', 'type_id'
+		);
+	} //Function ends
+
+
+	/**
+	 * Status of the Contact
+	 */
+	public function status()
+	{
+		return $this->hasOne(
+			config('crmomni-class.class_model.lookup_value'),
+			'id', 'status_id'
 		);
 	} //Function ends
 

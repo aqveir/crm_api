@@ -70,10 +70,10 @@ $api->version('v1', [
             // Contact Management
             $api->post('fetch', 'Backend\\Contact\\ContactAPIController@index');
             $api->post('upload', 'Backend\\Contact\\ContactAPIController@upload');
-            $api->get('{hash}', 'Backend\\Contact\\ContactAPIController@show');
+            $api->get('{contact}', 'Backend\\Contact\\ContactAPIController@show');
             $api->post('/', 'Backend\\Contact\\ContactAPIController@create');
-            $api->put('{hash}', 'Backend\\Contact\\ContactAPIController@update');
-            $api->delete('{hash}', 'Backend\\Contact\\ContactAPIController@destroy');
+            $api->put('{contact}', 'Backend\\Contact\\ContactAPIController@update');
+            $api->delete('{contact}', 'Backend\\Contact\\ContactAPIController@destroy');
 
             // Telephony
             $api->post('{hash}/call', 'Backend\\Contact\\TelephonyController@call');

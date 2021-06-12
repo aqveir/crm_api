@@ -146,7 +146,6 @@ class ContactRepository extends EloquentRepository implements ContactContract
         $objReturnValue=null;
         try {
             $contact = $this->model
-                ->with(['addresses', 'details', 'notes', 'documents'])
                 ->where('org_id', $orgId)
                 ->where('hash', $hash)
                 ->first();
