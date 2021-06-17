@@ -206,7 +206,7 @@ class LookupTableSeeder extends Seeder
                         'display_value' => 'External',
                     ],
                     [
-                        'key' => 'account_type_customer',
+                        'key' => 'account_type_contact',
                         'display_value' => 'Contact',
                     ],
                     [
