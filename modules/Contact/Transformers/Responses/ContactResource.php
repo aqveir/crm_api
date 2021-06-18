@@ -21,7 +21,10 @@ class ContactResource extends JsonResource
         $status = null;
 
         try {
-            $this->load(['type', 'gender', 'group', 'status', 'details', 'addresses', 'notes', 'documents']);
+            $this->load(['type', 'gender', 'group', 'status', 'details', 'addresses', 'notes', 'documents', 
+                'service_requests', 'service_requests.status', 'service_requests.category'
+            ]);
+            $this->loadCount(['notes', 'documents', 'service_requests']);
 
             //Get image path if exists
             $avatarPath = empty($this->avatar)?null:url(Storage::url($this->avatar));
@@ -32,9 +35,11 @@ class ContactResource extends JsonResource
                 'date_of_birth_at',
                 'type', 'gender', 'group', 'status', 
                 'details', 'addresses', 'notes', 'documents',
-                'is_verified', 'is_active', 'last_updated_at'
+                'is_verified', 'is_active', 'last_updated_at',
+                'notes_count', 'documents_count', 'service_requests_count'
             ]);
             $response['avatar'] = $avatarPath;
+            $response['service_requests'] = $this['service_requests'];
 
             $objReturnValue = $response;
         } catch(Exception $e) {

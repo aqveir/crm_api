@@ -38,6 +38,36 @@ trait ContactRelationship
 
 
 	/**
+	 * Service Requests of the contact
+	 */
+	public function service_requests()
+	{
+		return $this->hasMany(
+			config('crmomni-class.class_model.service_request.main'),
+			'contact_id', 'id'
+		)
+		->orderBy('created_at', 'desc');
+	} //Function ends
+
+
+	/**
+	 * Service Requests of the contact
+	 */
+	public function active_service_requests()
+	{
+		return $this->hasMany(
+			config('crmomni-class.class_model.service_request.main'),
+			'contact_id', 'id'
+		)
+		->with(['status'])
+		->whereHas('status', function($inner_query) {
+			$inner_query->whereIn('key', ['service_request_status_new', 'service_request_status_active']);
+		})
+		->orderBy('created_at', 'desc');
+	} //Function ends
+
+
+	/**
 	 * Contacts Wallets
 	 */
 	public function wallets()
