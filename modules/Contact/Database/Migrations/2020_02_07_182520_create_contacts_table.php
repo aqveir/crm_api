@@ -35,9 +35,9 @@ class CreateContactsTable extends Migration
             //Contact Relationship Keys
             $table->unsignedBigInteger('occupation_id')->nullable();
             $table->unsignedBigInteger('company_id')->nullable();
-            $table->unsignedBigInteger('gender_id')->nullable();
+            $table->unsignedBigInteger('gender_id')->nullable();        //E.g. Male, Female, Others
             $table->unsignedBigInteger('group_id')->nullable();
-            $table->unsignedBigInteger('type_id')->nullable();
+            $table->unsignedBigInteger('type_id')->nullable();          //E.g. Whole-seller, Distributor
             $table->unsignedBigInteger('status_id')->nullable();
 
             $table->rememberToken();
@@ -50,6 +50,10 @@ class CreateContactsTable extends Migration
             //Referral Fields
             $table->string('referral_code')->nullable();
             $table->integer('referred_by')->nullable();
+
+            //Preferences
+            $table->string('language_code')->default('en');
+            $table->unsignedBigInteger('timezone_id')->nullable();
             
             //Audit Log Fields
             $table->unsignedBigInteger('created_by')->default(0);

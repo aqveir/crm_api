@@ -22,7 +22,7 @@ class CreateTimezoneTable extends Migration
             $table->string('display_value', 255)->nullable();
 
             //GMT Offset
-            $table->integer('gmt_offset')->default(0);
+            $table->integer('utc_offset')->default(0);
             $table->boolean('is_dst_enabled')->default(false);
             $table->datetime('dst_start_at')->nullable();
             $table->datetime('dst_end_at')->nullable();
