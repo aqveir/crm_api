@@ -11,7 +11,7 @@ use Modules\User\Http\Requests\Backend\Auth\UserLogoutRequest;
 use Modules\User\Http\Requests\Backend\Auth\UserForgotRequest;
 use Modules\User\Http\Requests\Backend\Auth\UserResetRequest;
 
-use Modules\User\Services\User\UserAuthService;
+use Modules\User\Services\UserAuthService;
 
 use Symfony\Component\HttpFoundation\Response;
 
@@ -43,7 +43,7 @@ class UserAuthController extends ApiBaseController
      * User Login
      *
      * @param \Modules\User\Http\Requests\Backend\Auth\UserLoginRequest $request
-     * @param \Modules\User\Services\User\UserAuthService $userAuthService
+     * @param \Modules\User\Services\UserAuthService $service
      * 
      * @return \Illuminate\Http\JsonResponse
      *
@@ -66,7 +66,7 @@ class UserAuthController extends ApiBaseController
      *      @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function login(UserLoginRequest $request, UserAuthService $userAuthService, string $subdomain)
+    public function login(UserLoginRequest $request, UserAuthService $service, string $subdomain)
     {
         try {
             //Get Org Hash 
@@ -79,7 +79,7 @@ class UserAuthController extends ApiBaseController
             $credentials = collect($request->only('username', 'password'));
 
             //Authenticate Customer
-            $data = $userAuthService->authenticate($orgHash, $credentials, $ipAddress);
+            $data = $service->authenticate($orgHash, $credentials, $ipAddress);
 
             //Send response data
             return $this->response->success(compact('data'));
@@ -95,7 +95,7 @@ class UserAuthController extends ApiBaseController
      * User Logout or Revoke Token
      *
      * @param \Modules\User\Http\Requests\Backend\Auth\UserLogoutRequest $request
-     * @param \Modules\User\Services\User\UserAuthService $userAuthService
+     * @param \Modules\User\Services\UserAuthService $service
      * 
      * @return \Illuminate\Http\JsonResponse
      *
@@ -110,7 +110,7 @@ class UserAuthController extends ApiBaseController
      *      @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function logout(UserLogoutRequest $request, UserAuthService $userAuthService)
+    public function logout(UserLogoutRequest $request, UserAuthService $service)
     {
         try {
             //Get IP Address
@@ -120,7 +120,7 @@ class UserAuthController extends ApiBaseController
             $payload = collect($request);
 
             //Logout customer
-            $data = $userAuthService->logout($payload, $ipAddress);
+            $data = $service->logout($payload, $ipAddress);
 
             //Send response data
             return $this->response->success(compact('data'));
@@ -138,22 +138,21 @@ class UserAuthController extends ApiBaseController
      * Forgot Password for User
      *
      * @param \Modules\User\Http\Requests\Backend\Auth\UserForgotRequest $request
-     * @param \Modules\User\Services\User\UserAuthService $userAuthService
+     * @param \Modules\User\Services\UserAuthService $service
      * 
      * @return \Illuminate\Http\JsonResponse
      *
-     * @OA\Get(
+     * @OA\Post(
      *      path="/user/forgot",
      *      tags={"User"},
      *      operationId="api.backend.user.forgot",
-     *      security={{"omni_token":{}}},
      *      @OA\Response(response=200, description="Request was successfully executed."),
      *      @OA\Response(response=400, description="Bad Request"),
      *      @OA\Response(response=422, description="Model Validation Error"),
      *      @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function forgot(UserForgotRequest $request, UserAuthService $userAuthService, string $subdomain)
+    public function forgot(UserForgotRequest $request, UserAuthService $service, string $subdomain)
     {
         try {
             //Get Org Hash 
@@ -166,7 +165,7 @@ class UserAuthController extends ApiBaseController
             $payload = collect($request->only('email'));
 
             //Forgot password request
-            $data = $userAuthService->sendForgotPasswordResetLink($orgHash, $payload, $ipAddress);
+            $data = $service->sendForgotPasswordResetLink($orgHash, $payload, $ipAddress);
 
             //Send response data
             return $this->response->success(compact('data'));
@@ -179,7 +178,26 @@ class UserAuthController extends ApiBaseController
     } //Function ends
 
     
-    public function reset(UserResetRequest $request, UserAuthService $userAuthService, string $subdomain)
+
+    /**
+     * Reset Password for User
+     *
+     * @param \Modules\User\Http\Requests\Backend\Auth\UserResetRequest $request
+     * @param \Modules\User\Services\UserAuthService $service
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @OA\Post(
+     *      path="/user/reset",
+     *      tags={"User"},
+     *      operationId="api.backend.user.reset",
+     *      @OA\Response(response=200, description="Request was successfully executed."),
+     *      @OA\Response(response=400, description="Bad Request"),
+     *      @OA\Response(response=422, description="Model Validation Error"),
+     *      @OA\Response(response=500, description="Internal Server Error")
+     * )
+     */
+    public function reset(UserResetRequest $request, UserAuthService $service, string $subdomain)
     {
         try {
             //Get Org Hash 
@@ -189,10 +207,10 @@ class UserAuthController extends ApiBaseController
             $ipAddress = $this->getIpAddressInRequest($request);
 
             //Create payload
-            $payload = collect($request->only('password', 'new_password'));
+            $payload = collect($request);
 
             //Reset Password request
-            $data = $userAuthService->resetPassword($orgHash, $payload, $ipAddress);
+            $data = $service->resetPassword($orgHash, $payload, $ipAddress);
 
             //Send response data
             return $this->response->success(compact('data'));
