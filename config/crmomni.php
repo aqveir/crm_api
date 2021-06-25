@@ -13,18 +13,6 @@ return [
         | For example: {subdomain}.domainname.com
         |
         */
-        'website' => env('APPLICATION_WEBSITE', ['localhost', 'www', '']),
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | Application Domain
-        |--------------------------------------------------------------------------
-        |
-        | Specifies the Application Domian name used for accessing the console pages.
-        | For example: {subdomain}.domainname.com
-        |
-        */
         'domain' => env('APPLICATION_DOAMIN', '{subdomain}.crmomni.com'),
 
 
