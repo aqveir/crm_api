@@ -32,7 +32,6 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class UserController extends ApiBaseController
 {
-
     /**
      * Constructor.
      *
@@ -96,14 +95,10 @@ class UserController extends ApiBaseController
      * @return \Illuminate\Http\JsonResponse
      *
      * @OA\Get(
-     *     path="/organization/{ohash}/user/{hash}",
+     *     path="/user/{hash}",
      *     tags={"User"},
      *     operationId="api.backend.user.show",
      *     security={{"omni_token":{}}},
-     *     @OA\Parameter(
-     *          in="path", name="ohash", description="Enter organization code or key", required=true,
-     *          @OA\Schema(type="string")
-     *     ),
      *     @OA\Parameter(ref="#/components/parameters/hash_identifier"),
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),

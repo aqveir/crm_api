@@ -146,6 +146,15 @@ class UserAuthController extends ApiBaseController
      *      path="/user/forgot",
      *      tags={"User"},
      *      operationId="api.backend.user.forgot",
+     *      @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                  required={"email"},
+     *                  @OA\Property(property="email", description="Enter email address.", type="string")
+     *              ),
+     *          ),
+     *      ),
      *      @OA\Response(response=200, description="Request was successfully executed."),
      *      @OA\Response(response=400, description="Bad Request"),
      *      @OA\Response(response=422, description="Model Validation Error"),
@@ -178,7 +187,6 @@ class UserAuthController extends ApiBaseController
     } //Function ends
 
     
-
     /**
      * Reset Password for User
      *
@@ -191,6 +199,18 @@ class UserAuthController extends ApiBaseController
      *      path="/user/reset",
      *      tags={"User"},
      *      operationId="api.backend.user.reset",
+     *      @OA\RequestBody(
+     *          @OA\MediaType(
+     *              mediaType="application/json",
+     *              @OA\Schema(
+     *                  required={"token", "email", "password", "password_confirmation"},
+     *                  @OA\Property(property="token", description="Enter forgot password token sent to the email.", type="string"),
+     *                  @OA\Property(property="email", description="Enter email address.", type="string"),
+     *                  @OA\Property(property="password", description="Enter new password.", type="string"),
+     *                  @OA\Property(property="password_confirmation", description="Re-type new password.", type="string"),
+     *              ),
+     *          ),
+     *      ),
      *      @OA\Response(response=200, description="Request was successfully executed."),
      *      @OA\Response(response=400, description="Bad Request"),
      *      @OA\Response(response=422, description="Model Validation Error"),
@@ -216,104 +236,9 @@ class UserAuthController extends ApiBaseController
             return $this->response->success(compact('data'));
             
         } catch(AccessDeniedHttpException $e) {
-            return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
+            return $this->response->fail([$e->getMessage()], Response::HTTP_UNAUTHORIZED);
         } catch(Exception $e) {
-            return $this->response->fail([], Response::HTTP_BAD_REQUEST);
-        }
-    } //Function ends
-
-
-
-
-    /**
-     * Verify User Account & Email
-     *
-     * @param \Modules\User\Http\Requests\Backend\User\UserVerifyRequest $request
-     * @param \Modules\User\Services\UserService $userService
-     * @param \string $token
-     * 
-     * @return \Illuminate\Http\JsonResponse
-     *
-     * @OA\Get(
-     *     path="/user/verify/{token}",
-     *     tags={"User"},
-     *     operationId="api.backend.user.verify",
-     *     @OA\Parameter(
-     *          in="path", name="token", description="Email verification token", required=true,
-     *          @OA\Schema(type="string")
-     *     ),
-     *     @OA\Parameter(ref="#/components/parameters/organization_key"),
-     *     @OA\Parameter(
-     *          in="query", name="email", description="Enter valid email address.", required=true,
-     *          @OA\Schema(type="string")
-     *     ),
-     *     @OA\Response(response=200, description="Request was successfully executed."),
-     *     @OA\Response(response=422, description="Model Validation Error"),
-     *     @OA\Response(response=500, description="Internal Server Error")
-     * )
-     */
-    public function verify(UserVerifyRequest $request, UserService $userService, string $token)
-    {
-        try {
-            //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request);
-
-            //Create payload
-            $payload = collect($request);
-
-            //Verify User Email
-            $data = $userService->verify($orgHash, $payload, $token);
-
-            //Send response data
-            return $this->response->success(compact('data'));
-        } catch(AccessDeniedHttpException $e) {
-            return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
-        } catch(Exception $e) {
-            return $this->response->fail([], Response::HTTP_BAD_REQUEST);
-        }
-    } //Function ends
-
-
-    /**
-     * Activate User Account & Email
-     *
-     * @param \Modules\User\Http\Requests\Backend\User\UserActivateRequest $request
-     * @param \Modules\User\Services\UserService $userService
-     * @param \string $token
-     * 
-     * @return \Illuminate\Http\JsonResponse
-     *
-     * @OA\Get(
-     *     path="/user/activate/{token}",
-     *     tags={"User"},
-     *     operationId="api.backend.user.activate",
-     *     @OA\Parameter(
-     *          in="path", name="token", description="Email activation token", required=true,
-     *          @OA\Schema(type="string")
-     *     ),
-     *     @OA\Parameter(
-     *          in="query", name="email", description="Enter valid email address.", required=true,
-     *          @OA\Schema(type="string")
-     *     ),
-     *     @OA\Response(response=200, description="Request was successfully executed."),
-     *     @OA\Response(response=422, description="Model Validation Error"),
-     *     @OA\Response(response=500, description="Internal Server Error")
-     * )
-     */
-    public function activate(UserActivateRequest $request, UserService $userService, string $token)
-    {
-        try {
-            //Create payload
-            $payload = collect($request);
-
-            $data = $userService->activate($payload, $token);
-
-            //Send response data
-            return $this->response->success(compact('data'));
-        } catch(AccessDeniedHttpException $e) {
-            return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
-        } catch(Exception $e) {
-            return $this->response->fail([], Response::HTTP_BAD_REQUEST);
+            return $this->response->fail([$e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     } //Function ends
 

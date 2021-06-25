@@ -214,7 +214,7 @@ class UserAuthService extends BaseService
     {
         try {
             $response = $this->passwordBrokerManager->reset(
-                $request->only('email', 'password', 'password_confirmation', 'token'),
+                $request->only('email', 'password', 'password_confirmation', 'token')->toArray(),
                 function (User $user, $password) {
                     $user->password = $password;
                     $user->save();
@@ -225,13 +225,13 @@ class UserAuthService extends BaseService
 
             if($response !== Password::PASSWORD_RESET) {
                 if($response === Password::INVALID_TOKEN) { throw new AccessDeniedHttpException('Token Expired'); }
-                elseif($response === Password::INVALID_USER) { throw new BadRequestHttpException(); }
+                elseif($response === Password::INVALID_USER) { throw new BadRequestHttpException('Invalid User'); }
                 else {throw new HttpException(500);}
             } //End if
 
             return $response === Password::PASSWORD_RESET;
         } catch(Exception $e) {
-            return false;
+            throw $e;
         } //Try-catch ends
     } //Function ends
 

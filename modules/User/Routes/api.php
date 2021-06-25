@@ -36,12 +36,6 @@ $api->version('v1', [
             // User Exists Validation
             $api->get('exists', 'Backend\\User\\UserController@exists');
 
-            // User Activation
-            $api->get('activate/{token}', 'Backend\\User\\SetUserController@activate');
-
-            // User Registration
-            $api->post('register', 'Backend\\User\\SetUserController@register');
-
             // User Availability Status
             $api->get('status/{key}', 'Backend\\User\\UserAvailabilityController@detail');
         });
