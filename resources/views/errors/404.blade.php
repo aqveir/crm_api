@@ -1,4 +1,4 @@
-@extends('templates.crmomni.layouts.default')
+@extends('errors::minimal')
 
 @section('title', __('Not Found'))
 @section('code', '404')

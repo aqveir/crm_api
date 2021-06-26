@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -11,20 +13,38 @@
 |
 */
 
-Route::prefix('user')->group(function() {
-    //Route::get('/', 'UserController@index');
-
-    //Verify New User in Existing Organization
-    Route::get('verify/{token}', 'Backend\\User\\SetUserController@verify');
-
-    //Activate New User and Create New Organization
-    Route::get('activate/{token}', 'Backend\\User\\SetUserController@activate');
-});
-
 //Reset Password Link For CRM Users
-Route::get('reset/{token}', ['as' => 'password.reset', function($token, Request $req) {
-	//$baseuri_webapp = config('crmomni.settings.base_url.web_app');
-    //return redirect($baseuri_webapp.'web/reset/'.$token);
-    //return redirect('web/reset/'.$token);
-    dd($token);
-}]);
+Route::get('reset/{token}', ['as' => 'password.reset', 
+    function(string $token, Request $request) {
+
+        //Get Host
+        $host = $request->getSchemeAndHttpHost();
+
+        //Get query data
+        $queryData = $request->query();
+
+        //Build query string
+        $queryString = '';
+        if ($queryData && is_array($queryData) && count($queryData)>0) {
+            $queryDataCount = count($queryData);
+
+            $index=0;
+            foreach ($queryData as $key => $value) {
+                if ($index==0) {
+                    $queryString .= '?';
+                } //End if
+
+                $queryString .= $key . '=' . $value;
+
+                if ($index>=0 && $queryDataCount>1 && $index<($queryDataCount-1)) {
+                    $queryString .= '&';
+                } //End if
+
+                $index++;
+            } //Loop ends
+        } //End if
+
+        //Build URL and Redirect 
+        return redirect($host.'/web/user/reset/'.$token.$queryString);
+    } //Function ends
+]);
