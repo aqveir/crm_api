@@ -27,10 +27,10 @@ return [
                     'validation_rules' => [
                         'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
 
-                        'logo' => 'nullable|image|mimes:jpg,png|dimensions:ratio=1/1|max:512',
+                        'logo' => 'nullable|image|mimes:jpg,jpeg,png,bmp,gif|dimensions:ratio=1/1|max:512',
                         'name' => 'nullable|string|max:40',
                         'contact_person_name' => 'required|string|max:80',
-                        'email' => 'required|email|max:40|unique:users,email',
+                        'email' => 'required|email|max:40|unique:contact_details,identifier',
                         'phone' => 'nullable|string|max:15',
                         'phone_idd' => 'required_with:phone|string|max:5',
                         'industry_key' => 'string',
@@ -356,18 +356,30 @@ return [
                     'validation_rules' => []
                 ],
 
+                //Contact Create
                 'create' => [
-                    'validation_rules' => []
+                    'validation_rules' => [
+                        'first_name' => 'nullable|string|max:40',
+                        'last_name' => 'nullable|string|max:40'
+                    ]
                 ],
 
                 'update' => [
                     'validation_rules' => []
                 ],
 
+                //Contact Avatar Update
+                'update_avatar' => [
+                    'validation_rules' => [
+                        'avatar' => 'required|image|mimes:jpg,jpeg,png,bmp,gif|dimensions:ratio=1/1|max:512'
+                    ]
+                ],
+
                 'delete' => [
                     'validation_rules' => []
                 ],
 
+                //Contact upload
                 'upload' => [
                     'validation_rules' => [
                         'files.*' => 'required|file|mimes:csv,txt,xls,xlsx|max:1024'

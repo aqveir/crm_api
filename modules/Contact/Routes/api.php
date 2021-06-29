@@ -73,6 +73,7 @@ $api->version('v1', [
             $api->get('{contact}', 'Backend\\Contact\\ContactAPIController@show');
             $api->post('/', 'Backend\\Contact\\ContactAPIController@create');
             $api->put('{contact}', 'Backend\\Contact\\ContactAPIController@update');
+            $api->put('{contact}/avatar', 'Backend\\Contact\\ContactAPIController@updateAvatar');
             $api->delete('{contact}', 'Backend\\Contact\\ContactAPIController@destroy');
 
             // Telephony

@@ -243,7 +243,7 @@ class OrganizationService extends BaseService
 
             //Upload Logo, if exists
             if (!empty($file)) {
-                $logo = $this->uploadLogo($hash, $file, 'logo');
+                $logo = $this->uploadImage($hash, $file, 'logo');
                 $data['logo'] = $logo['file_path'];
             } //End if
 
@@ -324,36 +324,6 @@ class OrganizationService extends BaseService
             throw new AccessDeniedHttpException($e->getMessage());
         } catch(BadRequestHttpException $e) {
             throw new BadRequestHttpException($e->getMessage());
-        } catch(Exception $e) {
-            Log::error($e);
-            throw new HttpException(500);
-        } //Try-catch ends
-
-        return $objReturnValue;
-    } //Function ends
-
-
-    /**
-     * Upload Logo file
-     */
-    private function uploadLogo(string $orgHash, File $file, string $customPath=null)
-    {
-        $objReturnValue=null;
-        $industry=null;
-        try {
-            $folderName=$orgHash;
-            if (!empty($customPath)) {
-                $folderName .= '/' . $customPath;
-            } //End if
-
-            //Save the file to the storage
-            $objFileStore=$this->filesystemRepository->upload($file, $folderName);
-            if (empty($objFileStore)) {
-                throw new BadRequestHttpException();
-            } //End if
-
-            //Return Organiztion object
-            $objReturnValue = $objFileStore;
         } catch(Exception $e) {
             Log::error($e);
             throw new HttpException(500);

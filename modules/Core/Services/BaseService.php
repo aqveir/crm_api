@@ -6,6 +6,7 @@ use Config;
 use Carbon\Carbon;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile as File;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -206,6 +207,36 @@ abstract class BaseService
         } catch(Exception $e) {
             log::error('BaseService:getLookupValue:Exception:' . $e->getMessage());
             throw $e;
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends
+
+
+    /**
+     * Upload Image file
+     */
+    public function uploadImage(string $orgHash, File $file, string $customPath=null)
+    {
+        $objReturnValue=null;
+        $industry=null;
+        try {
+            $folderName=$orgHash;
+            if (!empty($customPath)) {
+                $folderName .= '/' . $customPath;
+            } //End if
+
+            //Save the file to the storage
+            $objFileStore=$this->filesystemRepository->upload($file, $folderName);
+            if (empty($objFileStore)) {
+                throw new BadRequestHttpException();
+            } //End if
+
+            //Return Organiztion object
+            $objReturnValue = $objFileStore;
+        } catch(Exception $e) {
+            Log::error($e);
+            throw new HttpException(500);
         } //Try-catch ends
 
         return $objReturnValue;

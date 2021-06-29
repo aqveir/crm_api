@@ -12,6 +12,7 @@ use Modules\Contact\Http\Requests\Backend\Contact\CreateContactRequest;
 use Modules\Contact\Http\Requests\Backend\Contact\UpdateContactRequest;
 use Modules\Contact\Http\Requests\Backend\Contact\DeleteContactRequest;
 use Modules\Contact\Http\Requests\Backend\Contact\UploadContactRequest;
+use Modules\Contact\Http\Requests\Backend\Contact\UpdateContactAvatarRequest;
 
 use Modules\Contact\Models\Contact\Contact;
 use Modules\Contact\Services\Contact\ContactService;
@@ -294,12 +295,11 @@ class ContactAPIController extends ApiBaseController
 
 
     /**
-     * Update Contact by Identifier (Backend)
+     * Upload Contact data (Backend)
      *
      * @param  \Modules\Contact\Http\Requests\Backend\Contact\UploadContactRequest $request
      * @param  \Modules\Contact\Services\Contact\ContactService $service
      * @param  \string $subdomain
-     * @param  \Modules\Contact\Models\Contact\Contact $contact
      * 
      * @return \Illuminate\Http\JsonResponse
      *
@@ -348,6 +348,64 @@ class ContactAPIController extends ApiBaseController
             throw new HttpException(500, $e->getMessage());
         } //Try-catch ends
 
+    } //Function ends
+
+
+    /**
+     * Update Contact-Avatar by Identifier (Backend)
+     *
+     * @param  \Modules\Contact\Http\Requests\Backend\Contact\UpdateContactAvatarRequest $request
+     * @param  \Modules\Contact\Services\Contact\ContactService $service
+     * @param  \string $subdomain
+     * @param  \Modules\Contact\Models\Contact\Contact $contact
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @OA\Post(
+     *      path="/contact/{hash}/avatar",
+     *      tags={"Contact"},
+     *      operationId="api.backend.contact.upload.avatar",
+     *      security={{"omni_token":{}}},
+     *      @OA\Parameter(ref="#/components/parameters/hash_identifier"),
+     *      @OA\Response(response=200, description="Request was successfully executed."),
+     *      @OA\Response(response=400, description="Bad Request"),
+     *      @OA\Response(response=422, description="Model Validation Error"),
+     *      @OA\Response(response=500, description="Internal Server Error")
+     * )
+     */
+    public function updateAvatar(UpdateContactAvatarRequest $request, ContactService $service, string $subdomain, Contact $contact)
+    {   
+        try {
+            //Get Org Hash 
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
+
+            //Get IP Address
+            $ipAddress = $this->getIpAddressInRequest($request);
+
+            //Check for file upload
+            $files=null;
+            if ($request->hasFile('avatar')) {
+                $files = $request->file('avatar');
+            } else {
+                throw new BadRequestHttpException();
+            } //End if
+
+            //Create payload
+            $payload = collect($request);
+
+            //Get data of the Contact
+            $data = $service->updateAvatar($orgHash, $payload, $contact['hash'], $files, $ipAddress);
+
+            //Send response data
+            return $this->response->success(compact('data'));
+
+        } catch (AccessDeniedHttpException $e) {
+            throw new AccessDeniedHttpException($e->getMessage());
+        } catch (UnauthorizedHttpException $e) {
+            throw new UnauthorizedHttpException($e->getMessage());
+        } catch (Exception $e) {  
+            throw new HttpException(500, $e->getMessage());
+        } //Try-catch ends
     } //Function ends
 
 } //Class ends

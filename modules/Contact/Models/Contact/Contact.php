@@ -48,7 +48,7 @@ class Contact extends Model implements
      */
     protected $fillable = [
         'org_id', 'username', 'password', '2fa_secret', 
-        'first_name','middle_name','last_name',
+        'avatar', 'first_name','middle_name','last_name',
         'type_id', 'gender_id', 'group_id', 'status_id',
         'job_title', 'date_of_birth_at',
         'referred_by',

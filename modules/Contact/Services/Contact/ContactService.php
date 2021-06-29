@@ -59,13 +59,13 @@ class ContactService extends BaseService
     /**
      * @var Modules\Contact\Repositories\Contact\ContactRepository
      */
-    protected $customerrepository;
+    protected $contactRepository;
 
 
     /**
      * @var Modules\Contact\Repositories\Contact\ContactDetailRepository
      */
-    protected $customerdetailrepository;
+    protected $contactdetailRepository;
 
 
     /**
@@ -79,21 +79,21 @@ class ContactService extends BaseService
      * @param \Modules\Core\Repositories\Organization\OrganizationRepository    $organizationRepository
      * @param \Modules\Core\Repositories\Lookup\LookupValueRepository           $lookuprepository
      * @param \Modules\Core\Repositories\Core\FileSystemRepository              $filesystemRepository
-     * @param \Modules\Contact\Repositories\Contact\ContactRepository           $customerrepository
-     * @param \Modules\Contact\Repositories\Contact\ContactDetailRepository     $customerdetailrepository
+     * @param \Modules\Contact\Repositories\Contact\ContactRepository           $contactRepository
+     * @param \Modules\Contact\Repositories\Contact\ContactDetailRepository     $contactdetailRepository
      */
     public function __construct(
         OrganizationRepository              $organizationRepository,
         LookupValueRepository               $lookuprepository,
         FileSystemRepository                $filesystemRepository,
-        ContactRepository                   $customerrepository,
-        ContactDetailRepository             $customerdetailrepository
+        ContactRepository                   $contactRepository,
+        ContactDetailRepository             $contactdetailRepository
     ) {
         $this->organizationRepository       = $organizationRepository;
         $this->lookuprepository             = $lookuprepository;
         $this->filesystemRepository         = $filesystemRepository;
-        $this->customerrepository           = $customerrepository;
-        $this->customerdetailrepository     = $customerdetailrepository;
+        $this->contactRepository            = $contactRepository;
+        $this->contactdetailRepository      = $contactdetailRepository;
     } //Function ends
 
 
@@ -125,7 +125,7 @@ class ContactService extends BaseService
             } //End if
 
             //Check if the Contact exists
-            $response = $this->customerdetailrepository->getContactDetailsByIdentifier($organization['id'], $data, null, true, true);
+            $response = $this->contactdetailRepository->getContactDetailsByIdentifier($organization['id'], $data, null, true, true);
 
             $objReturnValue = !empty($response);
         } catch(ModelNotFoundException $e) {
@@ -161,7 +161,7 @@ class ContactService extends BaseService
             $size = ($payload->has('size'))?$payload['size']:10;
 
             //Load Contact Data
-            $objReturnValue = $this->customerrepository
+            $objReturnValue = $this->contactRepository
                 ->getFullData($user['org_id'], $orgHash, $isForcedFromDB, $page, $size);
 
         } catch(Exception $e) {
@@ -190,7 +190,7 @@ class ContactService extends BaseService
             $isForcedFromDB = true; //$this->isForced($payload);
 
             //Load Contact Data
-            $objReturnValue = $this->customerrepository->getFullDataByIdentifier($user['org_id'], $hash, $isForcedFromDB);
+            $objReturnValue = $this->contactRepository->getFullDataByIdentifier($user['org_id'], $hash, $isForcedFromDB);
 
         } catch(Exception $e) {
             log::error($e);
@@ -222,7 +222,7 @@ class ContactService extends BaseService
             log::info(json_encode($contact).'->'. $organization['id'].'->'.$contact['hash']);
 
             //Load Contact Data
-            $objReturnValue = $this->customerrepository->getFullDataFromDB($organization['id'], $contact['hash']);
+            $objReturnValue = $this->contactRepository->getFullDataFromDB($organization['id'], $contact['hash']);
 
         } catch(AccessDeniedHttpException $e) {
             throw new AccessDeniedHttpException();
@@ -249,7 +249,7 @@ class ContactService extends BaseService
 
             //Get phone details for a contact
             $isPrimary = ($proxy!=null)?null:true;
-            $contactDetail = $this->customerdetailrepository->getContactDetailsByType($contact['id'], $type['id'], $isPrimary, $proxy);
+            $contactDetail = $this->contactdetailRepository->getContactDetailsByType($contact['id'], $type['id'], $isPrimary, $proxy);
 
             if($contactDetail!=null) {
                 $country_code = '91'; //$contactDetail['country']['code'];
@@ -357,7 +357,7 @@ class ContactService extends BaseService
             $dataValidate = ($payload->only(['email', 'phone']))->toArray();
 
             //Duplicate check
-            $isDuplicate=$this->customerdetailrepository->validate($organization['id'], $dataValidate);
+            $isDuplicate=$this->contactdetailRepository->validate($organization['id'], $dataValidate);
             if (!$isDuplicate) {
 
                 //Generate the data payload to create user
@@ -372,7 +372,7 @@ class ContactService extends BaseService
                 );
 
                 //Create Contact
-                $contact = $this->customerrepository->create($payload, $createdBy, $ipAddress);
+                $contact = $this->contactRepository->create($payload, $createdBy, $ipAddress);
 
                 //Create Contact details - Email
                 if(!empty($payload['email'])) {
@@ -388,7 +388,7 @@ class ContactService extends BaseService
                         'is_verified' => $isEmailValid,
                         'created_by'=> $createdBy
                     ];
-                    $this->customerdetailrepository->create($payloadDetails);
+                    $this->contactdetailRepository->create($payloadDetails);
                 } //End if
 
                 //Create Contact details - Phone
@@ -405,7 +405,7 @@ class ContactService extends BaseService
                         'is_verified' => $isPhoneValid,
                         'created_by'=> $createdBy
                     ];
-                    $this->customerdetailrepository->create($payloadDetails);
+                    $this->contactdetailRepository->create($payloadDetails);
                 } //End if
 
                 //Notify user to Activate Account
@@ -442,6 +442,9 @@ class ContactService extends BaseService
         $objReturnValue=null;
 
         try {
+            //Authenticated User
+            $user = $this->getCurrentUser('backend');
+
             //Get organization data
             $organization = $this->getOrganizationByHash($orgHash);
 
@@ -455,7 +458,7 @@ class ContactService extends BaseService
             $dataValidate = ($payload->only(['email', 'phone']))->toArray();
 
             //Duplicate check
-            $isDuplicate=$this->customerdetailrepository->validate($organization['id'], $dataValidate);
+            $isDuplicate=$this->contactdetailRepository->validate($organization['id'], $dataValidate);
             if (!$isDuplicate) {
 
                 //Generate the data payload to create user
@@ -470,7 +473,7 @@ class ContactService extends BaseService
                 );
 
                 //Create Contact
-                $contact = $this->customerrepository->create($payload, $createdBy, $ipAddress);
+                $contact = $this->contactRepository->create($payload, $createdBy, $ipAddress);
 
                 //Create Contact details - Email
                 if(!empty($payload['email'])) {
@@ -486,7 +489,7 @@ class ContactService extends BaseService
                         'is_verified' => $isEmailValid,
                         'created_by'=> $createdBy
                     ];
-                    $this->customerdetailrepository->create($payloadDetails);
+                    $this->contactdetailRepository->create($payloadDetails);
                 } //End if
 
                 //Create Contact details - Phone
@@ -503,7 +506,7 @@ class ContactService extends BaseService
                         'is_verified' => $isPhoneValid,
                         'created_by'=> $createdBy
                     ];
-                    $this->customerdetailrepository->create($payloadDetails);
+                    $this->contactdetailRepository->create($payloadDetails);
                 } //End if
 
                 //Notify user to Activate Account
@@ -553,7 +556,7 @@ class ContactService extends BaseService
             $dataValidate = ($payload->only(['email', 'phone']))->toArray();
 
             //Duplicate check
-            $isDuplicate=$this->customerdetailrepository->validate($organization['id'], $dataValidate);
+            $isDuplicate=$this->contactdetailRepository->validate($organization['id'], $dataValidate);
             if (!$isDuplicate) {
 
                 //Generate the data payload to create user
@@ -568,7 +571,7 @@ class ContactService extends BaseService
                 );
 
                 //Create Contact
-                $contact = $this->customerrepository->create($payload, $createdBy, $ipAddress);
+                $contact = $this->contactRepository->create($payload, $createdBy, $ipAddress);
 
                 //Create Contact details - Email
                 if(!empty($payload['email'])) {
@@ -584,7 +587,7 @@ class ContactService extends BaseService
                         'is_verified' => $isEmailValid,
                         'created_by'=> $createdBy
                     ];
-                    $this->customerdetailrepository->create($payloadDetails);
+                    $this->contactdetailRepository->create($payloadDetails);
                 } //End if
 
                 //Create Contact details - Phone
@@ -601,7 +604,7 @@ class ContactService extends BaseService
                         'is_verified' => $isPhoneValid,
                         'created_by'=> $createdBy
                     ];
-                    $this->customerdetailrepository->create($payloadDetails);
+                    $this->contactdetailRepository->create($payloadDetails);
                 } //End if
 
                 //Notify user to Activate Account
@@ -614,6 +617,52 @@ class ContactService extends BaseService
             } else {
                 throw new DuplicateDataException();
             } //End if
+        } catch(DuplicateDataException $e) {
+            throw new DuplicateDataException();
+        } catch(Exception $e) {
+            throw new HttpException(500);
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends
+
+
+    /**
+     * Update Avatar Contact
+     * 
+     * @param  \string  $orgHash
+     * @param  \Illuminate\Support\Collection  $payload
+     * @param  \string  $cHash
+     * @param  \File  $file
+     * @param  \string  $ipAddress (optional)
+     * 
+     */
+    public function updateAvatar(string $orgHash, Collection $payload, string $cHash, File $file=null, string $ipAddress=null)
+    {
+        $objReturnValue=null;
+
+        try {
+            //Authenticated User
+            $user = $this->getCurrentUser('backend');
+
+            //Get organization data
+            $organization = $this->getOrganizationByHash($orgHash);
+
+            //Upload Logo, if exists
+            $data = [];
+            if (!empty($file)) {
+                $avatar = $this->uploadImage($organization['hash'], $file, 'contact/'.$cHash.'/avatar');
+                $data['avatar'] = $avatar['file_path'];
+
+                //Update contact
+                $contact = $this->contactRepository->update($cHash, 'hash', $data, $user['id'], $ipAddress);
+                if ($contact) {
+                    //Raise event: Contact Updated
+                    event(new ContactUpdatedEvent($contact));
+                } //End if
+            } //End if
+
+            $objReturnValue=$contact;
         } catch(DuplicateDataException $e) {
             throw new DuplicateDataException();
         } catch(Exception $e) {
