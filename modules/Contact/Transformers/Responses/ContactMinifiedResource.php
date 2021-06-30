@@ -2,6 +2,7 @@
 
 namespace Modules\Contact\Transformers\Responses;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Resources\Json\Responses;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
@@ -34,7 +35,7 @@ class ContactMinifiedResource extends ResourceCollection
                 $data->load(['type']);
 
                 //Get image path if exists
-                $avatarPath = empty($this->avatar)?null:url(Storage::url($this->avatar));
+                $avatarPath = empty($data->avatar)?null:url(Storage::url($data->avatar));
 
                 $response = $data->only([
                     'hash', 'name_initials', 'full_name',

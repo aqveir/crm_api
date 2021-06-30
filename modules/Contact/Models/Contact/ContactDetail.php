@@ -43,7 +43,7 @@ class ContactDetail extends Model {
      */
     protected $hidden = [
         'org_id', 'contact_id', 'type_id', 'subtype_id',
-        'phone_idd', 'pivot', 'identifier', 'is_active',
+        'phone_idd', 'pivot', 'is_active',
         'created_by', 'updated_by', 'deleted_by',
         'created_at', 'updated_at', 'deleted_at'
     ]; 
@@ -63,7 +63,7 @@ class ContactDetail extends Model {
      *
      * @var array
      */
-    protected $appends = ['identifier_masked'];
+    protected $appends = [];
 
 
     /**
@@ -97,17 +97,4 @@ class ContactDetail extends Model {
 
     }
 
-
-    public function getIdentifierMaskedAttribute() {
-        $objReturnValue=null;
-        try {
-            $data = $this->attributes['identifier'];
-  
-            $objReturnValue = $data;
-        } catch(Exception $e) {
-            $objReturnValue=null;
-        } //Try-catch ends
-        
-        return $objReturnValue;
-    } //Function ends
 } //Class ends
