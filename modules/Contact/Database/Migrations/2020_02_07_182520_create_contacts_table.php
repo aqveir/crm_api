@@ -30,15 +30,21 @@ class CreateContactsTable extends Migration
             $table->string('first_name')->nullable();
             $table->string('middle_name')->nullable();
             $table->string('last_name')->nullable();
-            $table->dateTime('date_of_birth_at')->nullable();
+            $table->dateTime('birth_at')->nullable();
 
             //Contact Relationship Keys
-            $table->unsignedBigInteger('occupation_id')->nullable();
-            $table->unsignedBigInteger('company_id')->nullable();
             $table->unsignedBigInteger('gender_id')->nullable();        //E.g. Male, Female, Others
             $table->unsignedBigInteger('group_id')->nullable();
             $table->unsignedBigInteger('type_id')->nullable();          //E.g. Whole-seller, Distributor
-            $table->unsignedBigInteger('status_id')->nullable();
+
+            //Provision to keep industry specific data
+            $table->json('extras')->nullable();
+
+            //Setting data for the contact used by the CRMO
+            $table->json('settings')->nullable();
+
+            //Search tags for the contact
+            $table->string('search_tags')->nullable();
 
             $table->rememberToken();
             $table->dateTime('last_login_at')->nullable();

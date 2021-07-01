@@ -95,7 +95,7 @@ class ContactTableSeeder extends Seeder
             'first_name' => $faker->firstName(),
             'middle_name' => null,
             'last_name' => $faker->lastName(),
-            'date_of_birth_at' => null,
+            'birth_at' => null,
     
             //Contact Relationship Keys
             'type_id' => 1,
@@ -120,7 +120,7 @@ class ContactTableSeeder extends Seeder
             'first_name' => $faker->firstName(),
             'middle_name' => null,
             'last_name' => $faker->lastName(),
-            'date_of_birth_at' => null,
+            'birth_at' => null,
     
             //Contact Relationship Keys
             'type_id' => 1,

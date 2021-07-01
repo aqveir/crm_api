@@ -28,7 +28,7 @@ class ContactResource extends JsonResource
             $user = Auth::guard('backend')->user();
             $isMaskedData = $user?!($user->hasPrivileges(['show_contact_unmasked_data'], true)):true;
 
-            $this->load(['type', 'gender', 'group', 'status', 'details', 'addresses', 'notes', 'documents', 
+            $this->load(['type', 'gender', 'group', 'details', 'addresses', 'notes', 'documents', 
                 'service_requests', 'service_requests.status', 'service_requests.category'
             ]);
             $this->loadCount(['notes', 'documents', 'service_requests']);
@@ -39,14 +39,16 @@ class ContactResource extends JsonResource
             $response = $this->only([
                 'id', 'hash', 'full_name', 'name_initials',
                 'first_name','middle_name','last_name',
-                'date_of_birth_at',
-                'type', 'gender', 'group', 'status', 
+                'birth_at', 'type', 'gender', 'group',
+
                 'addresses', 'notes', 'documents',
                 'is_verified', 'is_active', 'last_updated_at',
                 'notes_count', 'documents_count', 'service_requests_count'
             ]);
             $response['avatar'] = $avatarPath;
             $response['service_requests'] = $this['service_requests'];
+            $response['extras'] = json_encode($this['extras']);
+            $response['settings'] = json_encode($this['settings']);
 
             //Conatct details
             $details = $this->details->toArray();

@@ -30,7 +30,7 @@ class ContactAddress extends Model {
     protected $fillable = [
         'type_id', 'apartment_id', 'society_id', 
         'address1', 'address2', 'locality', 'city', 
-        'state_id', 'country_id', 'zipcode', 
+        'state', 'country_id', 'zipcode', 
         'google_place_id', 'longitude', 'latitude',
         'is_default', ''
     ];
@@ -43,8 +43,7 @@ class ContactAddress extends Model {
      */
     protected $hidden = [
         'org_id', 'contact_id', 
-        'type_id', 'apartment_id', 'society_id',
-        'state_id', 'country_id', 'google_place_id',
+        'type_id', 'apartment_id', 'society_id', 'country_id',
         'created_by', 'updated_by', 'deleted_by',
         'created_at', 'updated_at', 'deleted_at'
     ]; 

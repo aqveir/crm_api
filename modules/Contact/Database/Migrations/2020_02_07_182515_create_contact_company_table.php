@@ -13,7 +13,7 @@ class CreateContactCompanyTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('crmomni-migration.table_name.contact.company'), function (Blueprint $table) {
+        Schema::create(config('crmomni-migration.table_name.company'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
             $table->string('name')->unique();
@@ -46,6 +46,21 @@ class CreateContactCompanyTable extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+
+        Schema::create(config('crmomni-migration.table_name.contact.company'), function (Blueprint $table) {
+            $table->bigIncrements('id');
+
+            $table->unsignedBigInteger('org_id');
+            $table->unsignedBigInteger('contact_id');
+            $table->unsignedBigInteger('company_id');
+
+            $table->string('role')->unique();
+            $table->string('description', 1000)->nullable();
+
+            $table->timestamps();
+            $table->softDeletes();
+        });
     }
 
     /**
@@ -55,6 +70,8 @@ class CreateContactCompanyTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists(config('crmomni-migration.table_name.company'));
+
         Schema::dropIfExists(config('crmomni-migration.table_name.contact.company'));
     }
 }

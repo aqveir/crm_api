@@ -49,8 +49,8 @@ class Contact extends Model implements
     protected $fillable = [
         'org_id', 'username', 'password', '2fa_secret', 
         'avatar', 'first_name','middle_name','last_name',
-        'type_id', 'gender_id', 'group_id', 'status_id',
-        'job_title', 'date_of_birth_at',
+        'type_id', 'gender_id', 'birth_at',
+        'extras', 'settings', 'search_tags',
         'referred_by',
     ];
 
@@ -72,8 +72,8 @@ class Contact extends Model implements
      */
     protected $hidden = [
         'id', 'org_id', 'password', '2fa_secret', 'remember_token',
-        'first_name','middle_name','last_name', 'avatar', 'date_of_birth_at',
-        'company_id', 'occupation_id', 'type_id', 'gender_id', 'group_id', 'status_id',
+        'first_name','middle_name','last_name', 'avatar', 'birth_at',
+        'type_id', 'gender_id',
         'provider', 'provider_id', 'last_login_at', 'referral_code',
         'failed_attempts', 'max_failed_attempts', 'is_active', 'ip_address', 'is_verified',
         'created_by', 'updated_by', 'deleted_by', 'referred_by',
@@ -87,7 +87,7 @@ class Contact extends Model implements
      * @var array
      */
     protected $dates = [
-        'date_of_birth_at', 'last_login_at',
+        'birth_at', 'last_login_at',
         'created_at', 'updated_at', 'deleted_at',
         'last_updated_at'
     ];

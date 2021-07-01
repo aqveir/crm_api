@@ -27,7 +27,7 @@ class CreateContactAddressesTable extends Migration
             $table->integer('society_id')->nullable();            
             $table->string('locality')->nullable();
             $table->string('city')->nullable();
-            $table->unsignedBigInteger('state_id')->nullable();
+            $table->string('state')->nullable();
             $table->unsignedBigInteger('country_id')->nullable();
             $table->string('zipcode')->nullable();
 

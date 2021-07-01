@@ -38,8 +38,7 @@ class ContactMinifiedResource extends ResourceCollection
                 $avatarPath = empty($data->avatar)?null:url(Storage::url($data->avatar));
 
                 $response = $data->only([
-                    'hash', 'name_initials', 'full_name',
-                    'type',
+                    'hash', 'name_initials', 'full_name', 'type',
                     'is_verified', 'is_active', 'last_updated_at'
                 ]);
                 $response['avatar'] = $avatarPath;

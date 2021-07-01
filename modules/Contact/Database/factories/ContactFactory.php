@@ -16,14 +16,12 @@ $factory->define(Contact::class, function (Faker $faker) {
         'first_name' => $faker->firstName(),
         'middle_name' => null,
         'last_name' => $faker->lastName(),
-        'date_of_birth_at' => null,
+        'birth_at' => null,
 
         //Contact Relationship Keys
         'type_id' => 1,
-        'status_id' => 1,
         'gender_id' => 1,
         'group_id' => 1,
-        'company_id' => 1,
 
         'is_verified' => $faker->numberBetween(0, 1),
 
@@ -59,7 +57,7 @@ $factory->define(ContactAddress::class, function (Faker $faker) {
         'address2' => null,
         'locality' => $faker->lastName(),
         'city' => $faker->city(),
-        'state_id' => null,
+        'state' => $faker->state(),
         'country_id' => 1,
         'zipcode' => $faker->postcode(),
 
