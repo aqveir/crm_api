@@ -19,6 +19,7 @@ class CreateServicerequestTable extends Migration
 
             $table->bigIncrements('id');
             $table->string('hash')->nullable();
+            $table->string('name')->nullable(); //Name for the SR/Lead
 
             //SR Relationship Core References
             $table->unsignedBigInteger('org_id');
