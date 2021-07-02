@@ -230,21 +230,20 @@ class LookupTableSeeder extends Seeder
                         'is_editable' => false,
                     ],
                     [
-                        'key' => 'contact_type_retailer',
-                        'display_value' => 'Retailer',
+                        'key' => 'contact_type_customer',
+                        'display_value' => 'Customer',
+                        'is_editable' => false,
                     ],
                     [
-                        'key' => 'contact_type_wholesaler',
-                        'display_value' => 'Wholesaler',
+                        'key' => 'contact_type_vendor',
+                        'display_value' => 'Vendor',
+                        'is_editable' => false,
                     ],
                     [
-                        'key' => 'contact_type_distributor',
-                        'display_value' => 'Distributor',
+                        'key' => 'contact_type_internal',
+                        'display_value' => 'Emploee OR Internal',
+                        'is_editable' => false,
                     ],
-                    [
-                        'key' => 'contact_type_business',
-                        'display_value' => 'Business',
-                    ]
                 ]
             ],
             [ //Contact Gender
