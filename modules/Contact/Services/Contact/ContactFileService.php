@@ -5,6 +5,10 @@ namespace Modules\Contact\Services\Contact;
 use Config;
 use Carbon\Carbon;
 
+use Maatwebsite\Excel\Facades\Excel;
+
+use Modules\Contact\Imports\ContactImport;
+
 use Modules\Core\Repositories\Lookup\LookupValueRepository;
 use Modules\Core\Repositories\Organization\OrganizationRepository;
 use Modules\Contact\Repositories\Contact\ContactRepository;
@@ -14,7 +18,7 @@ use Modules\Core\Repositories\Core\FileSystemRepository;
 use Modules\Contact\Events\ContactUploadedEvent;
 
 use Modules\Core\Services\BaseService;
-use Modules\Contact\Notifications\ContactActivationNotification;
+use Modules\Contact\Notifications\ContactImportNotification;
 
 use Modules\Core\Traits\FileStorageAction;
 
@@ -22,6 +26,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile as File;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Notification;
 
 use Exception;
 use Modules\Core\Exceptions\DuplicateDataException;
@@ -108,6 +114,9 @@ class ContactFileService extends BaseService
         $objReturnValue=null;
 
         try {
+            //Authenticated User
+            $user = $this->getCurrentUser('backend');
+
             //Get organization data
             $organization = $this->getOrganizationByHash($orgHash);
 
@@ -125,8 +134,11 @@ class ContactFileService extends BaseService
                 array_push($savedFiles, $savedFile);
             } //End if
 
+            //Notify Organization Users
+            Notification::send($organization, new ContactImportNotification($organization, $savedFiles));
+
             //Raise upload event
-            //event(new ContactUploadedEvent($organization, $savedFile));
+            event(new ContactUploadedEvent($organization, $savedFiles));
 
             //Assign to the return value
             $objReturnValue = $savedFiles;
@@ -151,11 +163,11 @@ class ContactFileService extends BaseService
      * 
      * @param  \string  $orgHash
      * @param  \Illuminate\Support\Collection  $payload
-     * @param  \Illuminate\Http\UploadedFile  $file
+     * @param  \Illuminate\Http\UploadedFile  $files
      * @param  \string  $ipAddress (optional)
      * 
      */
-    public function processUpload(string $orgHash, Collection $payload, string $ipAddress=null)
+    public function processUpload(string $orgHash, array $files, string $ipAddress=null)
     {
         $objReturnValue=null;
 
@@ -163,17 +175,34 @@ class ContactFileService extends BaseService
             //Get organization data
             $organization = $this->getOrganizationByHash($orgHash);
 
-            //Create file object from path
-            //$file = new File($payload['file_path']);
+            //Contact Import class
+            $contactImport = new ContactImport;
 
-            var_dump($payload);
+            //Iterate contacts
+            $contacts = [];
 
+            //Iterate the uploaded the files
+            foreach ($files as $file) {
+                switch ($file['file_extn']) {
+                    case 'xlsx':
+                        $response = $contactImport->toArray(storage_path('app').'/'.$file['file_path']);
+                        $response = $this->processFileDataArray($response);
+                        break;
+                    
+                    case 'csv':
 
-            /**
-             * REFER: https://www.youtube.com/watch?v=6P_nqOX38CE
-             */
+                        break;
 
+                    default:
+                        # code...
+                        break;
+                } //Switch ends
 
+                //Add contacts to the whole collection
+                $contacts = array_merge($contacts, $response);
+            } //Loop ends
+
+            Log::info($contacts);
             Log::info('processUpload called');
 
 
@@ -184,17 +213,104 @@ class ContactFileService extends BaseService
             //$objReturnValue = $savedFile;
 
         } catch(AccessDeniedHttpException $e) {
-            log::error('ContactFileService:upload:AccessDeniedHttpException:' . $e->getMessage());
+            log::error('ContactFileService:processUpload:AccessDeniedHttpException:' . $e->getMessage());
             throw new AccessDeniedHttpException($e->getMessage());
         } catch(BadRequestHttpException $e) {
-            log::error('ContactFileService:upload:BadRequestHttpException:' . $e->getMessage());
+            log::error('ContactFileService:processUpload:BadRequestHttpException:' . $e->getMessage());
             throw new BadRequestHttpException($e->getMessage());
         } catch(Exception $e) {
-            log::error('ContactFileService:upload:Exception:' . $e->getMessage());
+            log::error('ContactFileService:processUpload:Exception:' . $e->getMessage());
             throw new HttpException(500);
         } //Try-catch ends
 
         return $objReturnValue;
+    } //Function ends
+
+
+    /**
+     * Process Data Array
+     * 
+     * @return $contacts
+     */
+    private function processFileDataArray(array $sheets)
+    {
+        try {
+            //Initialize the contacts array
+            $contacts = [];
+
+            //Iterate Worksheet
+            foreach ($sheets as $key => $value) {
+                $rows = $value;
+
+                //Iterate rows in the sheet
+                foreach ($rows as $row) 
+                {
+                    //Set contact value
+                    $contact = $row;
+
+                    //Iterate columns in the row
+                    foreach ($row as $key => $value) {
+                        //Handle email address 
+                        if ($key=='email') {
+                            if (empty($contact['details'])) {
+                                $contact['details'] = [];
+                            } //End if                            
+
+                            $detail = [];
+                            $detail['type_key'] = 'contact_detail_type_email';
+                            $detail['subtype_key'] = 'contact_detail_subtype_email_personal';
+                            $detail['identifier'] = $row[$key];
+                            $detail['is_primary'] = true;
+
+                            array_push($contact['details'], $detail);
+                        } //End if
+
+                        //Handle phone number 
+                        if ($key=='phone') {
+                            if (empty($contact['details'])) {
+                                $contact['details'] = [];
+                            } //End if 
+
+                            $detail = [];
+                            $contact['details']['type_key'] = 'contact_detail_type_phone';
+                            $contact['details']['subtype_key'] = 'contact_detail_subtype_email_personal';
+                            $contact['details']['identifier'] = $row[$key];
+                            $contact['details']['phone_idd'] = $row['phone_idd'];
+                            $contact['details']['is_primary'] = true;
+                        } //End if
+                    } //Loop ends
+
+                    //
+                    $this->validationDuplicateCheck($contact);
+
+                    array_push($contacts, $contact);
+                } //Loop ends
+            } //Loop ends
+            
+            return $contacts;
+
+        } catch(Exception $e) {
+            throw $e;
+        } //Try-Catch ends
+    } //Function ends
+
+
+    private function validationDuplicateCheck(array &$row)
+    {
+        try {
+            //Iterate columns in the row
+            foreach ($row as $key => $value) {
+                //Verify email address OR phone
+                if (($key=='email') || ($key=='phone')) {
+
+
+                    $row['duplicate'] = true;
+                } //End if
+            } //Loop ends
+
+        } catch(Exception $e) {
+            throw $e;
+        } //Try-Catch ends
     } //Function ends
 
 } //Class ends

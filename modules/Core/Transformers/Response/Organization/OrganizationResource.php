@@ -16,7 +16,7 @@ class OrganizationResource extends JsonResource
     public function toArray($request)
     {
         //Load dependencies
-        $this->load(['industry', 'country', 'timezone', 'configurations']);
+        $this->load(['industry', 'country', 'timezone', 'configurations', 'users']);
 
         //Get image path if exists
         $logoPath = empty($this->logo)?null:url(Storage::url($this->logo));
@@ -32,6 +32,9 @@ class OrganizationResource extends JsonResource
             'industry', 'country', 'timezone', 'configurations'
         ]);
         $response['logo'] = $logoPath;
+
+        //Get notification
+        $response['notifications'] = $this->notifications;
 
         return $response;
     } //Function ends

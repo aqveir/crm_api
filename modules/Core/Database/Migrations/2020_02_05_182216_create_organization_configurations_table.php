@@ -17,7 +17,7 @@ class CreateOrganizationConfigurationsTable extends Migration
             $table->bigIncrements('id');
 
             $table->unsignedBigInteger('org_id');
-            $table->integer('configuration_id');
+            $table->unsignedBigInteger('configuration_id');
             $table->text('value')->nullable();
 
             //Audit Log Fields

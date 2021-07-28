@@ -34,6 +34,8 @@ class OrganizationMiniResource extends ResourceCollection
             $objReturnValue = [];
             foreach ($this->collection as $data) {
 
+                $data->load(['users', 'configurations']);
+
                 //Get image path if exists
                 $logoPath = empty($data->logo)?null:url(Storage::url($data->logo));
 

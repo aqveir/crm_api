@@ -152,6 +152,9 @@ class UserAuthService extends BaseService
             $user['reportees'] = [];
             $user['settings'] = $user->hasRoles(['super_admin']);
 
+            //Get Users unread notifications
+            $user->unreadNotifications;
+
             //Raise event: User Login
             event(new UserLoginEvent($user, $ipAddress));
 

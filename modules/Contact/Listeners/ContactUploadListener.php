@@ -36,11 +36,11 @@ class ContactUploadListener
     public function handle(ContactUploadedEvent $event)
     {
         $organization = $event->model;
-        $fileData = $event->file;
+        $files = $event->files;
         $isAutoCreated = $event->isAutoCreated;
 
         //Create the default user
-        $this->service->processUpload($organization['hash'], collect($fileData), $isAutoCreated);
+        $this->service->processUpload($organization['hash'], $files, $isAutoCreated);
     } //Function ends
 
 } //Class ends

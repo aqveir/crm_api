@@ -51,7 +51,6 @@ class OrganizationRepository extends EloquentRepository implements OrganizationC
             if (empty($query)) {
                 throw new ModelNotFoundException();
             } //End if
-            $query = $query->load(['users', 'configurations']);
 
             $objReturnValue = $query;	
 		} catch(Exception $e) {

@@ -18,7 +18,7 @@ class ContactUploadedEvent
     /**
      * File variable
      */
-    public $file;
+    public $files;
 
 
     /**
@@ -32,10 +32,10 @@ class ContactUploadedEvent
      *
      * @return void
      */
-    public function __construct($model, $file, bool $isAutoCreated=false)
+    public function __construct($model, $files, bool $isAutoCreated=false)
     {
         $this->model = $model;
-        $this->file = $file;
+        $this->files = $files;
         $this->isAutoCreated = $isAutoCreated;
     }
 
