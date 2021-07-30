@@ -13,7 +13,7 @@ use Illuminate\Routing\Controller as BaseController;
  *      ),
  *       @OA\Info(
  *          version="3.0.0",
- *          title="CRM API Documentation",
+ *          title="aQveir API Documentation",
  *          termsOfService="http://swagger.io/terms/",
  *      ),
  * )
