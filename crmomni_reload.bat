@@ -6,6 +6,7 @@ echo "Cache cleaning..."
 z:\xampp\php\php artisan cache:clear
 z:\xampp\php\php artisan config:clear
 z:\xampp\php\php artisan route:clear
+z:\xampp\php\php artisan view:clear
 echo "Cache cleared."
 
 echo "Generating Laravel App Key..."
