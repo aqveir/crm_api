@@ -10,6 +10,8 @@ use Modules\Core\Models\Organization\Traits\Action\OrganizationAction;
 
 use Illuminate\Notifications\Notifiable;
 
+use Laravel\Cashier\Billable;
+
 /**
  * Organization Model
  */
@@ -19,6 +21,8 @@ class Organization extends Model
     use OrganizationAction;
     use Notifiable;
     use SoftDeletes;
+    use Billable;       //Cashier (Stripe)
+    
 
 	/**
      * The database table used by the model.
@@ -62,7 +66,9 @@ class Organization extends Model
         'google_place_id', 'longitude', 'latitude', 'logo',
         'website', 'contact_person_name', 'email', 'phone', 'phone_idd', 'search_tags',
         'created_by', 'updated_by', 'deleted_by',
-        'created_at', 'updated_at', 'deleted_at', 'last_updated_at'
+        'created_at', 'updated_at', 'deleted_at', 'last_updated_at',
+
+        'stripe_id', 'pm_type', 'pm_last_four', 'trial_ends_at'
     ]; 
 
 
@@ -160,6 +166,66 @@ class Organization extends Model
     private function generateHashKey() {
         $this->attributes['hash'] = $this->generateRandomHash('o');
         return !is_null($this->attributes['hash']);
+    } //Function ends
+
+
+    /**
+     * ----------------------------------------------------------------
+     * STRIPE SPECIFIC CHANGES
+     * ----------------------------------------------------------------
+     */
+
+    /**
+     * Get the customer name that should be synced to Stripe.
+     *
+     * @return string|null
+     */
+    public function stripeName()
+    {
+        return $this->name;
+    } //Function ends
+
+
+    /**
+     * Get the customer email that should be synced to Stripe.
+     *
+     * @return string|null
+     */
+    public function stripeEmail()
+    {
+        return $this->email;
+    } //Function ends
+
+
+    /**
+     * Get the customer phone that should be synced to Stripe.
+     *
+     * @return string|null
+     */
+    public function stripePhone()
+    {
+        $phone = '';
+        if (!empty($this->phone_idd)) { $phone .= '+'.$this->phone_idd; }
+        $phone .= $this->phone;
+
+        return $phone;
+    } //Function ends
+
+
+    /**
+     * Get the customer address that should be synced to Stripe.
+     *
+     * @return string|null
+     */
+    public function stripeAddress()
+    {
+        $address = '';
+        // if (!empty($this->address)) { $address .= $this->address . ', '; }
+        // if (!empty($this->city)) { $address .= $this->city . ', '; }
+        // if (!empty($this->state)) { $address .= $this->state . ', '; }
+        // if (!empty($this->zipcode)) { $address .= $this->zipcode; }
+
+        return $address;
     } //Function ends
 
 } //Class ends

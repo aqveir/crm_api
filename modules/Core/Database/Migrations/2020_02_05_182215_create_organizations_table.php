@@ -18,7 +18,7 @@ class CreateOrganizationsTable extends Migration
             $table->string('hash')->nullable();
 
             $table->string('name');
-            $table->string('subdomain');
+            $table->string('subdomain')->index();
             $table->string('custom_domain')->nullable();
 
             //Organization Attributes
@@ -47,6 +47,12 @@ class CreateOrganizationsTable extends Migration
             $table->string('phone_idd')->nullable();
 
             $table->boolean('is_active')->default(true);
+
+            //Stripe Fields
+            $table->string('stripe_id')->nullable()->index();
+            $table->string('pm_type')->nullable();
+            $table->string('pm_last_four', 4)->nullable();
+            $table->timestamp('trial_ends_at')->nullable();
 
             //Audit Log Fields
             $table->unsignedBigInteger('created_by')->default(0);

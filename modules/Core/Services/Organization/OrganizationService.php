@@ -186,6 +186,15 @@ class OrganizationService extends BaseService
 
             //TODO: Create configuration data
 
+            //Cashier Addition
+            $options = [
+                'metadata' => [
+                    'org_hash'  => $organization['hash'],
+                    'owner'     => $organization['contact_person_name']
+                ]
+            ];
+            $stripeCustomer = $organization->createAsStripeCustomer($options);
+
             //Notify Organization Created
             $organization->notify(new NewOrganizationWelcomeEmail());
 
@@ -255,6 +264,20 @@ class OrganizationService extends BaseService
 
             //Clear organization cache
             $this->organizationRepository->setOrganizationClearCache();
+
+            //Cashier Update
+            $options = [
+                'metadata' => [
+                    'org_hash'  => $organization['hash'],
+                    'owner'     => $organization['contact_person_name']
+                ]
+            ];
+            $stripeCustomer = null;
+            if (empty($organization['stripe_id'])) {
+                $stripeCustomer = $organization->createAsStripeCustomer($options);
+            } else {
+                $stripeCustomer = $organization->updateStripeCustomer($options);
+            } //End if
 
             //Notify Organization Created
             $organization->notify(new NewOrganizationWelcomeEmail());

@@ -32,6 +32,7 @@ return [
         //Subscription Entities
         'subscription' => [
             'main' => env('TABLE_NAME_PREFIX', '') . 'subscriptions',
+            'items' => env('TABLE_NAME_PREFIX', '') . 'subscription_items',
             'organizations' => env('TABLE_NAME_PREFIX', '') . 'organization_subscriptions',
         ],
 
