@@ -4,6 +4,7 @@
 /storage/*.key
 /vendor
 /packages
+/storage/logs/*
 
 .env
 .env.backup
