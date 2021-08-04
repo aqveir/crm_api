@@ -11,15 +11,6 @@ class ContactImportNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    /**
-     * If your queue connection's after_commit configuration option 
-     * is set to false, you may still indicate that a particular 
-     * queued notification should be dispatched after all open database 
-     * transactions have been committed by defining an $afterCommit 
-     * property on the notification class
-     */
-    public $afterCommit = true;
-
 
     /**
      * @param $model

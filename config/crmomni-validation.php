@@ -456,6 +456,16 @@ return [
                 ]
             ], // Subscription Controller end
 
+            // Payment Method Controller Requests
+            'payment_method' => [
+                // Create Subscription validations
+                'create' => [
+                    'validation_rules' => [
+                        'key' => 'sometimes|string|max:255|unique:'. config('crmomni-migration.table_name.subscription.main') .',key'
+                    ]
+                ],
+            ], // Payment Method Controller end
+
             // Preferences Controller Requests
             'preference' => [
                 //Fetch all privileges

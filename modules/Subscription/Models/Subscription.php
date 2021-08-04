@@ -5,12 +5,14 @@ namespace Modules\Subscription\Models;
 use Modules\Core\Models\BaseModel as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use Laravel\Cashier\Subscription as CashierSubscription;
+
 use Modules\Subscription\Models\Traits\Relationship\SubscriptionRelationship;
 
 /**
  * Eloquent Model for Subscriptions
  */
-class Subscription extends Model {
+class Subscription extends CashierSubscription {
 
     use SubscriptionRelationship;
     use SoftDeletes;

@@ -31,13 +31,13 @@ $api->version('v1', [
     // Authenticated Endpoints for Backend
     $api->group(['middleware' => ['auth:backend']], function(Router $api) {
 
-        // Organization Endpoint
+        // Organization Endpoints
         $api->group(['prefix' => 'meta'], function(Router $api) {
             $api->get('country', 'Backend\\CountryController@index');
             $api->get('timezone', 'Backend\\TimezoneController@index');
         });
 
-        // Organization Endpoint
+        // Organization Endpoints
         $api->group(['prefix' => 'organization'], function(Router $api) {
             $api->post('/', 'Backend\\OrganizationController@create');
             $api->put('{organization}', 'Backend\\OrganizationController@update');
@@ -47,7 +47,7 @@ $api->version('v1', [
             $api->get('{organization}', 'Backend\\OrganizationController@show');
         });
 
-        // Role Endpoint
+        // Role Endpoints
         $api->group(['prefix' => 'privilege'], function(Router $api) {
             $api->get('/', 'Backend\\PrivilegeController@index');
             $api->get('{privilege}', 'Backend\\PrivilegeController@show');

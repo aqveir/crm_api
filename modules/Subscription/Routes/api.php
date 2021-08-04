@@ -33,6 +33,16 @@ $api->version('v1', [
     // Authenticated Endpoints for Backend
     $api->group(['middleware' => ['auth:backend']], function(Router $api) {
 
+        // Organization Endpoints
+        $api->group(['prefix' => 'organization/paymentmethods'], function(Router $api) {
+            $api->get('fetch', 'Backend\\PaymentMethodController@index');
+            $api->get('abcd', function() { return 'abcd'; });
+            
+            $api->post('/', 'Backend\\PaymentMethodController@create');
+            // $api->put('{subscription}', 'Backend\\SubscriptionController@update');
+            // $api->delete('{subscription}', 'Backend\\SubscriptionController@destroy');
+        });
+
         // Subscription Endpoints
         $api->group(['prefix' => 'subscription'], function(Router $api) {
             $api->get('/', 'Backend\\SubscriptionController@index');
@@ -40,6 +50,8 @@ $api->version('v1', [
             $api->post('/', 'Backend\\SubscriptionController@create');
             $api->put('{subscription}', 'Backend\\SubscriptionController@update');
             $api->delete('{subscription}', 'Backend\\SubscriptionController@destroy');
+
+            $api->get('plan', 'Backend\\PlanController@index');
         });
     });
 });

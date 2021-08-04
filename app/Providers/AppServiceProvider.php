@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Schema;
 use Laravel\Cashier\Cashier;
 
 use Modules\Core\Models\Organization\Organization;
+use Modules\Subscription\Models\Subscription;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -31,7 +32,9 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
 
-        //Change Cashier Customer Model
+        //Change Cashier Models
         Cashier::useCustomerModel(Organization::class);
+        Cashier::useSubscriptionModel(Subscription::class);
+        //Cashier::useSubscriptionItemModel(SubscriptionItem::class);
     }
 }
