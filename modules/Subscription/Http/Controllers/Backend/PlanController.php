@@ -31,42 +31,75 @@ class PlanController extends ApiBaseController
     public function __construct()
     {
         parent::__construct();
-        //$this->authorizeResource(Subscription::class, 'subscription');
     }
 
 
     /**
-     * Get All Subscription Plans
+     * Create Subscription Plans/Pricing
      *
      * @param \Illuminate\Http\Request $request
      * @param \Modules\Subscription\Services\PlanService $service
      * 
      * @return \Illuminate\Http\JsonResponse
      *
-     * @OA\Get(
-     *      path="/plan",
+     * @OA\Post(
+     *      path="/subscription/plan",
      *      tags={"Subscription"},
-     *      operationId="api.backend.subscription.plan.index",
+     *      operationId="api.backend.subscription.plan.create",
      *      security={{"omni_token":{}}},
      *      @OA\Response(response=200, description="Request was successfully executed."),
      *      @OA\Response(response=400, description="Bad Request"),
      *      @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function index(Request $request, PlanService $service, string $subdomain)
+    public function create(Request $request, PlanService $service, string $subdomain)
     {
         try {
-            //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
-
             //Create payload
             $payload = collect($request);
 
             //Fetch Subscriptions
-            $response = $service->index($orgHash, $payload);
+            $data = $service->create($payload);
 
-            //Transform the response
-            $data = new PlanMinifiedResource($response);
+            //Send response data
+            return $this->response->success(compact('data'));
+            
+        } catch(AccessDeniedHttpException $e) {
+            return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
+        } catch(UnauthorizedHttpException $e) {
+            return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
+        } catch(Exception $e) {
+            return $this->response->fail([], Response::HTTP_BAD_REQUEST);
+        }
+    } //Function ends
+
+
+    /**
+     * Update Subscription Plans/Pricing
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \Modules\Subscription\Services\PlanService $service
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @OA\Put(
+     *      path="/subscription/plan",
+     *      tags={"Subscription"},
+     *      operationId="api.backend.subscription.plan.update",
+     *      security={{"omni_token":{}}},
+     *      @OA\Response(response=200, description="Request was successfully executed."),
+     *      @OA\Response(response=400, description="Bad Request"),
+     *      @OA\Response(response=500, description="Internal Server Error")
+     * )
+     */
+    public function update(Request $request, PlanService $service, string $subdomain)
+    {
+        try {
+            //Create payload
+            $payload = collect($request);
+
+            //Fetch Subscriptions
+            $data = $service->updateAll($payload);
 
             //Send response data
             return $this->response->success(compact('data'));

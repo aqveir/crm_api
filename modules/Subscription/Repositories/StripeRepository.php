@@ -28,6 +28,24 @@ class StripeRepository //implements SubscriptionContract
 
 
 	/**
+	 * Get Stripe Client
+	 */
+	public function getStripeClient()
+	{
+		$objReturnValue=null;
+		
+		try {
+            $objReturnValue = $this->stripeClient;
+		} catch(Exception $e) {
+			$objReturnValue=null;
+			Log::error(json_encode($e));
+		} //Try-catch ends
+		
+		return $objReturnValue;
+	} //Function ends
+
+
+	/**
 	 * Get All Stripe Products
 	 */
 	public function getProducts()
@@ -67,7 +85,12 @@ class StripeRepository //implements SubscriptionContract
             $keyCache = config('subscription.settings.cache.stripe_prices.key');
             $durationCache = config('subscription.settings.cache.stripe_prices.duration_in_sec');
 
-            if (Cache::has($keyCache) || ($isForced)) {
+            //Force the cache to be cleared
+            if ($isForced) {
+                Cache::forget($keyCache);
+            } //End if
+
+            if (Cache::has($keyCache)) {
                 $objReturnValue = Cache::get($keyCache);
             } else {
                 $objReturnValue = Cache::remember($keyCache, $durationCache/60, function() {

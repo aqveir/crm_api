@@ -9,7 +9,9 @@ use Illuminate\Http\Request;
 use Modules\Core\Http\Controllers\ApiBaseController;
 
 use Modules\Subscription\Models\Subscription;
-use Modules\Subscription\Services\SubscriptionService;
+use Modules\Subscription\Services\PlanService;
+
+use Modules\Subscription\Transformers\Responses\PlanMinifiedResource;
 
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,7 +22,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
-class SubscriptionController extends ApiBaseController
+class PlanController extends ApiBaseController
 {
     /**
      * Constructor.
@@ -33,30 +35,33 @@ class SubscriptionController extends ApiBaseController
 
 
     /**
-     * Get All Active Subscriptions
+     * Get All Subscription Plans
      *
      * @param \Illuminate\Http\Request $request
-     * @param \Modules\Subscription\Services\SubscriptionService $service
+     * @param \Modules\Subscription\Services\PlanService $service
      * 
      * @return \Illuminate\Http\JsonResponse
      *
      * @OA\Get(
-     *      path="/subscription/active",
+     *      path="/subscription/plan",
      *      tags={"Subscription"},
-     *      operationId="api.backend.subscription.active",
+     *      operationId="api.backend.subscription.plan.index",
      *      @OA\Response(response=200, description="Request was successfully executed."),
      *      @OA\Response(response=400, description="Bad Request"),
      *      @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function index(Request $request, SubscriptionService $service, string $subdomain)
+    public function index(Request $request, PlanService $service, string $subdomain)
     {
         try {
             //Create payload
             $payload = collect($request);
 
-            //Fetch Subscription that is active and display filtered
-            $data = $service->index($payload, true, true);
+            //Fetch Subscriptions
+            $response = $service->index($payload);
+
+            //Transform the response
+            $data = new PlanMinifiedResource($response);
 
             //Send response data
             return $this->response->success(compact('data'));
@@ -69,6 +74,5 @@ class SubscriptionController extends ApiBaseController
             return $this->response->fail([], Response::HTTP_BAD_REQUEST);
         }
     } //Function ends
-
 
 } //Class ends

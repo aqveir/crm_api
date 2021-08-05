@@ -26,7 +26,7 @@ $api->version('v1', [
 
         // Subscription Endpoints
         $api->group(['prefix' => 'subscription'], function(Router $api) {
-            $api->get('active', 'Frontend\\SubscriptionController@index');
+            $api->get('plan', 'Frontend\\PlanController@index');
         });
     });
 
@@ -45,13 +45,18 @@ $api->version('v1', [
 
         // Subscription Endpoints
         $api->group(['prefix' => 'subscription'], function(Router $api) {
+
+            //Subscription-Plans (Pricing) Endpoints
+            $api->group(['prefix' => 'plan'], function(Router $api) {
+                $api->post('/', 'Backend\\PlanController@create');
+                $api->put('/', 'Backend\\PlanController@update');
+            });
+
             $api->get('/', 'Backend\\SubscriptionController@index');
             
             $api->post('/', 'Backend\\SubscriptionController@create');
             $api->put('{subscription}', 'Backend\\SubscriptionController@update');
             $api->delete('{subscription}', 'Backend\\SubscriptionController@destroy');
-
-            $api->get('plan', 'Backend\\PlanController@index');
         });
     });
 });
