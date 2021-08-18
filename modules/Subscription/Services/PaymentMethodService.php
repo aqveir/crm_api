@@ -192,35 +192,42 @@ class PaymentMethodService extends BaseService
 
 
     /**
-     * Delete Subscription
+     * Delete Payment Method
      * 
-     * @param \Illuminate\Support\Collection $payload
-     * @param \int $subscriptionId
+     * @param  \string  $orgHash
+     * @param  \Illuminate\Support\Collection  $payload
+     * @param  \string  $paymentMethodId
      *
      * @return mixed
      */
-    public function delete(Collection $payload, int $subscriptionId)
+    public function delete(string $orgHash, Collection $payload, string $paymentMethodId)
     {
         $objReturnValue=null;
         try {
-            //Authenticated User
-            $user = $this->getCurrentUser('backend');
+            //Get organization data
+            $organization = $this->getOrganizationByHash($orgHash);
 
-            //Get Subscription
-            $subscription = $this->subscriptionRepository->getById($subscriptionId);
+            //Get Payment Method
+            if (!($organization->hasPaymentMethod())) {
+                throw new BadRequestHttpException();
+            } //End if
+            $paymentMethod = $organization->findPaymentMethod($paymentMethodId);
+            if (empty($paymentMethod)) {
+                throw new BadRequestHttpException('Selected Payment Method Missing');
+            } //End if
 
-            //Delete Subscription
-            $response = $this->subscriptionRepository->deleteById($subscriptionId, $user['id']);
+            //Delete Payment Method
+            $paymentMethod->delete();
             
             //Assign to the return value
-            $objReturnValue = $response;
+            $objReturnValue = $paymentMethod;
 
         } catch(AccessDeniedHttpException $e) {
             log::error('PaymentMethodService:delete:AccessDeniedHttpException:' . $e->getMessage());
-            throw new AccessDeniedHttpException($e->getMessage());
+            throw $e;
         } catch(BadRequestHttpException $e) {
             log::error('PaymentMethodService:delete:BadRequestHttpException:' . $e->getMessage());
-            throw new BadRequestHttpException($e->getMessage());
+            throw $e;
         } catch(Exception $e) {
             log::error('PaymentMethodService:delete:Exception:' . $e->getMessage());
             throw new HttpException(500);

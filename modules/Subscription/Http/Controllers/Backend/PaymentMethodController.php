@@ -32,7 +32,6 @@ class PaymentMethodController extends ApiBaseController
     public function __construct()
     {
         parent::__construct();
-        //$this->authorizeResource(Subscription::class, 'subscription');
     }
 
 
@@ -45,7 +44,7 @@ class PaymentMethodController extends ApiBaseController
      * @return \Illuminate\Http\JsonResponse
      *
      * @OA\Get(
-     *      path="/organization/paymentmethods/fetch",
+     *      path="/organization/paymentmethod/fetch",
      *      tags={"Organization"},
      *      operationId="api.backend.subscription.paymentmethod.index",
      *      security={{"omni_token":{}}},
@@ -88,7 +87,7 @@ class PaymentMethodController extends ApiBaseController
      * @return \Illuminate\Http\JsonResponse
      *
      * @OA\Post(
-     *     path="/organization/paymentmethods",
+     *     path="/organization/paymentmethod",
      *     tags={"Organization"},
      *     operationId="api.backend.subscription.paymentmethod.create",
      *     security={{"omni_token":{}}},
@@ -123,7 +122,7 @@ class PaymentMethodController extends ApiBaseController
 
 
     /**
-     * Update Subscription
+     * Update Payment Method
      *
      * @param \Modules\Subscription\Http\Requests\Backend\UpdateSubscriptionRequest $request
      * @param \Modules\Subscription\Services\PaymentMethodService $service
@@ -131,7 +130,7 @@ class PaymentMethodController extends ApiBaseController
      * @return \Illuminate\Http\JsonResponse
      *
      * @OA\Put(
-     *     path="/organization/paymentmethods/{id}",
+     *     path="/organization/paymentmethod/{id}",
      *     tags={"Organization"},
      *     operationId="api.backend.subscription.paymentmethod.update",
      *     security={{"omni_token":{}}},
@@ -165,7 +164,7 @@ class PaymentMethodController extends ApiBaseController
 
 
     /**
-     * Delete Subscription
+     * Delete Payment Method
      *
      * @param \Modules\Subscription\Http\Requests\Backend\DeleteSubscriptionRequest $request
      * @param \Modules\Subscription\Services\PaymentMethodService $service
@@ -173,7 +172,7 @@ class PaymentMethodController extends ApiBaseController
      * @return \Illuminate\Http\JsonResponse
      *
      * @OA\Delete(
-     *     path="/organization/paymentmethods/{id}",
+     *     path="/organization/paymentmethod/{uuid}",
      *     tags={"Organization"},
      *     operationId="api.backend.subscription.paymentmethod.delete",
      *     security={{"omni_token":{}}},
@@ -183,7 +182,7 @@ class PaymentMethodController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function destroy(DeleteSubscriptionRequest $request, PaymentMethodService $service, string $subdomain, Subscription $subscription)
+    public function destroy(Request $request, PaymentMethodService $service, string $subdomain, string $uuid)
     {
         try {
             //Get Org Hash 
@@ -192,8 +191,8 @@ class PaymentMethodController extends ApiBaseController
             //Create payload
             $payload = collect($request);
 
-            //Delete subscription
-            $data = $service->delete($payload, $subscription['id']);
+            //Delete Payment Method
+            $data = $service->delete($orgHash, $payload, $uuid);
 
             //Send response data
             return $this->response->success(compact('data'));
@@ -201,7 +200,7 @@ class PaymentMethodController extends ApiBaseController
         } catch(AccessDeniedHttpException $e) {
             return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
         } catch(Exception $e) {
-            return $this->response->fail([], Response::HTTP_BAD_REQUEST);
+            return $this->response->fail([$e->getMessage()], Response::HTTP_BAD_REQUEST);
         }
     } //Function ends
 

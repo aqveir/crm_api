@@ -78,7 +78,8 @@ class Organization extends Model
      * @var array
      */
     protected $dates = [
-        'created_at', 'updated_at', 'deleted_at'
+        'created_at', 'updated_at', 'deleted_at',
+        'trial_ends_at'
     ];
 
 
@@ -165,6 +166,7 @@ class Organization extends Model
      */
     private function generateHashKey() {
         $this->attributes['hash'] = $this->generateRandomHash('o');
+        $this->attributes['trial_ends_at'] = now()->addDays(365);
         return !is_null($this->attributes['hash']);
     } //Function ends
 
