@@ -79,6 +79,49 @@ class PaymentMethodController extends ApiBaseController
 
 
     /**
+     * Get Setup Intent for the Organization
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \Modules\Subscription\Services\PaymentMethodService $service
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @OA\Get(
+     *      path="/organization/paymentmethod/intent",
+     *      tags={"Organization"},
+     *      operationId="api.backend.subscription.paymentmethod.index",
+     *      security={{"omni_token":{}}},
+     *      @OA\Response(response=200, description="Request was successfully executed."),
+     *      @OA\Response(response=400, description="Bad Request"),
+     *      @OA\Response(response=500, description="Internal Server Error")
+     * )
+     */
+    public function intent(Request $request, PaymentMethodService $service, string $subdomain)
+    {
+        try {
+            //Get Org Hash 
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
+
+            //Create payload
+            $payload = collect($request);
+
+            //Fetch Subscriptions
+            $data = $service->setupIntent($orgHash, $payload);
+
+            //Send response data
+            return $this->response->success(compact('data'));
+            
+        } catch(AccessDeniedHttpException $e) {
+            return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
+        } catch(UnauthorizedHttpException $e) {
+            return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
+        } catch(Exception $e) {
+            return $this->response->fail([], Response::HTTP_BAD_REQUEST);
+        }
+    } //Function ends
+
+
+    /**
      * Create Subscription
      *
      * @param \Modules\Subscription\Http\Requests\Backend\CreatePaymentMethodRequest $request

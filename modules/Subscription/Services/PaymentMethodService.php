@@ -105,6 +105,39 @@ class PaymentMethodService extends BaseService
 
 
     /**
+     * Get Setup Intent for the Organization
+     * 
+     * @param  \string  $orgHash
+     * @param  \Illuminate\Support\Collection  $payload
+     *
+     * @return mixed
+     */
+    public function setupIntent(string $orgHash, Collection $payload)
+    {
+        $objReturnValue=null; $paymentMethods=null;
+        try {
+            //Get organization data
+            $organization = $this->getOrganizationByHash($orgHash);
+
+            //Assign to the return value
+            $objReturnValue = $organization->createSetupIntent();
+
+        } catch(AccessDeniedHttpException $e) {
+            log::error('PaymentMethodService:intent:AccessDeniedHttpException:' . $e->getMessage());
+            throw new AccessDeniedHttpException($e->getMessage());
+        } catch(BadRequestHttpException $e) {
+            log::error('PaymentMethodService:intent:BadRequestHttpException:' . $e->getMessage());
+            throw new BadRequestHttpException($e->getMessage());
+        } catch(Exception $e) {
+            log::error('PaymentMethodService:intent:Exception:' . $e->getMessage());
+            throw new HttpException(500);
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends
+
+
+    /**
      * Create Payment Method
      * 
      * @param  \string  $orgHash
