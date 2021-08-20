@@ -76,7 +76,7 @@ class PaymentMethodService extends BaseService
      */
     public function index(string $orgHash, Collection $payload)
     {
-        $objReturnValue=null; $paymentMethods=null;
+        $objReturnValue=null; $records=null;
         try {
             //Get organization data
             $organization = $this->getOrganizationByHash($orgHash);
@@ -84,10 +84,24 @@ class PaymentMethodService extends BaseService
             //Check for existing payment methods exists
             if ($organization->hasPaymentMethod()) {
                 $paymentMethods = $organization->paymentMethods();
+                if (!empty($paymentMethods)) {
+                    //Convert to array
+                    $records = $paymentMethods->toArray();
+
+                    $defaultPaymentMethod = null;
+                    if ($organization->hasDefaultPaymentMethod()) {
+                        $defaultPaymentMethod = $organization->defaultPaymentMethod();
+                    } //End if
+
+                    //Set default flag
+                    foreach ($records as &$record) {
+                        $record['is_default'] = (!empty($defaultPaymentMethod) && ($defaultPaymentMethod->id==$record['id']))?true:false;
+                    } //Loop ends                    
+                } //End if
             } //End if
 
             //Assign to the return value
-            $objReturnValue = $paymentMethods;
+            $objReturnValue = $records;
 
         } catch(AccessDeniedHttpException $e) {
             log::error('PaymentMethodService:index:AccessDeniedHttpException:' . $e->getMessage());
@@ -142,12 +156,13 @@ class PaymentMethodService extends BaseService
      * 
      * @param  \string  $orgHash
      * @param  \Illuminate\Support\Collection  $payload
+     * @param  \bool  $isForced (optional)
      *
      * @return mixed
      */
-    public function create(string $orgHash, Collection $payload)
+    public function create(string $orgHash, Collection $payload, bool $isForced=false)
     {
-        $objReturnValue=null; $data=[];
+        $objReturnValue=null; $paymentMethod=null;
         try {
             //Get organization data
             $organization = $this->getOrganizationByHash($orgHash);
@@ -155,8 +170,12 @@ class PaymentMethodService extends BaseService
             //Authenticated User
             $user = $this->getCurrentUser('backend');
 
-            //Create Payment Method
-            $paymentMethod = $organization->addPaymentMethod($payload['payment_method']);            
+            //Create and Make default payment method, if none exists
+            if (!($organization->hasDefaultPaymentMethod()) || $isForced) {
+                $paymentMethod = $organization->updateDefaultPaymentMethod($payload['payment_method']); //Create and Make Default Payment Method
+            } else {
+                $paymentMethod = $organization->addPaymentMethod($payload['payment_method']); //Create Payment Method
+            } //End if
 
             //Assign to the return value
             $objReturnValue = $paymentMethod;
@@ -177,31 +196,28 @@ class PaymentMethodService extends BaseService
 
 
     /**
-     * Update Subscription
+     * Update Payment Method
      * 
-     * @param \Illuminate\Support\Collection $payload
-     * @param \int $subscriptionId
+     * @param  \string  $orgHash
+     * @param  \Illuminate\Support\Collection $payload
+     * @param  \string  $paymentMethodId
      *
      * @return mixed
      */
-    public function update(Collection $payload, int $subscriptionId)
+    public function update(string $orgHash, Collection $payload, string $paymentMethodId)
     {
-        $objReturnValue=null;
+        $objReturnValue=null;$paymentMethod=null;
         try {
-            //Authenticated User
-            $user = $this->getCurrentUser('backend');
+            //Get organization data
+            $organization = $this->getOrganizationByHash($orgHash);
 
-            //Build data
-            $data = $payload->only([
-                'key', 'display_value', 'description', 'data_json',
-                'order','is_displayed'
-            ])->toArray();
-
-            //Update Subscription
-            $subscription = $this->subscriptionRepository->update($subscriptionId, 'id', $data, $user['id']);              
+            //Create and Make default payment method, if none exists
+            if ($payload->has('is_default') && $payload['is_default']) {
+                $paymentMethod = $organization->updateDefaultPaymentMethod($paymentMethodId); //Make Default Payment Method
+            } //End if
 
             //Assign to the return value
-            $objReturnValue = $subscription;
+            $objReturnValue = $paymentMethod;
 
         } catch(AccessDeniedHttpException $e) {
             log::error('PaymentMethodService:update:AccessDeniedHttpException:' . $e->getMessage());
@@ -238,6 +254,7 @@ class PaymentMethodService extends BaseService
             if (!($organization->hasPaymentMethod())) {
                 throw new BadRequestHttpException();
             } //End if
+
             $paymentMethod = $organization->findPaymentMethod($paymentMethodId);
             if (empty($paymentMethod)) {
                 throw new BadRequestHttpException('Selected Payment Method Missing');

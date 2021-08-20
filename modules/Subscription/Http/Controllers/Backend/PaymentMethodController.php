@@ -147,7 +147,7 @@ class PaymentMethodController extends ApiBaseController
             $payload = collect($request);
 
             //Create subscription data
-            $data = $service->create($orgHash, $payload);
+            $data = $service->create($orgHash, $payload, ($payload->has('is_default')?$payload['is_default']:false));
 
             //Send response data
             return $this->response->success(compact('data'));
@@ -165,13 +165,13 @@ class PaymentMethodController extends ApiBaseController
     /**
      * Update Payment Method
      *
-     * @param \Modules\Subscription\Http\Requests\Backend\UpdateSubscriptionRequest $request
+     * @param \Illuminate\Http\Request $request
      * @param \Modules\Subscription\Services\PaymentMethodService $service
      * 
      * @return \Illuminate\Http\JsonResponse
      *
      * @OA\Put(
-     *     path="/organization/paymentmethod/{id}",
+     *     path="/organization/paymentmethod/{uuid}",
      *     tags={"Organization"},
      *     operationId="api.backend.subscription.paymentmethod.update",
      *     security={{"omni_token":{}}},
@@ -181,7 +181,7 @@ class PaymentMethodController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function update(UpdateSubscriptionRequest $request, PaymentMethodService $service, string $subdomain, Subscription $subscription)
+    public function update(Request $request, PaymentMethodService $service, string $subdomain, string $uuid)
     {
         try {
             //Get Org Hash 
@@ -190,8 +190,8 @@ class PaymentMethodController extends ApiBaseController
             //Create payload
             $payload = collect($request);
 
-            //Update subscription
-            $data = $service->update($payload, $subscription['id']);
+            //Update Payment Method
+            $data = $service->update($orgHash, $payload, $uuid);
 
             //Send response data
             return $this->response->success(compact('data'));

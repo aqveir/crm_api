@@ -37,7 +37,6 @@ $api->version('v1', [
         $api->group(['prefix' => 'organization/paymentmethod'], function(Router $api) {
             $api->get('fetch', 'Backend\\PaymentMethodController@index');
             $api->get('intent', 'Backend\\PaymentMethodController@intent');
-            $api->get('abcd', function() { return 'abcd'; });
             
             $api->post('/', 'Backend\\PaymentMethodController@create');
             $api->put('{uuid}', 'Backend\\PaymentMethodController@update');
