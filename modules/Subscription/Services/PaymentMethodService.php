@@ -155,17 +155,11 @@ class PaymentMethodService extends BaseService
             //Authenticated User
             $user = $this->getCurrentUser('backend');
 
-            //Build data
-            $data = $payload->toArray();
-            $data = array_merge($data, [
-                'created_by' => $user['id'] 
-            ]);
-
             //Create Payment Method
-            $paymentMethods = $organization->addPaymentMethod($data);            
+            $paymentMethod = $organization->addPaymentMethod($payload['payment_method']);            
 
             //Assign to the return value
-            $objReturnValue = $paymentMethods;
+            $objReturnValue = $paymentMethod;
 
         } catch(AccessDeniedHttpException $e) {
             log::error('PaymentMethodService:create:AccessDeniedHttpException:' . $e->getMessage());

@@ -7,9 +7,7 @@ use Illuminate\Support\Facades\Log;
 
 use Illuminate\Http\Request;
 use Modules\Core\Http\Controllers\ApiBaseController;
-use Modules\Subscription\Http\Requests\Backend\CreatePaymentMethodRequest;
 use Modules\Subscription\Http\Requests\Backend\UpdateSubscriptionRequest;
-use Modules\Subscription\Http\Requests\Backend\DeleteSubscriptionRequest;
 
 use Modules\Subscription\Models\Subscription;
 use Modules\Subscription\Services\PaymentMethodService;
@@ -122,9 +120,9 @@ class PaymentMethodController extends ApiBaseController
 
 
     /**
-     * Create Subscription
+     * Create Payment Method for Organization
      *
-     * @param \Modules\Subscription\Http\Requests\Backend\CreatePaymentMethodRequest $request
+     * @param \Illuminate\Http\Request $request
      * @param \Modules\Subscription\Services\PaymentMethodService $service
      * 
      * @return \Illuminate\Http\JsonResponse
@@ -139,7 +137,7 @@ class PaymentMethodController extends ApiBaseController
      *     @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function create(CreatePaymentMethodRequest $request, PaymentMethodService $service, string $subdomain)
+    public function create(Request $request, PaymentMethodService $service, string $subdomain)
     {
         try {
             //Get Org Hash 
@@ -209,7 +207,7 @@ class PaymentMethodController extends ApiBaseController
     /**
      * Delete Payment Method
      *
-     * @param \Modules\Subscription\Http\Requests\Backend\DeleteSubscriptionRequest $request
+     * @param \Illuminate\Http\Request $request
      * @param \Modules\Subscription\Services\PaymentMethodService $service
      * 
      * @return \Illuminate\Http\JsonResponse
