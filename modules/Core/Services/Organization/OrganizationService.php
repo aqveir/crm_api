@@ -87,13 +87,13 @@ class OrganizationService extends BaseService
     /**
      * Get all organization data
      * 
-     * @param \Illuminate\Support\Collection $request
+     * @param \Illuminate\Support\Collection $payload
      * @param \bool $isActive (optional)
      *
      * @return mixed
      * 
      */
-    public function getAll(Collection $request, bool $isActive=null)
+    public function getAll(Collection $payload, bool $isActive=null)
     {
         $objReturnValue=null;
         try {
@@ -115,14 +115,14 @@ class OrganizationService extends BaseService
     /**
      * Get organization data by identifier
      * 
-     * @param \Illuminate\Support\Collection $request
+     * @param \Illuminate\Support\Collection $payload
      * @param \string $hash
      * @param \bool $isActive (optional)
      *
      * @return mixed
      * 
      */
-    public function getData(Collection $request, string $hash, bool $isActive=null)
+    public function getData(Collection $payload, string $hash, bool $isActive=null)
     {
         $objReturnValue=null;
         try {
@@ -146,12 +146,12 @@ class OrganizationService extends BaseService
     /**
      * Create organization
      * 
-     * @param \Illuminate\Support\Collection $request
+     * @param \Illuminate\Support\Collection $payload
      *
      * @return mixed
      * 
      */
-    public function create(Collection $request, string $ipAddress=null)
+    public function create(Collection $payload, string $ipAddress=null)
     {
         $objReturnValue=null;
         try {
@@ -161,11 +161,11 @@ class OrganizationService extends BaseService
                 throw new AccessDeniedHttpException();
             } //End if
 
-            $keyIndustry = ($request->has('industry_key'))?$request['industry_key']:'industry_type_vanilla';
+            $keyIndustry = ($payload->has('industry_key'))?$payload['industry_key']:'industry_type_vanilla';
             $industry = $this->lookupRepository->getLookUpByKey(0, $keyIndustry);
 
             //Build Data
-            $data = $request->only([
+            $data = $payload->only([
                 'name', 'subdomain', 'website',
                 'contact_person_name', 'email', 'phone', 'phone_idd'
             ])->toArray();
@@ -180,12 +180,6 @@ class OrganizationService extends BaseService
             //Clear organization cache
             $this->organizationRepository->setOrganizationClearCache();
 
-            //Create default roles
-            $roles = $this->roleService->createDefaultRole($organization['hash']);
-            $organization['roles'] = $roles;
-
-            //TODO: Create configuration data
-
             //Cashier Addition
             $options = [
                 'metadata' => [
@@ -195,11 +189,17 @@ class OrganizationService extends BaseService
             ];
             $stripeCustomer = $organization->createAsStripeCustomer($options);
 
+            //Create default roles
+            $roles = $this->roleService->createDefaultRole($organization['hash']);
+            $organization['roles'] = $roles;
+
+            //TODO: Create configuration data
+
             //Notify Organization Created
             $organization->notify(new NewOrganizationWelcomeEmail());
 
             //Raise event: New Organization Added
-            event(new OrganizationCreatedEvent($organization, $request));
+            event(new OrganizationCreatedEvent($organization, $payload));
 
             //return Organiztion object
             $objReturnValue = $organization;
@@ -221,12 +221,12 @@ class OrganizationService extends BaseService
      * Update Organization
      * 
      * @param \string $hash
-     * @param \Illuminate\Support\Collection $request
+     * @param \Illuminate\Support\Collection $payload
      *
      * @return mixed
      * 
      */
-    public function update(string $hash, Collection $request, File $file=null, string $ipAddress=null)
+    public function update(string $hash, Collection $payload, File $file=null, string $ipAddress=null)
     {
         $objReturnValue=null;
         $industry=null;
@@ -239,15 +239,15 @@ class OrganizationService extends BaseService
 
             //Refine request data based on user role
             if ($user->hasRoles(['super_admin'])) {
-                $keyIndustry = ($request->has('industry_key'))?$request['industry_key']:'industry_type_vanilla';
+                $keyIndustry = ($payload->has('industry_key'))?$payload['industry_key']:'industry_type_vanilla';
                 $industry = $this->lookupRepository->getLookUpByKey(0, $keyIndustry);
 
                 //Build Data
-                $data = $request->toArray();
+                $data = $payload->toArray();
                 $data['industry_id'] = $industry['id'];
             } else {
                 //Build Data
-                $data = $request->except(['name', 'subdomain', 'industry_key', 'is_active'])->toArray();
+                $data = $payload->except(['name', 'subdomain', 'industry_key', 'is_active'])->toArray();
             } //End if
 
             //Upload Logo, if exists
@@ -283,7 +283,7 @@ class OrganizationService extends BaseService
             $organization->notify(new NewOrganizationWelcomeEmail());
 
             //Raise event: Organization Updated
-            event(new OrganizationUpdatedEvent($organization, $request));
+            event(new OrganizationUpdatedEvent($organization, $payload));
 
             //Return Organiztion object
             $objReturnValue = $organization;
@@ -304,12 +304,12 @@ class OrganizationService extends BaseService
      * Delete Organization
      * 
      * @param \string $hash
-     * @param \Illuminate\Support\Collection $request
+     * @param \Illuminate\Support\Collection $payload
      *
      * @return mixed
      * 
      */
-    public function delete(string $hash, Collection $request, string $ipAddress=null)
+    public function delete(string $hash, Collection $payload, string $ipAddress=null)
     {
         $objReturnValue=null;
         $industry=null;

@@ -11,7 +11,7 @@ return [
                 'create' => [
                     'validation_rules' => [
                         'name' => 'nullable|string|max:40',
-                        'subdomain' => 'required|max:36|unique:' . config('crmomni-migration.table_name.organizations') . ',subdomain',
+                        'subdomain' => 'required|min:3|max:36|not_in:' . implode(',', config('crmomni.settings.restricted_subdomains','')) . '|unique:' . config('crmomni-migration.table_name.organizations') . ',subdomain',
                         'first_name' => 'required|string|max:80',
                         'last_name' => 'string|max:80',
                         'contact_person_name' => 'required|string|max:80',
