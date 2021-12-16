@@ -366,6 +366,8 @@ return [
                         'aniversary_at' => 'nullable|date|after:birth_at',
                         'type_key' => 'string|max:50',
                         'gender_key' => 'string|max:50',
+                        'timezone_key' => 'string|max:50',
+                        'language_code' => 'sometimes|string',
 
                         'extras' => 'nullable|json',
                         'settings' => 'nullable|json',
@@ -394,7 +396,43 @@ return [
                 ],
 
                 'update' => [
-                    'validation_rules' => []
+                    'validation_rules' => [
+                        'first_name' => 'required|string|max:40',
+                        'middle_name' => 'nullable|string|max:40',
+                        'last_name' => 'nullable|string|max:40',
+                        'birth_at' => 'nullable|date|before:now',
+                        'aniversary_at' => 'nullable|date|after:birth_at',
+                        'type_key' => 'string|max:50',
+                        'gender_key' => 'string|max:50',
+                        'timezone_key' => 'string|max:50',
+                        'language_code' => 'sometimes|string',
+
+                        'extras' => 'nullable|json',
+                        'settings' => 'nullable|json',
+                        
+                        'details' => 'sometimes',
+                        'details.*.id' => 'sometimes|number',
+                        'details.*.type_key' => 'string|required_with:details',
+                        'details.*.subtype_key' => 'nullable|string|max:40',
+                        'details.*.phone_idd' => 'nullable|string|max:5',
+                        'details.*.identifier' => 'string|max:200|required_with:details',
+                        'details.*.is_primary' => 'boolean',
+
+                        'addresses' => 'sometimes',
+                        'addresses.*.id' => 'sometimes|number',
+                        'addresses.*.type_key' => 'string|required_with:addresses',
+                        'addresses.*.name' => 'nullable|string',
+                        'addresses.*.address1' => 'nullable|string|max:100',
+                        'addresses.*.address2' => 'nullable|string|max:100',
+                        'addresses.*.locality' => 'nullable|string|max:100',
+                        'addresses.*.city' => 'string|required_with:addresses',
+                        'addresses.*.state' => 'string|required_with:addresses',
+                        'addresses.*.country_id' => 'number|required_with:addresses',
+                        'addresses.*.zipcode' => 'nullable|string|max:30',
+                        'addresses.*.google_place_id' => 'nullable|string|max:100',
+                        'addresses.*.longitude' => 'nullable|number',
+                        'addresses.*.latitude' => 'nullable|number',
+                    ]
                 ],
 
                 //Contact Avatar Update

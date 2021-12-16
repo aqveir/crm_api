@@ -17,6 +17,11 @@ return [
                 'key' => '_cache_stripe_prices_key_',
                 'duration_in_sec' => 86400,
             ],
+
+            'stripe_subscriptions' => [
+                'key' => '_cache_stripe_subscriptions_key_',
+                'duration_in_sec' => 86400,
+            ]
         ],
 
         //Pricing settings
@@ -160,6 +165,9 @@ return [
                     'max_leads' => 500
                 ]
             ],
-        ]
+        ],
+
+        //Free plans array
+        'free_plans' => ['price_1JLAlSFoTpVJV8Ly2kv7wfDO', 'price_1JLAlSFoTpVJV8LyS6AhedR2']
     ]
 ];

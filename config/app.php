@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'https://crmomni.com'),
+    'url' => env('APP_URL', 'https://aqveir.com'),
 
     'asset_url' => env('ASSET_URL', null),
 
