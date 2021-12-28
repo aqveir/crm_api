@@ -24,8 +24,20 @@ use Illuminate\Support\Facades\Route;
 Route::domain(config('crmomni.settings.domain'))->group(function() {
 	// Default route
 	Route::get('/', function(Request $request, string $subdomain) {
+		$subdomainValid = true;
 
+		//Check if the subdomains is part of restricted list
+		$subdomainsRestricted = config('crmomni.settings.restricted_subdomains');
+		$subdomainValid = (in_array($subdomain, $subdomainsRestricted))?false:true;
+
+		//Get the backend URI
 		$backendUri = config('crmomni.settings.backend_uri');
-		return redirect($backendUri);
+
+		//Route to the valid subdomain 
+		if ($subdomainValid) {
+			return redirect($backendUri);
+		} else {
+			return redirect($backendUri.'/user/forgot');
+		} //End if
 	});
 });
