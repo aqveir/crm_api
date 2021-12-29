@@ -30,16 +30,28 @@ return [
 
         /*
         |--------------------------------------------------------------------------
-        | Back-end URI prefix
+        | Back-end URI
         |--------------------------------------------------------------------------
         |
-        | Specifies the URL name used for accessing back-end pages.
+        | Specifies the URL name used for accessing front-end CRM pages.
         | For example: backend -> http://localhost/console
         |
         */
         'backend_uri' => env('APPLICATION_BACKEND_URI', '/console'),
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | Front-end Error URI
+        |--------------------------------------------------------------------------
+        |
+        | Specifies the URI for path for the forntend error page.
+        | For example: backend -> http://localhost/console
+        |
+        */
+        'frontend_error_uri' => env('APPLICATION_FRONTEND_ERROR_URI', '/error/global/400'),
+
+        
         /*
         |--------------------------------------------------------------------------
         | Specifies the default date format.

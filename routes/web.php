@@ -37,7 +37,7 @@ Route::domain(config('crmomni.settings.domain'))->group(function() {
 		if ($subdomainValid) {
 			return redirect($backendUri);
 		} else {
-			return redirect($backendUri.'/user/forgot');
+			return redirect($backendUri . config('crmomni.settings.frontend_error_uri'));
 		} //End if
 	});
 });
