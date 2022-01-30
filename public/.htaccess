@@ -4,6 +4,15 @@
         Options +FollowSymLinks -Indexes
     </IfModule>
 
+    <IfModule mod_headers.c>
+        #Always set these headers.
+        #Header always set Access-Control-Allow-Origin "*"
+        Header always set Access-Control-Allow-Methods "POST, GET, OPTIONS, DELETE, PATCH, PUT"
+        Header always set Access-Control-Max-Age "864000"
+        Header always set Access-Control-Allow-Headers "x-requested-with, content-type, origin, authorization, accept"
+        Header always set Access-Control-Allow-Credentials "true"
+    </IfModule>
+
     RewriteEngine On
 
     # Handle Authorization Header

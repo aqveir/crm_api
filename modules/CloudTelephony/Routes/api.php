@@ -36,5 +36,18 @@ $api->version('v1', [
             //TODO: Delete this
             $api->any('call/customer','Exotel\\VoiceController@test');
         });
+
+        // Twilio Endpoints
+        $api->group(['prefix' => 'twilio'], function(Router $api) {
+            //Exotels Calls
+            $api->any('callback','Twilio\\VoiceController@callback');
+            $api->any('passthru','Twilio\\VoiceController@passthru');
+
+            //Exotels SMS
+            //$api->any('sms/callback','Twilio\\SmsController@callback');
+
+            //TODO: Delete this
+            $api->any('call/customer','Twilio\\VoiceController@test');
+        });
     });
 });

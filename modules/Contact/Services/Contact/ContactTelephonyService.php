@@ -89,7 +89,7 @@ class ContactTelephonyService extends BaseService
      * 
      * @return bool
      */
-    public function makeCall(string $orgHash, string $contactHash, string $proxy=null, Collection $payload, string $ipAddress)
+    public function makeCall(string $orgHash, string $contactHash, string $proxy=null, Collection $payload, string $ipAddress=null)
     {
         $objReturnValue=false;
         try {
@@ -99,7 +99,7 @@ class ContactTelephonyService extends BaseService
             //Authenticated User
             $user = $this->getCurrentUser('backend');
             if ($user && empty($user['phone'])) {
-                throw new ModelNotFoundException();
+                throw new ModelNotFoundException($user?'Users phone not available':'User not available');
             } //End if
 
             //Get Contact Data
@@ -117,7 +117,7 @@ class ContactTelephonyService extends BaseService
                     'org_hash'      => $organization['hash'],
                     'to_id'         => $contact['id'],
                     'to_name'       => $contact['full_name'],
-                    'to_number'     => $response['identifier_masked'],
+                    'to_number'     => $response['identifier'],
                     'from_id'       => $user['id'],
                     'from_name'     => $user['full_name'],
                     'from_number'   => $user['phone']

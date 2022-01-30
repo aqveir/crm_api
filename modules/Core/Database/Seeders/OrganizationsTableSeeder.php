@@ -65,7 +65,7 @@ class OrganizationsTableSeeder extends Seeder
                         'value' => 'configuration_telephony_providers_exotel' 
                     ],
                     [
-                        'configuration_id' => 3, 
+                        'configuration_id' => 7, 
                         'value' => json_encode(
                             [
                                 'exotel_subdomain' => '@api.exotel.com',
@@ -76,7 +76,7 @@ class OrganizationsTableSeeder extends Seeder
                         )
                     ],
                     [
-                        'configuration_id' => 3, 
+                        'configuration_id' => 9, 
                         'value' => json_encode(
                             [
                                 'api_endpoint' => 'https://app.indiasms.com/sendsms/bulksms.php',
@@ -97,7 +97,7 @@ class OrganizationsTableSeeder extends Seeder
                         )
                     ],
                     [
-                        'configuration_id' => 6, 
+                        'configuration_id' => 4, 
                         'value' => '08047494247'
                     ]
                 ]
@@ -126,18 +126,18 @@ class OrganizationsTableSeeder extends Seeder
                         'value' => 'configuration_telephony_providers_exotel' 
                     ],
                     [
-                        'configuration_id' => 3, 
+                        'configuration_id' => 8, 
                         'value' => json_encode(
                             [
-                                'exotel_subdomain' => '@api.exotel.com',
-                                'exotel_sid' => 'portiqo',
-                                'exotel_api_key' => 'portiqo',
-                                'exotel_api_token' => '9d6555a64e9b1bbf94a3ba3fd3e87363d63d54a1'
+                                'twilio_base_url' => 'default',
+                                'twilio_sid' => 'AC48d21145a7be8b1cab763122ca2989d9',
+                                'twilio_api_key' => 'portiqo',
+                                'twilio_auth_token' => '2671ecec5d4e8e7f1fd16e059822281c'
                             ]
                         )
                     ],
                     [
-                        'configuration_id' => 6, 
+                        'configuration_id' => 4, 
                         'value' => '08047494247'
                     ]
                 ]
@@ -166,7 +166,7 @@ class OrganizationsTableSeeder extends Seeder
                         'value' => 'configuration_telephony_providers_exotel' 
                     ],
                     [
-                        'configuration_id' => 3, 
+                        'configuration_id' => 7, 
                         'value' => json_encode(
                             [
                                 'exotel_subdomain' => '@api.exotel.com',
@@ -177,7 +177,7 @@ class OrganizationsTableSeeder extends Seeder
                         )
                     ],
                     [
-                        'configuration_id' => 3, 
+                        'configuration_id' => 9, 
                         'value' => json_encode(
                             [
                                 'api_endpoint' => 'https://app.indiasms.com/sendsms/bulksms.php',
@@ -198,7 +198,7 @@ class OrganizationsTableSeeder extends Seeder
                         )
                     ],
                     [
-                        'configuration_id' => 6, 
+                        'configuration_id' => 4, 
                         'value' => '08047494247'
                     ]
                 ]
@@ -227,7 +227,7 @@ class OrganizationsTableSeeder extends Seeder
                         'value' => 'configuration_telephony_providers_exotel' 
                     ],
                     [
-                        'configuration_id' => 3, 
+                        'configuration_id' => 7, 
                         'value' => json_encode(
                             [
                                 'exotel_subdomain' => '@api.exotel.com',
@@ -238,7 +238,7 @@ class OrganizationsTableSeeder extends Seeder
                         )
                     ],
                     [
-                        'configuration_id' => 3, 
+                        'configuration_id' => 9, 
                         'value' => json_encode(
                             [
                                 'api_endpoint' => 'https://app.indiasms.com/sendsms/bulksms.php',
@@ -259,7 +259,7 @@ class OrganizationsTableSeeder extends Seeder
                         )
                     ],
                     [
-                        'configuration_id' => 6, 
+                        'configuration_id' => 4, 
                         'value' => '08047494247'
                     ]
                 ]

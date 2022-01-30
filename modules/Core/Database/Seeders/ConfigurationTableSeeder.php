@@ -68,20 +68,6 @@ class ConfigurationTableSeeder extends Seeder
                     ]
                 )
             ],
-            [ //Telephony - Exotel Configuration
-                'type_id' => '12',
-                'key' => 'configuration_telephony_exotel',
-                'display_value' => 'Telephony - Exotel Configuration',
-                'filter' => 'configuration_telephony_providers_exotel',
-                'schema' => json_encode(
-                    [
-                        'exotel_subdomain' => 'exotel_subdomain',
-                        'exotel_sid' => 'enter_exotel_sid',
-                        'exotel_api_key' => 'enter_exotel_api_key',
-                        'exotel_api_token' => 'enter_exotel_api_token'
-                    ]
-                )
-            ],
             [ //Telephony - SMS Providers Selection
                 'type_id' => '9',
                 'key' => 'configuration_telephony_sms_providers',
@@ -108,30 +94,6 @@ class ConfigurationTableSeeder extends Seeder
                             'provider_key' => 'configuration_telephony_providers_2',
                             'display_value' => 'Provider 2'
                         ],
-                    ]
-                )
-            ],
-            [ //Telephony - IndiaSMS Configuration
-                'type_id' => '12',
-                'key' => 'configuration_telephony_indiasms',
-                'filter' => 'configuration_telephony_providers_indiasms',
-                'display_value' => 'Telephony - IndiaSMS Configuration',
-                'schema' => json_encode(
-                    [
-                        'api_endpoint' => 'https://app.indiasms.com/sendsms/bulksms.php',
-                        'api_username' => 'api_username',
-                        'api_password ' => 'api_password',
-                        'api_verb' => 'GET',
-                        'sms_type' => 'TEXT',
-                        'sender' => 'your-6char-senderid',
-                        'payload_signature' => [
-                            'username' => '[api_username]',
-                            'password' => '[api_password]',
-                            'type' => '[sms_type]',
-                            'sender' => '[sender]',
-                            'mobile' => '[!mobile_number!]',
-                            'message' => '[!sms_message!]'
-                        ]
                     ]
                 )
             ],
@@ -170,7 +132,59 @@ class ConfigurationTableSeeder extends Seeder
                         'options' => []
                     ]
                 )
-            ]
+            ],
+            [ //Telephony - Exotel Configuration
+                'type_id' => '12',
+                'key' => 'configuration_telephony_exotel',
+                'display_value' => 'Telephony - Exotel Configuration',
+                'filter' => 'configuration_telephony_providers_exotel',
+                'schema' => json_encode(
+                    [
+                        'exotel_subdomain' => 'exotel_subdomain',
+                        'exotel_sid' => 'enter_exotel_sid',
+                        'exotel_api_key' => 'enter_exotel_api_key',
+                        'exotel_api_token' => 'enter_exotel_api_token'
+                    ]
+                )
+            ],
+            [ //Telephony - Twilio Configuration
+                'type_id' => '12',
+                'key' => 'configuration_telephony_twilio',
+                'display_value' => 'Telephony - Twilio Configuration',
+                'filter' => 'configuration_telephony_providers_twilio',
+                'schema' => json_encode(
+                    [
+                        'twilio_base_url' => 'enter_twilio_base_url',
+                        'twilio_sid' => 'enter_twilio_sid',
+                        'twilio_api_key' => 'enter_twilio_api_key',
+                        'twilio_auth_token' => 'enter_twilio_auth_token'
+                    ]
+                )
+            ],
+            [ //Telephony - IndiaSMS Configuration
+                'type_id' => '12',
+                'key' => 'configuration_telephony_indiasms',
+                'filter' => 'configuration_telephony_providers_indiasms',
+                'display_value' => 'Telephony - IndiaSMS Configuration',
+                'schema' => json_encode(
+                    [
+                        'api_endpoint' => 'https://app.indiasms.com/sendsms/bulksms.php',
+                        'api_username' => 'api_username',
+                        'api_password ' => 'api_password',
+                        'api_verb' => 'GET',
+                        'sms_type' => 'TEXT',
+                        'sender' => 'your-6char-senderid',
+                        'payload_signature' => [
+                            'username' => '[api_username]',
+                            'password' => '[api_password]',
+                            'type' => '[sms_type]',
+                            'sender' => '[sender]',
+                            'mobile' => '[!mobile_number!]',
+                            'message' => '[!sms_message!]'
+                        ]
+                    ]
+                )
+            ],
         ];
     }
 }

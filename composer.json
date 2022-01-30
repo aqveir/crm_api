@@ -24,6 +24,7 @@
         "maatwebsite/excel": "^3.1",
         "nwidart/laravel-modules": "^8.2",
         "phpoffice/phpspreadsheet": "^1.18",
+        "twilio/sdk": "^6.33",
         "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {

@@ -10,9 +10,11 @@ use Modules\Core\Models\Organization\Organization;
 use Modules\Core\Repositories\Organization\OrganizationRepository;
 use Modules\Core\Repositories\Lookup\LookupValueRepository;
 use Modules\CloudTelephony\Repositories\Exotel\VoiceCallRepository as ExotelVoiceCallRepository;
+use Modules\CloudTelephony\Repositories\Twilio\VoiceCallRepository as TwilioVoiceCallRepository;
 
 use Modules\Core\Services\BaseService;
 
+use Modules\CloudTelephony\Events\Call\TelephonyCallCallbackReceivedEvent;
 use Modules\CloudTelephony\Events\Call\TelephonyCallInProgressEvent;
 use Modules\CloudTelephony\Events\Call\TelephonyCallCompletedEvent;
 use Modules\CloudTelephony\Events\Call\TelephonyCallNotConnectedEvent;
@@ -52,9 +54,10 @@ class TelephonyVoiceService extends BaseService
 
 
     /**
-     * @var \ExotelVoiceCallRepository
+     * @var \VoiceCallRepository
      */
     protected $exotelVoiceCallRepository;
+    protected $twilioVoiceCallRepository;
 
 
     /**
@@ -63,16 +66,19 @@ class TelephonyVoiceService extends BaseService
      * @param \Modules\Core\Repositories\Organization\OrganizationRepository    $organizationRepository
      * @param \Modules\Core\Repositories\Lookup\LookupValueRepository           $lookupRepository
      * @param \ExotelVoiceCallRepository                                        $exotelVoiceCallRepository
+     * @param \TwilioVoiceCallRepository                                        $twilioVoiceCallRepository
      * 
      */
     public function __construct(
         OrganizationRepository              $organizationRepository,
         LookupValueRepository               $lookupRepository,
-        ExotelVoiceCallRepository           $exotelVoiceCallRepository
+        ExotelVoiceCallRepository           $exotelVoiceCallRepository,
+        TwilioVoiceCallRepository           $twilioVoiceCallRepository
     ) {
         $this->organizationRepository       = $organizationRepository;
         $this->lookupRepository             = $lookupRepository;
         $this->exotelVoiceCallRepository    = $exotelVoiceCallRepository;
+        $this->twilioVoiceCallRepository    = $twilioVoiceCallRepository;
     } //Function ends
 
 
@@ -104,8 +110,15 @@ class TelephonyVoiceService extends BaseService
             //Check Telephony Providers
             $telephonyProvider = $configuration['pivot']['value'];
 
+            //Get Exotel Outgoing Number
+            $virtualNumber = $organization->getOrganizationConfigurationByKey('configuration_telephony_outgoing_phone_number');
+            if (empty($virtualNumber) || empty($virtualNumber['pivot']['value'])) {
+                throw new TelephonyConfigurationException();
+            } //End if
+            $payload['virtual_number'] = json_encode(($virtualNumber['pivot']['value']), true);
+
             switch ($telephonyProvider) {
-                case 'configuration_telephony_providers_exotel':
+                case 'configuration_telephony_providers_exotel': //Exotel
                     //Load configuration
                     $configuration = $organization->getOrganizationConfigurationByKey('configuration_telephony_exotel');
                     if (empty($configuration) || empty($configuration['pivot']['value'])) {
@@ -113,18 +126,26 @@ class TelephonyVoiceService extends BaseService
                     } //End if
                     $settings = json_decode(($configuration['pivot']['value']), true);
 
-                    //Get Exotel Outgoing Number
-                    $virtualNumber = $organization->getOrganizationConfigurationByKey('configuration_telephony_outgoing_phone_number');
-                    if (empty($virtualNumber) || empty($virtualNumber['pivot']['value'])) {
-                        throw new TelephonyConfigurationException();
-                    } //End if
-                    $payload['virtual_number'] = json_encode(($virtualNumber['pivot']['value']), true);
-
                     //Callback URL
                     $callbackUrl = url(config('cloudtelephony.exotel.call.callback-url'));
                     $callbackUrl .= "?key=" . $orgHash;
                     
                     $response = $this->exotelVoiceCallRepository->makeCallToConnectTwoNumbers($payload, $settings, $callbackUrl);
+                    break;
+
+                case 'configuration_telephony_providers_twilio': //Twilio
+                    //Load configuration
+                    $configuration = $organization->getOrganizationConfigurationByKey('configuration_telephony_twilio');
+                    if (empty($configuration) || empty($configuration['pivot']['value'])) {
+                        throw new TelephonyConfigurationException();
+                    } //End if
+                    $settings = json_decode(($configuration['pivot']['value']), true);
+
+                    //Callback URL
+                    $callbackUrl = url(config('cloudtelephony.twilio.call.callback-url'));
+                    $callbackUrl .= "?key=" . $orgHash;
+
+                    $response = $this->twilioVoiceCallRepository->makeCallToConnectTwoNumbers($payload, $settings, $callbackUrl);
                     break;
                 
                 default:
@@ -176,7 +197,7 @@ class TelephonyVoiceService extends BaseService
             $organization = $this->getOrganizationByHash($orgHash);
                 
             //Raise events
-            //event(new TelephonyCallCallbackReceivedEvent($organization, $payload));
+            event(new TelephonyCallCallbackReceivedEvent($organization, $payload, $ipAddress));
             $this->raiseEvent($organization, $payload, $ipAddress);
 
             //Assign to the return value

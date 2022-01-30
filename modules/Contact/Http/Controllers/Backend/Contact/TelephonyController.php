@@ -57,9 +57,9 @@ class TelephonyController extends ApiBaseController
      *      @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function call(TelephonyRequest $request, ContactTelephonyService $service, string $hash)
+    public function call(TelephonyRequest $request, ContactTelephonyService $service, string $subdomain, string $hash)
     {
-        return $this->callToProxy($request, $service, $hash);
+        return $this->callToProxy($request, $service, $subdomain, $hash);
     } //Function ends
 
 
@@ -85,11 +85,11 @@ class TelephonyController extends ApiBaseController
      *      @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function callToProxy(TelephonyRequest $request, ContactTelephonyService $service, string $hash, string $proxy=null)
+    public function callToProxy(TelephonyRequest $request, ContactTelephonyService $service, string $subdomain, string $hash, string $proxy=null)
     {
         try {
             //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request);
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
 
             //Get IP Address
             $ipAddress = $this->getIpAddressInRequest($request);

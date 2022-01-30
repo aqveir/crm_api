@@ -214,12 +214,12 @@ return [
             'key' => [
                 'lookup_value' => [
                     //Contact Details Types
-                    'phone' => 'customer_detail_type_phone',
-                    'email' => 'customer_detail_type_email',
+                    'phone' => 'contact_detail_type_phone',
+                    'email' => 'contact_detail_type_email',
 
                     //Contact Address Types
-                    'home'  => 'customer_address_type_home',
-                    'work'  => 'customer_address_type_work'
+                    'home'  => 'contact_address_type_home',
+                    'work'  => 'contact_address_type_work'
                 ]
             ],
             'value' => [
