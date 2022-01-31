@@ -10,5 +10,6 @@
     "Preference": true,
     "CloudTelephony": true,
     "ServiceRequest": true,
-    "Account": true
+    "Account": true,
+    "MailParser": true
 }
