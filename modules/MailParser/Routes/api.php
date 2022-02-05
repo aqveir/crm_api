@@ -22,19 +22,12 @@ $api->version('v1', [
     ], function (Router $api) {
 
     // Unauthenticated Endpoints for Mail Parser
-    $api->group(['prefix' => 'mailparser', 'middleware' => ['guest']], function(Router $api) {
+    $api->group(['prefix' => 'v1', 'middleware' => ['guest']], function(Router $api) {
 
         // Exotel Endpoints
-        $api->group(['prefix' => 'exotel'], function(Router $api) {
-            //Exotels Calls
-            $api->any('callback','Exotel\\VoiceController@callback');
-            $api->any('passthru','Exotel\\VoiceController@passthru');
-
-            //Exotels SMS
-            //$api->any('sms/callback','Exotel\\SmsController@callback');
-
-            //TODO: Delete this
-            $api->any('call/customer','Exotel\\VoiceController@test');
+        $api->group(['prefix' => 'mailparser'], function(Router $api) {
+            //zapier Calls
+            $api->post('zapier','Zapier\MailParserController@create');
         });
     });
 });

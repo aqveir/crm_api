@@ -874,6 +874,7 @@ return [
             ], // Contact Controller ends
         ],
 
+        //Cloud Telephony
         'telephony' => [
             //Exotel Provider
             'exotel' => [
@@ -903,6 +904,23 @@ return [
 
                 ]
             ]
-        ]
+        ],
+
+        //Mail Parser module
+        'mailparser' => [
+            //Default endpoint
+            'default' => [
+                'validation_rules' => [
+                    'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                ]
+            ],
+
+            //Zapier endpoint
+            'zapier' => [
+                'validation_rules' => [
+                    'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                ]
+            ],
+        ],
     ]
 ];
