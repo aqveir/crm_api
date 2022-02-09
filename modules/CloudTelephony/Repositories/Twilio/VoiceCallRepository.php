@@ -36,6 +36,11 @@ class VoiceCallRepository implements VoiceCallContract
 		$objReturnValue=null;
 		
 		try {
+
+			Log::info($payload);
+			Log::info($settings);
+			Log::info($callbackUrl);
+
 			//Create Twilio client
 			$client = new TwilioClient($settings['twilio_sid'], $settings['twilio_auth_token']);
 			

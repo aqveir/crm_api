@@ -55,10 +55,10 @@ abstract class BaseMailParserController extends ApiBaseController
             $ipAddress = $this->getIpAddressInRequest($request);
 
             //Check Provider exists
-            if (empty($payload)) { throw new BadRequestHttpException('Telephony: Missing Data'); }
+            if (empty($payload)) { throw new BadRequestHttpException('Mail Parser: Missing Data'); }
 
             //Process telephony callback
-            $data = $service->callback($orgHash, $provider, $payload, $ipAddress);
+            $data = $payload ; //$service->callback($orgHash, $provider, $payload, $ipAddress);
 
             //Send response data
             return $this->response->success(compact('data'));

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Modules\MailParser\Http\Controllers\BaseMailParserController;
 use Modules\MailParser\Services\MailParserService;
 use Modules\MailParser\Http\Requests\Zapier\MailParserRequest;
-use Modules\MailParser\Transformers\Zapier\MailParserResource as ZapierMailParserResource;
+use Modules\MailParser\Transformers\MailParserResource as ZapierMailParserResource;
 
 use Symfony\Component\HttpFoundation\Response;
 
@@ -56,15 +56,13 @@ class MailParserController extends BaseMailParserController
             //Provider switchcase to transform request
             $payload = null;
             //if (!isset($request['CallSid'])) { throw new BadRequestHttpException('Zapier: Missing CallSid'); } //End if
-            $payload = new ZapierMailParserResource($request);
+            $payload = new ZapierMailParserResource($request, 'zapier');
 
             //Create payload
             $payload = collect($payload);
 
-            return $payload;
-
             //Process mail parsed data
-            //return parent::processMailData($request, $service, $subdomain, 'zapier', $payload);
+            return parent::processMailData($request, $service, $subdomain, 'zapier', $payload);
             
         } catch(AccessDeniedHttpException $e) {
             return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
