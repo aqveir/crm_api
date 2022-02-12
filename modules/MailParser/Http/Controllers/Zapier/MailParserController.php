@@ -41,9 +41,9 @@ class MailParserController extends BaseMailParserController
      * @return \Illuminate\Http\JsonResponse
      *
      * @OA\Post(
-     *     path="/telephony/twilio/callback",
-     *     tags={"Telephony"},
-     *     operationId="api.telephony.twilio.call.callback",
+     *     path="/mailparser/zapier",
+     *     tags={"MailParser"},
+     *     operationId="api.mailparser.zapier.create",
      *     @OA\Parameter(ref="#/components/parameters/organization_key"),
      *     @OA\Response(response=200, description="Request was successfully executed."),
      *     @OA\Response(response=422, description="Model Validation Error"),
