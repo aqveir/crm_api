@@ -90,6 +90,13 @@ class MailParserService extends BaseService
     {
         $objReturnValue=null; $response=null;
         try {
+            //Create lock file
+            $fileName = './mem.lock';
+            $fp = fopen($fileName, 'w+');
+
+            //Lock the file
+            flock($fp, LOCK_EX); 
+
             //Get organization data
             $organization = $this->getOrganizationByHash($orgHash);
 
@@ -117,7 +124,11 @@ class MailParserService extends BaseService
         } catch(Exception $e) {
             log::error('MailParserService:processMailData:Exception:' . $e->getMessage());
             throw new HttpException(500, $e->getMessage());
-        } //Try-catch ends
+        }  finally {
+			//Release lock
+			flock($fp, LOCK_UN);
+			fclose($fp); //Unlock the file
+		} //Try-catch ends
 
         return $objReturnValue;
     } //Function ends

@@ -2,6 +2,8 @@
 
 namespace Modules\MailParser\Transformers;
 
+use Illuminate\Support\Facades\Log;
+
 use Illuminate\Http\Resources\Json\Resource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,36 +21,19 @@ class MailParserResource extends JsonResource
     {
         $objReturnValue=null;
         try {
-            $identifierPhone = $identifierEmail = $phoneIdd = '';
             $primaryPhone = $primaryEmail = true;
             $detailPhone = $detailEmail = null;
             $details = [];
 
-
-            // $callDuration = null;
-            // $callDirection = (isset($this['Direction']) && ($this['Direction']=='incoming'))?'telephony_direction_incoming':'telephony_direction_outgoing';
-            // $urlRecording = null;
-
             //Set Phone Number
-            if (!empty($identifierPhone)) {
-                $detailPhone = [
-                    'type_key'          => config('omnichannel.settings.static.key.lookup_value.phone'),
-                    'phone_idd'         => $phoneIdd,
-                    'identifier'        => $identifierPhone,
-                    'is_primary'        => $primaryPhone
-                ];
-
+            $detailPhone = $this->getDataForParam('phone');
+            if (!empty($detailPhone)) {
                 array_push($details, $detailPhone);
             } //End if
 
             //Set Email Address
-            if (!empty($identifierEmail)) {
-                $detailEmail = [
-                    'type_key'          => config('omnichannel.settings.static.key.lookup_value.email'),
-                    'identifier'        => $identifierEmail,
-                    'is_primary'        => $primaryEmail
-                ];
-
+            $detailEmail = $this->getDataForParam('email');
+            if (!empty($detailEmail)) {
                 array_push($details, $detailEmail);
             } //End if
             
@@ -69,9 +54,8 @@ class MailParserResource extends JsonResource
 	 * Parse data based on the data type and return matching value
 	 *
 	 * @return objReturnValue
-	 *
 	 */
-	private function getDataForParam($param)
+	private function getDataForParam($param, bool $isPrimary=false, bool $isVerified=false)
 	{	
 		$objReturnValue = null;
 		try {
@@ -81,28 +65,33 @@ class MailParserResource extends JsonResource
                 if ((is_array($keySynonyms)) && (count($keySynonyms)>1)) {
                     foreach ($keySynonyms as $synonym) {
                         if (isset($this[$synonym])) { 
-                            $objReturnValue = $this[$synonym]; 
+                            switch ($param) {
+                                case 'email':
+                                    $email = $this[$synonym];
+                                    if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                                        $objReturnValue = [
+                                            'type_key'          => config('crmomni.settings.static.key.lookup_value.email'),
+                                            'identifier'        => $email,
+                                            'is_primary'        => $isPrimary
+                                        ];
+                                    } //End if
+                                    break;
+
+                                case 'phone':
+                                    $phone = $this[$synonym];
+                                    $objReturnValue = $this->fnProcessPhone($phone, $isPrimary, $isVerified);
+                                    break;
+                                
+                                default:
+                                    $objReturnValue = $this[$synonym];
+                                    break;
+                            } //End switch
+
+                            break;
                         } //End if
                     } //Loop ends
                 } //End if
             } //End if
-
-            
-
-  			//Handle FIRST NAME Parameter in Request
-            // if (isset($this['name_first'])) { $objReturnValue = $this['name_first']; } //End if
-            // if (isset($this['first_name'])) { $objReturnValue = $this['first_name']; } //End if
-            // if (isset($this['firstname']))  { $objReturnValue = $this['firstname'];  } //End if
-            // if (isset($this['firstName']))  { $objReturnValue = $this['firstName'];  } //End if
-
-            // if ((!empty($objReturnValue)) && (strlen($objReturnValue)>1)) {
-            //     $strData = $this->fnCleanNamesData($objReturnValue);
-            //     if($strData == 'Not Provided' || strlen($strData)<1) {
-            //         $objReturnValue = ''; 
-            //     } else {
-            //         $objReturnValue = $strData;
-            //     } //End if-else
-            // } //End if
 		} catch (Exception $e) {
 	        throw $e;
 		} //Try-catch ends
@@ -116,7 +105,6 @@ class MailParserResource extends JsonResource
      * available for future reference
 	 *
 	 * @return objReturnValue
-	 *
 	 */
 	private function getNoteData($data, string $entityType='entity_type_contact')
 	{	
@@ -142,7 +130,6 @@ class MailParserResource extends JsonResource
 	 * Remove Special fbsql_set_characterset(link_identifier, characterset) From String
 	 *
 	 * @return objReturnValue
-	 *
 	 */
 	private function fnCleanNamesData($string)
 	{	
@@ -154,6 +141,56 @@ class MailParserResource extends JsonResource
 			$objReturnValue = $cleanString;
 		} catch (Exception $e) {
 	        throw $e;
+		} //Try-catch ends
+
+		return $objReturnValue;
+	} //Function ends 
+
+
+	/**
+	 * Process phone number
+	 *
+	 * @return objReturnValue
+	 */
+	private function fnProcessPhone($phone, bool $isPrimary=false, bool $isVerified=false)
+	{	
+		$objReturnValue = null;
+		try {
+			$phoneNumberUtil = \libphonenumber\PhoneNumberUtil::getInstance();
+
+            //Parse phone number
+			$phoneNumberObject = $phoneNumberUtil->parse($phone, null);
+            if ($phoneNumberUtil->isValidNumber($phoneNumberObject)) {
+
+                //Get phone type
+                $phoneSubTypeKey = null;
+                switch ($phoneNumberUtil->getNumberType($phoneNumberObject)) {
+                    case \libphonenumber\PhoneNumberType::MOBILE:
+                        $phoneSubTypeKey = 'contact_detail_subtype_phone_mobile';
+                        break;
+
+                    case \libphonenumber\PhoneNumberType::FIXED_LINE:
+                        $phoneSubTypeKey = 'contact_detail_subtype_phone_landline';
+                        break;
+                    
+                    default:
+                        break;
+                } //Switch ends
+
+                $objReturnValue = [
+                    'type_key'          => config('crmomni.settings.static.key.lookup_value.phone'),
+                    'subtype_key'       => $phoneSubTypeKey,
+                    'phone_idd'         => (string)($phoneNumberObject->getCountryCode()),
+                    'identifier'        => $phoneNumberObject->getNationalNumber(),
+                    'is_primary'        => $isPrimary
+                ];
+            } //End if	    
+		} catch (\libphonenumber\NumberParseException $e) {
+		    log::error($e);
+		    $objReturnValue = null;
+		} catch (Exception $e) {
+			Log::error(json_encode($e));
+			$objReturnValue = null;
 		} //Try-catch ends
 
 		return $objReturnValue;
