@@ -31,7 +31,7 @@ class Subscription extends CashierSubscription {
      * @var array
      */
     protected $fillable = [
-        'key', 'display_value', 'description', 'data_json',
+        'display_value', 'description', 'data_json',
         'is_displayed', 'order', 'created_by'
     ];
 

@@ -14,6 +14,8 @@ use Modules\Subscription\Http\Requests\Backend\DeleteSubscriptionRequest;
 use Modules\Subscription\Models\Subscription;
 use Modules\Subscription\Services\SubscriptionService;
 
+use Modules\Subscription\Transformers\Responses\SubscriptionMinifiedResource;
+
 use Symfony\Component\HttpFoundation\Response;
 
 use Exception;
@@ -32,7 +34,7 @@ class SubscriptionController extends ApiBaseController
     public function __construct()
     {
         parent::__construct();
-        $this->authorizeResource(Subscription::class, 'subscription');
+        //$this->authorizeResource(Subscription::class, 'subscription');
     }
 
 
@@ -57,11 +59,63 @@ class SubscriptionController extends ApiBaseController
     public function index(Request $request, SubscriptionService $service, string $subdomain)
     {
         try {
+            //Get Org Hash 
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
+
             //Create payload
             $payload = collect($request);
 
             //Fetch Subscriptions
-            $data = $service->index($payload);
+            $response = $service->index($orgHash, $payload);
+
+            //Transform data
+            $data = new SubscriptionMinifiedResource($response);
+
+            //Send response data
+            return $this->response->success(compact('data'));
+            
+        } catch(AccessDeniedHttpException $e) {
+            return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
+        } catch(UnauthorizedHttpException $e) {
+            return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
+        } catch(Exception $e) {
+            return $this->response->fail([], Response::HTTP_BAD_REQUEST);
+        }
+    } //Function ends
+
+
+    /**
+     * Get Subscriptions Details by Key
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \Modules\Subscription\Services\SubscriptionService $service
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     *
+     * @OA\Get(
+     *      path="/subscription/{uuid}",
+     *      tags={"Subscription"},
+     *      operationId="api.backend.subscription.show",
+     *      security={{"omni_token":{}}},
+     *      @OA\Response(response=200, description="Request was successfully executed."),
+     *      @OA\Response(response=400, description="Bad Request"),
+     *      @OA\Response(response=500, description="Internal Server Error")
+     * )
+     */
+    public function show(Request $request, SubscriptionService $service, string $subdomain, string $uuid)
+    {
+        try {
+            //Get Org Hash 
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
+
+            //Create payload
+            $payload = collect($request);
+
+            //Fetch Subscriptions
+            $data = $service->show($orgHash, $payload, $uuid);
+
+            //Transform data
+            //$data = new SubscriptionMinifiedResource($response);
 
             //Send response data
             return $this->response->success(compact('data'));
@@ -104,7 +158,7 @@ class SubscriptionController extends ApiBaseController
             $payload = collect($request);
 
             //Create subscription data
-            $data = $service->create($payload);
+            $data = $service->create($orgHash, $payload);
 
             //Send response data
             return $this->response->success(compact('data'));

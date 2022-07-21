@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Modules\Core\Repositories\Organization\OrganizationRepository;
 use Modules\Core\Repositories\Lookup\LookupValueRepository;
 use Modules\Subscription\Repositories\SubscriptionRepository;
+use Modules\Subscription\Repositories\StripeRepository;
 
 use Modules\Core\Services\BaseService;
 
@@ -49,63 +50,106 @@ class SubscriptionService extends BaseService
 
 
     /**
+     * @var  \Modules\Subscription\Repositories\StripeRepository
+     */
+    protected $stripeRepository;
+
+
+    /**
      * Service constructor.
      * 
      * @param \Modules\Core\Repositories\Organization\OrganizationRepository    $organizationRepository
      * @param \Modules\Core\Repositories\Lookup\LookupValueRepository           $lookupRepository
      * @param \Modules\Subscription\Repositories\SubscriptionRepository         $subscriptionRepository
+     * @param \Modules\Subscription\Repositories\StripeRepository               $stripeRepository
      */
     public function __construct(
         OrganizationRepository          $organizationRepository,
         LookupValueRepository           $lookupRepository,
-        SubscriptionRepository          $subscriptionRepository
+        SubscriptionRepository          $subscriptionRepository,
+        StripeRepository                $stripeRepository
     ) {
         $this->organizationRepository   = $organizationRepository;
         $this->lookupRepository         = $lookupRepository;
         $this->subscriptionRepository   = $subscriptionRepository;
+        $this->stripeRepository         = $stripeRepository;
     } //Function ends
 
 
     /**
      * Get All Subscriptions
      * 
-     * @param \Illuminate\Support\Collection $payload
-     * @param \bool $isAutoCreated (optional)
+     * @param  \string  $orgHash
+     * @param  \Illuminate\Support\Collection  $payload
+     * @param  \bool $isAutoCreated (optional)
+     * @param  \bool $isFiltered (optional)
      *
      * @return mixed
      */
-    public function index(Collection $payload, bool $isActive=null, bool $isFiltered=false)
+    public function index(string $orgHash, Collection $payload, bool $isActive=null, bool $isFiltered=false)
     {
         $objReturnValue=null;
         try {
-            //Create Subscription
-            $subscription = $this->subscriptionRepository;
+            //Get organization data
+            $organization = $this->getOrganizationByHash($orgHash);
 
-            //Apply active check
-            if (!empty($isActive)) {
-                $subscription = $subscription->where('is_active', $isActive);
-            } //End if
-
-            //Apply filter
-            if ($isFiltered) {
-                $subscription = $subscription->where('is_displayed', $isFiltered);
-            } //End if
-
-            $subscription = $subscription
-                ->orderBy('order', 'asc')
-                ->get();              
+            //Get subscription / invoices
+            $response = $this->stripeRepository->getSubscriptions($orgHash, $organization['stripe_id']);            
 
             //Assign to the return value
-            $objReturnValue = $subscription;
+            if (!empty($response)) {
+                //Assign to the return value
+                $objReturnValue = $response['data'];
+            } //End if
 
         } catch(AccessDeniedHttpException $e) {
-            log::error('SubscriptionService:create:AccessDeniedHttpException:' . $e->getMessage());
+            log::error('SubscriptionService:index:AccessDeniedHttpException:' . $e->getMessage());
             throw new AccessDeniedHttpException($e->getMessage());
         } catch(BadRequestHttpException $e) {
-            log::error('SubscriptionService:create:BadRequestHttpException:' . $e->getMessage());
+            log::error('SubscriptionService:index:BadRequestHttpException:' . $e->getMessage());
             throw new BadRequestHttpException($e->getMessage());
         } catch(Exception $e) {
-            log::error('SubscriptionService:create:Exception:' . $e->getMessage());
+            log::error('SubscriptionService:index:Exception:' . $e->getMessage());
+            throw new HttpException(500);
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends
+
+
+    /**
+     * Get Subscriptions by unique identifier
+     * 
+     * @param  \string  $orgHash
+     * @param  \Illuminate\Support\Collection  $payload
+     * @param  \string  $uuid
+     *
+     * @return mixed
+     */
+    public function show(string $orgHash, Collection $payload, string $uuid)
+    {
+        $objReturnValue=null;
+        try {
+            //Get organization data
+            $organization = $this->getOrganizationByHash($orgHash);
+
+            //Get subscription / invoices
+            $response = $this->stripeRepository->getSubscriptionsByUuid($orgHash, $uuid);        
+
+            //Assign to the return value
+            if (!empty($response)) {
+                //Assign to the return value
+                $objReturnValue = $response;
+            } //End if
+
+        } catch(AccessDeniedHttpException $e) {
+            log::error('SubscriptionService:index:AccessDeniedHttpException:' . $e->getMessage());
+            throw new AccessDeniedHttpException($e->getMessage());
+        } catch(BadRequestHttpException $e) {
+            log::error('SubscriptionService:index:BadRequestHttpException:' . $e->getMessage());
+            throw new BadRequestHttpException($e->getMessage());
+        } catch(Exception $e) {
+            log::error('SubscriptionService:index:Exception:' . $e->getMessage());
             throw new HttpException(500);
         } //Try-catch ends
 
@@ -121,24 +165,37 @@ class SubscriptionService extends BaseService
      *
      * @return mixed
      */
-    public function create(Collection $payload)
+    public function create(string $orgHash, Collection $payload)
     {
         $objReturnValue=null; $data=[];
         try {
             //Authenticated User
             $user = $this->getCurrentUser('backend');
 
-            //Build data
-            $data = $payload->only([
-                'key', 'display_value', 'description', 'data_json',
-                'order','is_displayed'
-            ])->toArray();
-            $data = array_merge($data, [
-                'created_by' => $user['id'] 
-            ]);
+            //Get organization data
+            $organization = $this->getOrganizationByHash($orgHash);
 
-            //Create Subscription
-            $subscription = $this->subscriptionRepository->create($data);              
+            //Create new subscription
+            if (in_array($payload['price'], config('subscription.settings.free_plans'))) {
+                $paymentMethodId = null;
+            } else {
+                $paymentMethodId = $payload['paymentMethodId'];
+            }
+            Log::info(empty($paymentMethodId)?"free":"paid");
+
+            $subscription = $organization->newSubscription('default', $payload['price'])->create();
+
+            // //Build data
+            // $data = $payload->only([
+            //     'key', 'display_value', 'description', 'data_json',
+            //     'order','is_displayed'
+            // ])->toArray();
+            // $data = array_merge($data, [
+            //     'created_by' => $user['id'] 
+            // ]);
+
+            // //Create Subscription
+            // $subscription = $this->subscriptionRepository->create($data);              
 
             //Assign to the return value
             $objReturnValue = $subscription;
