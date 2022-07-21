@@ -25,7 +25,7 @@ class OutgoingCallListener
     public function __construct(TelephonyVoiceService $service)
     {
         $this->service = $service;
-    }
+    } //Function ends
 
 
     /**
@@ -42,6 +42,6 @@ class OutgoingCallListener
 
         //Make an outgoing call
         $this->service->makecall($orgHash, $payload);
-    }
+    } //Function ends
 
 } //Class ends
