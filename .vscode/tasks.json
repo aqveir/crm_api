@@ -1,0 +1,13 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "automated-release",
+			"path": "vendor/swagger-api/swagger-ui",
+			"problemMatcher": [],
+			"label": "npm: automated-release - vendor/swagger-api/swagger-ui",
+			"detail": "release-it -VV --config ./release/.release-it.json"
+		}
+	]
+}

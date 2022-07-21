@@ -2,6 +2,18 @@
 	path = packages/ellaisys/telephony-exotel
 	url = https://github.com/ellaisys/telephony-exotel.git
 
+[submodule "telephony-ringcentral"]
+	path = packages/ellaisys/telephony-ringcentral
+	url = https://github.com/ellaisys/telephony-ringcentral.git
+
+[submodule "telephony-knowlarity"]
+	path = packages/ellaisys/telephony-knowlarity
+	url = https://github.com/ellaisys/telephony-knowlarity.git
+
+[submodule "telephony-servetel"]
+	path = packages/ellaisys/telephony-servetel
+	url = https://github.com/ellaisys/telephony-servetel.git
+
 [submodule "aws-cognito"]
 	path = packages/ellaisys/aws-cognito
 	url = https://github.com/ellaisys/aws-cognito.git
