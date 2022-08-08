@@ -387,11 +387,11 @@ return [
                         'addresses.*.locality' => 'nullable|string|max:100',
                         'addresses.*.city' => 'string|required_with:addresses',
                         'addresses.*.state' => 'string|required_with:addresses',
-                        'addresses.*.country_id' => 'number|required_with:addresses',
+                        'addresses.*.country_id' => 'numeric|required_with:addresses',
                         'addresses.*.zipcode' => 'nullable|string|max:30',
                         'addresses.*.google_place_id' => 'nullable|string|max:100',
-                        'addresses.*.longitude' => 'nullable|number',
-                        'addresses.*.latitude' => 'nullable|number',
+                        'addresses.*.longitude' => 'nullable|numeric',
+                        'addresses.*.latitude' => 'nullable|numeric',
                     ]
                 ],
 
