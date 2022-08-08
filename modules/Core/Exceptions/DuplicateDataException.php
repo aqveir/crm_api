@@ -22,4 +22,5 @@ class DuplicateDataException extends HttpException
         $message = 'EXCEPTION_DUPLICATE_DATA';
         parent::__construct(429, $message ?: 'You have a duplicate data.', $previous, $headers, $code);
     }
-}
+
+} //Class ends
