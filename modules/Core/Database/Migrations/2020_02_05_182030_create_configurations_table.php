@@ -13,7 +13,7 @@ class CreateConfigurationsTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('crmomni-migration.table_name.configuration.main'), function (Blueprint $table) {
+        Schema::create(config('aqveir-migration.table_name.configuration.main'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
             $table->unsignedBigInteger('type_id');
@@ -26,7 +26,7 @@ class CreateConfigurationsTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create(config('crmomni-migration.table_name.configuration.industry'), function (Blueprint $table) {
+        Schema::create(config('aqveir-migration.table_name.configuration.industry'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
             $table->integer('configuration_id');
@@ -41,8 +41,8 @@ class CreateConfigurationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(config('crmomni-migration.table_name.configuration.main'));
+        Schema::dropIfExists(config('aqveir-migration.table_name.configuration.main'));
 
-        Schema::dropIfExists(config('crmomni-migration.table_name.configuration.industry'));
+        Schema::dropIfExists(config('aqveir-migration.table_name.configuration.industry'));
     }
 }

@@ -13,7 +13,7 @@ trait TimeZoneRelationship
 	public function country()
 	{
 		return $this->belongsTo(
-			config('crmomni-class.class_model.country'),
+			config('aqveir-class.class_model.country'),
 			'country_id', 'id'
 		);
 	} //Function ends

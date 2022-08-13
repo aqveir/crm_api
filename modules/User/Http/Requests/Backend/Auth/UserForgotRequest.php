@@ -14,7 +14,7 @@ class UserForgotRequest extends FormRequest
      */
     public function rules()
     {
-        return Config::get('crmomni-validation.request_handler.backend.auth.forgot_password.validation_rules');
+        return Config::get('aqveir-validation.request_handler.backend.auth.forgot_password.validation_rules');
     }
 
     /**

@@ -103,7 +103,7 @@ class Event extends Model {
      */
     protected function serializeDate(\DateTimeInterface $date)
     {
-        return $date->format(config('crmomni.settings.date_format_response_generic'));
+        return $date->format(config('aqveir.settings.date_format_response_generic'));
     }
 
 
@@ -114,7 +114,7 @@ class Event extends Model {
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->table = config('crmomni-migration.table_name.service_request.activity');
+        $this->table = config('aqveir-migration.table_name.service_request.activity');
     }
 
 } //Class ends

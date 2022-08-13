@@ -81,7 +81,7 @@ trait ContactAction
 	{
 		$objReturnValue=null;
 		try {
-			$query = config('crmomni-class.class_model.contact.main')::where('hash', '=', $hash);
+			$query = config('aqveir-class.class_model.contact.main')::where('hash', '=', $hash);
 			$query = $query->where('org_id', '=', $orgId);
 			$query = $query->orderBy('id', 'asc')->firstOrFail();
 
@@ -102,7 +102,7 @@ trait ContactAction
 	{
 		$objReturnValue=null;
 		try {
-			$query = config('crmomni-class.class_model.contact.main')::where('id', $id);
+			$query = config('aqveir-class.class_model.contact.main')::where('id', $id);
 			if($orgId>0) { $query = $query->where('org_id', $orgId); }
 			$query = $query->orderBy('id', 'asc')->firstOrFail();
 
@@ -399,7 +399,7 @@ trait ContactAction
     public function getAllContactDataFromDB(int $orgId, int $userId=0) {
         $objReturnValue=null;
         try {
-            $query = config('crmomni-class.class_model.contact.main')::with([
+            $query = config('aqveir-class.class_model.contact.main')::with([
                 'details', 'details.type','service_requests',
                 'service_requests.type', 'service_requests.status', 
                 'service_requests.owner']);
@@ -435,7 +435,7 @@ trait ContactAction
     public function getAllContactMinifiedDataFromDB(int $orgId) {
         $objReturnValue=null;
         try {
-            $query = config('crmomni-class.class_model.contact.main')::where('org_id', $orgId);
+            $query = config('aqveir-class.class_model.contact.main')::where('org_id', $orgId);
             $query = $query->orderBy('created_on', 'desc')->get();
             $query->makeHidden(['job_title','date_of_birth','date_of_aniversary']);
             $query->makeVisible(['created_on']);
@@ -513,7 +513,7 @@ trait ContactAction
 
             //Get Contact By Id
             if ($orgId>0 && $ContactId>0) {
-                $Contact = config('crmomni-class.class_model.contact.main')::with([
+                $Contact = config('aqveir-class.class_model.contact.main')::with([
                     'addresses', 'details', 'addresses.type', 'details.type', 
                     'details.country','service_requests','company'
                 ]);

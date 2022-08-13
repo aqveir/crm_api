@@ -9,7 +9,7 @@ class UploadContactRequest extends FormRequest
 {
     public function rules()
     {
-        return Config::get('crmomni-validation.request_handler.backend.contact.upload.validation_rules');
+        return Config::get('aqveir-validation.request_handler.backend.contact.upload.validation_rules');
     }
 
 

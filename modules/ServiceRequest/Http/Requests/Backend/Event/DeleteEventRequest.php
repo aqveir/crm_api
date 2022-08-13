@@ -14,7 +14,7 @@ class DeleteEventRequest extends FormRequest
      */
     public function rules()
     {
-        return Config::get('crmomni-validation.request_handler.backend.event.delete.validation_rules');
+        return Config::get('aqveir-validation.request_handler.backend.event.delete.validation_rules');
     }
 
     /**

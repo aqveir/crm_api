@@ -13,7 +13,7 @@ class CreateServicerequestTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('crmomni-migration.table_name.service_request.main'), function (Blueprint $table) {
+        Schema::create(config('aqveir-migration.table_name.service_request.main'), function (Blueprint $table) {
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
 
@@ -54,6 +54,6 @@ class CreateServicerequestTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(config('crmomni-migration.table_name.service_request.main'));
+        Schema::dropIfExists(config('aqveir-migration.table_name.service_request.main'));
     }
 }

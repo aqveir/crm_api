@@ -16,7 +16,7 @@ trait OrganizationRelationship
 	public function industry()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.lookup_value'),
+			config('aqveir-class.class_model.lookup_value'),
 			'id', 'industry_id'
 		);
 	} //Function ends
@@ -28,7 +28,7 @@ trait OrganizationRelationship
 	public function timezone()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.lookup_value'),
+			config('aqveir-class.class_model.lookup_value'),
 			'id', 'timezone_id'
 		);
 	} //Function ends
@@ -40,7 +40,7 @@ trait OrganizationRelationship
 	public function state()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.lookup_value'),
+			config('aqveir-class.class_model.lookup_value'),
 			'id', 'state_id'
 		);
 	} //Function ends
@@ -52,7 +52,7 @@ trait OrganizationRelationship
 	public function country()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.lookup_value'),
+			config('aqveir-class.class_model.lookup_value'),
 			'id', 'country_id'
 		);
 	} //Function ends
@@ -64,7 +64,7 @@ trait OrganizationRelationship
 	public function users()
 	{
 		return $this->hasMany(
-			config('crmomni-class.class_model.user.main'),
+			config('aqveir-class.class_model.user.main'),
 			'org_id', 'id'
 		);
 	} //Function End
@@ -77,7 +77,7 @@ trait OrganizationRelationship
 	{
 		return $this->belongsToMany(
 			Configuration::class,
-			config('crmomni-migration.table_name.organization_configurations'),
+			config('aqveir-migration.table_name.organization_configurations'),
 			'org_id', 'configuration_id'
 		)
 		->withPivot('value');
@@ -90,7 +90,7 @@ trait OrganizationRelationship
 	public function roles()
 	{
 		return $this->hasMany(
-			config('crmomni-class.class_model.role'),
+			config('aqveir-class.class_model.role'),
 			'org_id', 'id'
 		);
 	} //Function End
@@ -101,9 +101,9 @@ trait OrganizationRelationship
 	 */
 	public function accounts()
 	{
-		if (class_exists(config('crmomni-class.class_model.account'))) {
+		if (class_exists(config('aqveir-class.class_model.account'))) {
 			return $this->hasMany(
-				config('crmomni-class.class_model.account'),
+				config('aqveir-class.class_model.account'),
 				'org_id', 'id'
 			);
 		} else {

@@ -860,12 +860,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ellaisys/telephony-exotel.git",
-                "reference": "8b428bbd5103ddd7c760afbb6025cae51ddf115a"
+                "reference": "1fecc97de6655213ea9dc027a4c811b30087e336"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ellaisys/telephony-exotel/zipball/8b428bbd5103ddd7c760afbb6025cae51ddf115a",
-                "reference": "8b428bbd5103ddd7c760afbb6025cae51ddf115a",
+                "url": "https://api.github.com/repos/ellaisys/telephony-exotel/zipball/1fecc97de6655213ea9dc027a4c811b30087e336",
+                "reference": "1fecc97de6655213ea9dc027a4c811b30087e336",
                 "shasum": ""
             },
             "require": {
@@ -922,7 +922,7 @@
                 "issues": "https://github.com/ellaisys/telephony-exotel/issues",
                 "source": "https://github.com/ellaisys/telephony-exotel/tree/master"
             },
-            "time": "2021-07-28T19:15:36+00:00"
+            "time": "2022-08-08T11:17:53+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",

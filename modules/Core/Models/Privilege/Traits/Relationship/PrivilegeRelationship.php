@@ -10,8 +10,8 @@ trait PrivilegeRelationship
 	public function roles()
 	{
 		return $this->belongsToMany(
-			config('crmomni-class.class_model.role'), 
-			config('crmomni-migration.table_name.role_privileges'),
+			config('aqveir-class.class_model.role'), 
+			config('aqveir-migration.table_name.role_privileges'),
 			'privilege_id' , 'role_id' 
 		);
 	}
@@ -19,8 +19,8 @@ trait PrivilegeRelationship
 	public function users()
 	{
 		return $this->belongsToMany(
-			config('crmomni-class.class_model.user.main'), 
-			config('crmomni-migration.table_name.user.privileges'),
+			config('aqveir-class.class_model.user.main'), 
+			config('aqveir-migration.table_name.user.privileges'),
 			'privilege_id' , 'user_id' 
 		);
 	}

@@ -13,7 +13,7 @@ trait CurrencyRelationship
 	public function countries()
 	{
 		return $this->hasMany(
-			config('crmomni-class.class_model.country'),
+			config('aqveir-class.class_model.country'),
 			'currency_code', 'iso_code'
 		);
 	} //Function ends

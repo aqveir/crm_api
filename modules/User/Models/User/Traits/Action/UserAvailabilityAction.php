@@ -107,7 +107,7 @@ trait UserAvailabilityAction
 	{
 		$objReturnValue=null;
 		try {
-			$query = config('crmomni-class.class_model.user_availability')::updateOrCreate([
+			$query = config('aqveir-class.class_model.user_availability')::updateOrCreate([
 				'user_id' => $userId
 				], [
 					'status_id' => $statusId, 
@@ -131,7 +131,7 @@ trait UserAvailabilityAction
 	{
 		$objReturnValue=null;
 		try {
-			$query = config('crmomni-class.class_model.user_availability')::where([
+			$query = config('aqveir-class.class_model.user_availability')::where([
 				'user_id' => $userId
 				])->firstOrFail();
 
@@ -151,7 +151,7 @@ trait UserAvailabilityAction
 	{
 		$objReturnValue=null;
 		try {
-			$query = config('crmomni-class.class_model.user')::with(['availability','country']);
+			$query = config('aqveir-class.class_model.user')::with(['availability','country']);
 			$query = $query->whereHas('availability.status', function ($inner_query) use ($orgId) {
 				$inner_query->where('id', $this->getLookUpByValue($orgId, config('portiqo-crm.settings.lookup_value.user_availability_status_online'))->id);
 			});
@@ -177,7 +177,7 @@ trait UserAvailabilityAction
 	{
 		$objReturnValue=null;
 		try {
-			$query = config('crmomni-class.class_model.user')::with(['availability']);
+			$query = config('aqveir-class.class_model.user')::with(['availability']);
 			$query = $query->where('id', $userId);
 			$query = $query->where('org_id', $orgId);
 			$query = $query->where('is_active', 1);
@@ -202,7 +202,7 @@ trait UserAvailabilityAction
 	{	
 		$objReturnValue=null;
 		try {
-			$query = config('crmomni-class.class_model.user')::where('id', $userId);
+			$query = config('aqveir-class.class_model.user')::where('id', $userId);
 			$query = $query->where('org_id', $orgId);
 			$query = $query->where('is_active', 1);
 			$query = $query->where('modified_on', '>=', Carbon::now()->subHours(config('portiqo-crm.default.user.availability.minimum_duration_for_lead_allocation')));

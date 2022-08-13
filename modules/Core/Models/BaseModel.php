@@ -60,7 +60,7 @@ abstract class BaseModel extends Model
             }
 
             if (!empty($updatedAt)) {
-                $objReturnValue = $updatedAt->format(config('crmomni.settings.date_format_response_generic'));
+                $objReturnValue = $updatedAt->format(config('aqveir.settings.date_format_response_generic'));
             } //End if
         } catch(Exception $e) {
 

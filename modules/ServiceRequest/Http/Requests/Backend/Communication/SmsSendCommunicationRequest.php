@@ -14,7 +14,7 @@ class SmsSendCommunicationRequest extends FormRequest
      */
     public function rules()
     {
-        return Config::get('crmomni-validation.request_handler.backend.communication.sms.send.validation_rules');
+        return Config::get('aqveir-validation.request_handler.backend.communication.sms.send.validation_rules');
     }
 
     /**

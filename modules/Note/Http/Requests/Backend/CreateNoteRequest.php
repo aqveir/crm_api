@@ -14,7 +14,7 @@ class CreateNoteRequest extends FormRequest
      */
     public function rules()
     {
-        return Config::get('crmomni-validation.request_handler.backend.note.create.validation_rules');
+        return Config::get('aqveir-validation.request_handler.backend.note.create.validation_rules');
     }
 
     /**

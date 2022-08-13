@@ -14,7 +14,7 @@ class DeletePreferenceRequest extends FormRequest
      */
     public function rules()
     {
-        return Config::get('crmomni-validation.request_handler.backend.preference.delete.validation_rules');
+        return Config::get('aqveir-validation.request_handler.backend.preference.delete.validation_rules');
     }
 
     /**

@@ -342,6 +342,7 @@ class ContactService extends BaseService
     public function create(string $orgHash, Collection $payload, string $ipAddress=null, bool $isAutoCreated=false)
     {
         $objReturnValue=null;
+        $payloadDetails=[];
 
         try {
             //Get organization data
@@ -361,9 +362,9 @@ class ContactService extends BaseService
             if (!$isDuplicate) {
 
                 //Generate the data payload to create user
-                $payload = $payload->only('password', 'first_name', 'middle_name', 'last_name');
-                $payload = array_merge(
-                    $payload,
+                $payloadContact = $payload->only('password', 'first_name', 'middle_name', 'last_name')->toArray();
+                $payloadContact = array_merge(
+                    $payloadContact,
                     [
                         'org_id' => $organization['id'],
                         '2fa_secret' => null,
@@ -372,14 +373,14 @@ class ContactService extends BaseService
                 );
 
                 //Create Contact
-                $contact = $this->contactRepository->create($payload, $createdBy, $ipAddress);
+                $contact = $this->contactRepository->create($payloadContact, $createdBy, $ipAddress);
 
                 //Create Contact details - Email
                 if(!empty($payload['email'])) {
                     //Get Email Type for the Organization
-                    $type = $this->getLookupValueByKey($organization['id'], config('omnichannel.settings.static.key.lookup_value.email'));
+                    $type = $this->getLookupValueByKey($organization['id'], config('aqveir.settings.static.key.lookup_value.email'));
 
-                    $payloadDetails = [
+                    array_push($payloadDetails, [
                         'org_id' => $organization['id'],
                         'type_id' => (empty($type)?0:$type['id']),
                         'contact_id' => $contact['id'],
@@ -387,16 +388,15 @@ class ContactService extends BaseService
                         'is_primary' => 1,
                         'is_verified' => $isEmailValid,
                         'created_by'=> $createdBy
-                    ];
-                    $this->contactdetailRepository->create($payloadDetails);
+                    ]);
                 } //End if
 
                 //Create Contact details - Phone
                 if(!empty($payload['phone'])) {
                     //Get Phone Type for the Organization
-                    $type = $this->getLookupValueByKey($organization['id'], config('omnichannel.settings.static.key.lookup_value.phone'));
+                    $type = $this->getLookupValueByKey($organization['id'], config('aqveir.settings.static.key.lookup_value.phone'));
 
-                    $payloadDetails = [
+                    array_push($payloadDetails, [
                         'org_id' => $organization['id'],
                         'type_id' => (empty($type)?0:$type['id']),
                         'contact_id' => $contact['id'],
@@ -404,8 +404,9 @@ class ContactService extends BaseService
                         'is_primary' => 1,
                         'is_verified' => $isPhoneValid,
                         'created_by'=> $createdBy
-                    ];
-                    $this->contactdetailRepository->create($payloadDetails);
+                    ]);
+
+                    //$this->contactdetailRepository->create($payloadDetails);
                 } //End if
 
                 //Notify user to Activate Account
@@ -419,7 +420,7 @@ class ContactService extends BaseService
                 throw new DuplicateDataException();
             } //End if
         } catch(DuplicateDataException $e) {
-            throw new DuplicateDataException();
+            throw $e;
         } catch(Exception $e) {
             throw new HttpException(500);
         } //Try-catch ends

@@ -14,7 +14,7 @@ class VoiceCallPassthruRequest extends FormRequest
      */
     public function rules()
     {
-        return Config::get('crmomni-validation.request_handler.telephony.exotel.voice.passthru.validation_rules');
+        return Config::get('aqveir-validation.request_handler.telephony.exotel.voice.passthru.validation_rules');
     }
 
     /**

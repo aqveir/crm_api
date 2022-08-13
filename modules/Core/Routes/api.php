@@ -18,7 +18,7 @@ $api->version('v1', [
         'prefix' => 'api',
         'middleware' => ['api'],
         'namespace' => 'Modules\Core\Http\Controllers',
-        'domain' => config('crmomni.settings.domain')
+        'domain' => config('aqveir.settings.domain')
     ], function (Router $api) {
 
     // Unauthenticated OR Guest endpoints

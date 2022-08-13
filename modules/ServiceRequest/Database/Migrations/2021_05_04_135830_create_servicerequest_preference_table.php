@@ -13,7 +13,7 @@ class CreateServicerequestPreferenceTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('crmomni-migration.table_name.service_request.preference'), function (Blueprint $table) {
+        Schema::create(config('aqveir-migration.table_name.service_request.preference'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
             //SR Preference Relationship Core References
@@ -35,6 +35,6 @@ class CreateServicerequestPreferenceTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(config('crmomni-migration.table_name.service_request.preference'));
+        Schema::dropIfExists(config('aqveir-migration.table_name.service_request.preference'));
     }
 }

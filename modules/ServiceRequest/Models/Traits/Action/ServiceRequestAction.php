@@ -21,7 +21,7 @@ trait ServiceRequestAction
 	public function notes()
 	{
         return $this->hasMany(
-            config('crmomni-class.class_model.note'),
+            config('aqveir-class.class_model.note'),
             'reference_id', 'id'
         )
         ->with(['type'])

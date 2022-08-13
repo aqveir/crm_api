@@ -13,7 +13,7 @@ class CreateNotesTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('crmomni-migration.table_name.notes'), function (Blueprint $table) {
+        Schema::create(config('aqveir-migration.table_name.notes'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
             // FK Relationships
@@ -39,6 +39,6 @@ class CreateNotesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(config('crmomni-migration.table_name.notes'));
+        Schema::dropIfExists(config('aqveir-migration.table_name.notes'));
     }
 }

@@ -13,7 +13,7 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('crmomni-migration.table_name.user.main'), function (Blueprint $table) {
+        Schema::create(config('aqveir-migration.table_name.user.main'), function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('hash')->nullable();
 
@@ -62,7 +62,7 @@ class CreateUsersTable extends Migration
             $table->softDeletes();
         });
 
-        Schema::create(config('crmomni-migration.table_name.user.availability'), function (Blueprint $table) {
+        Schema::create(config('aqveir-migration.table_name.user.availability'), function (Blueprint $table) {
             $table->bigIncrements('id');
             
             $table->unsignedBigInteger('user_id');
@@ -71,7 +71,7 @@ class CreateUsersTable extends Migration
             $table->ipAddress('ip_address')->nullable();
         });
 
-        Schema::create(config('crmomni-migration.table_name.user.availability_history'), function (Blueprint $table) {
+        Schema::create(config('aqveir-migration.table_name.user.availability_history'), function (Blueprint $table) {
             $table->unsignedBigInteger('user_id');
             $table->integer('status_id');
             $table->timestamp('created_at')->useCurrent();
@@ -87,10 +87,10 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(config('crmomni-migration.table_name.user.main'));
+        Schema::dropIfExists(config('aqveir-migration.table_name.user.main'));
 
-        Schema::dropIfExists(config('crmomni-migration.table_name.user.availability'));
+        Schema::dropIfExists(config('aqveir-migration.table_name.user.availability'));
 
-        Schema::dropIfExists(config('crmomni-migration.table_name.user.availability_history'));
+        Schema::dropIfExists(config('aqveir-migration.table_name.user.availability_history'));
     }
 }

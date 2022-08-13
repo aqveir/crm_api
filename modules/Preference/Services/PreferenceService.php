@@ -99,7 +99,7 @@ class PreferenceService extends BaseService
             $user = $this->getCurrentUser('backend');
 
             //Get organization details
-            if ($user->hasRoles(config('crmomni.settings.default.role.key_super_admin'))) {
+            if ($user->hasRoles(config('aqveir.settings.default.role.key_super_admin'))) {
                 //Get organization data
                 $organization = $this->getOrganizationByHash($orgHash);
                 $orgId = $organization['id'];
@@ -142,7 +142,7 @@ class PreferenceService extends BaseService
             $user = $this->getCurrentUser('backend');
 
             //Get organization details
-            if ($user->hasRoles(config('crmomni.settings.default.role.key_super_admin'))) {
+            if ($user->hasRoles(config('aqveir.settings.default.role.key_super_admin'))) {
                 //Get organization data
                 $organization = $this->getOrganizationByHash($orgHash);
                 $orgId = $organization['id'];
@@ -260,7 +260,7 @@ class PreferenceService extends BaseService
                 $user = $this->getCurrentUser('backend');
 
                 //Get organization details
-                if ($user->hasRoles(config('crmomni.settings.default.role.key_super_admin'))) {
+                if ($user->hasRoles(config('aqveir.settings.default.role.key_super_admin'))) {
                     //Get organization data
                     $organization = $this->getOrganizationByHash($orgHash);
                     $orgId = $organization['id'];
@@ -328,7 +328,7 @@ class PreferenceService extends BaseService
             $user = $this->getCurrentUser('backend');
 
             //Get organization details
-            if ($user->hasRoles(config('crmomni.settings.default.role.key_super_admin'))) {
+            if ($user->hasRoles(config('aqveir.settings.default.role.key_super_admin'))) {
                 //Get organization data
                 $organization = $this->getOrganizationByHash($orgHash);
                 $orgId = $organization['id'];
@@ -393,7 +393,7 @@ class PreferenceService extends BaseService
             $user = $this->getCurrentUser('backend');
 
             //Get organization details
-            if ($user->hasRoles(config('crmomni.settings.default.role.key_super_admin'))) {
+            if ($user->hasRoles(config('aqveir.settings.default.role.key_super_admin'))) {
                 //Get organization data
                 $organization = $this->getOrganizationByHash($orgHash);
                 $orgId = $organization['id'];

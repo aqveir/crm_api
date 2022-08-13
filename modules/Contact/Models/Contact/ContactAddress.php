@@ -81,7 +81,7 @@ class ContactAddress extends Model {
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->table = config('crmomni-migration.table_name.contact.addresses');
+        $this->table = config('aqveir-migration.table_name.contact.addresses');
     }
 
 } //Class ends

@@ -10,7 +10,7 @@ trait ContactDetailRelationship
 	public function type()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.lookup_value'), 
+			config('aqveir-class.class_model.lookup_value'), 
 			'id', 'type_id'
 		);
 	}
@@ -18,7 +18,7 @@ trait ContactDetailRelationship
 	public function subtype()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.lookup_value'), 
+			config('aqveir-class.class_model.lookup_value'), 
 			'id', 'subtype_id'
 		);
 	}
@@ -26,7 +26,7 @@ trait ContactDetailRelationship
 	public function country()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.country'), 
+			config('aqveir-class.class_model.country'), 
 			'id', 'phone_idd'
 		);
 	}
@@ -34,7 +34,7 @@ trait ContactDetailRelationship
 	public function contact()
 	{
 		return $this->belongsTo(
-			config('crmomni-class.class_model.contact.main'),  
+			config('aqveir-class.class_model.contact.main'),  
 			'contact_id', 'id'
 		);
 	}

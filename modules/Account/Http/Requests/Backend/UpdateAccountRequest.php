@@ -14,7 +14,7 @@ class UpdateAccountRequest extends FormRequest
      */
     public function rules()
     {
-        return Config::get('crmomni-validation.request_handler.backend.account.update.validation_rules');
+        return Config::get('aqveir-validation.request_handler.backend.account.update.validation_rules');
     }
 
     /**

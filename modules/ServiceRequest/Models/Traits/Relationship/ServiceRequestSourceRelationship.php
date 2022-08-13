@@ -15,7 +15,7 @@ trait ServiceRequestSourceRelationship
 	public function channel()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.lookup_value'),
+			config('aqveir-class.class_model.lookup_value'),
 			'id', 'channel_type_id'
 		);
     } //Function ends

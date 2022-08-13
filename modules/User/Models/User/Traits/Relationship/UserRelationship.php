@@ -16,7 +16,7 @@ trait UserRelationship
 	public function organization()
 	{
 		return $this->belongsTo(
-			config('crmomni-class.class_model.organization'), 
+			config('aqveir-class.class_model.organization'), 
 			'org_id', 'id'
 		);
 	} //Function ends
@@ -28,7 +28,7 @@ trait UserRelationship
 	public function country()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.country'), 
+			config('aqveir-class.class_model.country'), 
 			'phone_idd_code', 'phone_idd'
 		);
 	} //Function ends
@@ -40,7 +40,7 @@ trait UserRelationship
 	public function timezone()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.timezone'), 
+			config('aqveir-class.class_model.timezone'), 
 			'id', 'timezone_id'
 		);
 	} //Function ends
@@ -52,8 +52,8 @@ trait UserRelationship
 	public function roles()
 	{
 		return $this->belongsToMany(
-			config('crmomni-class.class_model.role'),
-			config('crmomni-migration.table_name.user.roles'),
+			config('aqveir-class.class_model.role'),
+			config('aqveir-migration.table_name.user.roles'),
 			'user_id', 'role_id'
 		);
 	} //Function ends
@@ -65,8 +65,8 @@ trait UserRelationship
 	public function privileges()
 	{
 		return $this->belongsToMany(
-			config('crmomni-class.class_model.privilege'),
-			config('crmomni-migration.table_name.user.privileges'),
+			config('aqveir-class.class_model.privilege'),
+			config('aqveir-migration.table_name.user.privileges'),
 			'user_id', 'privilege_id'
 		);
 	} //Function ends
@@ -78,8 +78,8 @@ trait UserRelationship
 	public function active_privileges()
 	{
 		return $this->belongsToMany(
-			config('crmomni-class.class_model.privilege'),
-			config('crmomni-migration.table_name.user.privileges'),
+			config('aqveir-class.class_model.privilege'),
+			config('aqveir-migration.table_name.user.privileges'),
 			'user_id', 'privilege_id'
 		)
 		->wherePivot('is_active', 1);
@@ -105,7 +105,7 @@ trait UserRelationship
 	public function user_reportess()
 	{
 		return $this->hasMany(
-			config('crmomni-class.class_model.user_reportees'),
+			config('aqveir-class.class_model.user_reportees'),
 			'reportee_id','id'
 		)
 		->whereNotNull('reportee_id');

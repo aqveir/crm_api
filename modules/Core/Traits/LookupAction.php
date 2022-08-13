@@ -28,7 +28,7 @@ trait LookupAction
     {
         $objReturnValue=null;
         try {
-            $query = config('crmomni-class.class_model.lookup_value')::where('org_id', 0);
+            $query = config('aqveir-class.class_model.lookup_value')::where('org_id', 0);
 
             if (!empty($orgId)) {
                 $query = $query->orWhere('org_id', $orgId);

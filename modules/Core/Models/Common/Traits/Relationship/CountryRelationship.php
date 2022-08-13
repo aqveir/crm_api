@@ -13,7 +13,7 @@ trait CountryRelationship
 	public function currency()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.currency'),
+			config('aqveir-class.class_model.currency'),
 			'iso_code', 'currency_code'
 		)->where('is_active', true);
 	} //Function ends
@@ -25,7 +25,7 @@ trait CountryRelationship
 	public function timezones()
 	{
 		return $this->hasMany(
-			config('crmomni-class.class_model.timezone'),
+			config('aqveir-class.class_model.timezone'),
 			'country_id','id'
 		)->where('is_active', true);
 	} //Function ends

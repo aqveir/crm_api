@@ -15,7 +15,7 @@ trait CommunicationRelationship
 	public function organization()
 	{
 		return $this->belongsTo(
-			config('crmomni-class.class_model.organization'),
+			config('aqveir-class.class_model.organization'),
 			'org_id', 'id'
 		);
 	} //Function ends
@@ -27,7 +27,7 @@ trait CommunicationRelationship
 	public function servicerequest()
 	{
 		return $this->belongsTo(
-			config('crmomni-class.class_model.service_request.main'),
+			config('aqveir-class.class_model.service_request.main'),
 			'servicerequest_id', 'id'
 		);
     } //Function ends
@@ -39,7 +39,7 @@ trait CommunicationRelationship
 	public function type()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.lookup_value'),
+			config('aqveir-class.class_model.lookup_value'),
 			'id', 'activity_subtype_id'
 		);
     } //Function ends
@@ -51,7 +51,7 @@ trait CommunicationRelationship
 	public function direction()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.lookup_value'),
+			config('aqveir-class.class_model.lookup_value'),
 			'id', 'direction_id'
 		);
 	} //Function ends

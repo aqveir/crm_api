@@ -76,7 +76,7 @@ class Currency extends Model {
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->table = config('crmomni-migration.table_name.currencies');
+        $this->table = config('aqveir-migration.table_name.currencies');
     }
 
 

@@ -18,7 +18,7 @@ $api->version('v1', [
         'prefix' => 'api',
         'middleware' => ['api'],
         'namespace' => 'Modules\MailParser\Http\Controllers',
-        'domain' => config('crmomni.settings.domain')
+        'domain' => config('aqveir.settings.domain')
     ], function (Router $api) {
 
     // Unauthenticated Endpoints for Mail Parser

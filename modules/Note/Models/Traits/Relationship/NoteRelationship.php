@@ -13,7 +13,7 @@ trait NoteRelationship
 	public function type()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.lookup_value'),
+			config('aqveir-class.class_model.lookup_value'),
 			'id', 'entity_type_id'
 		);
 	} //Function ends
@@ -25,7 +25,7 @@ trait NoteRelationship
 	public function owner()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.user.main'),
+			config('aqveir-class.class_model.user.main'),
 			'id', 'created_by'
 		);
 	} //Function ends

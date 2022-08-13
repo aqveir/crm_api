@@ -79,7 +79,7 @@ class Country extends Model {
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->table = config('crmomni-migration.table_name.countries');
+        $this->table = config('aqveir-migration.table_name.countries');
     }
 
 } //Class ends

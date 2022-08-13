@@ -70,7 +70,7 @@ class MailParserResource extends JsonResource
                                     $email = $this[$synonym];
                                     if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
                                         $objReturnValue = [
-                                            'type_key'          => config('crmomni.settings.static.key.lookup_value.email'),
+                                            'type_key'          => config('aqveir.settings.static.key.lookup_value.email'),
                                             'identifier'        => $email,
                                             'is_primary'        => $isPrimary
                                         ];
@@ -178,7 +178,7 @@ class MailParserResource extends JsonResource
                 } //Switch ends
 
                 $objReturnValue = [
-                    'type_key'          => config('crmomni.settings.static.key.lookup_value.phone'),
+                    'type_key'          => config('aqveir.settings.static.key.lookup_value.phone'),
                     'subtype_key'       => $phoneSubTypeKey,
                     'phone_idd'         => (string)($phoneNumberObject->getCountryCode()),
                     'identifier'        => $phoneNumberObject->getNationalNumber(),

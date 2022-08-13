@@ -13,7 +13,7 @@ class CreateServicerequestSourceTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('crmomni-migration.table_name.service_request.source'), function (Blueprint $table) {
+        Schema::create(config('aqveir-migration.table_name.service_request.source'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
             //SR Source References
@@ -26,7 +26,7 @@ class CreateServicerequestSourceTable extends Migration
         });
 
 
-        Schema::create(config('crmomni-migration.table_name.service_request.source-data'), function (Blueprint $table) {
+        Schema::create(config('aqveir-migration.table_name.service_request.source-data'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
             //SR Sources Mapper References
@@ -45,8 +45,8 @@ class CreateServicerequestSourceTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(config('crmomni-migration.table_name.service_request.source'));
+        Schema::dropIfExists(config('aqveir-migration.table_name.service_request.source'));
 
-        Schema::dropIfExists(config('crmomni-migration.table_name.service_request.source-data'));
+        Schema::dropIfExists(config('aqveir-migration.table_name.service_request.source-data'));
     }
 }

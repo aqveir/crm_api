@@ -43,7 +43,7 @@ trait ContactRelationship
 	public function service_requests()
 	{
 		return $this->hasMany(
-			config('crmomni-class.class_model.service_request.main'),
+			config('aqveir-class.class_model.service_request.main'),
 			'contact_id', 'id'
 		)
 		->orderBy('created_at', 'desc');
@@ -56,7 +56,7 @@ trait ContactRelationship
 	public function active_service_requests()
 	{
 		return $this->hasMany(
-			config('crmomni-class.class_model.service_request.main'),
+			config('aqveir-class.class_model.service_request.main'),
 			'contact_id', 'id'
 		)
 		->with(['status'])
@@ -74,7 +74,7 @@ trait ContactRelationship
 	{
 		return $this->belongsToMany(
 			ContactDetail::class,
-			config('crmomni-migration.table_name.wallet.contacts'),
+			config('aqveir-migration.table_name.wallet.contacts'),
 			'contact_id', 
 			'wallet_id'
 		)->wherePivot('is_active', 1);
@@ -104,9 +104,9 @@ trait ContactRelationship
 	 */
 	public function notes()
 	{
-		if (class_exists(config('crmomni-class.class_model.note'))) {
+		if (class_exists(config('aqveir-class.class_model.note'))) {
 			return $this->hasMany(
-				config('crmomni-class.class_model.note'),
+				config('aqveir-class.class_model.note'),
 				'reference_id', 'id'
 			)
 			->with(['type', 'owner'])
@@ -124,7 +124,7 @@ trait ContactRelationship
 	public function documents()
 	{
 		return $this->hasMany(
-			config('crmomni-class.class_model.document'),
+			config('aqveir-class.class_model.document'),
 			'reference_id', 'id'
 		)
 		->with(['type', 'owner'])
@@ -140,7 +140,7 @@ trait ContactRelationship
 	public function organization()
 	{
 		return $this->belongsTo(
-			config('crmomni-class.class_model.organization'),
+			config('aqveir-class.class_model.organization'),
 			'org_id', 'id'
 		);
 	} //Function ends
@@ -152,7 +152,7 @@ trait ContactRelationship
 	public function occupation()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.lookup_value'),
+			config('aqveir-class.class_model.lookup_value'),
 			'id', 'occupation_id'
 		);
 	} //Function ends
@@ -164,7 +164,7 @@ trait ContactRelationship
 	public function gender()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.lookup_value'),
+			config('aqveir-class.class_model.lookup_value'),
 			'id', 'gender_id'
 		);
 	} //Function ends
@@ -176,7 +176,7 @@ trait ContactRelationship
 	public function group()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.lookup_value'),
+			config('aqveir-class.class_model.lookup_value'),
 			'id', 'group_id'
 		);
 	} //Function ends
@@ -188,7 +188,7 @@ trait ContactRelationship
 	public function type()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.lookup_value'),
+			config('aqveir-class.class_model.lookup_value'),
 			'id', 'type_id'
 		);
 	} //Function ends
@@ -200,7 +200,7 @@ trait ContactRelationship
 	public function status()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.lookup_value'),
+			config('aqveir-class.class_model.lookup_value'),
 			'id', 'status_id'
 		);
 	} //Function ends

@@ -13,7 +13,7 @@ class CreatePreferenceDataValueTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('crmomni-migration.table_name.preference.data_value'), function (Blueprint $table) {
+        Schema::create(config('aqveir-migration.table_name.preference.data_value'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
             $table->integer('data_id');             //From Preference Data Table
@@ -34,6 +34,6 @@ class CreatePreferenceDataValueTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(config('crmomni-migration.table_name.preference.data_value'));
+        Schema::dropIfExists(config('aqveir-migration.table_name.preference.data_value'));
     }
 }

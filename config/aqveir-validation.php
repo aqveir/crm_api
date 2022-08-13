@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Validation\Rule;
+use Modules\Core\Rules\PhoneValidationRule;
 
 return [
     'request_handler' => [
@@ -11,7 +12,7 @@ return [
                 'create' => [
                     'validation_rules' => [
                         'name' => 'nullable|string|max:40',
-                        'subdomain' => 'required|min:3|max:36|not_in:' . implode(',', config('crmomni.settings.restricted_subdomains','')) . '|unique:' . config('crmomni-migration.table_name.organizations') . ',subdomain',
+                        'subdomain' => 'required|min:3|max:36|not_in:' . implode(',', config('aqveir.settings.restricted_subdomains','')) . '|unique:' . config('aqveir-migration.table_name.organizations') . ',subdomain',
                         'first_name' => 'required|string|max:80',
                         'last_name' => 'string|max:80',
                         'contact_person_name' => 'required|string|max:80',
@@ -25,7 +26,7 @@ return [
                 // Update Organization
                 'update' => [
                     'validation_rules' => [
-                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'sometimes|string|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
 
                         'logo' => 'nullable|image|mimes:jpg,jpeg,png,bmp,gif|dimensions:ratio=1/1|max:512',
                         'name' => 'nullable|string|max:40',
@@ -52,7 +53,7 @@ return [
                 //Delete Organization
                 'delete' => [
                     'validation_rules' => [
-                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'sometimes|string|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
                     ]
                 ]
             ], //Organization Controller ends
@@ -62,14 +63,14 @@ return [
                 // Lookup data fetch-show
                 'fetch' => [
                     'validation_rules' => [
-                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'sometimes|string|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
                     ]
                 ],
 
                 // LookUp Create Request
                 'create' => [
                     'validation_rules' => [
-                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'sometimes|string|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
                         'name' => 'required|max:25',
                         'description' => 'max:40'
                     ]
@@ -78,7 +79,7 @@ return [
                 // LookUp Update Request
                 'update' => [
                     'validation_rules' => [
-                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'sometimes|string|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
                         
                         'id' => 'required|numeric',
                         'name' => 'required|max:25',
@@ -117,14 +118,14 @@ return [
                 // Role fetch-show
                 'fetch' => [
                     'validation_rules' => [
-                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'sometimes|string|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
                     ]
                 ],
 
                 // Role Create Request
                 'create' => [
                     'validation_rules' => [
-                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'sometimes|string|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
 
                         'display_value' => 'required|max:255',
                         'description' => 'max:255',
@@ -135,7 +136,7 @@ return [
                 // Role Update Request
                 'update' => [
                     'validation_rules' => [
-                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'sometimes|string|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
 
                         'display_value' => 'required|max:255',
                         'description' => 'max:255',
@@ -163,7 +164,7 @@ return [
                 // Forgot Password Request for User
                 'forgot_password' => [
                     'validation_rules' => [
-                        'email' => 'required|email|max:40|exists:' . config('crmomni-migration.table_name.user.main') . ',email'
+                        'email' => 'required|email|max:40|exists:' . config('aqveir-migration.table_name.user.main') . ',email'
                     ]
                 ],
 
@@ -210,7 +211,7 @@ return [
                     'release_token' => env('SIGN_UP_RELEASE_TOKEN', false),
 
                     'validation_rules' => [
-                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'sometimes|string|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
                         
                         'username' => 'required|max:36|unique:users,username',
                         'password' => 'required|string|confirmed|min:8|max:99',
@@ -230,7 +231,7 @@ return [
                 //User Update Request
                 'update' => [
                     'validation_rules' => [
-                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'sometimes|string|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
 
                         'avatar' => 'nullable|image|mimes:jpg,bmp,png|dimensions:ratio=1/1|max:512', //Max size in KB
                         'first_name' => 'required|string|max:40',
@@ -249,7 +250,7 @@ return [
                 //User Delete Request
                 'delete' => [
                     'validation_rules' => [
-                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'sometimes|string|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
                     ]
                 ],
 
@@ -265,28 +266,28 @@ return [
                 // Verify User Request
                 'verify' => [
                     'validation_rules' => [
-                        'email' => 'required|email|max:40|exists:' . config('crmomni-migration.table_name.user.main') . ',email',
+                        'email' => 'required|email|max:40|exists:' . config('aqveir-migration.table_name.user.main') . ',email',
                     ]
                 ],
 
                 // Activate User Account Request
                 'activate' => [
                     'validation_rules' => [
-                        'email' => 'required|email|max:40|exists:' . config('crmomni-migration.table_name.user.main') . ',email',
+                        'email' => 'required|email|max:40|exists:' . config('aqveir-migration.table_name.user.main') . ',email',
                     ]
                 ],
 
                 //Get User data
                 'fetch' => [
                     'validation_rules' => [
-                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'sometimes|string|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
                     ]
                 ],
 
                 //User Status Request: Intended for telecallers
                 'status' => [
                     'validation_rules' => [
-                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'sometimes|string|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
                         
                         'role' => 'required|string',
                     ]
@@ -303,7 +304,7 @@ return [
                 // Create Note validations
                 'create' => [
                     'validation_rules' => [
-                        'entity_type'     => 'required|string|exists:' . config('crmomni-migration.table_name.lookup_value') . ',key',
+                        'entity_type'     => 'required|string|exists:' . config('aqveir-migration.table_name.lookup_value') . ',key',
                         'reference_id' => 'required|numeric',
                         'note' => 'required|string|max:1000',
                     ]
@@ -328,7 +329,7 @@ return [
                 // Create Document validations
                 'create' => [
                     'validation_rules' => [
-                        'entity_type'     => 'required|string|exists:' . config('crmomni-migration.table_name.lookup_value') . ',key',
+                        'entity_type'     => 'required|string|exists:' . config('aqveir-migration.table_name.lookup_value') . ',key',
                         'reference_id'    => 'required|numeric',
                         'title'           => 'required|string|max:150',
                         'description'     => 'string|max:1000',
@@ -376,7 +377,11 @@ return [
                         'details.*.type_key' => 'string|required_with:details',
                         'details.*.subtype_key' => 'nullable|string|max:40',
                         'details.*.phone_idd' => 'nullable|string|max:5',
-                        'details.*.identifier' => 'string|max:200|required_with:details',
+
+                        'details.*.identifier' => 'exclude_unless:details.*.type_key,contact_detail_type_email|required_with:details|email|max:200',
+                        'details.*.identifier' => ['exclude_unless:details.*.type_key,contact_detail_type_phone',
+                            'required_with:details', 'max:200', new PhoneValidationRule],
+
                         'details.*.is_primary' => 'boolean',
 
                         'addresses' => 'sometimes',
@@ -464,7 +469,7 @@ return [
                 // Create Subscription validations
                 'create' => [
                     'validation_rules' => [
-                        'key' => 'sometimes|string|max:255|unique:'. config('crmomni-migration.table_name.subscription.main') .',key',
+                        'key' => 'sometimes|string|max:255|unique:'. config('aqveir-migration.table_name.subscription.main') .',key',
                         
                         'display_value' => 'required|string|max:255',
                         'description' => 'sometimes|string|max:1000',
@@ -477,7 +482,7 @@ return [
                 // Update Subscription validations
                 'update' => [
                     'validation_rules' => [
-                        'key' => 'sometimes|string|max:255|unique:'. config('crmomni-migration.table_name.subscription.main') .',key',
+                        'key' => 'sometimes|string|max:255|unique:'. config('aqveir-migration.table_name.subscription.main') .',key',
                         
                         'display_value' => 'required|string|max:255',
                         'description' => 'sometimes|string|max:1000',
@@ -499,7 +504,7 @@ return [
                 // Create Subscription validations
                 'create' => [
                     'validation_rules' => [
-                        'key' => 'sometimes|string|max:255|unique:'. config('crmomni-migration.table_name.subscription.main') .',key'
+                        'key' => 'sometimes|string|max:255|unique:'. config('aqveir-migration.table_name.subscription.main') .',key'
                     ]
                 ],
             ], // Payment Method Controller end
@@ -509,14 +514,14 @@ return [
                 //Fetch all privileges
                 'fetch' => [
                     'validation_rules' => [ 
-                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'sometimes|string|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
                     ]
                 ],
 
                 // Preferences Create Request
                 'create' => [
                     'validation_rules' => [
-                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'sometimes|string|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
 
                         'name' => [
                             'required',
@@ -532,7 +537,7 @@ return [
                         'is_multiple' => 'sometimes|boolean', 
                         'keywords' => 'sometimes|string', 
                         'order' => 'sometimes|numeric', 
-                        'type_key' => 'required|string|exists:' . config('crmomni-migration.table_name.lookup_value') . ',key',
+                        'type_key' => 'required|string|exists:' . config('aqveir-migration.table_name.lookup_value') . ',key',
                         'data' => 'sometimes',
                         'data.values' => 'required_with:data|array'
                     ]
@@ -541,7 +546,7 @@ return [
                 // Preferences Update Request
                 'update' => [
                     'validation_rules' => [
-                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'sometimes|string|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
 
                         'display_value' => 'required|string|max:100',
                         'description' => 'sometimes|string|max:1000', 
@@ -551,7 +556,7 @@ return [
                         'is_multiple' => 'sometimes|boolean', 
                         'keywords' => 'sometimes|string', 
                         'order' => 'sometimes|numeric', 
-                        'type_key' => 'required|string|exists:' . config('crmomni-migration.table_name.lookup_value') . ',key',
+                        'type_key' => 'required|string|exists:' . config('aqveir-migration.table_name.lookup_value') . ',key',
                         'data' => 'sometimes',
                         'data.values' => 'required_with:data|array'
                     ]
@@ -560,7 +565,7 @@ return [
                 // Preferences Delete Request
                 'delete' => [
                     'validation_rules' => [
-                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45'
+                        'key' => 'sometimes|string|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45'
                     ]
                 ]
             ], // Preferences Controller end
@@ -621,14 +626,14 @@ return [
                 // Account fetch-show
                 'fetch' => [
                     'validation_rules' => [
-                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'sometimes|string|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
                     ]
                 ],
 
                 // Account Create Request
                 'create' => [
                     'validation_rules' => [
-                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'sometimes|string|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
 
                         'name' => 'required|string|max:255',
                         'description' => 'nullable|string|max:255',
@@ -656,7 +661,7 @@ return [
                 // Account Update Request
                 'update' => [
                     'validation_rules' => [
-                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'sometimes|string|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
 
                         'name' => 'required|string|max:255',
                         'description' => 'nullable|string|max:255',
@@ -684,7 +689,7 @@ return [
                 // Account Delete Request
                 'delete' => [
                     'validation_rules' => [
-                        'key' => 'sometimes|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'sometimes|string|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
                     ]
                 ]
             ], // Account Controller end
@@ -785,13 +790,13 @@ return [
                 //Get the contact data
                 'show' => [
                     'validation_rules' => [
-                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'required|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
                     ]
                 ],
 
                 'exists' => [
                     'validation_rules' => [
-                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'required|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
                         
                         'email' => 'required_without:phone|email|max:36',
                         'phone' => 'required_without:email|max:15',
@@ -800,7 +805,7 @@ return [
 
                 'register' => [
                     'validation_rules' => [
-                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'required|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
                         'password' => 'required|confirmed|string|min:8|max:64',
                         'first_name' => 'string|max:64',
                         'last_name' => 'string|max:64',
@@ -813,7 +818,7 @@ return [
                 // Authenticate the contact
                 'login' => [
                     'validation_rules' => [
-                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'required|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
                         'username' => 'required|max:36',
                         'password' => 'required|string|min:8|max:64',
                         'phone_idd' => 'required|min:1|max:5',
@@ -824,14 +829,14 @@ return [
                 // Logout the contact
                 'logout' => [
                     'validation_rules' => [
-                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'required|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
                     ]
                 ],
 
                 // Forgot Password Request for User
                 'forgot_password' => [
                     'validation_rules' => [
-                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'required|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
                         'email' => 'required|email'
                     ]
                 ],
@@ -862,12 +867,12 @@ return [
                 //Social authentication
                 'social_login' => [
                     'validation_rules' => [
-                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'required|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
                     ]
                 ],
                 'social_login_callback' => [
                     'validation_rules' => [
-                        'key' => 'required|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                        'key' => 'required|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
                     ]
                 ],
 
@@ -882,19 +887,19 @@ return [
                 'voice' => [
                     'callback' => [
                         'validation_rules' => [
-                            'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                            'key' => 'required|string|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
                         ]
                     ],
 
                     'details' => [
                         'validation_rules' => [
-                            'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                            'key' => 'required|string|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
                         ]
                     ],
 
                     'passthru' => [
                         'validation_rules' => [
-                            'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                            'key' => 'required|string|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
                         ]
                     ],
                 ],
@@ -911,14 +916,14 @@ return [
             //Default endpoint
             'default' => [
                 'validation_rules' => [
-                    'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                    'key' => 'required|string|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
                 ]
             ],
 
             //Zapier endpoint
             'zapier' => [
                 'validation_rules' => [
-                    'key' => 'required|string|exists:' . config('crmomni-migration.table_name.organizations') . ',hash|max:45',
+                    'key' => 'required|string|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
                 ]
             ],
         ],

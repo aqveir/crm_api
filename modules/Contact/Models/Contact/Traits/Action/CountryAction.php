@@ -20,7 +20,7 @@ trait CountryAction
     {
     	$objReturnValue = null;
     	try{
-    		$country = config('crmomni-class.class_model.country')::firstOrCreate([
+    		$country = config('aqveir-class.class_model.country')::firstOrCreate([
     			'code' => $countryCode
     		]);	
 

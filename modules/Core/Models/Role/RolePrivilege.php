@@ -54,6 +54,6 @@ class RolePrivilege extends Model
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->table = config('crmomni-migration.table_name.role_privileges');
+        $this->table = config('aqveir-migration.table_name.role_privileges');
     } //Function ends
 }

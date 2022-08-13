@@ -62,7 +62,7 @@ class Company extends Model {
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->table = config('crmomni-migration.table_name.company');
+        $this->table = config('aqveir-migration.table_name.company');
     }
 
 } //Class ends

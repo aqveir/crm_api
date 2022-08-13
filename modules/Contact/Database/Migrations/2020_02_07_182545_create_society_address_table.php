@@ -13,7 +13,7 @@ class CreateSocietyAddressTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('crmomni-migration.table_name.contact.society_address'), function (Blueprint $table) {
+        Schema::create(config('aqveir-migration.table_name.contact.society_address'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
             $table->string('name');        
@@ -48,6 +48,6 @@ class CreateSocietyAddressTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(config('crmomni-migration.table_name.contact.society_address'));
+        Schema::dropIfExists(config('aqveir-migration.table_name.contact.society_address'));
     } //Function ends
 } //Class ends

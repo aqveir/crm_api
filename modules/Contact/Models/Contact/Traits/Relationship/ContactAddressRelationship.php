@@ -16,7 +16,7 @@ trait ContactAddressRelationship
 	public function type()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.lookup_value'), 
+			config('aqveir-class.class_model.lookup_value'), 
 			'id', 'type_id'
 		);
 	}
@@ -28,7 +28,7 @@ trait ContactAddressRelationship
 	public function state()
 	{
 		return $this->belongsTo(
-			config('crmomni-class.class_model.contact.main'),  
+			config('aqveir-class.class_model.contact.main'),  
 			'state_id', 'id'
 		);
 	}
@@ -40,7 +40,7 @@ trait ContactAddressRelationship
 	public function contact()
 	{
 		return $this->belongsTo(
-			config('crmomni-class.class_model.contact.main'),  
+			config('aqveir-class.class_model.contact.main'),  
 			'contact_id', 'id'
 		);
 	}

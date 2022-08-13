@@ -13,7 +13,7 @@ class CreateCurrencyTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('crmomni-migration.table_name.currencies'), function (Blueprint $table) {
+        Schema::create(config('aqveir-migration.table_name.currencies'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
             //Currency details
@@ -42,6 +42,6 @@ class CreateCurrencyTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(config('crmomni-migration.table_name.currencies'));
+        Schema::dropIfExists(config('aqveir-migration.table_name.currencies'));
     }
 }

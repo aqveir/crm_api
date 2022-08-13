@@ -14,7 +14,7 @@ class ResetPasswordRequest extends FormRequest
      */
     public function rules()
     {
-        return Config::get('crmomni-validation.request_handler.auth.reset_password.validation_rules');
+        return Config::get('aqveir-validation.request_handler.auth.reset_password.validation_rules');
     }
 
     

@@ -129,6 +129,7 @@ class TelephonyVoiceService extends BaseService
                     //Callback URL
                     $callbackUrl = url(config('cloudtelephony.exotel.call.callback-url'));
                     $callbackUrl .= "?key=" . $orgHash;
+                    $callbackUrl .= "&sr_hash=" . $srHash;
                     
                     $response = $this->exotelVoiceCallRepository->makeCallToConnectTwoNumbers($payload, $settings, $callbackUrl);
                     break;

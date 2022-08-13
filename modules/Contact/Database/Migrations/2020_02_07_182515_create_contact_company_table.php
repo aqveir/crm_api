@@ -13,7 +13,7 @@ class CreateContactCompanyTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('crmomni-migration.table_name.company'), function (Blueprint $table) {
+        Schema::create(config('aqveir-migration.table_name.company'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
             $table->string('name')->unique();
@@ -48,7 +48,7 @@ class CreateContactCompanyTable extends Migration
         });
 
 
-        Schema::create(config('crmomni-migration.table_name.contact.company'), function (Blueprint $table) {
+        Schema::create(config('aqveir-migration.table_name.contact.company'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
             $table->unsignedBigInteger('org_id');
@@ -70,8 +70,8 @@ class CreateContactCompanyTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(config('crmomni-migration.table_name.company'));
+        Schema::dropIfExists(config('aqveir-migration.table_name.company'));
 
-        Schema::dropIfExists(config('crmomni-migration.table_name.contact.company'));
+        Schema::dropIfExists(config('aqveir-migration.table_name.contact.company'));
     }
 }

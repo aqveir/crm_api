@@ -21,7 +21,7 @@ trait ServiceRequestRelationship
 	public function organization()
 	{
 		return $this->belongsTo(
-			config('crmomni-class.class_model.organization'),
+			config('aqveir-class.class_model.organization'),
 			'org_id', 'id'
 		);
 	} //Function ends
@@ -33,7 +33,7 @@ trait ServiceRequestRelationship
 	public function account()
 	{
 		return $this->belongsTo(
-			config('crmomni-class.class_model.account'),
+			config('aqveir-class.class_model.account'),
 			'account_id', 'id'
 		);
 	} //Function ends
@@ -45,7 +45,7 @@ trait ServiceRequestRelationship
 	public function contact()
 	{
 		return $this->belongsTo(
-			config('crmomni-class.class_model.contact.main'),
+			config('aqveir-class.class_model.contact.main'),
 			'contact_id', 'id'
 		);
 	} //Function ends
@@ -57,7 +57,7 @@ trait ServiceRequestRelationship
 	public function owner()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.user.main'),
+			config('aqveir-class.class_model.user.main'),
 			'id', 'owner_id'
 		);
 	} //Function ends
@@ -69,7 +69,7 @@ trait ServiceRequestRelationship
 	public function category()
 	{
 		return $this->belongsTo(
-			config('crmomni-class.class_model.lookup_value'),
+			config('aqveir-class.class_model.lookup_value'),
 			'category_id', 'id'
 		);
 	} //Function ends
@@ -81,7 +81,7 @@ trait ServiceRequestRelationship
 	public function status()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.lookup_value'),
+			config('aqveir-class.class_model.lookup_value'),
 			'id', 'status_id'
 		);
 	} //Function ends
@@ -93,7 +93,7 @@ trait ServiceRequestRelationship
 	public function stage()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.lookup_value'),
+			config('aqveir-class.class_model.lookup_value'),
 			'id', 'stage_id'
 		);
 	} //Function ends
@@ -105,7 +105,7 @@ trait ServiceRequestRelationship
 	public function type()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.lookup_value'),
+			config('aqveir-class.class_model.lookup_value'),
 			'id', 'type_id'
 		);
 	} //Function ends
@@ -118,7 +118,7 @@ trait ServiceRequestRelationship
 	{
 		return $this->belongsToMany(
 			ServiceRequestSource::class,
-			config('crmomni-migration.table_name.service_request.source-data'),
+			config('aqveir-migration.table_name.service_request.source-data'),
 			'servicerequest_id', 'source_id'
 		);
 	} //Function ends
@@ -204,7 +204,7 @@ trait ServiceRequestRelationship
 	public function notes()
 	{
         return $this->hasMany(
-            config('crmomni-class.class_model.note'),
+            config('aqveir-class.class_model.note'),
             'reference_id', 'id'
         )
         ->with(['type'])
@@ -219,7 +219,7 @@ trait ServiceRequestRelationship
 	public function documents()
 	{
 		return $this->hasMany(
-			config('crmomni-class.class_model.document'),
+			config('aqveir-class.class_model.document'),
 			'reference_id', 'id'
         )
         ->with(['type'])

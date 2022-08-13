@@ -15,7 +15,7 @@ trait PreferenceRelationship
 	public function type()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.lookup_value'),
+			config('aqveir-class.class_model.lookup_value'),
 			'id', 'type_id'
 		);
 	}

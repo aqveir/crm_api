@@ -184,7 +184,7 @@ class UserService extends BaseService
             //Authenticated User
             $userCurr = $this->getCurrentUser('backend');
             if (!empty($userCurr)) {
-                if ($userCurr->hasRoles(config('crmomni.settings.default.role.key_super_admin'))) {
+                if ($userCurr->hasRoles(config('aqveir.settings.default.role.key_super_admin'))) {
                     //Get organization data
                     $organization = $this->getOrganizationByHash($orgHash);
                     $orgId = $organization['id'];
@@ -428,7 +428,7 @@ class UserService extends BaseService
             //Authenticated User
             $user = $this->getCurrentUser('backend');
             if (!empty($user)) {
-                if ($user->hasRoles(config('crmomni.settings.default.role.key_super_admin'))) {
+                if ($user->hasRoles(config('aqveir.settings.default.role.key_super_admin'))) {
                     //Get organization data
                     $organization = $this->getOrganizationByHash($orgHash);
                     $orgId = $organization['id'];
@@ -482,7 +482,7 @@ class UserService extends BaseService
             //Authenticated User
             $user = $this->getCurrentUser('backend');
             if (!empty($user)) {
-                if ($user->hasRoles(config('crmomni.settings.default.role.key_super_admin'))) {
+                if ($user->hasRoles(config('aqveir.settings.default.role.key_super_admin'))) {
                     //Get organization data
                     $organization = $this->getOrganizationByHash($orgHash);
                     $orgId = $organization['id'];

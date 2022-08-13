@@ -13,7 +13,7 @@ class CreateUserRolesTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('crmomni-migration.table_name.user.roles'), function (Blueprint $table) {
+        Schema::create(config('aqveir-migration.table_name.user.roles'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
             $table->unsignedBigInteger('user_id');
@@ -37,6 +37,6 @@ class CreateUserRolesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(config('crmomni-migration.table_name.user.roles'));
+        Schema::dropIfExists(config('aqveir-migration.table_name.user.roles'));
     }
 }

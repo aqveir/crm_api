@@ -13,7 +13,7 @@ trait AccountRelationship
 	public function type()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.lookup_value'),
+			config('aqveir-class.class_model.lookup_value'),
 			'id', 'type_id'
 		);
 	} //Function ends
@@ -25,7 +25,7 @@ trait AccountRelationship
 	public function owner()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.user.main'),
+			config('aqveir-class.class_model.user.main'),
 			'id', 'owner_id'
 		);
     } //Function ends
@@ -37,7 +37,7 @@ trait AccountRelationship
 	public function organization()
 	{
 		return $this->belongsTo(
-			config('crmomni-class.class_model.organization'), 
+			config('aqveir-class.class_model.organization'), 
 			'org_id', 'id'
 		);
 	} //Function ends
@@ -49,7 +49,7 @@ trait AccountRelationship
 	public function timezone()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.lookup_value'),
+			config('aqveir-class.class_model.lookup_value'),
 			'id', 'timezone_id'
 		);
 	} //Function ends
@@ -61,7 +61,7 @@ trait AccountRelationship
 	public function state()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.lookup_value'),
+			config('aqveir-class.class_model.lookup_value'),
 			'id', 'state_id'
 		);
 	} //Function ends
@@ -73,7 +73,7 @@ trait AccountRelationship
 	public function country()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.lookup_value'),
+			config('aqveir-class.class_model.lookup_value'),
 			'id', 'country_id'
 		);
 	} //Function ends

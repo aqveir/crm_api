@@ -13,7 +13,7 @@ class CreateServicerequestCommunicationTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('crmomni-migration.table_name.service_request.communication'), function (Blueprint $table) {
+        Schema::create(config('aqveir-migration.table_name.service_request.communication'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
             //SR Communication Essential References
@@ -67,6 +67,6 @@ class CreateServicerequestCommunicationTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(config('crmomni-migration.table_name.service_request.communication'));
+        Schema::dropIfExists(config('aqveir-migration.table_name.service_request.communication'));
     }
 }

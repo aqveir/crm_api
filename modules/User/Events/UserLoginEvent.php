@@ -3,11 +3,13 @@
 namespace Modules\User\Events;
 
 use Modules\User\Models\User\User;
+use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
 class UserLoginEvent
 {
-    use SerializesModels;
+    use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * User Model variable

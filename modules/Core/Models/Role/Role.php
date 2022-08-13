@@ -95,7 +95,7 @@ class Role extends Model
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->table = config('crmomni-migration.table_name.roles');
+        $this->table = config('aqveir-migration.table_name.roles');
     } //Function ends
 
 } //Class ends

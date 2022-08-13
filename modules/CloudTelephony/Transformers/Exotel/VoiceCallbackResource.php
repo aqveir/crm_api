@@ -62,16 +62,17 @@ class VoiceCallbackResource extends JsonResource
             } //End Switch
             
             $objReturnValue = [
-                'transaction_uuid'  => $this['CallSid'],
+                'external_uuid'     => $this['CallSid'],
                 'direction_key'     => $callDirection,
                 'call_status_key'   => $callStatus,
                 'call_recording_url'=> $urlRecording,
                 'call_duration'     => $callDuration,
-                'uri'               => isset($this['Uri'])?$this['Uri']:null,
+                'call_recording_url'=> isset($this['Uri'])?$this['Uri']:null,
+                'start_at'          => isset($this['DateCreated'])?$this['DateCreated']:null,
                 'created_at'        => isset($this['DateCreated'])?$this['DateCreated']:null,
                 'updated_at'        => isset($this['DateUpdated'])?$this['DateUpdated']:null,
-                'to_number'         => isset($this['To'])?$this['To']:null,
-                'from_number'       => isset($this['From'])?$this['From']:null,
+                'call_to'           => isset($this['To'])?$this['To']:null,
+                'call_from'         => isset($this['From'])?$this['From']:null,
                 'virtual_number'    => isset($this['PhoneNumberSid'])?$this['PhoneNumberSid']:null,
             ];
         } catch(Exception $e) {

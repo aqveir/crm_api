@@ -106,7 +106,7 @@ class ContactTelephonyService extends BaseService
             $contact = $this->customerrepository->getFullDataByIdentifier($user['org_id'], $contactHash);
 
             //Contact Details Type
-            $typeKey = config('crmomni.settings.static.key.lookup_value.phone');
+            $typeKey = config('aqveir.settings.static.key.lookup_value.phone');
             $detailsType = $this->lookuprepository->getLookUpByKey($user['org_id'], $typeKey);
 
             //Check if the Contact exists

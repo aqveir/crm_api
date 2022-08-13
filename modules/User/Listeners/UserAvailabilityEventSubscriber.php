@@ -3,10 +3,11 @@
 namespace Modules\User\Listeners;
 
 use Modules\User\Services\UserAvailabilityService;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 use Exception;
 
-class UserAvailabilityEventSubscriber
+class UserAvailabilityEventSubscriber implements ShouldQueue
 {
     /**
      * Service

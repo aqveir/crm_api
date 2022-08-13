@@ -13,7 +13,7 @@ trait MapCountryDataRelationship
 	public function country()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.country'),
+			config('aqveir-class.class_model.country'),
 			'id', 'country_id'
 		)->where('is_active', true);
     } //Function ends
@@ -25,7 +25,7 @@ trait MapCountryDataRelationship
 	public function currency()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.currency'),
+			config('aqveir-class.class_model.currency'),
 			'id', 'currency_id'
 		)->where('is_active', true);
 	} //Function ends
@@ -37,7 +37,7 @@ trait MapCountryDataRelationship
 	public function timezone()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.timezone'),
+			config('aqveir-class.class_model.timezone'),
 			'id', 'timezone_id'
 		)->where('is_active', true);
 	} //Function ends

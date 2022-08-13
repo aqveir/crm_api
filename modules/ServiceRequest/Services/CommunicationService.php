@@ -191,6 +191,91 @@ class CommunicationService extends BaseService
      *
      * @return mixed
      */
+    public function createCall(
+        string $orgHash, string $srHash, Collection $payload, 
+        string $directionKey='communication_direction_outgoing', 
+        string $ipAddress=null)
+    {
+        $objReturnValue=null; $data=[];
+        try {
+            //Authenticated User
+            $user = $this->getCurrentUser('backend');
+
+            //Get organization data
+            $organization = $this->getOrganizationByHash($orgHash);
+            if (empty($organization)) { throw new BadRequestHttpException(); } //End if
+
+            //Get ServiceRequest details by identifier
+            $serviceRequest = $this->servicerequestRepository->getFullDataByIdentifier($organization['id'], $srHash);
+            if (empty($serviceRequest)) { throw new BadRequestHttpException(); } //End if
+
+            //Build data
+            $data = $payload->toArray();
+            $data = array_merge($data, [
+                'org_id' => $organization['id'],
+                'servicerequest_id' => $serviceRequest['id'] ,
+                'start_at' => Carbon::now()
+            ]);
+
+            //Lookup Communication Type data - Mail
+            $lookupCommType = $this->lookupRepository->getLookUpByKey($organization['id'], 'comm_type_phone');
+            if (empty($lookupCommType)) { throw new BadRequestHttpException(); } //End if
+            $data['activity_subtype_id'] = $lookupCommType['id'];
+
+            //Lookup Communication Direction data - Outward
+            $lookupCommDirection = $this->lookupRepository->getLookUpByKey($organization['id'], 'communication_direction_outgoing');
+            if (empty($lookupCommDirection)) { throw new BadRequestHttpException(); } //End if
+            $data['direction_id'] = $lookupCommDirection['id'];
+
+            //Lookup Communication From Person data
+            $lookupFromPersonType = $this->lookupRepository->getLookUpByKey($organization['id'], 'communication_person_type_user');
+            if (empty($lookupFromPersonType)) { throw new BadRequestHttpException(); } //End if
+            $data['from_person_type_id'] = $lookupFromPersonType['id'];
+            $data['from_person_identifier_id'] = $user['id'];
+            $data['call_from'] = $user['full_name'];
+
+            //Lookup Communication To Person data
+            $lookupToPersonType = $this->lookupRepository->getLookUpByKey($organization['id'], 'communication_person_type_contact');
+            if (empty($lookupToPersonType)) { throw new BadRequestHttpException(); } //End if
+            $data['to_person_type_id'] = $lookupToPersonType['id'];
+            $data['to_person_identifier_id'] = $serviceRequest->contact['id'];
+            $data['call_to'] = $serviceRequest->contact['full_name'];
+
+            //Create Communication - Mail
+            $comm = $this->communicationRepository->create($data, $user['id'], $ipAddress);
+            //$comm->makeVisible(['email_subject', 'email_body']);
+                
+            //Raise event: Voice Call Communication Created
+            //event(new MailCommunicationCreated($comm));                
+
+            //Assign to the return value
+            $objReturnValue = $comm;
+
+        } catch(AccessDeniedHttpException $e) {
+            log::error('CommunicationService:sendMail:AccessDeniedHttpException:' . $e->getMessage());
+            throw new AccessDeniedHttpException($e->getMessage());
+        } catch(BadRequestHttpException $e) {
+            log::error('CommunicationService:sendMail:BadRequestHttpException:' . $e->getMessage());
+            throw new BadRequestHttpException($e->getMessage());
+        } catch(Exception $e) {
+            log::error('CommunicationService:sendMail:Exception:' . $e->getMessage());
+            throw new HttpException(500);
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends
+
+
+    /**
+     * Send Mail to Contact
+     * 
+     * @param \string $orgHash
+     * @param \string $srHash
+     * @param \Illuminate\Support\Collection $payload
+     * @param \bool $isAutoCreated (optional)
+     *
+     * @return mixed
+     */
     public function sendMail(string $orgHash, string $srHash, Collection $payload, string $ipAddress=null)
     {
         $objReturnValue=null; $data=[];

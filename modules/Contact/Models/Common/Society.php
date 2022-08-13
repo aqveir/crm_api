@@ -81,7 +81,7 @@ class Society extends Model {
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->table = config('crmomni-migration.table_name.contact.society_address');
+        $this->table = config('aqveir-migration.table_name.contact.society_address');
     }
 
 } //Class ends

@@ -14,7 +14,7 @@ class ContactExistsRequest extends FormRequest
      */
     public function rules()
     {
-        return Config::get('crmomni-validation.request_handler.frontend.contact.exists.validation_rules');
+        return Config::get('aqveir-validation.request_handler.frontend.contact.exists.validation_rules');
     }
 
     

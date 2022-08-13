@@ -14,7 +14,7 @@ class ForgotPasswordRequest extends FormRequest
      */
     public function rules()
     {
-        return Config::get('crmomni-validation.request_handler.auth.forgot_password.validation_rules');
+        return Config::get('aqveir-validation.request_handler.auth.forgot_password.validation_rules');
     }
 
     

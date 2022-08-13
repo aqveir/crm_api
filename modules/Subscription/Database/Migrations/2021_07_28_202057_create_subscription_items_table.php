@@ -13,7 +13,7 @@ class CreateSubscriptionItemsTable extends Migration
      */
     public function up()
     {
-        Schema::create(config('crmomni-migration.table_name.subscription.items'), function (Blueprint $table) {
+        Schema::create(config('aqveir-migration.table_name.subscription.items'), function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('subscription_id');
 
@@ -35,6 +35,6 @@ class CreateSubscriptionItemsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists(config('crmomni-migration.table_name.subscription.items'));
+        Schema::dropIfExists(config('aqveir-migration.table_name.subscription.items'));
     }
 }

@@ -13,7 +13,7 @@ trait UserAvailabilityRelationship
 	public function status()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.lookup_value'),
+			config('aqveir-class.class_model.lookup_value'),
 			'id', 'status_id'
 		);
 	} //Function ends
@@ -24,7 +24,7 @@ trait UserAvailabilityRelationship
 	public function user()
 	{
 		return $this->belongsTo(
-			config('crmomni-class.class_model.user.main'),
+			config('aqveir-class.class_model.user.main'),
 			'user_id', 'id'
 		);
 	} //Function ends

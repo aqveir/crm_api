@@ -70,7 +70,7 @@ abstract class ApiBaseController extends CoreController
             } //End if
 
             //Get Whitelisted subdomains
-            $subdomainsWhitelisted = config('crmomni.settings.whitelisted_subdomains');
+            $subdomainsWhitelisted = config('aqveir.settings.whitelisted_subdomains');
 
             //Check administrative domain
             if (in_array($subdomain, $subdomainsWhitelisted) && (!$isForcedHostCheck)){

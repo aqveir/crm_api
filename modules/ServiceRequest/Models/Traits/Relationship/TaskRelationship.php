@@ -16,7 +16,7 @@ trait TaskRelationship
 	public function organization()
 	{
 		return $this->belongsTo(
-			config('crmomni-class.class_model.organization'),
+			config('aqveir-class.class_model.organization'),
 			'org_id', 'id'
 		);
     } //Function ends
@@ -28,7 +28,7 @@ trait TaskRelationship
 	public function servicerequest()
 	{
 		return $this->belongsTo(
-			config('crmomni-class.class_model.service_request.main'),
+			config('aqveir-class.class_model.service_request.main'),
 			'servicerequest_id', 'id'
 		);
     } //Function ends
@@ -40,7 +40,7 @@ trait TaskRelationship
 	public function owner()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.user.main'),
+			config('aqveir-class.class_model.user.main'),
 			'id', 'created_by'
 		);
     } //Function ends
@@ -64,7 +64,7 @@ trait TaskRelationship
 	public function type()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.lookup_value'),
+			config('aqveir-class.class_model.lookup_value'),
 			'id', 'type_id'
 		);
 	} //Function ends
@@ -76,7 +76,7 @@ trait TaskRelationship
 	public function subtype()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.lookup_value'),
+			config('aqveir-class.class_model.lookup_value'),
 			'id', 'subtype_id'
 		);
 	} //Function ends
@@ -88,7 +88,7 @@ trait TaskRelationship
 	public function priority()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.lookup_value'),
+			config('aqveir-class.class_model.lookup_value'),
 			'id', 'priority_id'
 		);
 	} //Function ends
@@ -100,7 +100,7 @@ trait TaskRelationship
 	public function status()
 	{
 		return $this->hasOne(
-			config('crmomni-class.class_model.lookup_value'),
+			config('aqveir-class.class_model.lookup_value'),
 			'id', 'status_id'
 		);
 	} //Function ends
