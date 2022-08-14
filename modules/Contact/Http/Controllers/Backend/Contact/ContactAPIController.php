@@ -188,7 +188,7 @@ class ContactAPIController extends ApiBaseController
         } catch (UnauthorizedHttpException $e) {
             throw new UnauthorizedHttpException($e->getMessage());
         } catch (Exception $e) {  
-            throw new HttpException(500, $e->getMessage());
+            throw $e;
         } //Try-catch ends
 
     } //Function ends

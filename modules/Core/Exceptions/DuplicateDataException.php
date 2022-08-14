@@ -17,10 +17,10 @@ class DuplicateDataException extends HttpException
      *
      * @return void
      */
-    public function __construct(Exception $previous = null, $headers = [], $code = 0)
+    public function __construct(Exception $previous = null, int $code = 0, array $headers = [])
     {
         $message = 'EXCEPTION_DUPLICATE_DATA';
-        parent::__construct(429, $message ?: 'You have a duplicate data.', $previous, $headers, $code);
+        parent::__construct(400, $message, $previous, $headers, $code);
     }
 
 } //Class ends

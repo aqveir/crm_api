@@ -343,6 +343,7 @@ class ContactService extends BaseService
     {
         $objReturnValue=null;
         $payloadDetails=[];
+        $contactDetails=[];
 
         try {
             //Get organization data
@@ -354,11 +355,36 @@ class ContactService extends BaseService
                 $createdBy = $user['id'];
             } //End if
 
+            //Check for existing contact details
+            if ($payload->has(['details'])) {
+                $contactDetails = $payload['details'];
+            } //End if
+
             //Data for validation
             $dataValidate = ($payload->only(['email', 'phone']))->toArray();
+            if (!empty($dataValidate)) {
+
+                //Create Contact details - Email
+                if(!empty($payload['email'])) {
+                    array_push($contactDetails, [
+                        'type_key' => config('aqveir.settings.static.key.lookup_value.email'),
+                        'subtype_key' => 'contact_detail_subtype_email_personal',
+                        'identifier' => $payload['email'],
+                    ]);
+                } //End if
+
+                //Create Contact details - Phone
+                if(!empty($payload['phone'])) {
+                    array_push($contactDetails, [
+                        'type_key' => config('aqveir.settings.static.key.lookup_value.phone'),
+                        'subtype_key' => 'contact_detail_subtype_phone_mobile',
+                        'identifier' => $payload['phone']
+                    ]);
+                } //End if
+            } //End if           
 
             //Duplicate check
-            $isDuplicate=$this->contactdetailRepository->validate($organization['id'], $dataValidate);
+            $isDuplicate=$this->contactdetailRepository->validate($organization['id'], $contactDetails);
             if (!$isDuplicate) {
 
                 //Generate the data payload to create user
@@ -367,7 +393,7 @@ class ContactService extends BaseService
                     $payloadContact,
                     [
                         'org_id' => $organization['id'],
-                        '2fa_secret' => null,
+                        'mfa_secret' => null,
                         'group_id' => 0,
                     ]
                 );
@@ -375,40 +401,39 @@ class ContactService extends BaseService
                 //Create Contact
                 $contact = $this->contactRepository->create($payloadContact, $createdBy, $ipAddress);
 
-                //Create Contact details - Email
-                if(!empty($payload['email'])) {
-                    //Get Email Type for the Organization
-                    $type = $this->getLookupValueByKey($organization['id'], config('aqveir.settings.static.key.lookup_value.email'));
+                //Create contact details
+                if (!empty($contactDetails) && is_array($contactDetails) && count($contactDetails)>0)
+                {
+                    //Loop the array
+                    foreach ($contactDetails as $detail) {
+                        //Get Type for the Organization
+                        $type = $this->getLookupValueByKey($organization['id'], $detail['type_key']);
 
-                    array_push($payloadDetails, [
-                        'org_id' => $organization['id'],
-                        'type_id' => (empty($type)?0:$type['id']),
-                        'contact_id' => $contact['id'],
-                        'identifier' => $payload['email'],
-                        'is_primary' => 1,
-                        'is_verified' => $isEmailValid,
-                        'created_by'=> $createdBy
-                    ]);
+                        //Get SubType for the Organization
+                        $subtype = null;
+                        if (array_key_exists('subtype_key', $detail)) {
+                            $subtype = $this->getLookupValueByKey($organization['id'], $detail['subtype_key']);
+                        } //End if
+                        
+                        //Build the contact details payload
+                        $payloadDetails = [
+                            'org_id'        => $organization['id'],
+                            'type_id'       => (empty($type)?0:$type['id']),
+                            'subtype_id'    => (empty($subtype)?0:$subtype['id']),
+                            'contact_id'    => $contact['id'],
+                            'identifier'    => $detail['identifier'],
+                            'is_primary'    => array_key_exists('is_primary', $detail)?$detail['is_primary']:false,
+                            'is_verified'   => array_key_exists('is_verified', $detail)?$detail['is_verified']:false,
+                            'created_by'    => $createdBy
+                        ];
+
+                        //Create contact details
+                        if (!empty($payloadDetails)) {
+                            $this->contactdetailRepository->create($payloadDetails);
+                        } //End if
+                    } //Loop ends         
                 } //End if
-
-                //Create Contact details - Phone
-                if(!empty($payload['phone'])) {
-                    //Get Phone Type for the Organization
-                    $type = $this->getLookupValueByKey($organization['id'], config('aqveir.settings.static.key.lookup_value.phone'));
-
-                    array_push($payloadDetails, [
-                        'org_id' => $organization['id'],
-                        'type_id' => (empty($type)?0:$type['id']),
-                        'contact_id' => $contact['id'],
-                        'identifier' => $payload['phone'],
-                        'is_primary' => 1,
-                        'is_verified' => $isPhoneValid,
-                        'created_by'=> $createdBy
-                    ]);
-
-                    //$this->contactdetailRepository->create($payloadDetails);
-                } //End if
-
+                
                 //Notify user to Activate Account
                 //$contact->notify(new ContactActivationNotification($contact));
 
@@ -422,7 +447,7 @@ class ContactService extends BaseService
         } catch(DuplicateDataException $e) {
             throw $e;
         } catch(Exception $e) {
-            throw new HttpException(500);
+            throw $e;
         } //Try-catch ends
 
         return $objReturnValue;
@@ -468,7 +493,7 @@ class ContactService extends BaseService
                     $payload,
                     [
                         'org_id' => $organization['id'],
-                        '2fa_secret' => null,
+                        'mfa_secret' => null,
                         'group_id' => 0,
                     ]
                 );
@@ -566,7 +591,7 @@ class ContactService extends BaseService
                     $payload,
                     [
                         'org_id' => $organization['id'],
-                        '2fa_secret' => null,
+                        'mfa_secret' => null,
                         'group_id' => 0,
                     ]
                 );

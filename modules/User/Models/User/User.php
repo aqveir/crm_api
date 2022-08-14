@@ -79,7 +79,7 @@ class User extends Model implements
         'username', 'password', 'remember_token', 'is_remote_access_only',
         'email', 'phone','phone_idd', 'virtual_phone_number',
         'is_active', 'is_pool', 'is_default', 'language',
-        'failed_attempts', 'max_failed_attempts', '2fa_secret',
+        'failed_attempts', 'max_failed_attempts', 'mfa_secret',
         'verification_token', 'is_verified',
         'verified_at', 'last_login_at', 'last_updated_at',
         'created_by', 'updated_by', 'deleted_by', 

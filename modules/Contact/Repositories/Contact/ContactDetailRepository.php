@@ -80,7 +80,7 @@ class ContactDetailRepository extends EloquentRepository
         } catch(ModelNotFoundException $e) {
             $objReturnValue=null;
             Log::error('ContactDetailRepository:getContactDetailsByIdentifier:ModelNotFoundException:' . $e->getMessage());
-            throw new ModelNotFoundException();
+            throw $e;
         } catch (Exception $e) {
             $objReturnValue=null;
             Log::error('ContactDetailRepository:getContactDetailsByIdentifier:Exception:' . $e->getMessage());
@@ -96,31 +96,34 @@ class ContactDetailRepository extends EloquentRepository
      *
      * @return boolean
      */
-    public function validate(int $orgId, array $arrData)
+    public function validate(int $orgId, array $arrDetails)
     {
         $objReturnValue = false;
         try {
-            if (!empty($arrData))
+            if (!empty($arrDetails) && is_array($arrDetails) && count($arrDetails)>0)
             {
-                $keys = array_keys($arrData);
+                //Loop the array
+                foreach ($arrDetails as $detail) {
+                    //Check the content in the array
+                    if (in_array($detail['type_key'], [
+                            config('aqveir.settings.static.key.lookup_value.email'), 
+                            config('aqveir.settings.static.key.lookup_value.phone')
+                        ], false)) 
+                    {
+                        try {
+                            $data = $this->getContactDetailsByIdentifier($orgId, $detail['identifier']);
 
-                $maxRecords = count($keys);
-                $recordCounter = 0;
-                while (($maxRecords > $recordCounter) && !$objReturnValue) {
-                    $key = $keys[$recordCounter];
-                    $data = $this->getContactDetailsByIdentifier($orgId, $arrData[$key], null, true, true);
-
-                    //Record exists
-                    $objReturnValue = !empty($data);
-                    
-                    $recordCounter++;
+                            //Record exists
+                            $objReturnValue = !empty($data);
+                        } catch(ModelNotFoundException $e) {
+                            $objReturnValue=false;
+                            Log::info('ContactDetailRepository:validate:ModelNotFoundException:' . $e->getMessage());
+                        } //Try-Catch ends
+                    } //End if
                 } //Loop ends         
             } //End if
-        }   catch(ModelNotFoundException $e) {
-            $objReturnValue=false;
-            Log::error('ContactDetailRepository:validate:ModelNotFoundException:' . $e->getMessage());
-        } catch(Exception $e) {
-            throw new Exception($e);
+        }   catch(Exception $e) {
+            throw $e;
         } //Try-Catch ends
 
         return $objReturnValue;

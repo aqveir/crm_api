@@ -161,9 +161,9 @@ class ContactAuthService extends BaseService
                     $token = $this->guard('frontend')->login($contact);
                 } else {
                     if ($isOtpLogin) {
-                        if (!empty($contact['2fa_secret']))
+                        if (!empty($contact['mfa_secret']))
                         {
-                            if ($contact['2fa_secret']==$credentials['password']) {
+                            if ($contact['mfa_secret']==$credentials['password']) {
 
                             } else {
                                 throw new AccessDeniedHttpException();
