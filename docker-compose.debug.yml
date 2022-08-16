@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   aqveir-api:
-    image: aqveir-api
+    image: ellaisys/aqveir-api
     build:
       context: .
       dockerfile: ./Dockerfile

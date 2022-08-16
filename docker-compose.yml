@@ -1,10 +1,19 @@
-version: '3.4'
+version: '3.9'
 
 services:
   aqveir-api:
-    image: aqveir-api
+    stdin_open: true
+    tty: true
+    privileged: true
+    container_name: aqveir-api
+    image: ellaisys/aqveir-api
     build:
       context: .
       dockerfile: ./Dockerfile
-      ports:
-        - "8000"
+    ports:
+      - "80:80"
+
+networks:
+  default:
+    name: aqveir-api-network
+    external: true
