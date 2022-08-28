@@ -50,7 +50,7 @@ class User extends Model implements
     protected $fillable = [
         'org_id', 'username', 'password',
         'first_name', 'middle_name', 'last_name',
-        'email', 'phone', 'phone_idd', 'language',
+        'email', 'phone', 'language',
         'virtual_phone_number', 'timezone_id',
         'is_remote_access_only', 'failed_attempts',
         'verification_token', 'is_verified',
@@ -77,7 +77,7 @@ class User extends Model implements
         'id', 'org_id', 'timezone_id', 'avatar',
         'first_name', 'middle_name', 'last_name', 'name_initials',
         'username', 'password', 'remember_token', 'is_remote_access_only',
-        'email', 'phone','phone_idd', 'virtual_phone_number',
+        'email', 'phone', 'virtual_phone_number',
         'is_active', 'is_pool', 'is_default', 'language',
         'failed_attempts', 'max_failed_attempts', 'mfa_secret',
         'verification_token', 'is_verified',

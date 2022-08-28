@@ -203,7 +203,7 @@ class UserService extends BaseService
             //Build user data
             $data = $payload->only([
                 'username', 'password', 
-                'email', 'phone', 'phone_idd',
+                'email', 'phone',
                 'first_name', 'last_name', 
                 'is_remote_access_only', 'language'
             ])->toArray();
@@ -275,7 +275,7 @@ class UserService extends BaseService
             //Build user data
             $data = $payload->only([
                 'first_name', 'last_name', 
-                'email', 'phone', 'phone_idd',
+                'email', 'phone',
                 'is_remote_access_only', 'language', 'is_active'
             ])->toArray();
 

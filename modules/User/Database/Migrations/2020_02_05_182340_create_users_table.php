@@ -31,7 +31,6 @@ class CreateUsersTable extends Migration
             $table->integer('timezone_id')->nullable();
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
-            $table->string('phone_idd')->nullable();
             
             $table->rememberToken();
             $table->dateTime('last_login_at')->nullable();

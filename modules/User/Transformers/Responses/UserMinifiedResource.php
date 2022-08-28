@@ -43,7 +43,7 @@ class UserMinifiedResource extends ResourceCollection
 
                 $response = $data->only([
                     'hash', 'name_initials', 'full_name', 
-                    'email', 'phone', 'phone_idd', 'country',
+                    'email', 'phone', 'country',
                     'is_active', 'last_login_at', 'last_updated_at'
                 ]);
                 $response['is_verified'] = empty($this['verified_at'])?false:true;

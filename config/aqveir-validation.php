@@ -200,8 +200,7 @@ return [
                         'first_name' => 'required|max:40',
                         'last_name' => 'nullable|max:40',
                         'email' => 'required|email|max:40|unique:users,email',
-                        'phone' => ['required', 'string', 'max:20', new PhoneValidationRule],
-                        'phone_idd' => 'nullable|string|max:5',
+                        'phone' => ['required', 'string', 'max:20', new PhoneValidationRule]
                     ]
                 ],
 
@@ -219,8 +218,7 @@ return [
                         'last_name' => 'nullable|max:40',
                         'email' => 'required|email|max:40|unique:users,email',
                         'phone' => ['string', 'max:20', new PhoneValidationRule],
-                        'phone_idd' => 'nullable|string|max:5',
-                        'language' => 'required|string',
+                        'language' => 'nullable|string',
                         'roles' => 'required|array',
                         'roles.*.key' => 'required|string|max:100',
                         'roles.*.account_id' => 'nullable|integer',
@@ -238,7 +236,6 @@ return [
                         'last_name' => 'string|max:40',
                         'email' => 'email|max:40',
                         'phone' => ['string', 'max:20', new PhoneValidationRule],
-                        'phone_idd' => 'nullable|string|max:5',
                         'language' => 'required|string',
                         'roles' => 'required|array',
                         'roles.*.key' => 'required|string|max:100',

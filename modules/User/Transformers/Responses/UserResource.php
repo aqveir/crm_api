@@ -34,7 +34,7 @@ class UserResource extends JsonResource
             $response = $this->only([
                 'hash', 'username',
                 'first_name', 'last_name', 'full_name', 'name_initials',
-                'email', 'phone', 'phone_idd', 'virtual_phone_number', 'language',
+                'email', 'phone', 'virtual_phone_number', 'language',
                 'last_login_at', 'last_updated_at',
                 'organization', 'country', 'timezone',
                 'roles', 'privileges',
