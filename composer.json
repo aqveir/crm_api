@@ -10,7 +10,7 @@
     "require": {
         "php": "^7.3|^8.0",
         "aws/aws-sdk-php": "^3.149",
-        "darkaonline/l5-swagger": "^8.0",
+        "darkaonline/l5-swagger": "8.1.0",
         "ellaisys/telephony-exotel": "^1.0@dev",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^2.0",
