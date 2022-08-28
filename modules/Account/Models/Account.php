@@ -34,7 +34,7 @@ class Account extends Model {
         'org_id', 'name', 'description', 'type_id', 'owner_id',
         'address', 'locality', 'city', 'state_id', 'country_id', 'zipcode',
         'google_place_id', 'longitude', 'latitude', 'timezone_id',
-        'website', 'email', 'phone_idd', 'phone',
+        'website', 'email', 'phone',
         'is_default'
     ];
 
@@ -58,7 +58,7 @@ class Account extends Model {
         'org_id', 'description', 'type_id', 'owner_id',
         'address', 'locality', 'city', 'state_id', 'country_id', 'zipcode',
         'google_place_id', 'longitude', 'latitude', 'timezone_id',
-        'website', 'email', 'phone_idd', 'phone', 'is_default',
+        'website', 'email', 'phone', 'is_default',
         'created_by', 'updated_by', 'deleted_by',
         'created_at', 'updated_at', 'deleted_at', 'last_updated_at'
     ]; 

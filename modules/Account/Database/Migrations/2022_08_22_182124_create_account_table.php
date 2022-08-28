@@ -1,5 +1,6 @@
 <?php
 
+
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -39,7 +40,6 @@ class CreateAccountTable extends Migration
             
             $table->string('website')->nullable();
             $table->string('email')->nullable();
-            $table->string('phone_idd')->nullable();
             $table->string('phone')->nullable();
 
             $table->boolean('is_default')->default(false);  //Default user created for an organization
@@ -54,7 +54,7 @@ class CreateAccountTable extends Migration
         });
     }
 
-    
+
     /**
      * Reverse the migrations.
      *
@@ -64,4 +64,5 @@ class CreateAccountTable extends Migration
     {
         Schema::dropIfExists(config('aqveir-migration.table_name.account.main'));
     }
-}
+
+} //Function ends

@@ -28,7 +28,7 @@ class AccountResource extends JsonResource
                 'address', 'locality', 'city', 'zipcode',
                 'state', 'country', 'timezone', 
                 'google_place_id', 'longitude', 'latitude',
-                'website', 'email', 'phone_idd', 'phone',
+                'website', 'email', 'phone',
                 'is_default', 'last_updated_at'
             ]);
 

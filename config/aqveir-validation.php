@@ -647,8 +647,7 @@ return [
                         'latitude' => 'nullable|numeric',
 
                         'website' => 'nullable|string', 
-                        'email' => 'nullable|email', 
-                        'phone_idd' => 'nullable|string', 
+                        'email' => 'nullable|email',  
                         'phone' => ['nullable', 'string', 'max:20', new PhoneValidationRule],
 
                         'is_default' => 'nullable|boolean'
@@ -675,8 +674,7 @@ return [
                         'latitude' => 'nullable|numeric',
 
                         'website' => 'nullable|string', 
-                        'email' => 'nullable|email', 
-                        'phone_idd' => 'nullable|string', 
+                        'email' => 'nullable|email',
                         'phone' => ['nullable', 'string', 'max:20', new PhoneValidationRule],
 
                         'is_default' => 'nullable|boolean'

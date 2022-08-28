@@ -33,7 +33,6 @@ class AccountTestDataSeeder extends Seeder
                 for ($i=0; $i < $maxRecord; $i++) { 
                     $account = factory(\Modules\Account\Models\Account::class)->create([
                         'org_id' => $organization['id'],
-                        'type_id' => $faker->numberBetween(28, 30),
                         'is_default' => ($i==0)
                     ]);
                 } //Loop ends
