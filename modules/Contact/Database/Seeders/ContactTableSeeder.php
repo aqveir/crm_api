@@ -21,6 +21,7 @@ class ContactTableSeeder extends Seeder
 
             //Faker instance
             $faker = \Faker\Factory::create();
+            $faker->addProvider(new \Faker\Provider\en_US\PhoneNumber($faker));
 
             //Create contact & other objects
             factory(\Modules\Contact\Models\Contact\Contact::class, 100)->create()
@@ -44,8 +45,7 @@ class ContactTableSeeder extends Seeder
                             case 2: //Phone
                                 $typeId=43;
                                 $subtypeId=$faker->numberBetween(48, 49);
-                                $countryId='91';
-                                $identifier=$faker->unique()->numberBetween(9800000000, 9900000000);
+                                $identifier=$faker->e164PhoneNumber();
                                 break;
                     
                             case 3: //Social Handle
@@ -66,7 +66,6 @@ class ContactTableSeeder extends Seeder
                                 'contact_id' => $contact['id'],
                                 'type_id' => $typeId,
                                 'subtype_id' => $subtypeId,
-                                'phone_idd' => $countryId,
                                 'identifier' => $identifier,
                             ])
                         );
@@ -167,26 +166,22 @@ class ContactTableSeeder extends Seeder
             case 1: //Email
                 $typeId=42;
                 $subtypeId=$faker->numberBetween(46, 47);
-                $countryId=null;
                 $identifier=$faker->unique()->safeEmail();
                 break;
 
             case 2: //Phone
                 $typeId=43;
                 $subtypeId=$faker->numberBetween(48, 49);
-                $countryId='91';
-                $identifier=$faker->unique()->numberBetween(9800000000, 9900000000);
+                $identifier=$faker->e164PhoneNumber();
                 break;
 
             case 3: //Social Handle
                 $typeId=44;
                 $subtypeId=$faker->numberBetween(50, 54);
-                $countryId=null;
                 $identifier=$faker->url();
                 break;
             
             default:
-                $countryId=null;
                 break;
         } //Switch ends
 
@@ -195,7 +190,6 @@ class ContactTableSeeder extends Seeder
             'contact_id' => $contact['id'],
             'type_id' => $typeId,
             'subtype_id' => $subtypeId,
-            'phone_idd' => $countryId,
             'identifier' => $identifier,
             'proxy' => $faker->numberBetween(100000, 999999),
             'is_primary' => $faker->numberBetween(0, 1),

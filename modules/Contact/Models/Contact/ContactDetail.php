@@ -30,8 +30,7 @@ class ContactDetail extends Model {
      * @var array
      */
     protected $fillable = [
-        'org_id', 'contact_id', 'type_id', 'subtype_id', 
-        'phone_idd', 'identifier', 
+        'org_id', 'contact_id', 'type_id', 'subtype_id', 'identifier', 
         'is_primary', 'is_verified',
     ];
 
@@ -43,7 +42,7 @@ class ContactDetail extends Model {
      */
     protected $hidden = [
         'org_id', 'contact_id', 'type_id', 'subtype_id',
-        'phone_idd', 'pivot', 'is_active',
+        'pivot', 'is_active',
         'created_by', 'updated_by', 'deleted_by',
         'created_at', 'updated_at', 'deleted_at'
     ]; 
@@ -71,7 +70,7 @@ class ContactDetail extends Model {
      *
      * @var array
      */
-    protected $with = ['type', 'subtype', 'country'];
+    protected $with = ['type', 'subtype'];
     
     
     /**

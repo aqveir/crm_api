@@ -281,7 +281,6 @@ class ContactFileService extends BaseService
                             $contact['details']['type_key'] = 'contact_detail_type_phone';
                             $contact['details']['subtype_key'] = 'contact_detail_subtype_email_personal';
                             $contact['details']['identifier'] = $row[$key];
-                            $contact['details']['phone_idd'] = $row['phone_idd'];
                             $contact['details']['is_primary'] = true;
                         } //End if
                     } //Loop ends

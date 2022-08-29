@@ -21,7 +21,6 @@ class CreateContactDetailsTable extends Migration
             $table->unsignedBigInteger('type_id')->nullable();
             $table->unsignedBigInteger('subtype_id')->nullable();
 
-            $table->string('phone_idd')->nullable();
             $table->string('identifier')->nullable();
             $table->string('proxy')->nullable();
 

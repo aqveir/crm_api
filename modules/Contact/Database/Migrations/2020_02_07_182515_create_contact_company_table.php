@@ -35,7 +35,6 @@ class CreateContactCompanyTable extends Migration
             
             $table->string('website')->nullable();
             $table->string('email')->nullable();
-            $table->string('phone_idd')->nullable();
             $table->string('phone')->nullable();
 
             //Audit Log Fields

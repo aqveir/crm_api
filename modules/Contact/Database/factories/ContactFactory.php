@@ -37,7 +37,6 @@ $factory->define(ContactDetail::class, function (Faker $faker) {
         'contact_id' => 0,
         'type_id' => 0,
         'subtype_id' => 0,
-        'phone_idd' => '91',
         'identifier' => 0,
         'proxy' => $faker->numberBetween(100000, 999999),
         'is_primary' => $faker->numberBetween(0, 1),

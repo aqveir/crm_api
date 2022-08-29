@@ -23,14 +23,6 @@ trait ContactDetailRelationship
 		);
 	}
 
-	public function country()
-	{
-		return $this->hasOne(
-			config('aqveir-class.class_model.country'), 
-			'id', 'phone_idd'
-		);
-	}
-
 	public function contact()
 	{
 		return $this->belongsTo(

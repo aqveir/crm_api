@@ -108,13 +108,12 @@ class ContactAuthController extends ApiBaseController
      *          @OA\MediaType(
      *              mediaType="application/json",
      *              @OA\Schema(
-     *                  required={"email", "phone", "phone_idd", "password"},
+     *                  required={"email", "phone", "password"},
      *                  @OA\Property(property="first_name", description="Enter first name.", type="string"),
      *                  @OA\Property(property="last_name", description="Enter last name.", type="string"),
      *                  @OA\Property(property="email", description="Enter email address.", type="string"),
-     *                  @OA\Property(property="phone", description="Enter phone number.", type="string"),
-     *                  @OA\Property(property="password", description="Enter password.", type="string"),
-     *                  @OA\Property(property="phone_idd", description="Enter country code.", type="string"),
+     *                  @OA\Property(property="phone", description="Enter phone number (E164 format).", type="string"),
+     *                  @OA\Property(property="password", description="Enter password.", type="string")
      *              ),
      *          ),
      *      ),
@@ -179,8 +178,7 @@ class ContactAuthController extends ApiBaseController
      *              @OA\Schema(
      *                  required={"username", "password"},
      *                  @OA\Property(property="username", description="Enter email address.", type="string"),
-     *                  @OA\Property(property="password", description="Enter password.", type="string"),
-     *                  @OA\Property(property="phone_idd", description="Enter country code.", type="string"),
+     *                  @OA\Property(property="password", description="Enter password.", type="string")
      *              ),
      *          ),
      *      ),
