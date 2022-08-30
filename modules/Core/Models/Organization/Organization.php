@@ -41,7 +41,7 @@ class Organization extends Model
         'logo', 'name', 'subdomain', 'industry_id', 'timezone_id',
         'address', 'locality', 'city', 'state_id', 'country_id', 'zipcode',
         'google_place_id', 'longitude', 'latitude',
-        'website', 'contact_person_name','email', 'phone', 'phone_idd', 'search_tags'
+        'website', 'contact_person_name','email', 'phone', 'search_tags'
     ];
 
 
@@ -64,7 +64,7 @@ class Organization extends Model
         'id', 'subdomain', 'is_active', 'industry_id', 'timezone_id', 'custom_domain',
         'address', 'locality', 'city', 'state_id', 'country_id', 'zipcode',
         'google_place_id', 'longitude', 'latitude', 'logo',
-        'website', 'contact_person_name', 'email', 'phone', 'phone_idd', 'search_tags',
+        'website', 'contact_person_name', 'email', 'phone', 'search_tags',
         'created_by', 'updated_by', 'deleted_by',
         'created_at', 'updated_at', 'deleted_at', 'last_updated_at',
 
@@ -207,7 +207,6 @@ class Organization extends Model
     public function stripePhone()
     {
         $phone = '';
-        if (!empty($this->phone_idd)) { $phone .= '+'.$this->phone_idd; }
         $phone .= $this->phone;
 
         return $phone;

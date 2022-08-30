@@ -29,7 +29,7 @@ trait UserRelationship
 	{
 		return $this->hasOne(
 			config('aqveir-class.class_model.country'), 
-			'phone_idd_code', 'phone_idd'
+			//'phone_idd_code', 'phone_idd'
 		);
 	} //Function ends
 

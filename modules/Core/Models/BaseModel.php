@@ -98,4 +98,25 @@ abstract class BaseModel extends Model
         return $query->where('is_active', 1);
     } //Function ends
 
+
+    /**
+     * Get the computed date of last modification of event
+     *
+     * @return datetime
+     */
+    public function getPhonesAtAttribute() {
+        $objReturnValue=null;
+        try {
+            $phone=$this->attributes['phone'];
+            if (!empty($phone)) {
+                
+            } //End if
+
+            $objReturnValue = null;
+        } catch(Exception $e) {
+
+        } //Try-catch ends
+
+        return $objReturnValue;
+    } //Function ends
 } //Class ends

@@ -805,8 +805,7 @@ return [
                         'first_name' => 'string|max:64',
                         'last_name' => 'string|max:64',
                         'email' => 'required|email|max:64',
-                        'phone' => ['required', 'string', 'max:20', new PhoneValidationRule],
-                        'phone_idd' => 'nullable|min:1|max:5'
+                        'phone' => ['required', 'string', 'max:20', new PhoneValidationRule]
                     ]
                 ],
 

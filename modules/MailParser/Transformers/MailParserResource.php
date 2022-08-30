@@ -180,8 +180,7 @@ class MailParserResource extends JsonResource
                 $objReturnValue = [
                     'type_key'          => config('aqveir.settings.static.key.lookup_value.phone'),
                     'subtype_key'       => $phoneSubTypeKey,
-                    'phone_idd'         => (string)($phoneNumberObject->getCountryCode()),
-                    'identifier'        => $phoneNumberObject->getNationalNumber(),
+                    'identifier'        => $phoneNumberObject->format($phoneNumberObject, \libphonenumber\PhoneNumberFormat::E164),
                     'is_primary'        => $isPrimary
                 ];
             } //End if	    

@@ -44,7 +44,6 @@ class CreateOrganizationsTable extends Migration
             $table->string('contact_person_name')->nullable();
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
-            $table->string('phone_idd')->nullable();
 
             $table->boolean('is_active')->default(true);
 

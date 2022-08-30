@@ -26,7 +26,7 @@ class OrganizationResource extends JsonResource
             'hash', 'name', 'subdomain', 'custom_domain', 'website',
             'address', 'locality', 'city', 'zipcode',
             'google_place_id', 'longitude', 'latitude',
-            'contact_person_name', 'email', 'phone', 'phone_idd',
+            'contact_person_name', 'email', 'phone',
             'search_tags', 'last_updated_at', 'is_active', 
             'users_count',
             'industry', 'country', 'timezone', 'configurations'

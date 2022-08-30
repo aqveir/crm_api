@@ -167,7 +167,7 @@ class OrganizationService extends BaseService
             //Build Data
             $data = $payload->only([
                 'name', 'subdomain', 'website',
-                'contact_person_name', 'email', 'phone', 'phone_idd'
+                'contact_person_name', 'email', 'phone'
             ])->toArray();
             $data['industry_id'] = $industry['id'];
 

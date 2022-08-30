@@ -16,10 +16,11 @@ class CreateSubscriptionTable extends Migration
         Schema::create(config('aqveir-migration.table_name.subscription.main'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
-            $table->unsignedBigInteger('org_id');
-            $table->unsignedBigInteger('product_id');
+            //$table->unsignedBigInteger('product_id');
 
+            $table->string('key', 255);
             $table->string('display_value', 255);
+            $table->text('description')->nullable();
             $table->text('data_json')->nullable();
             $table->boolean('is_active')->default(true);
 
