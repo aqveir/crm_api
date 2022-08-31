@@ -13,6 +13,7 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
+        //Default User
         $user = factory(\Modules\User\Models\User\User::class)->create([
             'org_id' => 1,
             'username' => 'admin@ellaisys.com',
@@ -34,6 +35,22 @@ class UserTableSeeder extends Seeder
 
         //Environemnt check
         if (\App::environment() !== 'production') {
+
+            //Default Remote user
+            $remoteUser = factory(\Modules\User\Models\User\User::class)->create([
+                'org_id' => 1,
+                'username' => 'ellaisys_remote_user',
+                'password' => 'ellaisys_remote_password',
+                'first_name' => 'EllaiSys',
+                'last_name' => 'Remote User',
+                'is_verified' => true,
+                'is_remote_access_only' => true
+            ]);
+            $data = \Modules\User\Models\User\UserRole::create([
+                'user_id' => $remoteUser['id'],
+                'role_id' => 1,
+                'description' => 'System Generated'
+            ]);
 
             //Faker instance
             $faker = \Faker\Factory::create();

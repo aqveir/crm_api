@@ -340,13 +340,34 @@ class PrivilegesTableSeeder extends Seeder
                 'key' => 'allow_sms_outgoing',
                 'display_value' => 'Send SMS',
             ],
+            [ //allow_sms_incoming
+                'key' => 'allow_sms_incoming',
+                'display_value' => 'Incoming SMS',
+            ],
             [ //allow_msg_outgoing
                 'key' => 'allow_msg_outgoing',
                 'display_value' => 'Send Messages',
             ],
+            [ //allow_msg_incoming
+                'key' => 'allow_msg_incoming',
+                'display_value' => 'Incoming Messages',
+            ],
             [ //allow_email_outgoing
                 'key' => 'allow_email_outgoing',
                 'display_value' => 'Send E-Mail',
+            ],
+            [ //allow_email_incoming
+                'key' => 'allow_email_incoming',
+                'display_value' => 'Incoming E-Mail',
+            ],
+
+
+            /**
+             * MAIL PARSING PRIVILEGES
+             */
+            [ //allow_email_incoming_parsing
+                'key' => 'allow_email_incoming_parsing',
+                'display_value' => 'Incoming E-Mail Parsing',
             ],
         ];
 

@@ -125,7 +125,7 @@ class UserAuthService extends BaseService
                 $user = $this->userRepository->getByColumn($credentials['username'], 'username');
 
                 //Update user table
-                if($user) {
+                if($user && $user['is_remote_access_only']==0) {
                     $data = [
                         'failed_attempts' => $user['failed_attempts']+1,
                         'is_active' => ($user['max_failed_attempts']>0)?(($user['max_failed_attempts']>($user['failed_attempts']+1))):$user['is_active']

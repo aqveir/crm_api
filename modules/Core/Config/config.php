@@ -165,6 +165,23 @@ return [
                         'allow_email_outgoing'
                     ]
                 ],
+                [ //Remote User
+                    'key' => 'default_remote_user',
+                    'display_value' => 'Remote User', 
+                    'description' => 'Default remote user role created by the system.',
+                    'is_secure' => true,
+                    'privileges' => [
+                        //Manage tele communication
+                        'allow_call_incoming',
+                        'allow_sms_incoming',
+                        'allow_msg_incoming',
+                        'allow_email_incoming',
+
+                        //Manage email parsing
+                        'allow_email_incoming_parsing'
+
+                    ]
+                ]
             ],
         ],
     ]

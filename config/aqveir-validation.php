@@ -911,6 +911,8 @@ return [
             'default' => [
                 'validation_rules' => [
                     'key' => 'required|string|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
+                    'remote' => 'required|string|exists:' . config('aqveir-migration.table_name.user.main') . ',username|max:45',
+                    'secret' => 'required|string|max:64',
                 ]
             ],
 
@@ -918,6 +920,8 @@ return [
             'zapier' => [
                 'validation_rules' => [
                     'key' => 'required|string|exists:' . config('aqveir-migration.table_name.organizations') . ',hash|max:45',
+                    'remote' => 'required|string|exists:' . config('aqveir-migration.table_name.user.main') . ',username|max:45',
+                    'secret' => 'required|string|max:64',
                 ]
             ],
         ],

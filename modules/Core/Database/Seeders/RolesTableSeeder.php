@@ -48,7 +48,8 @@ class RolesTableSeeder extends Seeder
             ],
             array_merge(['org_id' => 1], config('core.settings.new_organization.default_roles')[0]),
             array_merge(['org_id' => 1], config('core.settings.new_organization.default_roles')[1]),
-            array_merge(['org_id' => 1], config('core.settings.new_organization.default_roles')[2])
+            array_merge(['org_id' => 1], config('core.settings.new_organization.default_roles')[2]),
+            array_merge(['org_id' => 1], config('core.settings.new_organization.default_roles')[3])
         ];
 
         foreach ($roles as $role) {

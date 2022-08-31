@@ -16,13 +16,13 @@ $api = app(Router::class);
 
 $api->version('v1', [
         'prefix' => 'api',
-        'middleware' => ['api'],
+        'middleware' => ['remote_endpoint_auth'],
         'namespace' => 'Modules\MailParser\Http\Controllers',
         'domain' => config('aqveir.settings.domain')
     ], function (Router $api) {
 
     // Unauthenticated Endpoints for Mail Parser
-    $api->group(['prefix' => 'v1', 'middleware' => ['guest']], function(Router $api) {
+    $api->group(['prefix' => 'v1'], function(Router $api) {
 
         // Exotel Endpoints
         $api->group(['prefix' => 'mailparser'], function(Router $api) {
