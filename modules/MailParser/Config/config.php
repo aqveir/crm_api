@@ -9,24 +9,28 @@ return [
                 //First Name
                 'first_name' => [
                     'first_name', 'name_first', 
-                    'firstname', 'firstName'
+                    'firstname', 'firstName',
+                    'FirstName', 'First_Name'
                 ],
 
                 //Last Name
                 'last_name' => [
                     'last_name', 'name_last',
-                    'lastname', 'lastName'
+                    'lastname', 'lastName',
+                    'LastName', 'Last_Name',
+                    'surname', 'Surname'
                 ],
 
                 //Email
                 'email' => [
-                    'email', 'mail', 'email_address',
-                    'e-mail'
+                    'email', 'mail', 'email_address', 'e-mail',
+                    'Email', 'EMail', 'E-Mail', 'E-mail'
                 ],
 
                 //Phone
                 'phone' => [
-                    'phone', 'phone_number'
+                    'phone', 'phone_number',
+                    'Phone'
                 ],
             ],
         ]

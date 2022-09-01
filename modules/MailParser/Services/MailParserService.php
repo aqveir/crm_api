@@ -86,7 +86,7 @@ class MailParserService extends BaseService
      *
      * @return mixed
      */
-    public function processMailData(string $orgHash, string $provider, Collection $payload, string $ipAddress=null)
+    public function processMailData(string $orgHash, string $provider, Collection $request, Collection $payload, string $ipAddress=null)
     {
         $objReturnValue=null; $response=null;
         try {
@@ -102,6 +102,9 @@ class MailParserService extends BaseService
 
             //Convert payload to Array
             $data = $payload->toArray();
+            $data = array_merge($data, [
+                'created_by' => $request['remote']
+            ]);
 
             switch ($provider) {
                 case 'zapier': //Zapier
@@ -113,17 +116,17 @@ class MailParserService extends BaseService
             } //End switch
                 
             //Raise event
-            event(new MailMergeReceivedEvent($organization, $payload, $ipAddress));
+            event(new MailMergeReceivedEvent($organization, $request, $payload, $ipAddress));
 
             //Assign to the return value
-            $objReturnValue = $payload;
+            $objReturnValue = $data;
 
         } catch(MailParseNoProviderException $e) {
             log::error('MailParserService:processMailData:MailParseNoProviderException:' . $e->getMessage());
-            throw new BadRequestHttpException($e->getMessage());
+            throw $e;
         } catch(Exception $e) {
             log::error('MailParserService:processMailData:Exception:' . $e->getMessage());
-            throw new HttpException(500, $e->getMessage());
+            throw $e;
         }  finally {
 			//Release lock
 			flock($fp, LOCK_UN);

@@ -19,6 +19,12 @@ class MailMergeReceivedEvent
 
 
     /**
+     * Request Data as Collection variable
+     */
+    public $request;
+
+
+    /**
      * Payload Data as Collection variable
      */
     public $payload;
@@ -35,16 +41,18 @@ class MailMergeReceivedEvent
      *
      * @return void
      */
-    public function __construct(Organization $organization, Collection $payload, string $ipAddress=null)
+    public function __construct(Organization $organization, Collection $request, Collection $payload, string $ipAddress=null)
     {
         $this->organization = $organization;
+        $this->request = $request;
         $this->payload = $payload;
         $this->ipAddress = $ipAddress;
     }
 
+    
     /**
      * Get the channels the event should be broadcast on.
-     *
+     *, 
      * @return array
      */
     public function broadcastOn()

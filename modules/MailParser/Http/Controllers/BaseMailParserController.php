@@ -58,32 +58,7 @@ abstract class BaseMailParserController extends ApiBaseController
             if (empty($payload)) { throw new BadRequestHttpException('Mail Parser: Missing Data'); }
 
             //Process telephony callback
-            $data = $service->processMailData($orgHash, $provider, $payload, $ipAddress);
-
-            //Send response data
-            return $this->response->success(compact('data'));
-            
-        } catch(AccessDeniedHttpException $e) {
-            return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
-        } catch(UnauthorizedHttpException $e) {
-            return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
-        } catch(Exception $e) {
-            return $this->response->fail([], Response::HTTP_BAD_REQUEST);
-        }
-    } //Function ends
-
-
-
-    public function test(VoiceCallPassthruRequest $request, TelephonyVoiceService $service, string $subdomain) {
-        try {
-            //Get Org Hash 
-            $orgHash = $this->getOrgHashInRequest($request);
-
-            //Create payload
-            $payload = collect($request);
-
-            //Process telephony details
-            $data = $service->makecall($orgHash, $payload);
+            $data = $service->processMailData($orgHash, $provider, collect($request), $payload, $ipAddress);
 
             //Send response data
             return $this->response->success(compact('data'));

@@ -55,7 +55,6 @@ class MailParserController extends BaseMailParserController
         try {
             //Provider switchcase to transform request
             $payload = null;
-            //if (!isset($request['CallSid'])) { throw new BadRequestHttpException('Zapier: Missing CallSid'); } //End if
             $payload = new ZapierMailParserResource($request, 'zapier');
 
             //Create payload

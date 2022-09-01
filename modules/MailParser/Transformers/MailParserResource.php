@@ -21,27 +21,32 @@ class MailParserResource extends JsonResource
     {
         $objReturnValue=null;
         try {
+            $orgId = null;
             $primaryPhone = $primaryEmail = true;
             $detailPhone = $detailEmail = null;
             $details = [];
 
+            //Get Organization Information
+            $organization = config('aqveir-class.class_model.organization')::where('hash', $request['key'])->first();
+
             //Set Phone Number
-            $detailPhone = $this->getDataForParam('phone');
+            $detailPhone = $this->getDataForParam($organization['id'], 'phone');
             if (!empty($detailPhone)) {
                 array_push($details, $detailPhone);
             } //End if
 
             //Set Email Address
-            $detailEmail = $this->getDataForParam('email');
+            $detailEmail = $this->getDataForParam($organization['id'], 'email');
             if (!empty($detailEmail)) {
                 array_push($details, $detailEmail);
             } //End if
             
             $objReturnValue = [
-                'first_name'        => $this->getDataForParam('first_name'),
-                'last_name'         => $this->getDataForParam('last_name'),
+                'org_id'            => $organization['id'],
+                'first_name'        => $this->getDataForParam($organization['id'], 'first_name'),
+                'last_name'         => $this->getDataForParam($organization['id'], 'last_name'),
                 'details'           => $details,
-                'notes'             => $this->getNoteData($request->all())
+                'notes'             => $this->getNoteData($organization['id'], $request->except(['key', 'remote', 'secret']))
             ];
         } catch(Exception $e) {
             $objReturnValue=null;
@@ -55,7 +60,7 @@ class MailParserResource extends JsonResource
 	 *
 	 * @return objReturnValue
 	 */
-	private function getDataForParam($param, bool $isPrimary=false, bool $isVerified=false)
+	private function getDataForParam($orgId, $param, bool $isPrimary=false, bool $isVerified=false)
 	{	
 		$objReturnValue = null;
 		try {
@@ -70,16 +75,18 @@ class MailParserResource extends JsonResource
                                     $email = $this[$synonym];
                                     if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
                                         $objReturnValue = [
+                                            'org_id'            => $orgId,
                                             'type_key'          => config('aqveir.settings.static.key.lookup_value.email'),
                                             'identifier'        => $email,
-                                            'is_primary'        => $isPrimary
+                                            'is_primary'        => $isPrimary,
+                                            'is_verified'       => $isVerified
                                         ];
                                     } //End if
                                     break;
 
                                 case 'phone':
                                     $phone = $this[$synonym];
-                                    $objReturnValue = $this->fnProcessPhone($phone, $isPrimary, $isVerified);
+                                    $objReturnValue = $this->fnProcessPhone($orgId, $phone, $isPrimary, $isVerified);
                                     break;
                                 
                                 default:
@@ -106,17 +113,16 @@ class MailParserResource extends JsonResource
 	 *
 	 * @return objReturnValue
 	 */
-	private function getNoteData($data, string $entityType='entity_type_contact')
+	private function getNoteData($orgId, $data, string $entityType='entity_type_contact')
 	{	
 		$objReturnValue = null;
 		try {
             $objReturnValue = [];
             array_push($objReturnValue, [
+                'org_id'        => $orgId,
                 'entity_type'   => $entityType, 
                 'reference_id'  => null, 
-                'note'          => json_encode($data), 
-                'org_id'        => null, 
-                'created_by'    => 0
+                'note'          => json_encode($data)
             ]);
 		} catch (Exception $e) {
 	        throw $e;
@@ -152,7 +158,7 @@ class MailParserResource extends JsonResource
 	 *
 	 * @return objReturnValue
 	 */
-	private function fnProcessPhone($phone, bool $isPrimary=false, bool $isVerified=false)
+	private function fnProcessPhone($orgId, $phone, bool $isPrimary=false, bool $isVerified=false)
 	{	
 		$objReturnValue = null;
 		try {
@@ -178,10 +184,12 @@ class MailParserResource extends JsonResource
                 } //Switch ends
 
                 $objReturnValue = [
+                    'org_id'            => $orgId,
                     'type_key'          => config('aqveir.settings.static.key.lookup_value.phone'),
                     'subtype_key'       => $phoneSubTypeKey,
-                    'identifier'        => $phoneNumberObject->format($phoneNumberObject, \libphonenumber\PhoneNumberFormat::E164),
-                    'is_primary'        => $isPrimary
+                    'identifier'        => $phoneNumberUtil->format($phoneNumberObject, \libphonenumber\PhoneNumberFormat::E164),
+                    'is_primary'        => $isPrimary,
+                    'is_verified'       => $isVerified
                 ];
             } //End if	    
 		} catch (\libphonenumber\NumberParseException $e) {
@@ -194,25 +202,5 @@ class MailParserResource extends JsonResource
 
 		return $objReturnValue;
 	} //Function ends 
-
-    // 'first_name' => 'required|string|max:40',
-    // 'middle_name' => 'nullable|string|max:40',
-    // 'last_name' => 'nullable|string|max:40',
-    // 'birth_at' => 'nullable|date|before:now',
-    // 'aniversary_at' => 'nullable|date|after:birth_at',
-    // 'type_key' => 'string|max:50',
-    // 'gender_key' => 'string|max:50',
-    // 'timezone_key' => 'string|max:50',
-    // 'language_code' => 'sometimes|string',
-
-    // 'extras' => 'nullable|json',
-    // 'settings' => 'nullable|json',
-    
-    // 'details' => 'required',
-    // 'details.*.type_key' => 'string|required_with:details',
-    // 'details.*.subtype_key' => 'nullable|string|max:40',
-    // 'details.*.phone_idd' => 'nullable|string|max:5',
-    // 'details.*.identifier' => 'string|max:200|required_with:details',
-    // 'details.*.is_primary' => 'boolean',
 
 } //Class ends
