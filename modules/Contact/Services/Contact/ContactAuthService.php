@@ -152,7 +152,7 @@ class ContactAuthService extends BaseService
             } //End if
 
             //Check User details exit for the user identifier
-            $customerDetails = $this->customerdetailrepository->getContactDetailsByIdentifier($organization['id'], $username, $type['id'], true, true);
+            $customerDetails = $this->customerdetailrepository->getContactDetailByIdentifier($organization['id'], $username, $type['id'], true, true);
             if (!empty($customerDetails)) {
 
                 //Get the Contact

@@ -371,8 +371,8 @@ return [
                         'settings' => 'nullable|json',
                         
                         'details' => 'required',
-                        'details.*.type_key' => 'string|required_with:details',
-                        'details.*.subtype_key' => 'nullable|string|max:40',
+                        'details.*.type_key' => 'string|required_with:details|max:200',
+                        'details.*.subtype_key' => 'nullable|string|max:200',
                         'details.*.phone_idd' => 'nullable|string|max:5',
 
                         'details.*.identifier' => 'exclude_unless:details.*.type_key,contact_detail_type_email|required_with:details|email|max:200',
@@ -414,8 +414,8 @@ return [
                         
                         'details' => 'sometimes',
                         'details.*.id' => 'sometimes|number',
-                        'details.*.type_key' => 'string|required_with:details',
-                        'details.*.subtype_key' => 'nullable|string|max:40',
+                        'details.*.type_key' => 'string|required_with:details|max:200',
+                        'details.*.subtype_key' => 'nullable|string|max:200',
                         'details.*.phone_idd' => 'nullable|string|max:5',
                         'details.*.identifier' => 'string|max:200|required_with:details',
                         'details.*.is_primary' => 'boolean',

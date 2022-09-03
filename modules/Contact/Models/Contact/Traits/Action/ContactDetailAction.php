@@ -42,7 +42,7 @@ trait ContactDetailAction
     /**
      * Get Contact Detail By Type and Identifier Details
      */
-    public function getContactDetailsByIdentifier($identifier, int $typeId=null, $isPrimary=null)
+    public function getContactDetailByIdentifier($identifier, int $typeId=null, $isPrimary=null)
     {
         $objReturnValue=null;
         try {

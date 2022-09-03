@@ -125,7 +125,7 @@ class ContactService extends BaseService
             } //End if
 
             //Check if the Contact exists
-            $response = $this->contactdetailRepository->getContactDetailsByIdentifier($organization['id'], $data, null, true, true);
+            $response = $this->contactdetailRepository->getContactDetailByIdentifier($organization['id'], $data, null, true, true);
 
             $objReturnValue = !empty($response);
         } catch(ModelNotFoundException $e) {
@@ -358,34 +358,34 @@ class ContactService extends BaseService
             //Check for existing contact details
             if ($payload->has(['details'])) {
                 $contactDetails = $payload['details'];
+            } else {
+                //Build data for contact details
+                $dataValidate = ($payload->only(['email', 'phone']))->toArray();
+                if (!empty($dataValidate)) {
+
+                    //Create Contact details - Email
+                    if(!empty($payload['email'])) {
+                        array_push($contactDetails, [
+                            'type_key' => config('aqveir.settings.static.key.lookup_value.email'),
+                            'subtype_key' => 'contact_detail_subtype_email_personal',
+                            'identifier' => $payload['email'],
+                        ]);
+                    } //End if
+
+                    //Create Contact details - Phone
+                    if(!empty($payload['phone'])) {
+                        array_push($contactDetails, [
+                            'type_key' => config('aqveir.settings.static.key.lookup_value.phone'),
+                            'subtype_key' => 'contact_detail_subtype_phone_mobile',
+                            'identifier' => $payload['phone']
+                        ]);
+                    } //End if
+                } //End if    
             } //End if
 
-            //Data for validation
-            $dataValidate = ($payload->only(['email', 'phone']))->toArray();
-            if (!empty($dataValidate)) {
-
-                //Create Contact details - Email
-                if(!empty($payload['email'])) {
-                    array_push($contactDetails, [
-                        'type_key' => config('aqveir.settings.static.key.lookup_value.email'),
-                        'subtype_key' => 'contact_detail_subtype_email_personal',
-                        'identifier' => $payload['email'],
-                    ]);
-                } //End if
-
-                //Create Contact details - Phone
-                if(!empty($payload['phone'])) {
-                    array_push($contactDetails, [
-                        'type_key' => config('aqveir.settings.static.key.lookup_value.phone'),
-                        'subtype_key' => 'contact_detail_subtype_phone_mobile',
-                        'identifier' => $payload['phone']
-                    ]);
-                } //End if
-            } //End if           
-
             //Duplicate check
-            $isDuplicate=$this->contactdetailRepository->validate($organization['id'], $contactDetails);
-            if (!$isDuplicate) {
+            $customerDetails=$this->contactdetailRepository->getContactDetailByIdentifiers($organization['id'], $contactDetails);
+            if (empty($customerDetails)) {
 
                 //Generate the data payload to create user
                 $payloadContact = $payload->only('password', 'first_name', 'middle_name', 'last_name')->toArray();
@@ -442,7 +442,9 @@ class ContactService extends BaseService
 
                 $objReturnValue=$contact;
             } else {
-                throw new DuplicateDataException();
+                if (!$isAutoCreated) { throw new DuplicateDataException(); }
+
+                $objReturnValue=$customerDetails->contact;
             } //End if
         } catch(DuplicateDataException $e) {
             throw $e;

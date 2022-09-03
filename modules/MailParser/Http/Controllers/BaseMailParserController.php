@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Modules\Core\Http\Controllers\ApiBaseController;
 
 use Modules\MailParser\Services\MailParserService;
+use Symfony\Component\HttpFoundation\Response;
 
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;

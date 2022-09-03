@@ -63,7 +63,7 @@ class ContactDetailRepository extends EloquentRepository
     /**
      * Get Contact Detail By Type and Identifier Details
      */
-    public function getContactDetailsByIdentifier(int $orgId, string $identifier, int $typeId=null, bool $isPrimary=null, bool $isActive=null)
+    public function getContactDetailByIdentifier(int $orgId, string $identifier, int $typeId=null, bool $isPrimary=null, bool $isActive=null)
     {
         $objReturnValue=null;
         try {
@@ -79,26 +79,27 @@ class ContactDetailRepository extends EloquentRepository
             $objReturnValue = $query;
         } catch(ModelNotFoundException $e) {
             $objReturnValue=null;
-            Log::error('ContactDetailRepository:getContactDetailsByIdentifier:ModelNotFoundException:' . $e->getMessage());
+            Log::error('ContactDetailRepository:getContactDetailByIdentifier:ModelNotFoundException:' . $e->getMessage());
             throw $e;
         } catch (Exception $e) {
             $objReturnValue=null;
-            Log::error('ContactDetailRepository:getContactDetailsByIdentifier:Exception:' . $e->getMessage());
+            Log::error('ContactDetailRepository:getContactDetailByIdentifier:Exception:' . $e->getMessage());
         } //Try-Catch ends
         return $objReturnValue;
     } //Function ends
 
 
     /**
-     * @param $item
-     * @param $column
-     * @param  array  $columns
+     * Get Contact Detail by the key provided array
+     * 
+     * @param int $orgId
+     * @param  array  $arrDetails
      *
      * @return boolean
      */
-    public function validate(int $orgId, array $arrDetails)
+    public function getContactDetailByIdentifiers(int $orgId, array $arrDetails)
     {
-        $objReturnValue = false;
+        $objReturnValue = null;
         try {
             if (!empty($arrDetails) && is_array($arrDetails) && count($arrDetails)>0)
             {
@@ -111,13 +112,13 @@ class ContactDetailRepository extends EloquentRepository
                         ], false)) 
                     {
                         try {
-                            $data = $this->getContactDetailsByIdentifier($orgId, $detail['identifier']);
+                            $data = $this->getContactDetailByIdentifier($orgId, $detail['identifier']);
 
                             //Record exists
-                            $objReturnValue = !empty($data);
+                            $objReturnValue = ((!empty($data))?$data:$objReturnValue);
                         } catch(ModelNotFoundException $e) {
-                            $objReturnValue=false;
-                            Log::info('ContactDetailRepository:validate:ModelNotFoundException:' . $e->getMessage());
+                            $objReturnValue=$objReturnValue;
+                            Log::info('ContactDetailRepository:getContactDetailByIdentifiers:ModelNotFoundException:' . $e->getMessage());
                         } //Try-Catch ends
                     } //End if
                 } //Loop ends         

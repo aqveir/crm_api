@@ -7,7 +7,7 @@ use Modules\Core\Models\Organization\Organization;
 use Illuminate\Support\Collection;
 use Illuminate\Queue\SerializesModels;
 
-class MailMergeReceivedEvent
+class MailReceivedEvent
 {
     use SerializesModels;
 

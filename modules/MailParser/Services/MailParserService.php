@@ -12,7 +12,7 @@ use Modules\Core\Repositories\Lookup\LookupValueRepository;
 
 use Modules\Core\Services\BaseService;
 
-use Modules\MailParser\Events\MailMergeReceivedEvent;
+use Modules\MailParser\Events\MailReceivedEvent;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -59,20 +59,14 @@ class MailParserService extends BaseService
      * 
      * @param \Modules\Core\Repositories\Organization\OrganizationRepository    $organizationRepository
      * @param \Modules\Core\Repositories\Lookup\LookupValueRepository           $lookupRepository
-     * @param \ExotelVoiceCallRepository                                        $exotelVoiceCallRepository
-     * @param \TwilioVoiceCallRepository                                        $twilioVoiceCallRepository
      * 
      */
     public function __construct(
         OrganizationRepository              $organizationRepository,
         LookupValueRepository               $lookupRepository
-        // ExotelVoiceCallRepository           $exotelVoiceCallRepository,
-        // TwilioVoiceCallRepository           $twilioVoiceCallRepository
     ) {
         $this->organizationRepository       = $organizationRepository;
         $this->lookupRepository             = $lookupRepository;
-        // $this->exotelVoiceCallRepository    = $exotelVoiceCallRepository;
-        // $this->twilioVoiceCallRepository    = $twilioVoiceCallRepository;
     } //Function ends
 
 
@@ -116,7 +110,7 @@ class MailParserService extends BaseService
             } //End switch
                 
             //Raise event
-            event(new MailMergeReceivedEvent($organization, $request, $payload, $ipAddress));
+            event(new MailReceivedEvent($organization, $request, $payload, $ipAddress));
 
             //Assign to the return value
             $objReturnValue = $data;

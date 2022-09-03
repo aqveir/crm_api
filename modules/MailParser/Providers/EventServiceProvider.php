@@ -2,7 +2,8 @@
 
 namespace Modules\MailParser\Providers;
 
-use Modules\MailParser\Events\NewMailReceivedEvent;
+use Modules\MailParser\Events\MailReceivedEvent;
+use Modules\MailParser\Listeners\NewMailParseListener;
 
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -15,8 +16,8 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         //New Mail Received Event
-        NewMailReceivedEvent::class => [
-
+        MailReceivedEvent::class => [
+            NewMailParseListener::class
         ],
     ];
 
@@ -27,7 +28,6 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $subscribe = [
-        'Modules\User\Listeners\UserAvailabilityEventSubscriber',
     ];
     
 } //Class ends
