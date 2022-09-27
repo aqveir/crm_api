@@ -19,8 +19,8 @@ class CreateDocumentsTable extends Migration
 
             // FK Relationships
             $table->unsignedBigInteger('org_id');
-            $table->integer('entity_type_id');
-            $table->integer('reference_id');
+            $table->unsignedBigInteger('entity_type_id');
+            $table->unsignedBigInteger('reference_id');
 
             $table->string('title', 255)->nullable();
             $table->text('description')->nullable();
@@ -31,10 +31,14 @@ class CreateDocumentsTable extends Migration
             $table->boolean('is_full_path')->default(false);
             $table->boolean('is_active')->default(true);
 
+            //Document Attributes
+            $table->string('author', 255)->nullable();
+            $table->dateTime('expiry_at')->nullable();
+
             //Audit Log Fields
             $table->unsignedBigInteger('created_by')->default(0);
             $table->unsignedBigInteger('updated_by')->nullable();
-            $table->integer('deleted_by')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
