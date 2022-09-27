@@ -19,16 +19,19 @@ class CreateUsersTable extends Migration
 
             $table->unsignedBigInteger('org_id');
             $table->string('username', 255)->unique();
-            $table->string('password', 255);
+            $table->string('password', 255)->nullable();
             $table->string('avatar', 4000)->nullable();
             $table->string('first_name', 100)->nullable();
             $table->string('middle_name', 100)->nullable();
             $table->string('last_name', 100)->nullable();
 
+            //User Attributes
+            $table->unsignedBigInteger('type_id')->nullable();
+
             //To be used for 2FA/TOTP based authentication
             $table->string('mfa_secret', 1000)->nullable();
 
-            $table->integer('timezone_id')->nullable();
+            $table->unsignedBigInteger('timezone_id')->nullable();
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
             
@@ -55,7 +58,7 @@ class CreateUsersTable extends Migration
             //Audit Log Fields
             $table->unsignedBigInteger('created_by')->default(0);
             $table->unsignedBigInteger('updated_by')->nullable();
-            $table->integer('deleted_by')->nullable();
+            $table->unsignedBigInteger('deleted_by')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
@@ -64,15 +67,17 @@ class CreateUsersTable extends Migration
         Schema::create(config('aqveir-migration.table_name.user.availability'), function (Blueprint $table) {
             $table->bigIncrements('id');
             
+            $table->unsignedBigInteger('org_id');
             $table->unsignedBigInteger('user_id');
-            $table->integer('status_id');
+            $table->unsignedBigInteger('status_id');
             $table->timestamps();
             $table->ipAddress('ip_address')->nullable();
         });
 
         Schema::create(config('aqveir-migration.table_name.user.availability_history'), function (Blueprint $table) {
+            $table->unsignedBigInteger('org_id');
             $table->unsignedBigInteger('user_id');
-            $table->integer('status_id');
+            $table->unsignedBigInteger('status_id');
             $table->timestamp('created_at')->useCurrent();
             $table->ipAddress('ip_address')->nullable();
         });

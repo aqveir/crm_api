@@ -764,6 +764,22 @@ class LookupTableSeeder extends Seeder
                     ],
                 ]
             ],
+            [ //User Type
+                'key' => 'user_type',
+                'display_value' => 'User Type',
+                'description' => 'Type of Users',
+                'is_editable' => false,
+                'values' => [
+                    [
+                        'key' => 'user_type_internal',
+                        'display_value' => 'Employee',
+                    ],
+                    [
+                        'key' => 'user_type_external',
+                        'display_value' => 'Agent / Channel Partner',
+                    ]
+                ]
+            ],
         ];
     }
 

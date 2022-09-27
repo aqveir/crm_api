@@ -16,8 +16,9 @@ class CreateUserPrivilegesTable extends Migration
         Schema::create(config('aqveir-migration.table_name.user.privileges'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
+            $table->unsignedBigInteger('org_id');
             $table->unsignedBigInteger('user_id');
-            $table->integer('privilege_id');
+            $table->unsignedBigInteger('privilege_id');
             $table->boolean('is_active')->default(true);
 
             //Audit Log Fields

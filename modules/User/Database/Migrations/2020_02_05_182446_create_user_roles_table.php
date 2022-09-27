@@ -16,8 +16,9 @@ class CreateUserRolesTable extends Migration
         Schema::create(config('aqveir-migration.table_name.user.roles'), function (Blueprint $table) {
             $table->bigIncrements('id');
 
+            $table->unsignedBigInteger('org_id');
             $table->unsignedBigInteger('user_id');
-            $table->integer('role_id');
+            $table->unsignedBigInteger('role_id');
             $table->string('description', 1000)->nullable();
             $table->unsignedBigInteger('account_id')->nullable();
             $table->boolean('is_active')->default(true);
