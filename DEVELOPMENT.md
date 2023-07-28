@@ -34,7 +34,7 @@ php artisan migrate:refresh --seed
 php artisan make:seeder Backend\CountriesTableSeeder
 
 php artisan migrate:fresh --seed
-php composer.phar dump-autoload
+php composer.phar dump-autoload --optimize
 ```
 
 ## Swagger Documentation Regenarate
