@@ -21,9 +21,9 @@ class Prefix implements Validator
      *
      * @return void
      */
-    public function __construct($prefix)
+    public function __construct(?string $prefix = null)
     {
-        $this->prefix = $prefix;
+        $this->prefix = $prefix ?? '';
     }
 
     /**
@@ -40,7 +40,7 @@ class Prefix implements Validator
 
         $path = $this->filterAndExplode($request->getPathInfo());
 
-        return ! is_null($this->prefix) && $prefix == array_slice($path, 0, count($prefix));
+        return ! empty($this->prefix) && $prefix == array_slice($path, 0, count($prefix));
     }
 
     /**

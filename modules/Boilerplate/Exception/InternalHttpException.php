@@ -30,7 +30,7 @@ class InternalHttpException extends HttpException
     {
         $this->response = $response;
 
-        parent::__construct($response->getStatusCode(), $message, $previous, $headers, $code);
+        parent::__construct($response->getStatusCode(), $message ?? '', $previous, $headers, $code);
     }
 
     /**

@@ -87,7 +87,7 @@ class PaymentMethodController extends ApiBaseController
      * @OA\Get(
      *      path="/organization/paymentmethod/intent",
      *      tags={"Organization"},
-     *      operationId="api.backend.subscription.paymentmethod.index",
+     *      operationId="api.backend.subscription.paymentmethod.intent",
      *      security={{"omni_token":{}}},
      *      @OA\Response(response=200, description="Request was successfully executed."),
      *      @OA\Response(response=400, description="Bad Request"),

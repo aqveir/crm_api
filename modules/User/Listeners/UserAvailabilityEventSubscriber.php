@@ -37,7 +37,7 @@ class UserAvailabilityEventSubscriber implements ShouldQueue
             $ipAddress = $event->ipAddress;
 
             //Execute service
-            $response = $this->service->record($user['id'], $statusKey, $ipAddress);
+            $response = $this->service->record($user->organization['id'], $user['id'], $statusKey, $ipAddress);
         } catch(Exception $e) {
             //Do nothing
         } //Try-catch ends

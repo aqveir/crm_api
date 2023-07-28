@@ -7,19 +7,11 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as BaseController;
 
 /**
- *  @OA\OpenApi(
- *      @OA\Server(
- *          url=SWAGGER_CONST_HOST
- *      ),
- *       @OA\Info(
- *          version="3.0.0",
- *          title="aQveir API Documentation",
- *          termsOfService="http://swagger.io/terms/",
- *      ),
+ * @OA\Info(
+ *     title="aQveir API Documentation",
+ *     version="0.1"
  * )
- */
-
- /**
+ * 
  * @OA\Parameter(
  *      parameter="organization_key",
  *      in="query",
@@ -83,9 +75,6 @@ use Illuminate\Routing\Controller as BaseController;
  *      @OA\Schema(type="string")
  * )
  * 
- */
-
- /**
  * @OA\SecurityScheme(
  *     type="http",
  *     description="Security Scheme for API Access Token",

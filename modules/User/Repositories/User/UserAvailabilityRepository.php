@@ -33,7 +33,7 @@ class UserAvailabilityRepository extends EloquentRepository
     /**
 	 * Record the User Availability
 	 */
-	public function record(int $userId, string $statusKey, string $ipAddress=null)
+	public function record(int $orgId, int $userId, string $statusKey, string $ipAddress=null)
 	{
 		$objReturnValue=null;
 		
@@ -42,7 +42,8 @@ class UserAvailabilityRepository extends EloquentRepository
             $status = $this->getLookupByKey($statusKey);
 
             //Check if the user/status exists
-            $model = UserAvailability::where('user_id', $userId)
+            $model = UserAvailability::where('org_id', $orgId)
+                ->where('user_id', $userId)
                 ->where('status_id', $status['id'])
                 ->first();
 
@@ -53,7 +54,7 @@ class UserAvailabilityRepository extends EloquentRepository
 
             //Record the status
             $model = UserAvailability::updateOrCreate(
-                ['user_id' => $userId],
+                [ 'org_id' => $orgId, 'user_id' => $userId ],
                 [
                     'status_id' => $status['id'],
                     'ip_address' => $ipAddress

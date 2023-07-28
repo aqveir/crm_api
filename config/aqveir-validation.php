@@ -17,7 +17,7 @@ return [
                         'last_name' => 'string|max:80',
                         'contact_person_name' => 'required|string|max:80',
                         'email' => 'required|email|max:40|unique:users,email',
-                        'phone' => ['nullable', 'string', 'max:20', new PhoneValidationRule],
+                        //'phone' => ['nullable', 'string', 'max:20', new PhoneValidationRule],
                         'phone_idd' => 'nullable|string|max:5',
                         'industry_key' => 'string'
                     ]
@@ -32,7 +32,7 @@ return [
                         'name' => 'nullable|string|max:40',
                         'contact_person_name' => 'required|string|max:80',
                         'email' => 'required|email|max:40|unique:contact_details,identifier',
-                        'phone' => ['string', 'max:20', new PhoneValidationRule],
+                        //'phone' => ['string', 'max:20', new PhoneValidationRule],
                         'phone_idd' => 'nullable|string|max:5',
                         'industry_key' => 'string',
 
@@ -200,7 +200,7 @@ return [
                         'first_name' => 'required|max:40',
                         'last_name' => 'nullable|max:40',
                         'email' => 'required|email|max:40|unique:users,email',
-                        'phone' => ['required', 'string', 'max:20', new PhoneValidationRule]
+                        //'phone' => ['required', 'string', 'max:20', new PhoneValidationRule]
                     ]
                 ],
 
@@ -217,7 +217,7 @@ return [
                         'first_name' => 'required|max:40',
                         'last_name' => 'nullable|max:40',
                         'email' => 'required|email|max:40|unique:users,email',
-                        'phone' => ['string', 'max:20', new PhoneValidationRule],
+                        //'phone' => ['string', 'max:20', new PhoneValidationRule],
                         'language' => 'nullable|string',
                         'roles' => 'required|array',
                         'roles.*.key' => 'required|string|max:100',
@@ -235,7 +235,7 @@ return [
                         'first_name' => 'required|string|max:40',
                         'last_name' => 'string|max:40',
                         'email' => 'email|max:40',
-                        'phone' => ['string', 'max:20', new PhoneValidationRule],
+                        //'phone' => ['string', 'max:20', new PhoneValidationRule],
                         'language' => 'required|string',
                         'roles' => 'required|array',
                         'roles.*.key' => 'required|string|max:100',
@@ -376,8 +376,8 @@ return [
                         'details.*.phone_idd' => 'nullable|string|max:5',
 
                         'details.*.identifier' => 'exclude_unless:details.*.type_key,contact_detail_type_email|required_with:details|email|max:200',
-                        'details.*.identifier' => ['exclude_unless:details.*.type_key,contact_detail_type_phone',
-                            'required_with:details', 'max:20', new PhoneValidationRule],
+                        //'details.*.identifier' => ['exclude_unless:details.*.type_key,contact_detail_type_phone',
+                        //    'required_with:details', 'max:20', new PhoneValidationRule],
 
                         'details.*.is_primary' => 'boolean',
 
@@ -648,7 +648,7 @@ return [
 
                         'website' => 'nullable|string', 
                         'email' => 'nullable|email',  
-                        'phone' => ['nullable', 'string', 'max:20', new PhoneValidationRule],
+                        //'phone' => ['nullable', 'string', 'max:20', new PhoneValidationRule],
 
                         'is_default' => 'nullable|boolean'
                     ]
@@ -675,7 +675,7 @@ return [
 
                         'website' => 'nullable|string', 
                         'email' => 'nullable|email',
-                        'phone' => ['nullable', 'string', 'max:20', new PhoneValidationRule],
+                        //'phone' => ['nullable', 'string', 'max:20', new PhoneValidationRule],
 
                         'is_default' => 'nullable|boolean'
                     ]
@@ -805,7 +805,7 @@ return [
                         'first_name' => 'string|max:64',
                         'last_name' => 'string|max:64',
                         'email' => 'required|email|max:64',
-                        'phone' => ['required', 'string', 'max:20', new PhoneValidationRule]
+                        //'phone' => ['required', 'string', 'max:20', new PhoneValidationRule]
                     ]
                 ],
 

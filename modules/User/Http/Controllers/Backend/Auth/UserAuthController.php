@@ -83,10 +83,8 @@ class UserAuthController extends ApiBaseController
 
             //Send response data
             return $this->response->success(compact('data'));
-        } catch(AccessDeniedHttpException $e) {
-            return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
         } catch(Exception $e) {
-            return $this->response->fail([], Response::HTTP_BAD_REQUEST);
+            throw $e;
         }
     } //Function ends
 

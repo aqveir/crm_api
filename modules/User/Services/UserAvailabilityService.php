@@ -96,6 +96,7 @@ class UserAvailabilityService extends BaseService
 
             //Fetch record
             $response = $this->useravailabilityRepository
+                ->where('org_id', $user->organization['id'])
                 ->where('user_id', $user['id'])
                 ->first();
 
@@ -132,9 +133,10 @@ class UserAvailabilityService extends BaseService
         try {
             //Authenticated User
             $user = $this->getCurrentUser('backend');
+            $organization = $user->organization;
 
             //Assign to the return value
-            $objReturnValue = $this->record($user['id'], $key, $ipAddress);
+            $objReturnValue = $this->record($organization['id'], $user['id'], $key, $ipAddress);
 
         } catch(ExistingDataException $e) {
             throw new ExistingDataException();
@@ -154,19 +156,20 @@ class UserAvailabilityService extends BaseService
     /**
      * Record User Availability
      * 
+     * @param \int $orgId
      * @param \int $userId
      * @param \string $statusKey 
      * @param \string $ipAddress (optional)
      *
      * @return mixed
      */
-    public function record(int $userId, string $statusKey, string $ipAddress=null)
+    public function record(int $orgId, int $userId, string $statusKey, string $ipAddress=null)
     {
         $objReturnValue = null;
 
         try {
             //Record availability
-            $response = $this->useravailabilityRepository->record($userId, $statusKey, $ipAddress);            
+            $response = $this->useravailabilityRepository->record($orgId, $userId, $statusKey, $ipAddress);            
 
             //Assign to the return value
             $objReturnValue = $response;

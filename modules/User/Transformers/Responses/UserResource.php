@@ -22,7 +22,7 @@ class UserResource extends JsonResource
 
         try {
             $this->load('organization', 'availability', 'availability.status', 'country', 'timezone', 'roles', 'privileges');
-            
+
             $availability = collect($this['availability']);
             if ((!empty($availability)) && (count($availability)>0)) {
                 $status = collect($availability['status'])->only('key', 'display_value');

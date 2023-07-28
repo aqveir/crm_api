@@ -8,6 +8,7 @@ use Throwable;
 use Symfony\Component\HttpFoundation\Response;
 
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -18,57 +19,45 @@ use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 class Handler extends ExceptionHandler
 {
     /**
-     * A list of the exception types that are not reported.
+     * The list of the inputs that are never flashed to the session on validation exceptions.
      *
-     * @var array
-     */
-    protected $dontReport = [
-        //
-    ];
-
-    /**
-     * A list of the inputs that are never flashed for validation exceptions.
-     *
-     * @var array
+     * @var array<int, string>
      */
     protected $dontFlash = [
+        'current_password',
         'password',
         'password_confirmation',
     ];
 
     /**
-     * Report or log an exception.
-     *
-     * @param  \Throwable  $exception
-     * @return void
-     *
-     * @throws \Exception
+     * Register the exception handling callbacks for the application.
      */
-    public function report(Throwable $exception)
+    public function register(): void
     {
-        //Handle policy errors
-        if ($exception instanceof \Illuminate\Auth\Access\AuthorizationException) {
-            throw new AccessDeniedHttpException();
-        } //End if
-
-        if ($exception instanceof \Illuminate\Database\Eloquent\ModelNotFoundException) {
-            throw new NotFoundHttpException('Requested page or data not found.');
-        } //End if
+        $this->stopIgnoring(HttpException::class);
         
-        parent::report($exception);
-    }
+        $this->reportable(function (Throwable $e) {
+            return [];
+        });
 
-    /**
-     * Render an exception into an HTTP response.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Throwable  $exception
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @throws \Throwable
-     */
-    public function render($request, Throwable $exception)
-    {
-        return parent::render($request, $exception);
+        $this->reportable(function (AccessDeniedHttpException $e) {
+            return [];
+        });
+
+        $this->reportable(function (AuthorizationException $e) {
+            throw new AccessDeniedHttpException();
+        });
+
+        $this->reportable(function (ModelNotFoundException $e) {
+            throw new NotFoundHttpException('Requested page or data not found.');
+        });
+
+        $this->renderable(function (Exception $e, Request $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'message' => 'Record not found.'
+                ], 404);
+            }
+        });
     }
 }

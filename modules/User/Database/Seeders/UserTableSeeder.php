@@ -25,6 +25,7 @@ class UserTableSeeder extends Seeder
         ]);
 
         $data = \Modules\User\Models\User\UserRole::create([
+            'org_id' => $user->organization['id'],
             'user_id' => $user['id'],
             'role_id' => 1,
             'description' => 'System Generated'
@@ -47,6 +48,7 @@ class UserTableSeeder extends Seeder
                 'is_remote_access_only' => true
             ]);
             $data = \Modules\User\Models\User\UserRole::create([
+                'org_id' => $remoteUser->organization['id'],
                 'user_id' => $remoteUser['id'],
                 'role_id' => 1,
                 'description' => 'System Generated'
@@ -59,6 +61,7 @@ class UserTableSeeder extends Seeder
             ->each(function($user) use ($faker) {
 
                 $data = \Modules\User\Models\User\UserRole::create([
+                    'org_id' => $user->organization['id'],
                     'user_id' => $user['id'],
                     'role_id' => $faker->numberBetween(2, 4),
                     'description' => 'System Generated'

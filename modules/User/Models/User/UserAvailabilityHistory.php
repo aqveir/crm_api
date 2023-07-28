@@ -25,7 +25,7 @@ class UserAvailabilityHistory extends Model {
      * @var array
      */
     protected $fillable = [
-        'user_id', 'status_id', 'ip_address'
+        'org_id', 'user_id', 'status_id', 'ip_address'
     ];
 
     

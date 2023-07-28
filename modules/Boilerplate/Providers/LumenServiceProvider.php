@@ -16,6 +16,7 @@ use Illuminate\Http\Request as IlluminateRequest;
 use Modules\Boilerplate\Routing\Adapter\Lumen as LumenAdapter;
 use Illuminate\Contracts\Validation\ValidatesWhenResolved;
 use FastRoute\DataGenerator\GroupCountBased as GcbDataGenerator;
+use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 
 class LumenServiceProvider extends BoilerplateServiceProvider
 {
@@ -175,8 +176,11 @@ class LumenServiceProvider extends BoilerplateServiceProvider
 
         $form->setJson($current->json());
 
-        if ($session = $current->getSession()) {
-            $form->setLaravelSession($session);
+        try {
+            if ($session = $current->getSession()) {
+                $form->setLaravelSession($current->getSession());
+            }
+        } catch (SessionNotFoundException $exception) {
         }
 
         $form->setUserResolver($current->getUserResolver());

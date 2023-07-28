@@ -66,7 +66,7 @@ abstract class ApiBaseController extends CoreController
 
             //Data check
             if (empty($subdomain) && empty($user)) {
-                throw new UnauthorizedHttpException();
+                throw new UnauthorizedHttpException('ERROR_UNAUTHORIZED_ACCESS');
             } //End if
 
             //Get Whitelisted subdomains
@@ -120,7 +120,7 @@ abstract class ApiBaseController extends CoreController
                     if ($user->organization['hash'] == $orgHashSubDomain) {
                         $returnValue = $orgHashSubDomain; 
                     } else {
-                        throw new UnauthorizedHttpException();
+                        throw new UnauthorizedHttpException('ERROR_UNAUTHORIZED_ACCESS');
                     } //End if
                 } //End if
             } //End if

@@ -39,6 +39,7 @@ class UserAvailabilityHistoryListener
 
         //Create user availability history
         $this->repository->create([
+            'org_id' => $userAvailability['org_id'],
             'user_id' => $userAvailability['user_id'],
             'status_id' => $userAvailability['status_id'],
             'ip_address' => $userAvailability['ip_address']

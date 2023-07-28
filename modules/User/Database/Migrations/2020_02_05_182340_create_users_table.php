@@ -28,8 +28,8 @@ class CreateUsersTable extends Migration
             //User Attributes
             $table->unsignedBigInteger('type_id')->nullable();
 
-            //To be used for 2FA/TOTP based authentication
-            $table->string('mfa_secret', 1000)->nullable();
+            //To be added for external reference
+            $table->string('ext_id', 1000)->nullable();
 
             $table->unsignedBigInteger('timezone_id')->nullable();
             $table->string('email')->nullable();

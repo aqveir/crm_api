@@ -202,11 +202,23 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
      */
     protected function getStatusCode(Throwable $exception)
     {
+        $statusCode = null;
+
         if ($exception instanceof ValidationException) {
-            return $exception->status;
+            $statusCode = $exception->status;
+        } elseif ($exception instanceof HttpExceptionInterface) {
+            $statusCode = $exception->getStatusCode();
+        } else {
+            // By default throw 500
+            $statusCode = 500;
         }
 
-        return $exception instanceof HttpExceptionInterface ? $exception->getStatusCode() : 500;
+        // Be extra defensive
+        if ($statusCode < 100 || $statusCode > 599) {
+            $statusCode = 500;
+        }
+
+        return $statusCode;
     }
 
     /**
@@ -357,8 +369,15 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
         $reflection = new ReflectionFunction($callback);
 
         $exception = $reflection->getParameters()[0];
+        $reflectionType = $exception->getType();
 
-        return $exception->getClass()->getName();
+        if ($reflectionType && ! $reflectionType->isBuiltin()) {
+            if ($reflectionType instanceof \ReflectionNamedType) {
+                return $reflectionType->getName();
+            }
+        }
+
+        return '';
     }
 
     /**

@@ -29,7 +29,7 @@ trait UserRelationship
 	{
 		return $this->hasOne(
 			config('aqveir-class.class_model.country'), 
-			//'phone_idd_code', 'phone_idd'
+			'phone_idd_code', 'phone'
 		);
 	} //Function ends
 
@@ -91,11 +91,15 @@ trait UserRelationship
 	*/
 	public function availability()
 	{
-		return $this->hasOne(
-			UserAvailability::class,
-			'user_id','id'
-		)
-		->whereNotNull('user_id');
+		try {
+			return $this->hasOne(
+				UserAvailability::class,
+				'user_id','id'
+			)
+			->whereNotNull('user_id');
+		} catch(Exception $e) {
+			return null;
+		} //Try-catch ends
 	} //Function ends
 
 

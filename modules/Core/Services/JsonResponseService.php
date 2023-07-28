@@ -33,7 +33,13 @@ class JsonResponseService
      */
     public function fail($resource = [], $code = Response::HTTP_UNPROCESSABLE_ENTITY)
     {
-        return $this->putAdditionalMeta($resource, 'fail')
+        $exception = null;
+        if ($resource instanceof \Exception) {
+            $exception = $resource;
+            $resource = [];
+        } //End if
+
+        return $this->putAdditionalMeta($resource, 'fail', $exception)
             ->response()
             ->setStatusCode($code);
     }
@@ -58,12 +64,24 @@ class JsonResponseService
      *
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
-    private function putAdditionalMeta($resource, $status)
+    private function putAdditionalMeta($resource, $status, $e=null)
     {
         $meta   = [
             'status'         => $status,
             'execution_time' => number_format(microtime(true) - LARAVEL_START, 4),
         ];
+
+        //Add exception message
+        if (!($e==null)) {
+            $meta = array_merge([
+                'error' => [
+                    'code' => $e->getCode(),
+                    'message' => $e->getMessage()
+                ],
+
+            ], $meta);            
+        } //End if
+
         $merged = array_merge($resource->additional ?? [], $meta);
 
         if ($resource instanceof JsonResource) {
