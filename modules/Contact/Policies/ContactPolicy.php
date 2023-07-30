@@ -2,12 +2,13 @@
 
 namespace Modules\Contact\Policies;
 
+use Modules\Core\Policies\BasePolicy;
 use Modules\User\Models\User\User;
 use Modules\Contact\Models\Contact\Contact;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class ContactPolicy
+class ContactPolicy extends BasePolicy
 {
     use HandlesAuthorization;
 
@@ -18,7 +19,7 @@ class ContactPolicy
      */
     public function __construct()
     {
-        //
+        parent::__construct();
     }
 
 

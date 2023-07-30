@@ -156,15 +156,15 @@ class UserAuthService extends BaseService
             $user->unreadNotifications;
 
             //Raise event: User Login
-            event(new UserLoginEvent($user, $ipAddress));
+            event(new UserLoginEvent($organization, $user, $ipAddress));
 
             return $user;
         } catch(AccessDeniedHttpException $e) {
             log::error('UserAuthService:authenticate:AccessDeniedHttpException:' . $e->getMessage());
-            throw new AccessDeniedHttpException($e->getMessage());
+            throw $e;
         } catch(UnauthorizedHttpException $e) {
             log::error('UserAuthService:authenticate:UnauthorizedHttpException:' . $e->getMessage());
-            throw new UnauthorizedHttpException($e->getMessage());
+            throw $e;
         } catch(Exception $e) {
             log::error('UserAuthService:authenticate:Exception:' . $e->getMessage());
             throw new HttpException(500);
@@ -193,10 +193,10 @@ class UserAuthService extends BaseService
             return $response === Password::RESET_LINK_SENT;
         } catch(AccessDeniedHttpException $e) {
             log::error('UserAuthService:sendForgotPasswordResetLink:AccessDeniedHttpException:' . $e->getMessage());
-            throw new AccessDeniedHttpException($e->getMessage());
+            throw $e;
         } catch(UnauthorizedHttpException $e) {
             log::error('UserAuthService:sendForgotPasswordResetLink:UnauthorizedHttpException:' . $e->getMessage());
-            throw new UnauthorizedHttpException($e->getMessage());
+            throw $e;
         } catch(Exception $e) {
             log::error('UserAuthService:sendForgotPasswordResetLink:Exception:' . $e->getMessage());
             throw new HttpException(500);
@@ -242,16 +242,23 @@ class UserAuthService extends BaseService
     /**
      * Logout the user
      * 
+     * @param \string $orgHash 
      * @param \Illuminate\Support\Collection $credentials
      * @param \string $ipAddress (optional)
      *
      * @return mixed
      */
-    public function logout(Collection $credentials, string $ipAddress='0.0.0.0')
+    public function logout(string $orgHash, Collection $credentials, string $ipAddress='0.0.0.0')
     {
         $objReturnValue = false;
 
         try {
+            //Get organization data
+            $organization = $this->getOrganizationByHash($orgHash);
+            if (!$organization['is_active']) {
+                throw new UnauthorizedHttpException('Organization is inactive.');
+            } //End if
+            
             //Get current user
             $user = $this->getCurrentUser();
             if ($user)
@@ -263,16 +270,16 @@ class UserAuthService extends BaseService
                 $objReturnValue = $this->guard('backend')->logout(true);
 
                 //Raise event: User Logout
-                event(new UserLogoutEvent($user, $ipAddress));
+                event(new UserLogoutEvent($organization, $user, $ipAddress));
             } else {
                 throw new UnauthorizedHttpException('ERROR_USER_AUTH_ACCESS');
             } //End if
         } catch(AccessDeniedHttpException $e) {
             log::error('UserAuthService:logout:AccessDeniedHttpException:' . $e->getMessage());
-            throw new AccessDeniedHttpException($e->getMessage());
+            throw $e;
         } catch(UnauthorizedHttpException $e) {
             log::error('UserAuthService:logout:UnauthorizedHttpException:' . $e->getMessage());
-            throw new UnauthorizedHttpException($e->getMessage());
+            throw $e;
         } catch(Exception $e) {
             log::error('UserAuthService:logout:Exception:' . $e->getMessage());
             throw new HttpException(500);
@@ -325,7 +332,7 @@ class UserAuthService extends BaseService
 
         } catch(BadRequestHttpException $e) {
             log::error('UserService:register:BadRequestHttpException:' . $e->getMessage());
-            throw new BadRequestHttpException($e->getMessage());
+            throw $e;
         } catch(Exception $e) {
             log::error('UserService:register:Exception:' . $e->getMessage());
             throw new HttpException(500);
@@ -373,7 +380,7 @@ class UserAuthService extends BaseService
 
         } catch(BadRequestHttpException $e) {
             log::error('UserService:register:BadRequestHttpException:' . $e->getMessage());
-            throw new BadRequestHttpException($e->getMessage());
+            throw $e;
         } catch(Exception $e) {
             log::error('UserService:register:Exception:' . $e->getMessage());
             throw new HttpException(500);

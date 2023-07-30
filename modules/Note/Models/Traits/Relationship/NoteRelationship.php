@@ -30,4 +30,16 @@ trait NoteRelationship
 		);
 	} //Function ends
 
+
+	/**
+	 * Show Organization
+	 */
+	public function organization()
+	{
+		return $this->hasOne(
+			config('aqveir-class.class_model.organization'),
+			'id', 'org_id'
+		);
+	} //Function ends
+
 } //Trait ends

@@ -25,12 +25,12 @@ trait UserAction
 	/**
 	 * Check if the User has the given roles
 	 */
-    public function hasRoles(Array $roles, bool $isStrict=false) {
+    public function hasRoles(int $orgId, Array $roles, bool $isStrict=false) {
 		$returnValue = false;
         try {
             if ($roles) {
                 //Get User Roles
-                $user_roles = collect($this->roles()->get());
+                $user_roles = collect($this->active_roles($orgId)->get());
 
                 //Find in collection
                 $exists = false;
@@ -51,12 +51,12 @@ trait UserAction
 	/**
 	 * Check if the User has the given privileges
 	 */
-    public function hasPrivileges(Array $privileges, bool $isStrict=false) {
+    public function hasPrivileges(int $orgId, Array $privileges, bool $isStrict=false) {
 		$returnValue = false;
         try {
             if ($privileges) {
                 //Get active privileges
-                $user_privileges = collect($this->getActivePrivileges());
+                $user_privileges = collect($this->getActivePrivileges($orgId));
 
                 //Find in collection
                 $exists = false;
@@ -79,17 +79,17 @@ trait UserAction
      *
      * @return \bool objReturnValue
      */
-    public function getActivePrivileges()
+    public function getActivePrivileges(int $orgId)
     {
         $objReturnValue=null; $userPrivileges=[];
         try { 
             //Check Roles with active privileges
-            $userRoles = $this->roles()->get();
+            $userRoles = $this->active_roles($orgId)->get();
             if(!empty($userRoles)) {
                 //Iterate the roles assigned
                 foreach($userRoles as $userRole) {
                     //Get privileges for the role
-                    $privileges = $userRole->active_privileges()->get();
+                    $privileges = $userRole->active_privileges($orgId)->get();
 
                     //Iterate the privileges in each role
                     foreach ($privileges as $privilege) {
@@ -103,7 +103,7 @@ trait UserAction
             } //End if
             
             //Check for extra granted privileges
-            $extraPrivileges = $this->active_privileges()->get();
+            $extraPrivileges = $this->active_privileges($orgId)->get();
             if (!empty($extraPrivileges)) {
                 foreach($extraPrivileges as $privilege) {
                     //Duplicate check to add the privileges

@@ -32,12 +32,13 @@ class UserAvailabilityEventSubscriber implements ShouldQueue
     public function handleUserLogin($event) {
         try {
             //Collect data
+            $organization = $event->organization;
             $user = $event->user;
             $statusKey = 'user_status_online';
             $ipAddress = $event->ipAddress;
 
             //Execute service
-            $response = $this->service->record($user->organization['id'], $user['id'], $statusKey, $ipAddress);
+            $response = $this->service->record($organization['id'], $user['id'], $statusKey, $ipAddress);
         } catch(Exception $e) {
             //Do nothing
         } //Try-catch ends
@@ -50,12 +51,13 @@ class UserAvailabilityEventSubscriber implements ShouldQueue
     public function handleUserLogout($event) {
         try {
             //Collect data
+            $organization = $event->organization;
             $user = $event->user;
             $statusKey = 'user_status_offline';
             $ipAddress = $event->ipAddress;
 
             //Execute service
-            $response = $this->service->record($user['id'], $statusKey, $ipAddress);
+            $response = $this->service->record($organization['id'], $user['id'], $statusKey, $ipAddress);
         } catch(Exception $e) {
             //Do nothing
         } //Try-catch ends

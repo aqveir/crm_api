@@ -29,7 +29,7 @@ trait UserAvailabilityAction
 		try {			
 			//User Busy Check
 			if($isUserCurrentBusyOnly) {
-				$currentUserAvailability = $this->getUserAvailabilityStatus($userId);
+				$currentUserAvailability = $this->getUserAvailabilityStatus($orgId, $userId);
 				//Log::debug($currentUserAvailability);
 
 				$statusBusy = $this->getLookUpByValue($orgId, config('portiqo-crm.settings.lookup_value.user_availability_status_busy'));
@@ -43,7 +43,7 @@ trait UserAvailabilityAction
 			$status = $this->getLookUpByValue($orgId, config('portiqo-crm.settings.lookup_value.user_availability_status_online'));
 			
             //Get the Contact Object
-            $objReturnValue = $this->setUserAvailabilityStatus($userId, $status->id, $modifiedBy);
+            $objReturnValue = $this->setUserAvailabilityStatus($orgId, $userId, $status->id, $modifiedBy);
 
 		} catch (Exception $e) {
 			$objReturnValue=null;
@@ -62,7 +62,7 @@ trait UserAvailabilityAction
 			$status = $this->getLookUpByValue($orgId, config('portiqo-crm.settings.lookup_value.user_availability_status_offline'));
 
             //Get the Contact Object
-            $objReturnValue = $this->setUserAvailabilityStatus($userId, $status->id, $modifiedBy);
+            $objReturnValue = $this->setUserAvailabilityStatus($orgId, $userId, $status->id, $modifiedBy);
 		} catch (Exception $e) {
 			$objReturnValue=null;
 			Log::error(json_encode($e));
@@ -78,7 +78,7 @@ trait UserAvailabilityAction
 		$objReturnValue=null;
 		try {
 			if($isUserCurrentOnlineOnly) {
-				$currentUserAvailability = $this->getUserAvailabilityStatus($userId);
+				$currentUserAvailability = $this->getUserAvailabilityStatus($orgId, $userId);
 				//Log::debug($currentUserAvailability);
 
 				$statusOnline = $this->getLookUpByValue($orgId, config('portiqo-crm.settings.lookup_value.user_availability_status_online'));
@@ -92,7 +92,7 @@ trait UserAvailabilityAction
 			$status = $this->getLookUpByValue($orgId, config('portiqo-crm.settings.lookup_value.user_availability_status_busy'));
 
             //Get the Contact Object
-            $objReturnValue = $this->setUserAvailabilityStatus($userId, $status->id, $modifiedBy);
+            $objReturnValue = $this->setUserAvailabilityStatus($orgId, $userId, $status->id, $modifiedBy);
 		} catch (Exception $e) {
 			$objReturnValue=null;
 			Log::error(json_encode($e));
@@ -103,11 +103,12 @@ trait UserAvailabilityAction
 	/**
 	 * Set User Availability by Identifier
 	 */
-	public function setUserAvailabilityStatus(int $userId, int $statusId, int $modifiedBy=0)
+	public function setUserAvailabilityStatus(int $orgId, int $userId, int $statusId, int $modifiedBy=0)
 	{
 		$objReturnValue=null;
 		try {
 			$query = config('aqveir-class.class_model.user_availability')::updateOrCreate([
+				'org_id' => $orgId,
 				'user_id' => $userId
 				], [
 					'status_id' => $statusId, 
@@ -127,11 +128,12 @@ trait UserAvailabilityAction
 	/**
 	 * Get User Availability by Identifier
 	 */
-	public function getUserAvailabilityStatus(int $userId)
+	public function getUserAvailabilityStatus(int $orgId, int $userId)
 	{
 		$objReturnValue=null;
 		try {
 			$query = config('aqveir-class.class_model.user_availability')::where([
+				'org_id' => $orgId, 
 				'user_id' => $userId
 				])->firstOrFail();
 
@@ -308,5 +310,3 @@ trait UserAvailabilityAction
     } //Function ends
     
 } //Trait ends
-
-

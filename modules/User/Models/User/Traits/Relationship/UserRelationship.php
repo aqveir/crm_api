@@ -49,40 +49,49 @@ trait UserRelationship
 	/**
 	 * Show Roles
 	 */
-	public function roles()
+	public function roles(int $orgId=0)
 	{
 		return $this->belongsToMany(
 			config('aqveir-class.class_model.role'),
 			config('aqveir-migration.table_name.user.roles'),
 			'user_id', 'role_id'
-		);
+		)
+		->withPivot('account_id')
+		->wherePivot('org_id', $orgId);
+	} //Function ends
+
+
+	/**
+	 * Show Active Roles
+	 */
+	public function active_roles(int $orgId)
+	{
+		return $this->roles($orgId)
+			->wherePivot('is_active', 1);
 	} //Function ends
 
 
 	/**
 	 * Show Privileges
 	 */
-	public function privileges()
-	{
-		return $this->belongsToMany(
-			config('aqveir-class.class_model.privilege'),
-			config('aqveir-migration.table_name.user.privileges'),
-			'user_id', 'privilege_id'
-		);
-	} //Function ends
-
-	
-	/**
-	 * Show Granted Privileges
-	 */
-	public function active_privileges()
+	public function privileges(int $orgId=0)
 	{
 		return $this->belongsToMany(
 			config('aqveir-class.class_model.privilege'),
 			config('aqveir-migration.table_name.user.privileges'),
 			'user_id', 'privilege_id'
 		)
-		->wherePivot('is_active', 1);
+		->wherePivot('org_id', $orgId);
+	} //Function ends
+
+	
+	/**
+	 * Show Granted Privileges
+	 */
+	public function active_privileges(int $orgId)
+	{
+		return $this->privileges($orgId)
+			->wherePivot('is_active', 1);
 	} //Function ends
 
 

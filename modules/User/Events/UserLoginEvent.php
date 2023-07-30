@@ -3,6 +3,8 @@
 namespace Modules\User\Events;
 
 use Modules\User\Models\User\User;
+use Modules\Core\Models\Organization\Organization;
+
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -10,6 +12,12 @@ use Illuminate\Queue\SerializesModels;
 class UserLoginEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    /**
+     * Organization Model variable
+     */
+    public $organization;
+
 
     /**
      * User Model variable
@@ -28,8 +36,9 @@ class UserLoginEvent
      *
      * @return void
      */
-    public function __construct(User $user, string $ipAddress)
+    public function __construct(Organization $organization, User $user, string $ipAddress)
     {
+        $this->organization = $organization;
         $this->user = $user;
         $this->ipAddress = $ipAddress;
     }

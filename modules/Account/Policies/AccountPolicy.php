@@ -2,12 +2,13 @@
 
 namespace Modules\Account\Policies;
 
+use Modules\Core\Policies\BasePolicy;
 use Modules\User\Models\User\User;
 use Modules\ServiceRequest\Models\ServiceRequest;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class AccountPolicy
+class AccountPolicy extends BasePolicy
 {
     use HandlesAuthorization;
 
@@ -18,7 +19,7 @@ class AccountPolicy
      */
     public function __construct()
     {
-        //
+        parent::__construct();
     }
 
 

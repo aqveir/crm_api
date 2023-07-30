@@ -122,7 +122,7 @@ class User extends Model implements
         'is_remote_access_only' => 'boolean', 
         'is_default' => 'boolean', 
         'is_pool' => 'boolean',
-        'is_active' => 'boolean',
+        'is_active' => 'boolean'
     ];
 
 

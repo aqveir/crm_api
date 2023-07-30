@@ -46,7 +46,7 @@ class UserAvailability extends Model {
      * @var array
      */
     protected $hidden = [
-        'created_at', 'updated_at'
+        'org_id', 'created_at', 'updated_at'
     ];
 
 

@@ -41,30 +41,16 @@ class UserAvailabilityRepository extends EloquentRepository
             //Get status from lookup
             $status = $this->getLookupByKey($statusKey);
 
-            //Check if the user/status exists
-            $model = UserAvailability::where('org_id', $orgId)
-                ->where('user_id', $userId)
-                ->where('status_id', $status['id'])
-                ->first();
-
-            //Check if the data exists
-            if (!empty($model)) {
-                throw new ExistingDataException();
-            } //End if
-
             //Record the status
             $model = UserAvailability::updateOrCreate(
-                [ 'org_id' => $orgId, 'user_id' => $userId ],
+                ['user_id' => $userId, 'org_id' => $orgId],
                 [
                     'status_id' => $status['id'],
                     'ip_address' => $ipAddress
                 ]
             );
 
-	        $objReturnValue = $model;		
-		} catch(ExistingDataException $e) {
-			log::warning('UserAvailabilityRepository:record:ExistingDataException:' . $e->getMessage());
-            throw new ExistingDataException();
+	        $objReturnValue = $model;
 		} catch(Exception $e) {
             log::error('UserAvailabilityRepository:record:Exception:' . $e->getMessage());
 			$objReturnValue=null;
