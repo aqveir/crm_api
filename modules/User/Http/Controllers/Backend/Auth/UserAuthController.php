@@ -108,9 +108,12 @@ class UserAuthController extends ApiBaseController
      *      @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function logout(UserLogoutRequest $request, UserAuthService $service)
+    public function logout(UserLogoutRequest $request, UserAuthService $service, string $subdomain)
     {
         try {
+            //Get Org Hash 
+            $orgHash = $this->getOrgHashInRequest($request, $subdomain);
+
             //Get IP Address
             $ipAddress = $this->getIpAddressInRequest($request);
 
@@ -118,16 +121,13 @@ class UserAuthController extends ApiBaseController
             $payload = collect($request);
 
             //Logout customer
-            $data = $service->logout($payload, $ipAddress);
+            $data = $service->logout($orgHash, $payload, $ipAddress);
 
             //Send response data
             return $this->response->success(compact('data'));
             
-        } catch(AccessDeniedHttpException $e) {
-            return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
         } catch(Exception $e) {
-            log::error('UserAuthController:logout:Exception:' . $e->getMessage());
-            return $this->response->fail([], Response::HTTP_BAD_REQUEST);
+            throw $e;
         }
     } //Function ends
 
@@ -177,10 +177,8 @@ class UserAuthController extends ApiBaseController
             //Send response data
             return $this->response->success(compact('data'));
             
-        } catch(AccessDeniedHttpException $e) {
-            return $this->response->fail([], Response::HTTP_UNAUTHORIZED);
         } catch(Exception $e) {
-            return $this->response->fail([], Response::HTTP_BAD_REQUEST);
+            throw $e;
         }
     } //Function ends
 
@@ -233,10 +231,8 @@ class UserAuthController extends ApiBaseController
             //Send response data
             return $this->response->success(compact('data'));
             
-        } catch(AccessDeniedHttpException $e) {
-            return $this->response->fail([$e->getMessage()], Response::HTTP_UNAUTHORIZED);
         } catch(Exception $e) {
-            return $this->response->fail([$e->getMessage()], Response::HTTP_BAD_REQUEST);
+            throw $e;
         }
     } //Function ends
 

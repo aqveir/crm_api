@@ -147,8 +147,8 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
     {
         // Convert Eloquent's 500 ModelNotFoundException into a 404 NotFoundHttpException
         if ($exception instanceof ModelNotFoundException) {
-            $exception = new NotFoundHttpException($exception->getMessage(), $exception);
-        }
+            $exception = new NotFoundHttpException('ERROR_DATA_NOT_FOUND', $exception);
+        } //End id
 
         foreach ($this->handlers as $hint => $handler) {
             if (! $exception instanceof $hint) {
