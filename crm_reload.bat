@@ -29,5 +29,5 @@ php artisan module:seed Preference
 php artisan module:seed Subscription
 php artisan module:seed Account
 php artisan module:seed ServiceRequest
-php artisan module:seed Wallet
+rem php artisan module:seed Wallet
 echo "Data created..."

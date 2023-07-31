@@ -148,7 +148,7 @@ class UserAuthService extends BaseService
             $user['token'] = $token;
             $user['created_on'] = time();
             $user['expires_in'] = $this->guard()->factory()->getTTL() * 60;
-            $user['privileges'] = $user->getActivePrivileges();
+            $user['privileges'] = $user->getActivePrivileges($organization['id']);
             $user['reportees'] = [];
             $user['settings'] = $user->hasRoles(['super_admin']);
 

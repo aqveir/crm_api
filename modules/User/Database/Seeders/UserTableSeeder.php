@@ -50,7 +50,7 @@ class UserTableSeeder extends Seeder
             $data = \Modules\User\Models\User\UserRole::create([
                 'org_id' => $remoteUser->organization['id'],
                 'user_id' => $remoteUser['id'],
-                'role_id' => 1,
+                'role_id' => 2,
                 'description' => 'System Generated'
             ]);
 
@@ -67,6 +67,26 @@ class UserTableSeeder extends Seeder
                     'description' => 'System Generated'
                 ]);
             });
+
+        //Localhost User
+        $localuser = factory(\Modules\User\Models\User\User::class)->create([
+            'org_id' => 5,
+            'username' => 'localhost@vomoto.com',
+            'password' => 'password',
+            'email' => 'localhost@vomoto.com',
+            'first_name' => 'EllaiSys Localhost',
+            'last_name' => 'Admin',
+            'is_verified' => true
+        ]);
+
+        $data = \Modules\User\Models\User\UserRole::create([
+            'org_id' => 5,
+            'user_id' => $localuser['id'],
+            'role_id' => 1,
+            'description' => 'System Generated'
+        ]);
+
+
         } //End if
     }
 }

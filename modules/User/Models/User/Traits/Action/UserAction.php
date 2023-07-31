@@ -25,7 +25,7 @@ trait UserAction
 	/**
 	 * Check if the User has the given roles
 	 */
-    public function hasRoles(int $orgId, Array $roles, bool $isStrict=false) {
+    public function hasRoles(Array $roles, int $orgId=0, bool $isStrict=false) {
 		$returnValue = false;
         try {
             if ($roles) {
@@ -51,7 +51,7 @@ trait UserAction
 	/**
 	 * Check if the User has the given privileges
 	 */
-    public function hasPrivileges(int $orgId, Array $privileges, bool $isStrict=false) {
+    public function hasPrivileges(Array $privileges, int $orgId=0, bool $isStrict=false) {
 		$returnValue = false;
         try {
             if ($privileges) {

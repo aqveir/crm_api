@@ -189,6 +189,7 @@ class UserService extends BaseService
                     $organization = $this->getOrganizationByHash($orgHash);
                     $orgId = $organization['id'];
                 } else {
+                    $organization = $userCurr->organization;
                     $orgId = $userCurr['org_id'];
                 } //End if
                 $userId = $userCurr['id'];
@@ -227,7 +228,7 @@ class UserService extends BaseService
                 } //End if
                 
                 //Raise event: User Added
-                event(new UserCreatedEvent($user, $isAutoCreated));
+                event(new UserCreatedEvent($organization, $user, $isAutoCreated));
             } else {
                 throw new BadRequestHttpException();
             } //End if
@@ -237,10 +238,10 @@ class UserService extends BaseService
 
         } catch(AccessDeniedHttpException $e) {
             log::error('UserService:create:AccessDeniedHttpException:' . $e->getMessage());
-            throw new AccessDeniedHttpException($e->getMessage());
+            throw $e;
         } catch(BadRequestHttpException $e) {
             log::error('UserService:create:BadRequestHttpException:' . $e->getMessage());
-            throw new BadRequestHttpException($e->getMessage());
+            throw $e;
         } catch(Exception $e) {
             log::error('UserService:create:Exception:' . $e->getMessage());
             throw new HttpException(500);
@@ -294,17 +295,17 @@ class UserService extends BaseService
             //TODO: Update Privileges
 
             //Raise event: User Updated
-            event(new UserUpdatedEvent($user));
+            event(new UserUpdatedEvent($organization, $user));
 
             //Assign to the return value
             $objReturnValue = $user;
 
         } catch(AccessDeniedHttpException $e) {
             log::error('UserService:update:AccessDeniedHttpException:' . $e->getMessage());
-            throw new AccessDeniedHttpException($e->getMessage());
+            throw $e;
         } catch(BadRequestHttpException $e) {
             log::error('UserService:update:BadRequestHttpException:' . $e->getMessage());
-            throw new BadRequestHttpException($e->getMessage());
+            throw $e;
         } catch(Exception $e) {
             log::error('UserService:update:Exception:' . $e->getMessage());
             throw new HttpException(500);
@@ -350,17 +351,17 @@ class UserService extends BaseService
             //TODO: Update Privileges
 
             //Raise event: User Updated
-            event(new UserDeletedEvent($user, $ipAddress));
+            event(new UserDeletedEvent($organization, $user, $ipAddress));
 
             //Assign to the return value
             $objReturnValue = $user;
 
         } catch(AccessDeniedHttpException $e) {
             log::error('UserService:update:AccessDeniedHttpException:' . $e->getMessage());
-            throw new AccessDeniedHttpException($e->getMessage());
+            throw $e;
         } catch(BadRequestHttpException $e) {
             log::error('UserService:update:BadRequestHttpException:' . $e->getMessage());
-            throw new BadRequestHttpException($e->getMessage());
+            throw $e;
         } catch(Exception $e) {
             log::error('UserService:update:Exception:' . $e->getMessage());
             throw new HttpException(500);
