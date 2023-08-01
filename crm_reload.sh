@@ -1,18 +1,18 @@
 echo "Clearing code dump & swagger..."
-sudo php composer.phar dump-autoload
-sudo php artisan l5-swagger:generate
+php composer.phar dump-autoload
+php artisan l5-swagger:generate
 
 echo "Cache cleaning..."
-sudo php artisan cache:clear
-sudo php artisan config:clear
-sudo php artisan route:clear
-sudo php artisan view:clear
+php artisan cache:clear
+php artisan config:clear
+php artisan route:clear
+php artisan view:clear
 echo "Cache cleared."
 
 echo "Settng system access..."
-sudo chown -R ec2-user:ec2-user .
-sudo chmod -R 777 storage/.
-sudo chmod -R 777 public/.
+chown -R apache:apache .
+chmod -R 777 storage/.
+chmod -R 777 public/.
 echo "System access granted."
 
 echo "Clearing logs..."
@@ -20,23 +20,23 @@ sudo cat /dev/null > storage/logs/laravel.log
 echo "Logs cleared."
 
 echo "Generating Laravel App Key..."
-sudo php artisan key:generate --force --quiet
+php artisan key:generate --force --quiet
 echo "Generated Laravel App Key"
 
 echo "Generating JWT Secret..."
-sudo php artisan jwt:secret --force --quiet
+php artisan jwt:secret --force --quiet
 echo "Generated JWT Secret Key"
 
 echo "Creating DB..."
-sudo php artisan migrate:refresh
+php artisan migrate:refresh
 echo "DB created."
 
 echo "Creating meta and dummy data ..."
-sudo php artisan module:seed Core
-sudo php artisan module:seed Contact
-sudo php artisan module:seed User
-sudo php artisan module:seed Preference
-sudo php artisan module:seed Subscription
-sudo php artisan module:seed Account
-sudo php artisan module:seed ServiceRequest
+php artisan module:seed Core
+php artisan module:seed Contact
+php artisan module:seed User
+php artisan module:seed Preference
+php artisan module:seed Subscription
+php artisan module:seed Account
+php artisan module:seed ServiceRequest
 echo "Data created..."

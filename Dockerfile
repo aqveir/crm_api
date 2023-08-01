@@ -1,32 +1,59 @@
-FROM composer:latest as vendor
-WORKDIR /aqveir/aqveir-api
-COPY composer.json composer.json
-COPY composer.lock composer.lock
-RUN composer install \
-    --ignore-platform-reqs \
-    --no-interaction \
-    --no-plugins \
-    --no-scripts \
-    --prefer-dist
-
+# Select the DNF Amazon Linux 2023 edition
 FROM amazonlinux:latest
-LABEL Name=ellaisys/aqveir-api Version=0.0.1
+LABEL Name=aqveir/aqveir-api Version=0.0.1
 RUN yum update -y; \
     yum install -y sudo; \
     yum install -y git; \
+    yum install -y curl; \
+    yum install -y zip; \
+    yum install -y unzip; \
     cd /
 
-# Install Apache and PHP7.4 and essential libraries
-RUN amazon-linux-extras install -y httpd httpd_modules; \
-    amazon-linux-extras install -y php7.4; \
-    yum clean metadata; \
-    yum install -y php php-{pear,cli,cgi,common,curl,mbstring,gd,mysqlnd,gettext,bcmath,json,xml,fpm,intl,zip}; \
-    cd /
+# CRM-API Docker file Environemnt Variables
+ENV PORT=8888
 
-# Install Project files
-RUN mkdir -p aqveir; \
-    # git clone git@bitbucket.org:ellaisys/eis_crmomni_api.git; \
-    chown -R apache:apache /aqveir
+# Update the DNF package of the Amazon Linux 2023 edition
+RUN dnf update -y
+
+# Install Apache and PHP8.1 and essential libraries
+RUN dnf install -y httpd; \
+    dnf install -y php8.2; \
+    yum clean metadata;
+RUN yum install -y php8.2-{cli,common,mbstring,gd,mysqlnd,xml,fpm,intl,bcmath};
+RUN cd /
+
+# Build PHP8.1 Zip work-around
+RUN dnf install -y php8.2-devel php-pear libzip libzip-devel
+RUN pecl install zip
+RUN "extension=zip.so" | sudo tee /etc/php.d/20-zip.ini
+
+# Latest composer release
+COPY --from=composer/composer:latest-bin /composer /usr/bin/composer
+
+# Install Project files from the repo
+RUN cd /; mkdir -p aqveir; \
+    cd /aqveir; \
+    git clone https://github.com/aqveir/crm_api.git aqveir-api;
+RUN cd /aqveir/aqveir-api
+
+# Set ownership and permissions for the folder
+RUN chown -R apache:apache /aqveir
+RUN chmod -R 777 /aqveir/aqveir-api/public /aqveir/aqveir-api/storage
+
+WORKDIR /aqveir/aqveir-api
+
+# Checkout the branch
+RUN git config --global --add safe.directory /aqveir/aqveir-api
+RUN git checkout master
+RUN git pull -f origin master
+
+# Install dependencies
+RUN composer install --ignore-platform-req=ext-zip
+COPY .env .
+
+# Run the shell command
+RUN chmod +x crm_reload.sh
+# ENTRYPOINT ["sh", "crm_reload.sh"]
 
 # Update the apache config file
 # RUN touch /etc/httpd/conf/aqveir-apache-ssl.conf
@@ -127,9 +154,10 @@ RUN mkdir -p aqveir; \
 #RUN echo "Include '/etc/httpd/conf/aqveir-apache-ssl.conf'" >> /etc/httpd/conf/httpd.conf
 
 #Open ports
-EXPOSE 80/tcp
+EXPOSE ${PORT}/tcp
 EXPOSE 443/tcp
 
 #ENTRYPOINT ["/"]
 # Start the Apache Server
-CMD ["/usr/sbin/httpd","-DFOREGROUND"]
+# CMD ["/usr/sbin/httpd","-DFOREGROUND"]
+CMD php artisan serve --host 0.0.0.0 --port ${PORT}

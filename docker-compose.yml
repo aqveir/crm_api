@@ -6,7 +6,7 @@ services:
     tty: true
     privileged: true
     container_name: aqveir-api
-    image: ellaisys/aqveir-api
+    image: aqveir/aqveir-api
     build:
       context: .
       dockerfile: ./Dockerfile

@@ -1,14 +1,6 @@
 /.phpunit.cache
-/node_modules
 /public/build
 /public/hot
-/public/storage
-/storage/*.key
-/vendor
-
-.env
-.env.backup
-.env.production
 
 .phpunit.result.cache
 Homestead.json
@@ -28,8 +20,10 @@ yarn-error.log
 /packages
 /storage/logs/*
 
+# Ignore files relating to environment 
 .env
 .env.backup
+.env.production
 
 .phpunit.result.cache
 Homestead.json
