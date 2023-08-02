@@ -6,12 +6,12 @@ services:
     tty: true
     privileged: true
     container_name: aqveir-api
-    image: aqveir/aqveir-api
+    image: aqveir-api
     build:
       context: .
       dockerfile: ./Dockerfile
     ports:
-      - "80:80"
+      - "8000:8888"
 
 networks:
   default:

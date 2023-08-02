@@ -49,11 +49,11 @@ COPY .env .
 
 # Set ownership and permissions for the folder
 RUN chown -R apache:apache /aqveir
-RUN chmod -R 777 /aqveir/aqveir-api/public /aqveir/aqveir-api/storage
+RUN chmod -R 777 /aqveir/aqveir-api/bootstrap /aqveir/aqveir-api/public /aqveir/aqveir-api/storage
 
 # Run the shell command
 RUN chmod +x crm_reload.sh
-# ENTRYPOINT ["bash", "crm_reload.sh"]
+#ENTRYPOINT ["bash", "crm_reload.sh"]
 
 # Update the apache config file
 # RUN touch /etc/httpd/conf/aqveir-apache-ssl.conf
