@@ -25,7 +25,7 @@ RUN cd /
 # Build PHP8.1 Zip work-around
 RUN dnf install -y php8.2-devel php-pear libzip libzip-devel
 RUN pecl install zip
-RUN "extension=zip.so" | sudo tee /etc/php.d/20-zip.ini
+RUN echo "extension=zip.so" | sudo tee /etc/php.d/20-zip.ini
 
 # Latest composer release
 COPY --from=composer/composer:latest-bin /composer /usr/bin/composer
@@ -36,10 +36,6 @@ RUN cd /; mkdir -p aqveir; \
     git clone https://github.com/aqveir/crm_api.git aqveir-api;
 RUN cd /aqveir/aqveir-api
 
-# Set ownership and permissions for the folder
-RUN chown -R apache:apache /aqveir
-RUN chmod -R 777 /aqveir/aqveir-api/public /aqveir/aqveir-api/storage
-
 WORKDIR /aqveir/aqveir-api
 
 # Checkout the branch
@@ -48,12 +44,16 @@ RUN git checkout master
 RUN git pull -f origin master
 
 # Install dependencies
-RUN composer install --ignore-platform-req=ext-zip
+RUN composer install
 COPY .env .
+
+# Set ownership and permissions for the folder
+RUN chown -R apache:apache /aqveir
+RUN chmod -R 777 /aqveir/aqveir-api/public /aqveir/aqveir-api/storage
 
 # Run the shell command
 RUN chmod +x crm_reload.sh
-# ENTRYPOINT ["sh", "crm_reload.sh"]
+# ENTRYPOINT ["bash", "crm_reload.sh"]
 
 # Update the apache config file
 # RUN touch /etc/httpd/conf/aqveir-apache-ssl.conf
