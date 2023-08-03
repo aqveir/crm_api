@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Support\Str;
+// use Illuminate\Support\Str;
 
 return [
 
@@ -128,7 +128,7 @@ return [
 
     'cookie' => env(
         'SESSION_COOKIE',
-        Str::slug(env('APP_NAME', 'laravel'), '_').'_session'
+        (env('APP_NAME', 'laravel'), '_').'_session'
     ),
 
     /*
