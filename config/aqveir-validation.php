@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Validation\Rule;
+//use Illuminate\Validation\Rule;
 //use Modules\Core\Rules\PhoneValidationRule;
 
 return [
@@ -524,7 +524,7 @@ return [
                             'required',
                             'string',
                             'max:100',
-                            Rule::unique('preferences', 'name')
+                            //Rule::unique('preferences', 'name')
                         ],
                         'display_value' => 'required|string|max:100',
                         'description' => 'nullable|string|max:1000', 
