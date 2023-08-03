@@ -128,7 +128,7 @@ return [
 
     'cookie' => env(
         'SESSION_COOKIE',
-        (env('APP_NAME', 'laravel'), '_').'_session'
+        env('APP_NAME', 'laravel').'_session'
     ),
 
     /*
