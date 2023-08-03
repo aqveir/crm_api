@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Validation\Rule;
-use Modules\Core\Rules\PhoneValidationRule;
+//use Modules\Core\Rules\PhoneValidationRule;
 
 return [
     'request_handler' => [
