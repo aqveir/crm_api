@@ -29,7 +29,7 @@ echo "Generating JWT Secret..."
 php artisan jwt:secret --force --quiet
 echo "Generated JWT Secret Key"
 
-if "$expres"; then
+#if "$expres"; then
     echo "Creating DB..."
     php artisan migrate:refresh
     echo "DB created."
@@ -43,4 +43,4 @@ if "$expres"; then
     php artisan module:seed Account
     php artisan module:seed ServiceRequest
     echo "Data created..."
-fi
+#fi

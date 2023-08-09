@@ -1,29 +1,30 @@
 # Select the DNF Amazon Linux 2023 edition
 FROM amazonlinux:latest
+
 LABEL Name=aqveir/aqveir-api Version=0.0.1
-RUN yum update -y; \
-    yum install -y sudo; \
-    yum install -y git; \
-    yum install -y curl; \
-    yum install -y zip; \
-    yum install -y unzip; \
+
+# Update the DNF package of the Amazon Linux 2023 edition
+RUN dnf update -y; \
+    dnf install -y sudo; \
+    dnf install -y git; \
+    dnf install -y curl; \
+    dnf install -y zip; \
+    dnf install -y unzip; \
     cd /
 
 # CRM-API Docker file Environemnt Variables
 ENV PORT=8888
 
-# Update the DNF package of the Amazon Linux 2023 edition
-RUN dnf update -y
-
 # Install Apache and PHP8.1 and essential libraries
 RUN dnf install -y httpd; \
     dnf install -y php8.2; \
-    yum clean metadata;
-RUN yum install -y php8.2-{cli,common,mbstring,gd,mysqlnd,xml,fpm,intl,bcmath};
+    dnf install -y php8.2-devel php-pear libzip libzip-devel php-json php-curl; \
+    dnf clean metadata;
+RUN dnf install -y php-{cli,common,dom,pear,fpm,gd,bcmath,mbstring,mysqlnd,xml,intl};
 RUN cd /
 
 # Build PHP8.1 Zip work-around
-RUN dnf install -y php8.2-devel php-pear libzip libzip-devel
+# RUN dnf install -y php8.2-devel php-pear libzip libzip-devel php-json php-curl
 RUN pecl install zip
 RUN echo "extension=zip.so" | sudo tee /etc/php.d/20-zip.ini
 
@@ -53,7 +54,7 @@ RUN chmod -R 777 /aqveir/aqveir-api/bootstrap /aqveir/aqveir-api/public /aqveir/
 
 # Run the shell command
 RUN chmod +x crm_reload.sh
-#ENTRYPOINT ["bash", "crm_reload.sh"]
+ENTRYPOINT ["bash", "crm_reload.sh"]
 
 # Update the apache config file
 # RUN touch /etc/httpd/conf/aqveir-apache-ssl.conf
