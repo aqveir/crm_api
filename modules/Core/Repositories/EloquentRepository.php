@@ -507,23 +507,26 @@ abstract class EloquentRepository //implements RepositoryContract
      *
      * @return mixed
      */
-    public function update($item, string $column='id', array $attributes, int $userId=null, string $ipAddress=null)
+    public function update($item, string $column='id', array $attributes=[], int $userId=null, string $ipAddress=null)
     {
         $model = $this->getByColumn($item, $column);
-        $model->update($attributes);
 
-        if ((!empty($userId)) || (!empty($ipAddress))) {
-            if (!empty($userId)) {
-                $model['updated_by'] = $userId;
-            } //End if
-            
-            if (!empty($ipAddress)) {
-                $model['ip_address'] = $userId;
-            } //End if
+        if ($attributes && is_array($attributes) && count($attributes)>0) {
+            $model->update($attributes);
 
-            $model->save();
+            if ((!empty($userId)) || (!empty($ipAddress))) {
+                if (!empty($userId)) {
+                    $model['updated_by'] = $userId;
+                } //End if
+                
+                if (!empty($ipAddress)) {
+                    $model['ip_address'] = $userId;
+                } //End if
+
+                $model->save();
+            } //End if
         } //End if
-        
+
         return $model;
     } //Function ends
 
