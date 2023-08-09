@@ -78,3 +78,12 @@ Also, you will need to modify the endpoint and region for wget call based on you
 
 ## Refernce Material
 1. Refer to this video link for step-by-step reference https://youtu.be/K8J6ngMekx4
+
+# Docker
+
+## Build Docker Image
+```cmd
+
+    docker build --file Dockerfile -t aqveir-api .
+
+```
