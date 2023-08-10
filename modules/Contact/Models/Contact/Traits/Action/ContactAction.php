@@ -98,7 +98,7 @@ trait ContactAction
 	/**
 	* Get Contact by Identifier
 	*/
-	public function getContactById(int $orgId=0, int $id)
+	public function getContactById(int $orgId, int $id)
 	{
 		$objReturnValue=null;
 		try {
