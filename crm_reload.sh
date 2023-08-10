@@ -1,4 +1,27 @@
-local expres="${1:-false}"    # Default value is false
+#!/bin/bash
+
+# Function to run the DB Migrations and Data Seeding
+migrateFunction() {
+    ARG_DB_MIGRATE="${1:-false}"    # Default value is false
+    ARG_DB_SEED="${2:-false}"       # Default value is false
+
+    echo $ARG_DB_MIGRATE
+    echo $ARG_DB_SEED    
+
+    echo "Creating DB..."
+    php artisan migrate:refresh
+    echo "DB created."
+
+    echo "Creating meta and dummy data ..."
+    php artisan module:seed Core
+    php artisan module:seed Contact
+    php artisan module:seed User
+    php artisan module:seed Preference
+    php artisan module:seed Subscription
+    php artisan module:seed Account
+    php artisan module:seed ServiceRequest
+    echo "Data created..."    
+}
 
 echo "Clearing code dump & swagger..."
 php composer.phar dump-autoload
@@ -29,18 +52,4 @@ echo "Generating JWT Secret..."
 php artisan jwt:secret --force --quiet
 echo "Generated JWT Secret Key"
 
-#if "$expres"; then
-    echo "Creating DB..."
-    php artisan migrate:refresh
-    echo "DB created."
-
-    echo "Creating meta and dummy data ..."
-    php artisan module:seed Core
-    php artisan module:seed Contact
-    php artisan module:seed User
-    php artisan module:seed Preference
-    php artisan module:seed Subscription
-    php artisan module:seed Account
-    php artisan module:seed ServiceRequest
-    echo "Data created..."
-#fi
+migrateFunction $1 $2
