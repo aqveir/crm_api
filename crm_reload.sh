@@ -6,7 +6,7 @@ migrateFunction() {
     ARG_DB_SEED="${2:-false}"       # Default value is false
 
     echo $ARG_DB_MIGRATE
-    echo $ARG_DB_SEED    
+    echo $ARG_DB_SEED
 
     echo "Creating DB..."
     php artisan migrate:refresh
@@ -20,7 +20,7 @@ migrateFunction() {
     php artisan module:seed Subscription
     php artisan module:seed Account
     php artisan module:seed ServiceRequest
-    echo "Data created..."    
+    echo "Data created..."
 }
 
 echo "Clearing code dump & swagger..."
@@ -52,4 +52,6 @@ echo "Generating JWT Secret..."
 php artisan jwt:secret --force --quiet
 echo "Generated JWT Secret Key"
 
-migrateFunction $1 $2
+if [ $1 == true ]; then
+    migrateFunction $1 $2
+fi
