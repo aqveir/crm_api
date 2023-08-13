@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 
 use Modules\Contact\Imports\ContactImportExcel;
+use Modules\Contact\Imports\ContactImportVcard;
 
 use Modules\Core\Repositories\Lookup\LookupValueRepository;
 use Modules\Core\Repositories\Organization\OrganizationRepository;
@@ -194,7 +195,8 @@ class ContactFileService extends BaseService
                         break;
 
                     case 'vcf': //Virtual Card Format
-
+                        //Contact Import class
+                        $contactImport = new ContactImportVcard;
                         break;
 
                     default:

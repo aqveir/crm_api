@@ -452,7 +452,7 @@ return [
                 'upload' => [
                     'validation_rules' => [
                         'files' => 'required',
-                        'files.*' => 'required|file|mimes:csv,txt,xls,xlsx,vcf,vcard|max:1024'
+                        'files.*' => 'required|file|mimes:csv,txt,xls,xlsx,vcf,vcard'
                     ]
                 ],
 
