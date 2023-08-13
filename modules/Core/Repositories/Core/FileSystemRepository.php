@@ -35,7 +35,7 @@ class FileSystemRepository
             if ($file->isValid()) 
             {
                 //Max upload file size in MB
-                $MAX_UPLOAD_FILESIZE = ($maxUploadFileSize>0)?:(config('filesystems.upload_document_filesize')*(1024*1024));
+                $MAX_UPLOAD_FILESIZE = ($maxUploadFileSize>0)?:(config('filesystems.upload_document_filesize', 5)*(1024*1024));
 
                 //Get File Related Info
                 $fileName = $file->getClientOriginalName();

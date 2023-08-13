@@ -37,10 +37,11 @@ class ContactUploadListener
     {
         $organization = $event->model;
         $files = $event->files;
+        $ipAddress = $event->ipAddress;
         $isAutoCreated = $event->isAutoCreated;
 
         //Create the default user
-        $this->service->processUpload($organization['hash'], $files, $isAutoCreated);
+        $this->service->processUpload($organization['hash'], $files, $ipAddress, $isAutoCreated);
     } //Function ends
 
 } //Class ends

@@ -22,6 +22,12 @@ class ContactUploadedEvent
 
 
     /**
+     * IP Address variable
+     */
+    public $ipAddress;
+
+
+    /**
      * Is Model Auto Created variable
      */
     public $isAutoCreated;
@@ -32,10 +38,11 @@ class ContactUploadedEvent
      *
      * @return void
      */
-    public function __construct($model, $files, bool $isAutoCreated=false)
+    public function __construct($model, $files, string $ipAddress=null, bool $isAutoCreated=false)
     {
         $this->model = $model;
         $this->files = $files;
+        $this->ipAddress = $ipAddress;
         $this->isAutoCreated = $isAutoCreated;
     }
 
