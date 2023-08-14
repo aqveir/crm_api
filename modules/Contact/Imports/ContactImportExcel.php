@@ -10,7 +10,7 @@ use Maatwebsite\Excel\Concerns\ToArray;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class ContactImport implements ToArray, WithHeadingRow
+class ContactImportExcel implements ToArray, WithHeadingRow
 {
     use Importable;
 

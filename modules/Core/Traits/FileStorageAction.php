@@ -44,7 +44,7 @@ trait FileStorageAction
             $objReturnValue = $objFileStore;
         } catch(Exception $e) {
             Log::error($e);
-            throw new HttpException(500);
+            throw $e;
         } //Try-catch ends
 
         return $objReturnValue;

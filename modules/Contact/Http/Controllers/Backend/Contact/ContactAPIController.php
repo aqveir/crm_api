@@ -329,7 +329,7 @@ class ContactAPIController extends ApiBaseController
             if ($request->hasFile('files')) {
                 $files = $request->file('files');
             } else {
-                throw new BadRequestHttpException();
+                throw new BadRequestHttpException('ERROR_UPLOADED_FILES_MISSING');
             } //End if
 
             //Create payload
@@ -340,12 +340,8 @@ class ContactAPIController extends ApiBaseController
 
             //Send response data
             return $this->response->success(compact('data'));
-        } catch (AccessDeniedHttpException $e) {
-            throw new AccessDeniedHttpException($e->getMessage());
-        } catch (UnauthorizedHttpException $e) {
-            throw new UnauthorizedHttpException($e->getMessage());
         } catch (Exception $e) {  
-            throw new HttpException(500, $e->getMessage());
+            throw $e;
         } //Try-catch ends
 
     } //Function ends

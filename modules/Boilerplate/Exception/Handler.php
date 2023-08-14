@@ -3,19 +3,24 @@
 namespace Modules\Boilerplate\Exception;
 
 use Modules\Boilerplate\Http\Request;
-use Exception;
+
 use ReflectionFunction;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Str;
+
 use Illuminate\Http\Response;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
+
+use Throwable;
+use Exception;
+use Illuminate\Validation\ValidationException;
 use Modules\Boilerplate\Contract\Debug\ExceptionHandler;
 use Modules\Boilerplate\Contract\Debug\MessageBagErrors;
-use Illuminate\Validation\ValidationException;
+
 use Symfony\Component\HttpFoundation\Response as BaseResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Illuminate\Contracts\Debug\ExceptionHandler as IlluminateExceptionHandler;
-use Throwable;
 
 class Handler implements ExceptionHandler, IlluminateExceptionHandler
 {
@@ -284,6 +289,9 @@ class Handler implements ExceptionHandler, IlluminateExceptionHandler
                 ];
             }
         }
+
+        //Error Logger
+        Log::error($exception->getFile() . ':upload:' . get_class($exception) .':' . $message);
 
         return array_merge($replacements, $this->replacements);
     }

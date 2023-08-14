@@ -7,7 +7,8 @@ use Carbon\Carbon;
 
 use Maatwebsite\Excel\Facades\Excel;
 
-use Modules\Contact\Imports\ContactImport;
+use Modules\Contact\Imports\ContactImportExcel;
+use Modules\Contact\Imports\ContactImportVcard;
 
 use Modules\Core\Repositories\Lookup\LookupValueRepository;
 use Modules\Core\Repositories\Organization\OrganizationRepository;
@@ -138,17 +139,17 @@ class ContactFileService extends BaseService
             Notification::send($organization, new ContactImportNotification($organization, $savedFiles));
 
             //Raise upload event
-            event(new ContactUploadedEvent($organization, $savedFiles));
+            event(new ContactUploadedEvent($organization, $savedFiles, $ipAddress));
 
             //Assign to the return value
             $objReturnValue = $savedFiles;
 
         } catch(AccessDeniedHttpException $e) {
             log::error('ContactFileService:upload:AccessDeniedHttpException:' . $e->getMessage());
-            throw new AccessDeniedHttpException($e->getMessage());
+            throw $e;
         } catch(BadRequestHttpException $e) {
             log::error('ContactFileService:upload:BadRequestHttpException:' . $e->getMessage());
-            throw new BadRequestHttpException($e->getMessage());
+            throw $e;
         } catch(Exception $e) {
             log::error('ContactFileService:upload:Exception:' . $e->getMessage());
             throw new HttpException(500);
@@ -167,16 +168,13 @@ class ContactFileService extends BaseService
      * @param  \string  $ipAddress (optional)
      * 
      */
-    public function processUpload(string $orgHash, array $files, string $ipAddress=null)
+    public function processUpload(string $orgHash, array $files, string $ipAddress=null, bool $isAutoCreated=false)
     {
-        $objReturnValue=null;
+        $objReturnValue=null;$response=[];
 
         try {
             //Get organization data
             $organization = $this->getOrganizationByHash($orgHash);
-
-            //Contact Import class
-            $contactImport = new ContactImport;
 
             //Iterate contacts
             $contacts = [];
@@ -185,12 +183,20 @@ class ContactFileService extends BaseService
             foreach ($files as $file) {
                 switch ($file['file_extn']) {
                     case 'xlsx':
+                        //Contact Import class
+                        $contactImport = new ContactImportExcel;
+
                         $response = $contactImport->toArray(storage_path('app').'/'.$file['file_path']);
                         $response = $this->processFileDataArray($organization, $response);
                         break;
                     
                     case 'csv':
 
+                        break;
+
+                    case 'vcf': //Virtual Card Format
+                        //Contact Import class
+                        $contactImport = new ContactImportVcard;
                         break;
 
                     default:
@@ -209,7 +215,6 @@ class ContactFileService extends BaseService
                 Log::info($contacts);
                 Log::info('processUpload called');
 
-                
             } //End if
 
             //Raise upload event
@@ -220,10 +225,10 @@ class ContactFileService extends BaseService
 
         } catch(AccessDeniedHttpException $e) {
             log::error('ContactFileService:processUpload:AccessDeniedHttpException:' . $e->getMessage());
-            throw new AccessDeniedHttpException($e->getMessage());
+            throw $e;
         } catch(BadRequestHttpException $e) {
             log::error('ContactFileService:processUpload:BadRequestHttpException:' . $e->getMessage());
-            throw new BadRequestHttpException($e->getMessage());
+            throw $e;
         } catch(Exception $e) {
             log::error('ContactFileService:processUpload:Exception:' . $e->getMessage());
             throw new HttpException(500);

@@ -451,7 +451,8 @@ return [
                 //Contact upload
                 'upload' => [
                     'validation_rules' => [
-                        'files.*' => 'required|file|mimes:csv,txt,xls,xlsx|max:1024'
+                        'files' => 'required',
+                        'files.*' => 'required|file|mimes:csv,txt,xls,xlsx,vcf,vcard'
                     ]
                 ],
 
