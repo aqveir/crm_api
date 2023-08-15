@@ -2,8 +2,21 @@
 
 namespace Modules\Contact\Imports;
 
+use Config;
+use Carbon\Carbon;
+
+use Sabre\VObject;
+
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+
+use Exception;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class ContactImportVcard
 {
@@ -31,57 +44,174 @@ class ContactImportVcard
      * 
      * @return $contacts
      */
-    public function processDataArray(array $rows)
+    public function processDataArray($organization, $data, string $type='contact_type_customer'): array
     {
         try {
             //Initialize the contacts array
             $contacts = [];
-            
-            //Iterate rows in the sheet
-            foreach ($rows as $row) 
-            {
-                Log::info($row);
-                //Set contact value
-                $contact = $row;
 
-                //Iterate columns in the row
-                foreach ($row as $key => $value) {
-                    //Handle email address 
-                    if ($key=='email') {
-                        $contact['details'] = [];
-                        $contact['details']['type_key'] = 'contact_detail_type_email';
-                        $contact['details']['subtype_key'] = 'contact_detail_subtype_email_personal';
-                        $contact['details']['identifier'] = $row['email'];
-                        $contact['details']['is_primary'] = true;
+            //Read the Vcards data from the file stream.
+            $splitter = new VObject\Splitter\VCard($data);
+            if ($splitter) {
+                while($vcard = $splitter->getNext()) {
+
+                    Log::info(json_encode($vcard->jsonSerialize(),JSON_PRETTY_PRINT));
+
+                    //Set contact value
+                    $contact = [];
+                    $contact['org_id'] = $organization['id'];
+
+                    //Contact Name
+                    $fullName = (string)$vcard->FN;
+                    $contact['first_name'] = $fullName;
+                    $contact['middle_name'] = $fullName;
+                    $contact['last_name'] = $fullName;
+
+                    //Contact Type
+                    $contact['type'] = $type;
+
+                    //Contact DOB
+                    if ($vcard->BDAY) {
+                        $contact['birth_at'] = Carbon::parse((string)$vcard->BDAY,'UTC')->format(config('aqveir.settings.date_format_response_generic'));
                     } //End if
 
-                    //Handle phone number 
-                    if ($key=='phone') {
-                        $contact['details'] = [];
-                        $contact['details']['type_key'] = 'contact_detail_type_phone';
-                        $contact['details']['subtype_key'] = 'contact_detail_subtype_email_personal';
-                        $contact['details']['identifier'] = $row['phone'];
-                        $contact['details']['is_primary'] = true;
+                    //Contact gender
+                    if ($gender = (string)$vcard->NOTE) {
+                        switch ($gender) {
+                            case 'Gender: Male':
+                                $contact['contact_gender']='contact_gender_male';
+                                break;
+                            
+                            case 'Gender: Female':
+                                $contact['contact_gender']='contact_gender_female';
+                                break;
+                            
+                            default:
+                            $contact['contact_gender']='contact_gender_others';
+                                break;
+                        } //Switch ends
                     } //End if
-                } //Loop ends
+                    
+                    //Iterate columns for Phone Number
+                    if ($vcard->TEL) {
+                        $contact['details']=[];
+                        $isPrimary=false;
+                        foreach ($vcard->TEL as $tel) {   
+                            $details = [];
+                            $details['type_key'] = 'contact_detail_type_phone';
+                            switch ($tel['TYPE']) {
+                                case 'HOME':
+                                    $details['subtype_key'] = 'contact_detail_subtype_phone_landline';
+                                    break;
 
-                array_push($contacts, $contact);
-            } //Loop ends
+                                case 'CELL':
+                                default:
+                                    $details['subtype_key'] = 'contact_detail_subtype_phone_mobile';
+                                    if (!$isPrimary) {
+                                        $details['is_primary'] = true;
+                                        $isPrimary=true;
+                                    } //End if
+                                    break;
+                            } //Switch ends
+                            $details['identifier'] = (string)$tel;
+
+                            array_push($contact['details'], $details);
+                        } //Loop ends                        
+                    } //End if
+
+                    //Iterate for Email Address
+                    if ($vcard->EMAIL) {
+                        $contact['details']=[];
+                        $isPrimary=false;
+                        foreach ($vcard->EMAIL as $email) {   
+                            $details = [];
+                            $details['type_key'] = 'contact_detail_type_email';
+                            switch ($email['TYPE']) {
+                                case 'INTERNET,WORK':
+                                case 'WORK':
+                                    $details['subtype_key'] = 'contact_detail_subtype_email_work';
+                                    break;
+
+                                case 'INTERNET,HOME':
+                                case 'HOME':
+                                default:
+                                    $details['subtype_key'] = 'contact_detail_subtype_email_personal';
+                                    if (!$isPrimary) {
+                                        $details['is_primary'] = true;
+                                        $isPrimary=true;
+                                    } //End if
+                                    break;
+                            } //Switch ends
+                            $details['identifier'] = (string)$email;
+
+                            array_push($contact['details'], $details);
+                        } //Loop ends                        
+                    } //End if
+
+                    //Add the VCard to the contacts notes for future refernce
+                    $contact['notes'] = [];
+                    array_push($contact['notes'], [
+                        'org_id' => $organization['id'],
+                        'entity_type' => 'entity_type_contact',
+                        'note' => $vcard->serialize()
+                    ]);
+    
+                    array_push($contacts, $contact);
+                } //loop ends
+            } //End if
 
             return $contacts;
-
         } catch(Exception $e) {
             throw $e;
         } //Try-Catch ends
     } //Function ends
-    
+
 
     /**
-     * The row heading set to 1
+     * @param  string|UploadedFile|null  $filePath
+     * @param  string|null  $disk
+     * @param  string|null  $readerType
+     * @return array
+     *
+     * @throws BadRequestHttpException
      */
-    public function headingRow(): int
+    public function parse($filePath = null, string $disk = null, string $readerType = null)
     {
-        return 1;
+        $filePath = $this->getFilePath($filePath);
+        $data = null;
+
+        try {
+            if (file_exists($filePath)) {
+                $data = file_get_contents($filePath);
+                if (!$data) {
+                    throw new BadRequestHttpException('ERROR_FILE_DATA');
+                } //End if
+            } else {
+                $data = null;
+            } //End if
+        } catch(Exception $e) {
+            throw $e;
+        } //Try-Catch ends
+
+        return $data;
+    } //Function ends
+
+
+    /**
+     * @param  UploadedFile|string|null  $filePath
+     * @return UploadedFile|string
+     *
+     * @throws NoFilePathGivenException
+     */
+    private function getFilePath($filePath = null)
+    {
+        $filePath = $filePath ?? $this->filePath ?? null;
+
+        if (null === $filePath) {
+            throw new BadRequestHttpException('ERROR_FILE_MISSING');
+        } //End if
+
+        return $filePath;
     } //Function ends
 
 } //Class ends

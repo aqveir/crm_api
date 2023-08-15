@@ -18,6 +18,7 @@
         "maatwebsite/excel": "^3.1",
         "nwidart/laravel-modules": "^10.0",
         "phpoffice/phpspreadsheet": "*",
+        "sabre/vobject": "^4.0",
         "tymon/jwt-auth": "^2.0"
     },
     "require-dev": {

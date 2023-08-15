@@ -197,6 +197,9 @@ class ContactFileService extends BaseService
                     case 'vcf': //Virtual Card Format
                         //Contact Import class
                         $contactImport = new ContactImportVcard;
+                        $response = $contactImport->parse(storage_path('app').'/'.$file['file_path']);
+                        $response = $contactImport->processDataArray($organization, $response);
+                        log:info($response);
                         break;
 
                     default:
