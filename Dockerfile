@@ -13,7 +13,7 @@ RUN dnf update -y; \
     cd /
 
 # CRM-API Docker file Environemnt Variables
-ENV PORT=8888
+ENV PORT=8989
 
 # Install Apache and PHP8.1 and essential libraries
 RUN dnf install -y httpd; \
@@ -46,119 +46,32 @@ RUN git pull -f origin master
 
 # Install dependencies
 RUN composer install
+
+# Copy the environment file
 COPY .env .
 
 # Set ownership and permissions for the folder
 RUN chown -R apache:apache /aqveir
 RUN chmod -R 777 /aqveir/aqveir-api/bootstrap /aqveir/aqveir-api/public /aqveir/aqveir-api/storage
 
+#Open ports
+EXPOSE 80/tcp
+EXPOSE 443/tcp
+EXPOSE ${PORT}/tcp
+
+# Copy apache configuration & restart apache server
+COPY aqveir-apache.conf /etc/httpd/conf.d
+RUN chmod 644 /etc/httpd/conf.d/aqveir-apache.conf
+
 # Run the shell command
 RUN chmod +x crm_reload.sh
-ENTRYPOINT ["bash", "crm_reload.sh"]
+RUN bash crm_reload.sh false false
 
-# Update the apache config file
-# RUN touch /etc/httpd/conf/aqveir-apache-ssl.conf
-# RUN printf " \
-#         ## \
-#         ## AQVEIR SOLUTION - PROD (SSL Virtual Host Context) \
-#         ## \
-#         ## https://*.aqveir.com OR https://api.aqveir.com \
-#         ## \
-#         <VirtualHost _default_:443> \
-#             # General setup for the virtual host, inherited from global configuration \
-#             DocumentRoot "/aqveir/prod/public" \
-#             ServerName api.aqveir.com:443 \
-#             ServerAlias *.aqveir.com \
-#             DirectoryIndex index.php \
-#             \
-#             # Use separate log files for the SSL virtual host; note that LogLevel \
-#             # is not inherited from httpd.conf. \
-#             ErrorLog logs/ssl_error_log \
-#             TransferLog logs/ssl_access_log \
-#             LogLevel warn \
-#             \
-#             # SSL Engine Switch: \
-#             SSLEngine on \
-#             \
-#             # SSL Protocol support: \
-#             SSLProtocol all -SSLv3 \
-#             \
-#             # SSL Cipher Suite: \
-#             SSLCipherSuite HIGH:MEDIUM:!aNULL:!MD5:!SEED:!IDEA \
-#             \
-#             # Speed-optimized SSL Cipher configuration: \
-#             #SSLCipherSuite RC4-SHA:AES128-SHA:HIGH:MEDIUM:!aNULL:!MD5 \
-#             #SSLHonorCipherOrder on \
-#             \
-#             # Server Certificate: \
-#             SSLCertificateFile /etc/letsencrypt/live/aqveir.com/cert.pem \
-#             \
-#             # Server Private Key: \
-#             SSLCertificateKeyFile /etc/letsencrypt/live/aqveir.com/privkey.pem \
-#             \
-#             # Server Certificate Chain: \
-#             SSLCertificateChainFile /etc/letsencrypt/live/aqveir.com/fullchain.pem \
-#             \
-#             # Certificate Authority (CA): \
-#             #SSLCACertificateFile /etc/pki/tls/certs/ca-bundle.crt \
-#             \
-#             # Client Authentication (Type): \
-#             #SSLVerifyClient require \
-#             #SSLVerifyDepth  10 \
-#             \
-#             #   Access Control: \
-#             #   With SSLRequire you can do per-directory access control based \
-#             #   on arbitrary complex boolean expressions containing server \
-#             #   variable checks and other lookup directives.  The syntax is a \
-#             #   mixture between C and Perl.  See the mod_ssl documentation \
-#             #   for more details. \
-#             #<Location /> \
-#             #SSLRequire (    %{SSL_CIPHER} !~ m/^(EXP|NULL)/ \
-#             #            and %{SSL_CLIENT_S_DN_O} eq "Snake Oil, Ltd." \
-#             #            and %{SSL_CLIENT_S_DN_OU} in {"Staff", "CA", "Dev"} \
-#             #            and %{TIME_WDAY} >= 1 and %{TIME_WDAY} <= 5 \
-#             #            and %{TIME_HOUR} >= 8 and %{TIME_HOUR} <= 20       ) \
-#             #</Location>
-#             \
-#             # SSL Engine Options: \
-#             #SSLOptions +FakeBasicAuth +ExportCertData +StrictRequire \
-#             \
-#             <Files ~ "\.(cgi|shtml|phtml|php3?)$"> \
-#                 SSLOptions +StdEnvVars \
-#             </Files> \
-#             \
-#             <Directory "/aqveir/prod/public"> \
-#                 Options Indexes FollowSymLinks \
-#                 AllowOverride All \
-#                 SSLOptions +StdEnvVars \
-#             \
-#                 <IfVersion < 2.3 > \
-#                     Order allow,deny \
-#                     Allow from all \
-#                 </IfVersion> \
-#             \
-#                 <IfVersion >= 2.3 > \
-#                     Require all granted \
-#                 </IfVersion> \
-#             </Directory> \
-#             \
-#             # SSL Protocol Adjustments: \
-#             BrowserMatch "MSIE [2-5]" \
-#                 nokeepalive ssl-unclean-shutdown \
-#                 downgrade-1.0 force-response-1.0 \
-#             \
-#             # Per-Server Logging: \
-#             CustomLog logs/ssl_request_log \
-#                 "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b" \
-#             \
-#         </VirtualHost>"
-#RUN echo "Include '/etc/httpd/conf/aqveir-apache-ssl.conf'" >> /etc/httpd/conf/httpd.conf
-
-#Open ports
-EXPOSE ${PORT}/tcp
-EXPOSE 443/tcp
-
-#ENTRYPOINT ["/"]
 # Start the Apache Server
-# CMD ["/usr/sbin/httpd","-DFOREGROUND"]
-CMD php artisan serve --host 0.0.0.0 --port ${PORT}
+ENV APACHE_RUN_USER www-data
+ENV APACHE_RUN_GROUP www-data
+ENV APACHE_LOG_DIR /var/log/apache2
+
+RUN echo "ServerName localhost" >> /etc/httpd/conf/httpd.conf
+CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+#CMD php artisan serve --host 0.0.0.0 --port ${PORT}
