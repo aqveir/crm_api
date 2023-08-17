@@ -79,11 +79,11 @@ class ContactDetailRepository extends EloquentRepository
             $objReturnValue = $query;
         } catch(ModelNotFoundException $e) {
             $objReturnValue=null;
-            Log::error('ContactDetailRepository:getContactDetailByIdentifier:ModelNotFoundException:' . $e->getMessage());
+            Log::debug('ContactDetailRepository:getContactDetailByIdentifier:ModelNotFoundException:' . $e->getMessage());
             throw $e;
         } catch (Exception $e) {
             $objReturnValue=null;
-            Log::error('ContactDetailRepository:getContactDetailByIdentifier:Exception:' . $e->getMessage());
+            Log::debug('ContactDetailRepository:getContactDetailByIdentifier:Exception:' . $e->getMessage());
         } //Try-Catch ends
         return $objReturnValue;
     } //Function ends
@@ -118,7 +118,7 @@ class ContactDetailRepository extends EloquentRepository
                             $objReturnValue = ((!empty($data))?$data:$objReturnValue);
                         } catch(ModelNotFoundException $e) {
                             $objReturnValue=$objReturnValue;
-                            Log::info('ContactDetailRepository:getContactDetailByIdentifiers:ModelNotFoundException:' . $e->getMessage());
+                            Log::debug('ContactDetailRepository:getContactDetailByIdentifiers:ModelNotFoundException:' . $e->getMessage());
                         } //Try-Catch ends
                     } //End if
                 } //Loop ends         
@@ -128,6 +128,20 @@ class ContactDetailRepository extends EloquentRepository
         } //Try-Catch ends
 
         return $objReturnValue;
+    } //Function ends
+
+
+    /**
+     * Calidate if the contact detail exists
+     * 
+     * @param int $orgId
+     * @param  array  $contactDetails
+     * 
+     * @return boolean
+     */
+    public function exits(int $orgId, array $contactDetails): bool
+    {
+        return !empty($this->getContactDetailByIdentifiers($orgId, $contactDetails));
     } //Function ends
 
 
@@ -149,9 +163,9 @@ class ContactDetailRepository extends EloquentRepository
             Log::error(json_encode($e));
         } //Try-Catch ends
        return $objReturnValue;
-    }//Function ends
+    } //Function ends
 
-
+    
     /**
     * Get massked Identifier By Type
     */  

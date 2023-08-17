@@ -44,18 +44,15 @@ class ContactImportVcard
      * 
      * @return $contacts
      */
-    public function processDataArray($organization, $data, string $type='contact_type_customer'): array
+    public function processDataArray($organization, $vcards, string $type='contact_type_customer'): array
     {
         try {
             //Initialize the contacts array
             $contacts = [];
 
-            //Read the Vcards data from the file stream.
-            $splitter = new VObject\Splitter\VCard($data);
-            if ($splitter) {
-                while($vcard = $splitter->getNext()) {
-
-                    Log::info(json_encode($vcard->jsonSerialize(),JSON_PRETTY_PRINT));
+            //Iterate the VCards
+            if ($vcards) {
+                while($vcard = $vcards->getNext()) {
 
                     //Set contact value
                     $contact = [];
@@ -69,6 +66,11 @@ class ContactImportVcard
 
                     //Contact Type
                     $contact['type'] = $type;
+
+                    //Contact Avatar
+                    if ($vcard->PHOTO) {
+                        $contact['avatar'] = (string)$vcard->PHOTO;
+                    } //End if
 
                     //Contact DOB
                     if ($vcard->BDAY) {
@@ -155,7 +157,7 @@ class ContactImportVcard
                         'entity_type' => 'entity_type_contact',
                         'note' => $vcard->serialize()
                     ]);
-    
+   
                     array_push($contacts, $contact);
                 } //loop ends
             } //End if
@@ -178,22 +180,30 @@ class ContactImportVcard
     public function parse($filePath = null, string $disk = null, string $readerType = null)
     {
         $filePath = $this->getFilePath($filePath);
-        $data = null;
+        $returnValue = null;
 
         try {
             if (file_exists($filePath)) {
                 $data = file_get_contents($filePath);
+
                 if (!$data) {
                     throw new BadRequestHttpException('ERROR_FILE_DATA');
                 } //End if
+
+                //Read the Vcards data from the file stream.
+                $vcards = new VObject\Splitter\VCard($data);
+                if (!$vcards) {
+                    throw new BadRequestHttpException('ERROR_VCARD_DATA');
+                } //End if
+                $returnValue = $vcards;
             } else {
-                $data = null;
+                $returnValue = null;
             } //End if
         } catch(Exception $e) {
             throw $e;
         } //Try-Catch ends
 
-        return $data;
+        return $returnValue;
     } //Function ends
 
 

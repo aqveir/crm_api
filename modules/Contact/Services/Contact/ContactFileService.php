@@ -17,6 +17,7 @@ use Modules\Contact\Repositories\Contact\ContactDetailRepository;
 use Modules\Core\Repositories\Core\FileSystemRepository;
 
 use Modules\Contact\Events\ContactUploadedEvent;
+use Modules\Contact\Events\ContactProcessesBulkDataEvent;
 
 use Modules\Core\Services\BaseService;
 use Modules\Contact\Notifications\ContactImportNotification;
@@ -63,7 +64,7 @@ class ContactFileService extends BaseService
     /**
      * @var Modules\Contact\Repositories\Contact\ContactRepository
      */
-    protected $customerrepository;
+    protected $contactrepository;
 
 
     /**
@@ -83,21 +84,21 @@ class ContactFileService extends BaseService
      * @param \Modules\Core\Repositories\Organization\OrganizationRepository    $organizationRepository
      * @param \Modules\Core\Repositories\Lookup\LookupValueRepository           $lookuprepository
      * @param \Modules\Core\Repositories\Core\FileSystemRepository              $filesystemRepository
-     * @param \Modules\Contact\Repositories\Contact\ContactRepository           $customerrepository
+     * @param \Modules\Contact\Repositories\Contact\ContactRepository           $contactrepository
      * @param \Modules\Contact\Repositories\Contact\ContactDetailRepository     $contactdetailRepository
      */
     public function __construct(
         OrganizationRepository              $organizationRepository,
         LookupValueRepository               $lookuprepository,
         FileSystemRepository                $filesystemRepository,
-        ContactRepository                   $customerrepository,
+        ContactRepository                   $contactrepository,
         ContactDetailRepository             $contactdetailRepository
     ) {
         $this->organizationRepository       = $organizationRepository;
         $this->lookuprepository             = $lookuprepository;
         $this->filesystemRepository         = $filesystemRepository;
-        $this->customerrepository           = $customerrepository;
-        $this->contactdetailRepository     = $contactdetailRepository;
+        $this->contactrepository            = $contactrepository;
+        $this->contactdetailRepository      = $contactdetailRepository;
     }
 
 
@@ -139,7 +140,7 @@ class ContactFileService extends BaseService
             Notification::send($organization, new ContactImportNotification($organization, $savedFiles));
 
             //Raise upload event
-            event(new ContactUploadedEvent($organization, $savedFiles, $ipAddress));
+            event(new ContactUploadedEvent($organization, $savedFiles, $ipAddress, $user['id']));
 
             //Assign to the return value
             $objReturnValue = $savedFiles;
@@ -168,7 +169,7 @@ class ContactFileService extends BaseService
      * @param  \string  $ipAddress (optional)
      * 
      */
-    public function processUpload(string $orgHash, array $files, string $ipAddress=null, bool $isAutoCreated=false)
+    public function processUpload(string $orgHash, array $files, string $ipAddress=null, int $createdBy=0)
     {
         $objReturnValue=null;$response=[];
 
@@ -186,8 +187,8 @@ class ContactFileService extends BaseService
                         //Contact Import class
                         $contactImport = new ContactImportExcel;
 
-                        $response = $contactImport->toArray(storage_path('app').'/'.$file['file_path']);
-                        $response = $this->processFileDataArray($organization, $response);
+                        $sheets = $contactImport->toArray(storage_path('app').'/'.$file['file_path']);
+                        $response = $contactImport->processDataArray($organization, $sheets);
                         break;
                     
                     case 'csv':
@@ -197,9 +198,8 @@ class ContactFileService extends BaseService
                     case 'vcf': //Virtual Card Format
                         //Contact Import class
                         $contactImport = new ContactImportVcard;
-                        $response = $contactImport->parse(storage_path('app').'/'.$file['file_path']);
-                        $response = $contactImport->processDataArray($organization, $response);
-                        log:info($response);
+                        $vcards = $contactImport->parse(storage_path('app').'/'.$file['file_path']);
+                        $response = $contactImport->processDataArray($organization, $vcards);
                         break;
 
                     default:
@@ -215,16 +215,20 @@ class ContactFileService extends BaseService
              * Process the contacts of data exists
              */
             if (!empty($contacts)) {
-                Log::info($contacts);
-                Log::info('processUpload called');
+                //Validate the data
+                $this->validateDuplicateData($organization, $contacts);
 
+                //Filter data based on duplicate key
+                $contactsFinal = array_filter($contacts, function($contact) {
+                    return ($contact && isset($contact['duplicate']))?!$contact['duplicate']:true;
+                });
+
+                //Notification to the user
+                //Notification::send($organization, new ContactImportNotification($organization, $contactsFinal));
+                
+                //Raise event to process bulk data
+                event(new ContactProcessesBulkDataEvent($organization, $contactsFinal, $ipAddress, $createdBy));
             } //End if
-
-            //Raise upload event
-            //event(new ContactUploadedProcessesEvent($organization, 'success'));
-
-            //Assign to the return value
-            //$objReturnValue = $savedFile;
 
         } catch(AccessDeniedHttpException $e) {
             log::error('ContactFileService:processUpload:AccessDeniedHttpException:' . $e->getMessage());
@@ -242,96 +246,56 @@ class ContactFileService extends BaseService
 
 
     /**
-     * Process Data Array
+     * Validate Contacts
      * 
-     * @return $contacts
+     * @param  \Modules\Core\Entities\Organization  $organization
+     * @param  \array  $contacts
+     * 
      */
-    private function processFileDataArray($organization, array $sheets)
+    private function validateDuplicateData($organization, array &$contacts)
     {
         try {
-            //Initialize the contacts array
-            $contacts = [];
-
-            //Iterate Worksheet
-            foreach ($sheets as $key => $value) {
-                $rows = $value;
-
-                //Iterate rows in the sheet
-                foreach ($rows as $row) 
-                {
-                    //Set contact value
-                    $contact = $row;
-
-                    //Iterate columns in the row
-                    foreach ($row as $key => $value) {
-                        //Handle email address 
-                        if ($key=='email') {
-                            if (empty($contact['details'])) {
-                                $contact['details'] = [];
-                            } //End if                            
-
-                            $detail = [];
-                            $detail['type_key'] = 'contact_detail_type_email';
-                            $detail['subtype_key'] = 'contact_detail_subtype_email_personal';
-                            $detail['identifier'] = $row[$key];
-                            $detail['is_primary'] = true;
-
-                            array_push($contact['details'], $detail);
-                        } //End if
-
-                        //Handle phone number 
-                        if ($key=='phone') {
-                            if (empty($contact['details'])) {
-                                $contact['details'] = [];
-                            } //End if 
-
-                            $detail = [];
-                            $contact['details']['type_key'] = 'contact_detail_type_phone';
-                            $contact['details']['subtype_key'] = 'contact_detail_subtype_email_personal';
-                            $contact['details']['identifier'] = $row[$key];
-                            $contact['details']['is_primary'] = true;
-                        } //End if
-                    } //Loop ends
-
-                    //Validate the data
-                    $this->validationDuplicateCheck($organization, $contact);
-
-                    array_push($contacts, $contact);
-                } //Loop ends
+            //Iterate contacts
+            foreach ($contacts as $key => &$contact) {
+                //Validate the data
+                $this->validateDuplicateCheck($organization, $contact);
             } //Loop ends
-            
-            return $contacts;
-
         } catch(Exception $e) {
             throw $e;
         } //Try-Catch ends
     } //Function ends
 
 
-    private function validationDuplicateCheck($organization, array &$row)
+    /**
+     * Validate Duplicate Contacts
+     * 
+     * @param  \Modules\Core\Entities\Organization  $organization
+     * @param  \array  $contact
+     * 
+     */
+    private function validateDuplicateCheck($organization, array &$contact)
     {
         try {
-            $dataValidate = [];
+            if (isset($contact['details']) && is_array($contact['details']) && count($contact['details'])>0) {
 
-            //Iterate columns in the row
-            foreach ($row as $key => $value) {
-                //Verify email address
-                if ($key=='email') {
-                    $dataValidate[$key] = $value;
-                } //End if
+                //Filter data based on keys
+                $details = array_filter($contact['details'], function($value) {
+                    return in_array($value['type_key'], [
+                        config('aqveir.settings.static.key.lookup_value.email'), 
+                        config('aqveir.settings.static.key.lookup_value.phone')
+                    ], false);
+                });
 
-                //Verify phone
-                if ($key=='phone') {
-                    $dataValidate[$key] = $value;
-                } //End if
-            } //Loop ends
-
-            //Duplicate check
-            $isDuplicate=$this->contactdetailRepository->validate($organization['id'], $dataValidate);
-            $row['duplicate'] = $isDuplicate;            
+                //Duplicate check
+                $contact['duplicate'] = $this->contactdetailRepository->exits($organization['id'], $details);           
+            } else { 
+                $contact['duplicate'] = false;
+            } //End if
         } catch(Exception $e) {
             throw $e;
         } //Try-Catch ends
+
+        return $contact;
     } //Function ends
 
 } //Class ends

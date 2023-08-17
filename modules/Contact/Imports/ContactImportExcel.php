@@ -37,41 +37,59 @@ class ContactImportExcel implements ToArray, WithHeadingRow
      * 
      * @return $contacts
      */
-    public function processDataArray(array $rows)
+    public function processDataArray($organization, array $sheets)
     {
         try {
             //Initialize the contacts array
             $contacts = [];
+
+            //Iterate Worksheets
+            foreach ($sheets as $key => $value) {
+                $rows = $value;
             
-            //Iterate rows in the sheet
-            foreach ($rows as $row) 
-            {
-                Log::info($row);
-                //Set contact value
-                $contact = $row;
+                //Iterate rows in the sheet
+                foreach ($rows as $row) 
+                {
+                    //Set contact value
+                    $contact = $row;
 
-                //Iterate columns in the row
-                foreach ($row as $key => $value) {
-                    //Handle email address 
-                    if ($key=='email') {
-                        $contact['details'] = [];
-                        $contact['details']['type_key'] = 'contact_detail_type_email';
-                        $contact['details']['subtype_key'] = 'contact_detail_subtype_email_personal';
-                        $contact['details']['identifier'] = $row['email'];
-                        $contact['details']['is_primary'] = true;
-                    } //End if
+                    //Iterate columns in the row
+                    foreach ($row as $key => $value) {
+                        //Handle email address 
+                        if ($key=='email') {
+                            $details = [];
+                            $details['type_key'] = 'contact_detail_type_email';
+                            $details['subtype_key'] = 'contact_detail_subtype_email_personal';
+                            $details['identifier'] = $row['email'];
+                            $details['is_primary'] = true;
 
-                    //Handle phone number 
-                    if ($key=='phone') {
-                        $contact['details'] = [];
-                        $contact['details']['type_key'] = 'contact_detail_type_phone';
-                        $contact['details']['subtype_key'] = 'contact_detail_subtype_email_personal';
-                        $contact['details']['identifier'] = $row['phone'];
-                        $contact['details']['is_primary'] = true;
-                    } //End if
+                            if (isset($contact['details'])) {
+                                array_push($contact['details'], $details);
+                            } else {
+                                $contact['details'] = [];
+                                array_push($contact['details'], $details);
+                            } //End if
+                        } //End if
+
+                        //Handle phone number 
+                        if ($key=='phone') {
+                            $details = [];
+                            $details['type_key'] = 'contact_detail_type_phone';
+                            $details['subtype_key'] = 'contact_detail_subtype_phone_mobile';
+                            $details['identifier'] = $row['phone'];
+                            $details['is_primary'] = true;
+
+                            if (isset($contact['details'])) {
+                                array_push($contact['details'], $details);
+                            } else {
+                                $contact['details'] = [];
+                                array_push($contact['details'], $details);
+                            } //End if
+                        } //End if
+                    } //Loop ends
+
+                    array_push($contacts, $contact);
                 } //Loop ends
-
-                array_push($contacts, $contact);
             } //Loop ends
 
             return $contacts;
