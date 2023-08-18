@@ -2,8 +2,8 @@
 
 namespace Modules\Contact\Listeners;
 
-use Modules\Contact\Events\ContactUploadedEvent;
-use Modules\Contact\Services\Contact\ContactFileService;
+use Modules\Contact\Events\ContactBulkDataEvent;
+use Modules\Contact\Services\Contact\ContactService;
 
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;

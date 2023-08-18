@@ -3,8 +3,10 @@
 namespace Modules\Contact\Providers;
 
 use Modules\Contact\Events\ContactUploadedEvent;
+use Modules\Contact\Events\ContactBulkDataEvent;
 
 use Modules\Contact\Listeners\ContactUploadListener;
+use Modules\Contact\Listeners\ContactBulkDataListener;
 
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 

@@ -711,7 +711,7 @@ class ContactService extends BaseService
      * 
      * @return void
      */
-    public function processBulkData(Organization $organization, array $contactsData, string $ipAddress=null, int $createdBy=0): void
+    public function processBulkData($organization, array $contactsData, string $ipAddress=null, int $createdBy=0): void
     {
         try {
             //Iterate the array of contacts data

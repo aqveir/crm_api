@@ -27,7 +27,7 @@ class ContactCreateNoteEvent
      *
      * @return void
      */
-    public function __construct(Contact $model, string $ipAddress=null)
+    public function __construct($model, string $ipAddress=null)
     {
         $this->model = $model;
         $this->ipAddress = $ipAddress;
