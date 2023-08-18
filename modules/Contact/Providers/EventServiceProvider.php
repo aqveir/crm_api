@@ -20,6 +20,11 @@ class EventServiceProvider extends ServiceProvider
         ContactUploadedEvent::class => [
             ContactUploadListener::class
         ],
+
+        //Contact Bulk Data Event
+        ContactBulkDataEvent::class => [
+            ContactBulkDataListener::class
+        ],
     ];
 
 

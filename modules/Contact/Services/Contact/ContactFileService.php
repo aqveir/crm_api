@@ -17,7 +17,7 @@ use Modules\Contact\Repositories\Contact\ContactDetailRepository;
 use Modules\Core\Repositories\Core\FileSystemRepository;
 
 use Modules\Contact\Events\ContactUploadedEvent;
-use Modules\Contact\Events\ContactProcessesBulkDataEvent;
+use Modules\Contact\Events\ContactBulkDataEvent;
 
 use Modules\Core\Services\BaseService;
 use Modules\Contact\Notifications\ContactImportNotification;
@@ -227,7 +227,7 @@ class ContactFileService extends BaseService
                 //Notification::send($organization, new ContactImportNotification($organization, $contactsFinal));
                 
                 //Raise event to process bulk data
-                event(new ContactProcessesBulkDataEvent($organization, $contactsFinal, $ipAddress, $createdBy));
+                event(new ContactBulkDataEvent($organization, $contactsFinal, $ipAddress, $createdBy));
             } //End if
 
         } catch(AccessDeniedHttpException $e) {

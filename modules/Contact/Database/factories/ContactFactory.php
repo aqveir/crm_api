@@ -12,7 +12,7 @@ $factory->define(Contact::class, function (Faker $faker) {
     return [
         'org_id' => $faker->numberBetween(1, 3),
         //'username' => (($counter%3)===1)?$faker->safeEmail():(9851000000+$faker->randomNumber(6,true)),
-        'password' => '12345678',
+        //'password' => '12345678',
         'first_name' => $faker->firstName(),
         'middle_name' => null,
         'last_name' => $faker->lastName(),

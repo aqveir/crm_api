@@ -4,7 +4,7 @@ namespace Modules\Contact\Events;
 
 use Illuminate\Queue\SerializesModels;
 
-class ContactProcessesBulkDataEvent
+class ContactBulkDataEvent
 {
     use SerializesModels;
 
@@ -44,7 +44,7 @@ class ContactProcessesBulkDataEvent
         $this->data = $data;
         $this->ipAddress = $ipAddress;
         $this->createdBy = $createdBy;
-    }
+    } //Function ends
 
 
     /**

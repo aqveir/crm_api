@@ -90,7 +90,7 @@ class ContactTableSeeder extends Seeder
         return [
             'org_id' => 1,
             //'username' => (($counter%3)===1)?$faker->safeEmail():(9851000000+$faker->randomNumber(6,true)),
-            'password' => $faker->password(),
+            //'password' => $faker->password(),
             'first_name' => $faker->firstName(),
             'middle_name' => null,
             'last_name' => $faker->lastName(),
@@ -115,7 +115,7 @@ class ContactTableSeeder extends Seeder
         return [
             'org_id' => 1,
             //'username' => (($counter%3)===1)?$faker->unique()->safeEmail():($faker->unique()->numberBetween(9800000000, 9900000000)),
-            'password' => $faker->password(),
+            //'password' => $faker->password(),
             'first_name' => $faker->firstName(),
             'middle_name' => null,
             'last_name' => $faker->lastName(),

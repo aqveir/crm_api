@@ -19,8 +19,7 @@ class CreateContactsTable extends Migration
 
             $table->unsignedBigInteger('org_id');
             //$table->string('username')->unique();
-            $table->string('password')->nullable();
-            $table->string('mfa_secret')->nullable();
+            //$table->string('password')->nullable();
 
             //Social login - Socialite
             $table->string('provider')->nullable();
@@ -47,6 +46,7 @@ class CreateContactsTable extends Migration
             $table->string('search_tags')->nullable();
 
             $table->rememberToken();
+            $table->boolean('allow_login')->default(false);
             $table->dateTime('last_login_at')->nullable();
             $table->boolean('is_verified')->default(false);
             $table->boolean('is_active')->default(true);

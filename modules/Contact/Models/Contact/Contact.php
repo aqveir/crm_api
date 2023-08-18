@@ -47,8 +47,8 @@ class Contact extends Model implements
      * @var array
      */
     protected $fillable = [
-        'org_id', 'username', 'password', 'mfa_secret', 
-        'avatar', 'first_name','middle_name','last_name',
+        'org_id', 'avatar', 
+        'first_name','middle_name','last_name',
         'type_id', 'gender_id', 'birth_at',
         'extras', 'settings', 'search_tags',
         'referred_by',
@@ -71,10 +71,10 @@ class Contact extends Model implements
      * @var array
      */
     protected $hidden = [
-        'id', 'org_id', 'password', 'mfa_secret', 'remember_token',
+        'id', 'org_id', 'remember_token',
         'first_name','middle_name','last_name', 'avatar', 'birth_at',
         'type_id', 'gender_id',
-        'provider', 'provider_id', 'last_login_at', 'referral_code',
+        'provider', 'provider_id', 'last_login_at', 'referral_code', 'allow_login',
         'failed_attempts', 'max_failed_attempts', 'is_active', 'ip_address', 'is_verified',
         'created_by', 'updated_by', 'deleted_by', 'referred_by',
         'created_at', 'updated_at', 'deleted_at'

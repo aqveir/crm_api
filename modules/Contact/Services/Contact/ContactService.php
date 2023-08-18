@@ -15,6 +15,7 @@ use Modules\Contact\Events\ContactCreatedEvent;
 use Modules\Contact\Events\ContactUpdatedEvent;
 use Modules\Contact\Events\ContactDeletedEvent;
 use Modules\Contact\Events\ContactUploadedEvent;
+use Modules\Contact\Events\ContactCreateNoteEvent;
 
 use Modules\Core\Services\BaseService;
 use Modules\Contact\Notifications\ContactActivationNotification;
@@ -388,12 +389,11 @@ class ContactService extends BaseService
             if (empty($customerDetails)) {
 
                 //Generate the data payload to create user
-                $payloadContact = $payload->only('password', 'first_name', 'middle_name', 'last_name')->toArray();
+                $payloadContact = $payload->only('first_name', 'middle_name', 'last_name')->toArray();
                 $payloadContact = array_merge(
                     $payloadContact,
                     [
                         'org_id' => $organization['id'],
-                        'mfa_secret' => null,
                         'group_id' => 0,
                     ]
                 );
@@ -698,6 +698,40 @@ class ContactService extends BaseService
         } //Try-catch ends
 
         return $objReturnValue;
+    } //Function ends
+    
+    
+    /**
+     * Process Bulk Data
+     * 
+     * @param \Modules\Core\Repositories\Organization\Organization $organization
+     * @param \Illuminate\Support\Collection $data
+     * @param \string $ipAddress
+     * @param \int $createdBy
+     * 
+     * @return void
+     */
+    public function processBulkData(Organization $organization, array $contactsData, string $ipAddress=null, int $createdBy=0): void
+    {
+        try {
+            //Iterate the array of contacts data
+            foreach ($contactsData as $contactData) {
+                    //Create contact
+                    $contact = $this->create($organization['hash'], collect($contactData), $ipAddress, true);
+
+                    //Create note for the contact
+                    foreach ($contactData['notes'] as $note) {
+                        $note['reference_id'] = $contact['id'];
+                        $note['created_by'] = $createdBy;
+
+                        //Call the event to create the note
+                        event(new ContactCreateNoteEvent($note, $ipAddress));
+                    } //Loop ends
+
+            } //Loop ends
+        } catch(Exception $e) {
+            throw $e;
+        } //Try-catch ends
     } //Function ends
 
 } //Class ends
