@@ -67,6 +67,25 @@ trait ContactAddressRelationship
 			Society::class,  
 			'id', 'society_id'
 		);
-	}
+	} //Function ends
+
+
+	/**
+	 * Notes for the Contact Address
+	 */
+	public function notes()
+	{
+		if (class_exists(config('aqveir-class.class_model.note'))) {
+			return $this->hasMany(
+				config('aqveir-class.class_model.note'),
+				'reference_id', 'id'
+			)
+			->with(['type', 'owner'])
+			->whereHas('type', function($inner_query){$inner_query->where('key', 'entity_type_contact_address');})
+			->orderBy('created_at', 'desc');
+		} else {
+			return [];
+		} //End if
+	} //Function ends
 	
 } //Classends

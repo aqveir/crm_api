@@ -66,6 +66,10 @@ class LookupTableSeeder extends Seeder
                         'display_value' => 'Contact Entity',
                     ],
                     [
+                        'key' => 'entity_type_contact_address',
+                        'display_value' => 'Contact Address Entity',
+                    ],
+                    [
                         'key' => 'entity_type_inventory',
                         'display_value' => 'Inventory Entity',
                     ],

@@ -33,7 +33,6 @@ class CreateContactAddressesTable extends Migration
 
             //Delivery relevant data
             $table->string('level')->nullable();
-            $table->text('notes')->nullable();
 
             //Location Details
             $table->integer('google_place_id')->nullable();

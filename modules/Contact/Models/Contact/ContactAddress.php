@@ -71,7 +71,7 @@ class ContactAddress extends Model {
      *
      * @var array
      */
-    protected $with = ['apartment', 'society', 'country'];
+    protected $with = ['apartment', 'society', 'country', 'notes'];
 
 
     /**
