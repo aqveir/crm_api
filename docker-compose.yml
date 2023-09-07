@@ -5,11 +5,11 @@ services:
     stdin_open: true
     tty: true
     privileged: true
-    container_name: aqveir-api
-    image: aqveir-api
+    container_name: aqveir-api-cont
+    image: aqveir-api-img
     build:
       context: .
-      dockerfile: ./Dockerfile
+      dockerfile: ./scripts/docker/Dockerfile
     ports:
       - "8000:8989"
 

@@ -17,33 +17,33 @@ os: linux
 #       - file
 hooks:
   BeforeInstall:
-    - location: devops/scripts/before_install.sh
+    - location: scripts/devops/before_install.sh
       timeout: 300
       runas: root
-    - location: devops/scripts/install_dependencies.sh
+    - location: scripts/devops/install_dependencies.sh
       timeout: 3000
       runas: root
-    - location: devops/scripts/install_code.sh
+    - location: scripts/devops/install_code.sh
       timeout: 300
       runas: root
   AfterInstall:
-    - location: devops/scripts/change_permissions.sh
+    - location: scripts/devops/change_permissions.sh
       timeout: 300
       runas: root
-    - location: devops/scripts/clear_logs.sh
+    - location: scripts/devops/clear_logs.sh
       timeout: 300
       runas: root
-  #   - location: devops/scripts/crmomni_reload.sh
+  #   - location: scripts/devops/crmomni_reload.sh
   #     timeout: 300
   #     runas: root
   ApplicationStart:
-    - location: devops/scripts/clear_logs.sh
+    - location: scripts/devops/clear_logs.sh
       timeout: 300
       runas: root
-    - location: devops/scripts/start_application.sh
+    - location: scripts/devops/start_application.sh
       timeout: 300
       runas: root
   ApplicationStop:
-    - location: devops/scripts/stop_application.sh
+    - location: scripts/devops/stop_application.sh
       timeout: 300
       runas: root
