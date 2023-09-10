@@ -19,7 +19,6 @@ class VoiceCallDetailsResource extends JsonResource
     {
         $objReturnValue=null;
         try {
-            $callDuration = null;
             $callDirection = (isset($this['direction']) && ($this['direction']=='inbound'))?'telephony_direction_incoming':'telephony_direction_outgoing';
             $urlRecording = null;
 
@@ -63,7 +62,7 @@ class VoiceCallDetailsResource extends JsonResource
                 'direction'         => $callDirection,
                 'source'            => 'twilio',
                 'status'            => $callStatus,
-                'duration'          => $callDuration,
+                'duration'          => isset($this['duration'])?$this['duration']:null,
                 'recording_url'     => $urlRecording,
                 'uri'               => isset($this['uri'])?$this['uri']:null,
                 'created_at'        => isset($this['start_time'])?$this['start_time']:null,
