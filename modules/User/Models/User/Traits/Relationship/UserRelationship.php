@@ -49,7 +49,7 @@ trait UserRelationship
 	/**
 	 * Show Roles
 	 */
-	public function roles(int $orgId=0)
+	public function roles(int $orgId)
 	{
 		return $this->belongsToMany(
 			config('aqveir-class.class_model.role'),
@@ -74,7 +74,7 @@ trait UserRelationship
 	/**
 	 * Show Privileges
 	 */
-	public function privileges(int $orgId=0)
+	public function privileges(int $orgId)
 	{
 		return $this->belongsToMany(
 			config('aqveir-class.class_model.privilege'),

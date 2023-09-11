@@ -29,6 +29,11 @@ trait UserAction
 		$returnValue = false;
         try {
             if ($roles) {
+                if ($orgId==0) {
+                    $organization = $this->organization;
+                    $orgId = $organization->id;
+                } //End if
+                
                 //Get User Roles
                 $user_roles = collect($this->active_roles($orgId)->get());
 
@@ -97,15 +102,17 @@ trait UserAction
                     $privileges = $userRole->active_privileges($orgId)->get();
 
                     //Iterate the privileges in each role
-                    foreach ($privileges as $privilege) {
-
-                        //Duplicate check to add the privileges
-                        if (!in_array($privilege, $userPrivileges, TRUE)) {
-                            array_push($userPrivileges, $privilege);
-                        } //End if
-                    } //Loop ends (privileges)
+                    if (!empty($privileges)) {
+                        $privileges = $privileges->toArray();
+                        foreach ($privileges as $privilege) {
+                            //Duplicate check to add the privileges
+                            if (!in_array($privilege, $userPrivileges, TRUE)) {
+                                array_push($userPrivileges, $privilege);
+                            } //End if
+                        } //Loop ends (privileges)
+                    } //End if
                 } //Loop ends (userRoles)
-            } //End if            
+            } //End if      
             
             //Check for extra granted privileges
             $extraPrivileges = $this->active_privileges($orgId)->get();
