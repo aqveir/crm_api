@@ -47,7 +47,7 @@ $api->version('v1', [
             $api->get('{organization}', 'Backend\\OrganizationController@show');
         });
 
-        // Role Endpoints
+        // Privilege Endpoints
         $api->group(['prefix' => 'privilege'], function(Router $api) {
             $api->get('/', 'Backend\\PrivilegeController@index');
             $api->get('{privilege}', 'Backend\\PrivilegeController@show');

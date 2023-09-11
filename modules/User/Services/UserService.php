@@ -142,6 +142,7 @@ class UserService extends BaseService
 
                 //Assign the role to new user
                 $user->roles()->attach($roleOrgAdmin['id'], [
+                    'org_id' => $organization['id'],
                     'account_id' => null,
                     'description' => 'System Generated',
                     'created_by' => 0

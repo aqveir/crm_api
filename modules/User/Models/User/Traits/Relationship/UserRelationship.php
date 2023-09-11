@@ -57,7 +57,6 @@ trait UserRelationship
 			'user_id', 'role_id'
 		)
 		->withPivot('account_id')
-		->wherePivot('org_id', 0)
 		->wherePivot('org_id', $orgId);
 	} //Function ends
 

@@ -55,6 +55,11 @@ trait UserAction
 		$returnValue = false;
         try {
             if ($privileges) {
+                if ($orgId==0) {
+                    $organization = $this->organization;
+                    $orgId = $organization->id;
+                } //End if
+
                 //Get active privileges
                 $user_privileges = collect($this->getActivePrivileges($orgId));
 
@@ -100,7 +105,7 @@ trait UserAction
                         } //End if
                     } //Loop ends (privileges)
                 } //Loop ends (userRoles)
-            } //End if
+            } //End if            
             
             //Check for extra granted privileges
             $extraPrivileges = $this->active_privileges($orgId)->get();
