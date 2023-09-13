@@ -20,6 +20,7 @@
         "nwidart/laravel-modules": "^10.0",
         "phpoffice/phpspreadsheet": "*",
         "sabre/vobject": "^4.0",
+        "socialiteproviders/google": "^4.1",
         "twilio/sdk": "^7.9",
         "tymon/jwt-auth": "^2.0"
     },

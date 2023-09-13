@@ -58,3 +58,8 @@ docker tag aqveir:latest public.ecr.aws/v2i8k2o7/aqveir:latest
 Run the following command to push this image to your newly created AWS repository:
 
 docker push public.ecr.aws/v2i8k2o7/aqveir:latest
+
+
+CREATE USER 'user_name'@'%' IDENTIFIED BY 'password';
+
+GRANT ALL PRIVILEGES ON db_name.* TO 'user_name'@'%';

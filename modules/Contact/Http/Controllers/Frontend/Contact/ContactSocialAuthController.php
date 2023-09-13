@@ -50,7 +50,7 @@ class ContactSocialAuthController extends ApiBaseController
      *      @OA\Response(response=500, description="Internal Server Error")
      * )
      */
-    public function redirectToProvider(ContactSocialLoginRequest $request, string $social)
+    public function redirectToProvider(ContactSocialLoginRequest $request, string $domain, string $social)
     {
         return Socialite::driver($social)
             ->redirectUrl(config('services.'.$social.'.redirect').'?key='.$request['key'])
