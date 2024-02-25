@@ -297,7 +297,7 @@ return [
          * Constants which can be used in annotations
          */
         'constants' => [
-            'SWAGGER_CONST_HOST' => env('SWAGGER_CONST_HOST', 'https://aqveir.com'),
+            'SWAGGER_CONST_HOST' => env('SWAGGER_CONST_HOST', 'https://api.aqveir.in'),
         ],
     ],
 ];
