@@ -13,6 +13,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+// Reset Password Link For CRM Users
+Route::get('reset/{token}', ['as' => 'aqveir.user.password.reset', function(string $token, Request $request) {
+	$backendUri = config('aqveir.settings.backend_uri');
+	return redirect($backendUri.'/reset/'.$token);
+}]);
+
+// Route for the web console
+Route::get('/', function(Request $request) {
+	$backendUri = config('aqveir.settings.backend_uri');
+	return redirect($backendUri);
 });
