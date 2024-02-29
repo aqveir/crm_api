@@ -14,14 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
 // Route for the web console
 Route::domain(config('aqveir.settings.domain'))->group(function() {
 	// Default route
-	Route::get('/{path?}', function(Request $request, string $subdomain, string $path=null) {
+	Route::get('/', function(Request $request, string $subdomain) {
 		$subdomainValid = true;
 
 		//Check if the subdomains is part of restricted list
@@ -45,9 +41,3 @@ Route::domain(config('aqveir.settings.domain'))->group(function() {
 // 	$backendUri = config('aqveir.settings.backend_uri');
 // 	return redirect($backendUri.'/reset/'.$token);
 // }]);
-
-// // Route for the web console
-// Route::get('/', function(Request $request) {
-// 	$backendUri = config('aqveir.settings.backend_uri');
-// 	return redirect($backendUri);
-// });
