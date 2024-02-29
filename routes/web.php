@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 // Route for the web console
 Route::domain(config('aqveir.settings.domain'))->group(function() {
 	// Default route
-	Route::get('/{path?}', function(Request $request, string $subdomain) {
+	Route::get('/{path?}', function(Request $request, string $subdomain, string $path=null) {
 		$subdomainValid = true;
 
 		//Check if the subdomains is part of restricted list
