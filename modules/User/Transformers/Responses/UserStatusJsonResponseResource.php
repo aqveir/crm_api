@@ -13,7 +13,7 @@ class UserStatusJsonResponseResource extends ResourceCollection
     private $output;
     private $phoneFormat;
 
-    public function __construct($collection, string $output, string $phoneFormat)
+    public function __construct($collection, string $output, string $phoneFormat='E164')
     {
        parent::__construct($collection);
        $this->output = $output;
@@ -39,16 +39,32 @@ class UserStatusJsonResponseResource extends ResourceCollection
                 foreach ($this->collection as $data) {
                     $response = [];
                     foreach ($output as $value) {
-                        if ($value=='phone') {
-                            $country = (!empty($data['country']))?$data['country']['phone_idd_code']:'';
+                        if ($value=='phone' && !empty($data['phone'])) {
+                            $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
 
-                            $phone = $this->phoneFormat;
-                            $phone = str_replace('[country]', $country, $phone);
-                            $phone = str_replace('[number]', $data['phone'], $phone);
+                            //Parse phone number
+                            $phoneNumberObject = $phoneUtil->parse($data['phone'], null);
+                            if (($phoneUtil->isValidNumber($phoneNumberObject)) && ($this->phoneFormat)) {
+                                switch (strtoupper($this->phoneFormat)) {
+                                    case 'NATIONAL':
+                                        $phone = $phoneUtil->format($phoneNumberObject, \libphonenumber\PhoneNumberFormat::NATIONAL);
+                                        break;
 
-                            $response[$value] = $phone;
+                                    case 'INTERNATIONAL':
+                                        $phone = $phoneUtil->format($phoneNumberObject, \libphonenumber\PhoneNumberFormat::INTERNATIONAL);
+                                        break;
+                                    
+                                    default:
+                                        $phone = $phoneUtil->format($phoneNumberObject, \libphonenumber\PhoneNumberFormat::E164);
+                                        break;
+                                } //End switch
+
+                                $response[$value] = str_replace(' ', '', $phone);
+                            } else {
+                                $response[$value] = null;
+                            } //End if
                         } else {
-                            $response[$value] = $data[$value];
+                            $response[$value] = null;
                         } //End if
                     } //Loop ends
                     array_push($objReturnValue, $response);

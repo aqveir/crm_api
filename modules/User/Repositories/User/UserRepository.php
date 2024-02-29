@@ -141,19 +141,31 @@ class UserRepository extends EloquentRepository implements UserContract
             $status = $this->getLookupByKey($statusKey);
 
             //Check data
-            $model = User::with(['availability', 'roles'])
+            $model = User::with(['availability'])
                 ->where('org_id', $orgId)
                 ->where('is_active', true)
                 ->whereHas('availability.status', function ($inner_query) use ($statusKey) {
                     $inner_query->where('key', $statusKey);
                 })
-                ->whereHas('roles', function ($inner_query) use ($roleKey) {
-                    $inner_query->where('key', $roleKey);
-                })
                 ->inRandomOrder()
                 ->get();
 
-	        $objReturnValue = $model;		
+            //Refine the user by role
+            if (!empty($roleKey)) {
+                $users=[];
+                foreach ($model as $user) {
+                    $roles = $user->roles($orgId)->get();
+                    if ($roles) {
+                        foreach ($roles as $role) {
+                            if ($role->key == $roleKey) {
+                                array_push($users, $user);
+                            } //End if
+                        } //End foreach
+                    } //End if
+                } //End foreach
+            } //End if
+
+	        $objReturnValue = $users;		
 		} catch(ExistingDataException $e) {
 			log::warning('UserAvailabilityRepository:getRecordsByStatus:ExistingDataException:' . $e->getMessage());
             throw new ExistingDataException();

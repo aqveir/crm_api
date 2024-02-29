@@ -216,7 +216,7 @@ class UserAvailabilityController extends ApiBaseController
 
             //Output formats
             $outputFormat = ($request->has('output'))?$request['output']:'hash,first_name,full_name,phone';
-            $phoneFormat = ($request->has('phoneformat'))?$request['phoneformat']:'0[number]';
+            $phoneFormat = ($request->has('phoneformat') && ($request['phoneformat']))?$request['phoneformat']:'E164';
 
             //Send response data
             switch ($request->headers->get('CONTENT-TYPE')) {
