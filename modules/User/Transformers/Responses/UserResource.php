@@ -41,8 +41,8 @@ class UserResource extends JsonResource
                 'is_active', 'is_remote_access_only',
                 'is_pool', 'is_default'
             ]);
-            $response['roles'] = $this->roles($this->org_id)->pluck('name');
-            $response['privileges'] = $this->privileges($this->org_id)->pluck('name');
+            $response['roles'] = $this->roles($this->org_id);
+            $response['privileges'] = $this->privileges($this->org_id);
             $response['is_verified'] = empty($this['verified_at'])?false:true;
             $response['avatar'] = $avatarPath;
 
