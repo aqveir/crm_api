@@ -17,7 +17,7 @@ class UserTableSeeder extends Seeder
         $user = factory(\Modules\User\Models\User\User::class)->create([
             'org_id' => 1,
             'username' => 'admin@ellaisys.com',
-            'password' => 'password',
+            'password' => 'Test@1234',
             'email' => 'admin@ellaisys.com',
             'first_name' => 'EllaiSys',
             'last_name' => 'Admin',

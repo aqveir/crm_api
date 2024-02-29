@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 // Route for the web console
 Route::domain(config('aqveir.settings.domain'))->group(function() {
 	// Default route
-	Route::get('/', function(Request $request, string $subdomain) {
+	Route::get('/{path?}', function(Request $request, string $subdomain) {
 		$subdomainValid = true;
 
 		//Check if the subdomains is part of restricted list
@@ -40,14 +40,14 @@ Route::domain(config('aqveir.settings.domain'))->group(function() {
 	});
 });
 
-// Reset Password Link For CRM Users
-Route::get('reset/{token}', ['as' => 'aqveir.user.password.reset', function(string $token, Request $request) {
-	$backendUri = config('aqveir.settings.backend_uri');
-	return redirect($backendUri.'/reset/'.$token);
-}]);
+// // Reset Password Link For CRM Users
+// Route::get('reset/{token}', ['as' => 'aqveir.user.password.reset', function(string $token, Request $request) {
+// 	$backendUri = config('aqveir.settings.backend_uri');
+// 	return redirect($backendUri.'/reset/'.$token);
+// }]);
 
-// Route for the web console
-Route::get('/', function(Request $request) {
-	$backendUri = config('aqveir.settings.backend_uri');
-	return redirect($backendUri);
-});
+// // Route for the web console
+// Route::get('/', function(Request $request) {
+// 	$backendUri = config('aqveir.settings.backend_uri');
+// 	return redirect($backendUri);
+// });
