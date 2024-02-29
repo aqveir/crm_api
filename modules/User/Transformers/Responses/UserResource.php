@@ -21,7 +21,7 @@ class UserResource extends JsonResource
         $status = null;
 
         try {
-            $this->load('organization', 'availability', 'availability.status', 'country', 'timezone'); //, 'roles', 'privileges');
+            $this->load('organization', 'availability', 'availability.status', 'country', 'timezone');
 
             $availability = collect($this['availability']);
             if ((!empty($availability)) && (count($availability)>0)) {
@@ -37,12 +37,11 @@ class UserResource extends JsonResource
                 'email', 'phone', 'virtual_phone_number', 'language',
                 'last_login_at', 'last_updated_at',
                 'organization', 'country', 'timezone',
-                //'roles', 'privileges',
                 'is_active', 'is_remote_access_only',
                 'is_pool', 'is_default'
             ]);
-            $response['roles'] = $this->roles($this->org_id);
-            $response['privileges'] = $this->privileges($this->org_id);
+            $response['roles'] = $this->roles($this->org_id)->get();
+            $response['privileges'] = $this->privileges($this->org_id)->get();
             $response['is_verified'] = empty($this['verified_at'])?false:true;
             $response['avatar'] = $avatarPath;
 
