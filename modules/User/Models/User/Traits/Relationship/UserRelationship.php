@@ -49,8 +49,9 @@ trait UserRelationship
 	/**
 	 * Show Roles
 	 */
-	public function roles(int $orgId)
+	public function roles(int $orgId=0)
 	{
+		$orgId = $this->org_id??$orgId;
 		return $this->belongsToMany(
 			config('aqveir-class.class_model.role'),
 			config('aqveir-migration.table_name.user.roles'),
@@ -64,7 +65,7 @@ trait UserRelationship
 	/**
 	 * Show Active Roles
 	 */
-	public function active_roles(int $orgId)
+	public function active_roles(int $orgId=0)
 	{
 		return $this->roles($orgId)
 			->wherePivot('is_active', 1);
@@ -74,8 +75,10 @@ trait UserRelationship
 	/**
 	 * Show Privileges
 	 */
-	public function privileges(int $orgId)
+	public function privileges(int $orgId=0)
 	{
+		$orgId = $this->org_id??$orgId;
+
 		return $this->belongsToMany(
 			config('aqveir-class.class_model.privilege'),
 			config('aqveir-migration.table_name.user.privileges'),
@@ -88,7 +91,7 @@ trait UserRelationship
 	/**
 	 * Show Granted Privileges
 	 */
-	public function active_privileges(int $orgId)
+	public function active_privileges(int $orgId=0)
 	{
 		return $this->privileges($orgId)
 			->wherePivot('is_active', 1);

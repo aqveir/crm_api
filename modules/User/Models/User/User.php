@@ -150,6 +150,42 @@ class User extends Model implements
 
 
     /**
+     * Get the phone number in E164 format
+     */
+    public function getPhoneAttribute($value) {
+        if (!empty($value)) {
+            $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
+            
+            //Parse phone number
+            $phoneNumberObject = $phoneUtil->parse($value, null);
+
+            //Format phone number in E164 format
+            $value = $phoneUtil->format($phoneNumberObject, \libphonenumber\PhoneNumberFormat::E164);
+        } //End if
+        
+        return $value;
+    } //Function ends
+
+
+    /**
+     * Get the virtual phone number in E164 format
+     */
+    public function getVirtualPhoneNumberAttribute($value) {
+        if (!empty($value)) {
+            $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
+
+            //Parse phone number
+            $phoneNumberObject = $phoneUtil->parse($value, null);
+
+            //Format phone number in E164 format
+            $value = $phoneUtil->format($phoneNumberObject, \libphonenumber\PhoneNumberFormat::E164);
+        } //End if
+
+        return $value;
+    } //Function ends
+
+
+    /**
      * Default constructor
      * @param array $attributes
      */
