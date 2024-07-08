@@ -13,7 +13,7 @@ return [
         | For example: {subdomain}.domainname.com
         |
         */
-        'domain' => env('APPLICATION_DOAMIN', '{subdomain}.aqveir.in'),
+        'domain' => env('APPLICATION_DOMAIN', '{subdomain}.aqveir.in'),
 
 
         /*
