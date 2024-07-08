@@ -389,7 +389,7 @@ class ContactService extends BaseService
             if (empty($customerDetails)) {
 
                 //Generate the data payload to create user
-                $payloadContact = $payload->only('first_name', 'middle_name', 'last_name')->toArray();
+                $payloadContact = $payload->except(['avatar', 'hash'])->toArray();
                 $payloadContact = array_merge(
                     $payloadContact,
                     [

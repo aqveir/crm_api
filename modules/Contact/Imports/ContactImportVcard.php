@@ -77,6 +77,11 @@ class ContactImportVcard
                         $contact['birth_at'] = Carbon::parse((string)$vcard->BDAY,'UTC')->format(config('aqveir.settings.date_format_response_generic'));
                     } //End if
 
+                    //Contact Category
+                    if ($category = (string)$vcard->CATEGORIES) {
+                        $contact['search_tags']= $category;
+                    } //End if
+
                     //Contact gender
                     if ($gender = (string)$vcard->NOTE) {
                         switch ($gender) {
@@ -96,7 +101,11 @@ class ContactImportVcard
                     
                     //Iterate columns for Phone Number
                     if ($vcard->TEL) {
-                        $contact['details']=[];
+                        //Initialize the details array if not exists
+                        if (!isset($contact['details'])) {
+                            $contact['details']=[];
+                        } //End if                       
+
                         $isPrimary=false;
                         foreach ($vcard->TEL as $tel) {   
                             $details = [];
@@ -123,7 +132,10 @@ class ContactImportVcard
 
                     //Iterate for Email Address
                     if ($vcard->EMAIL) {
-                        $contact['details']=[];
+                        //Initialize the details array if not exists
+                        if (!isset($contact['details'])) {
+                            $contact['details']=[];
+                        } //End if
                         $isPrimary=false;
                         foreach ($vcard->EMAIL as $email) {   
                             $details = [];
