@@ -8,6 +8,7 @@
         "php": "^8.1",
         "darkaonline/l5-swagger": "^8.5",
         "giggsey/libphonenumber-for-php": "^8.13",
+        "google/apiclient": "^2.15.0",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/cashier": "^14.12",
         "laravel/framework": "^10.10",
@@ -47,7 +48,9 @@
     "scripts": {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "Google\\Task\\Composer::cleanup",
             "@php artisan package:discover --ansi"
+
         ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
@@ -62,7 +65,10 @@
     "extra": {
         "laravel": {
             "dont-discover": []
-        }
+        },
+        "google/apiclient-services": [
+            "PeopleService"
+        ]
     },
     "config": {
         "optimize-autoloader": true,
