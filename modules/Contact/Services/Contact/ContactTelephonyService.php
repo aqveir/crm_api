@@ -82,7 +82,7 @@ class ContactTelephonyService extends BaseService
 
 
     /**
-     * Contact Exists
+     * Call Contact using Telephony
      * 
      * @param string $orgHash
      * @param \Illuminate\Support\Collection $payload
