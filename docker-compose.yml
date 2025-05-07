@@ -2,18 +2,16 @@ version: '3.9'
 
 services:
   aqveir-api:
-    stdin_open: true
-    tty: true
-    privileged: true
-    container_name: aqveir-api-cont
-    image: aqveir-api-img
+    container_name: aqveir-api-cont11
     build:
       context: .
-      dockerfile: ./scripts/docker/Dockerfile
+      dockerfile: ./scripts/docker/Dockerfile  # Adjust the path to your Dockerfile if necessary
     ports:
-      - "8000:8989"
+      - "8989:80"  # Adjust the port mapping according to your Apache configuration
+    networks:
+      - aqveir-api-network
 
 networks:
-  default:
-    name: aqveir-api-network
+  aqveir-api-network:
     external: true
+
