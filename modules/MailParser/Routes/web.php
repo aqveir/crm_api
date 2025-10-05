@@ -11,6 +11,6 @@
 |
 */
 
-Route::prefix('mailparser')->group(function() {
-    Route::get('/', 'MailParserController@index');
-});
+//Route::prefix('mailparser')->group(function() {
+//    Route::get('/', 'MailParserController@index');
+//});

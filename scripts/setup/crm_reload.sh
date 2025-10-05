@@ -35,7 +35,7 @@ php artisan view:clear
 echo "Cache cleared."
 
 echo "Settng system access..."
-chown -R apache:apache .
+chown -R www-data:www-data .
 chmod -R 777 storage/.
 chmod -R 777 public/.
 echo "System access granted."
