@@ -35,13 +35,16 @@ php artisan view:clear
 echo "Cache cleared."
 
 echo "Settng system access..."
-chown -R www-data:www-data .
-chmod -R 777 storage/.
-chmod -R 777 public/.
+sudo chown -R www-data:www-data .
+sudo chmod -R 775 .
+sudo chmod -R 775 bootstrap/cache
+sudo chmod -R 775 scripts
+sudo chmod -R 775 storage
+sudo chmod -R 775 public
 echo "System access granted."
 
 echo "Clearing logs..."
-sudo cat /dev/null > storage/logs/laravel.log
+sudo cat /dev/null > storage/logs/*.log
 echo "Logs cleared."
 
 echo "Generating Laravel App Key..."
