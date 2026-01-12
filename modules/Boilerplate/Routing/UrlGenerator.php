@@ -45,18 +45,8 @@ class UrlGenerator extends IlluminateUrlGenerator
      *
      * @param array $collections
      */
-    public function setRouteCollections($collections)
+    public function setRouteCollections(mixed $collections)
     {
-        if (! is_array($collections)) {
-            if ($collections instanceof RouteCollection) {
-                $collections = ['v1' => $collections];
-            } elseif($collections instanceof Illuminate\Support\Collection) {
-                $collections = $collections->toArray();
-            } else {
-                throw new \InvalidArgumentException('Route collections must be an array or an instance of RouteCollection.');
-            }
-        }
-
         $this->collections = $collections;
     }
 }
