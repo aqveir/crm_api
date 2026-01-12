@@ -32,6 +32,7 @@ php artisan cache:clear
 php artisan config:clear
 php artisan route:clear
 php artisan view:clear
+php artisan optimize
 echo "Cache cleared."
 
 echo "Settng system access..."
@@ -44,7 +45,7 @@ sudo chmod -R 775 public
 echo "System access granted."
 
 echo "Clearing logs..."
-sudo cat /dev/null > storage/logs/*.log
+sudo cat /dev/null > storage/logs/laravel.log
 echo "Logs cleared."
 
 echo "Generating Laravel App Key..."
