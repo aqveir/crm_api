@@ -16,5 +16,5 @@ use Illuminate\Http\RedirectResponse;
 //Reset Password Link For CRM Users
 Route::get('reset/{token}', [
     'as' => 'password.reset',
-    'uses' => 'UserAuthController@resetPassword'
+    'uses' => 'Backend\\Auth\\UserAuthController@resetPassword'
 ])->name('user.password.reset');
