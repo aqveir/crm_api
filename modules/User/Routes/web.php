@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 
 /*
@@ -15,37 +14,7 @@ use Illuminate\Http\RedirectResponse;
 */
 
 //Reset Password Link For CRM Users
-Route::get('reset/{token}', array('as' => 'password.reset', 
-    function(string $token, Request $request): RedirectResponse {
-
-        //Get Host
-        $host = $request->getSchemeAndHttpHost();
-
-        //Get query data
-        $queryData = $request->query();
-
-        //Build query string
-        $queryString = '';
-        if ($queryData && is_array($queryData) && count($queryData)>0) {
-            $queryDataCount = count($queryData);
-
-            $index=0;
-            foreach ($queryData as $key => $value) {
-                if ($index==0) {
-                    $queryString .= '?';
-                } //End if
-
-                $queryString .= $key . '=' . $value;
-
-                if ($index>=0 && $queryDataCount>1 && $index<($queryDataCount-1)) {
-                    $queryString .= '&';
-                } //End if
-
-                $index++;
-            } //Loop ends
-        } //End if
-
-        //Build URL and Redirect 
-        return redirect($host.'/web/user/reset/'.$token.$queryString);
-    } //Function ends
-));
+Route::get('reset/{token}', [
+    'as' => 'password.reset',
+    'uses' => 'UserAuthController@resetPassword'
+])->name('user.password.reset');

@@ -5,6 +5,8 @@ namespace Modules\User\Http\Controllers\Backend\Auth;
 use Config;
 use Illuminate\Support\Facades\Log;
 
+use Illuminate\Http\Request;
+
 use Modules\Core\Http\Controllers\ApiBaseController;
 use Modules\User\Http\Requests\Backend\Auth\UserLoginRequest;
 use Modules\User\Http\Requests\Backend\Auth\UserLogoutRequest;
@@ -234,6 +236,39 @@ class UserAuthController extends ApiBaseController
         } catch(Exception $e) {
             throw $e;
         }
+    } //Function ends
+
+    public function resetPassword(string $token, Request $request)
+    {
+        //Get Host
+        $host = $request->getSchemeAndHttpHost();
+
+        //Get query data
+        $queryData = $request->query();
+
+        //Build query string
+        $queryString = '';
+        if ($queryData && is_array($queryData) && count($queryData)>0) {
+            $queryDataCount = count($queryData);
+
+            $index=0;
+            foreach ($queryData as $key => $value) {
+                if ($index==0) {
+                    $queryString .= '?';
+                } //End if
+
+                $queryString .= $key . '=' . $value;
+
+                if ($index>=0 && $queryDataCount>1 && $index<($queryDataCount-1)) {
+                    $queryString .= '&';
+                } //End if
+
+                $index++;
+            } //Loop ends
+        } //End if
+
+        //Build URL and Redirect
+        return redirect($host.'/web/user/reset/'.$token.$queryString);
     } //Function ends
 
 } //Class ends
