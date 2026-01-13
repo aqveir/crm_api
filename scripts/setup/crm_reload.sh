@@ -44,6 +44,10 @@ sudo chmod -R 775 storage
 sudo chmod -R 775 public
 echo "System access granted."
 
+echo "Caching API routes..."
+php artisan api:cache
+echo "API routes cached."
+
 echo "Clearing logs..."
 sudo cat /dev/null > storage/logs/laravel.log
 echo "Logs cleared."
