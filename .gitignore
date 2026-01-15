@@ -31,13 +31,17 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 
+!**/.gitignore
+
 # Adding Application level files
 /resources/views/vendor
 /storage/api-docs/api-docs.json
 /storage/framework/laravel-excel/*
+/storage/framework/sessions/*
 
 # Ignore folders in public folder
 /public/*
+/bootstrap/cache/*
 
 # Include some folder in public folder
 !/public/css

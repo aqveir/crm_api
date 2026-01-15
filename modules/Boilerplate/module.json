@@ -5,9 +5,9 @@
     "keywords": [],
     "order": 0,
     "providers": [
-        "Modules\\Boilerplate\\Providers\\BoilerplateServiceProvider"
+        "Modules\\Boilerplate\\Providers\\LaravelServiceProvider"
     ],
-    "aliases": {},
+    "aliases": {"API": "Modules\\Boilerplate\\Facades\\API"},
     "files": [],
     "requires": []
 }

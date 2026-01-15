@@ -10,10 +10,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Modules\\Boilerplate\\Providers\\BoilerplateServiceProvider"
+                "Modules\\Boilerplate\\Providers\\LaravelServiceProvider"
             ],
             "aliases": {
-
+                "API": "Modules\\Boilerplate\\Facades\\API"
             }
         }
     },
