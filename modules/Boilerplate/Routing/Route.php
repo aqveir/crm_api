@@ -67,6 +67,13 @@ class Route extends \Illuminate\Routing\Route
     protected $controllerClass;
 
     /**
+     * Controller method name.
+     *
+     * @var string
+     */
+    protected $controllerMethod;
+
+    /**
      * Indicates if the request is conditional.
      *
      * @var bool
