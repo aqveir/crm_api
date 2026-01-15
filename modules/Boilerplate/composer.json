@@ -13,13 +13,16 @@
                 "Modules\\Boilerplate\\Providers\\LaravelServiceProvider"
             ],
             "aliases": {
-                "API": "Modules\\Boilerplate\\Facades\\API"
+                
             }
         }
     },
     "autoload": {
         "psr-4": {
             "Modules\\Boilerplate\\": ""
-        }
+        },
+        "files": [
+            "app/helpers.php"
+        ]
     }
 }

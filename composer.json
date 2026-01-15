@@ -66,6 +66,11 @@
         "laravel": {
             "dont-discover": []
         },
+        "merge-plugin": {
+            "include": [
+                "modules/*/composer.json"
+            ]
+        },
         "google/apiclient-services": [
             "PeopleService"
         ]

@@ -7,7 +7,7 @@
     "providers": [
         "Modules\\Boilerplate\\Providers\\LaravelServiceProvider"
     ],
-    "aliases": {"API": "Modules\\Boilerplate\\Facades\\API"},
+    "aliases": {},
     "files": [],
     "requires": []
 }
