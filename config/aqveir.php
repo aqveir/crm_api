@@ -25,7 +25,7 @@ return [
         | For example: backend -> http://localhost/console
         |
         */
-        'whitelisted_subdomains' => env('APPLICATION_WHITELIST_SUBDOAMIN', ['localhost', 'ellaisys']),
+        'whitelisted_subdomains' => env('APPLICATION_WHITELIST_SUBDOMAIN', ['localhost', 'ellaisys']),
 
 
         /*
@@ -147,7 +147,7 @@ return [
             'instanceof','insteadof','interface','isset','list','namespace','new',
             'print','private','protected','public','require','require_once',
             'return','static','switch','throw','trait','try','unset','use','var',
-            'while','xor','anal','boob','boobs','fuck','porn','pussy','sex', 's3x', 
+            'while','xor','anal','boob','boobs','fuck','porn','pussy','sex', 's3x',
         ],
 
         
