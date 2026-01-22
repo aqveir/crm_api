@@ -159,6 +159,7 @@ return [
         /*
          * Package Service Providers...
          */
+        Modules\Boilerplate\Providers\LaravelServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -168,12 +169,6 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
-        
-        /**
-         * Additions for AI-CRM App Platform
-         */
-        Modules\Boilerplate\Providers\LaravelServiceProvider::class,
     ])->toArray(),
 
     /*
