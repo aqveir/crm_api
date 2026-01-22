@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     'settings' => [
 
         /*
@@ -9,24 +8,22 @@ return [
         | Application Domain
         |--------------------------------------------------------------------------
         |
-        | Specifies the Application Domian name used for accessing the console pages.
+        | Specifies the Application Domain name used for accessing the console pages.
         | For example: {subdomain}.domainname.com
         |
         */
         'domain' => env('APPLICATION_DOMAIN', '{subdomain}.aqveir.in'),
-
 
         /*
         |--------------------------------------------------------------------------
         | Whitelisted Administration Subdomains
         |--------------------------------------------------------------------------
         |
-        | Specifies the URL name used for accessing back-end pages.
+        | Specifies the URL name used for accessing the administrative domains.
         | For example: backend -> http://localhost/console
         |
         */
-        'whitelisted_subdomains' => env('APPLICATION_WHITELIST_SUBDOMAIN', ['localhost', 'ellaisys']),
-
+        'whitelisted_subdomains' => explode(',', env('APPLICATION_WHITELIST_SUBDOMAIN', 'localhost,ellaisys')),
 
         /*
         |--------------------------------------------------------------------------
@@ -39,7 +36,6 @@ return [
         */
         'backend_uri' => env('APPLICATION_BACKEND_URI', '/console'),
 
-
         /*
         |--------------------------------------------------------------------------
         | Front-end Error URI
@@ -50,7 +46,6 @@ return [
         |
         */
         'frontend_error_uri' => env('APPLICATION_FRONTEND_ERROR_URI', '/error/global/400'),
-
         
         /*
         |--------------------------------------------------------------------------
@@ -65,8 +60,7 @@ return [
                 'key_super_admin' => ['super_admin'],
                 'key_organization_owner' => ['organization_owner']
             ]
-        ],  
-
+        ],
 
         /*
         |--------------------------------------------------------------------------
@@ -149,7 +143,6 @@ return [
             'return','static','switch','throw','trait','try','unset','use','var',
             'while','xor','anal','boob','boobs','fuck','porn','pussy','sex', 's3x',
         ],
-
         
         /*
         |--------------------------------------------------------------------------
@@ -179,7 +172,6 @@ return [
 
             'default' => 'aqveir.com'
         ],
-     
 
         /*
         |--------------------------------------------------------------------------
@@ -199,7 +191,6 @@ return [
                 ]
             ]
         ],
-
 
         /*
         |--------------------------------------------------------------------------
@@ -226,7 +217,6 @@ return [
 
             ],
         ],
-
 
         /*
         |--------------------------------------------------------------------------
