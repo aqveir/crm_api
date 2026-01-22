@@ -71,7 +71,7 @@ class UserAuthController extends ApiBaseController
     public function login(UserLoginRequest $request, UserAuthService $service, string $subdomain)
     {
         try {
-            //Get Org Hash 
+            //Get Org Hash
             $orgHash = $this->getOrgHashInRequest($request, $subdomain, true);
 
             //Get IP Address
